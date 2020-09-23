@@ -106,7 +106,9 @@ public class PlayerController : MonoBehaviour
     //Triggers a jump event when jump input is pressed
     private void Jump()
     {
-        if (Input.GetKeyDown(_jumpKey) && !_isJumping && _controller.isGrounded)
+        if ((_controller.collisionFlags & CollisionFlags.Below) != 0) _isJumping = false;
+
+        if (Input.GetKeyDown(_jumpKey) && !_isJumping)
         {
             _isJumping = true;
             StartCoroutine(JumpEvent_Coroutine());
@@ -131,8 +133,8 @@ public class PlayerController : MonoBehaviour
             //Break jump if player hits ceiling, and apply downward force to prevent player from sticking to the ceiling for a second.
             if ((_controller.collisionFlags & CollisionFlags.Above) != 0)
             {
-                _isJumping = false;
                 _controller.Move(Vector3.down * _jumpMultiplier * Time.deltaTime);
+                break;
             }
 
             timeInAir += Time.deltaTime;
