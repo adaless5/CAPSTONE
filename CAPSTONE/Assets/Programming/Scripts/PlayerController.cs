@@ -4,6 +4,14 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public enum PlayerState
+    {
+        Idle,
+        Grappling,
+        GrappleDeployed,
+    }
+
+    public PlayerState m_PlayerState { get; private set; }
     public Camera _camera { get; private set; }
     public CharacterController _controller { get; private set; }
     public AnimationCurve _jumpFallOff; //Adjusts the force parameter over the life of the jump.
@@ -133,11 +141,11 @@ public class PlayerController : MonoBehaviour
 
             //Apply Jump force
 
-            if (_GrappleHook.m_PlayerState == GrappleHook.PlayerState.Idle || _GrappleHook.m_PlayerState == GrappleHook.PlayerState.GrappleDeployed)
+            if (m_PlayerState == PlayerState.Idle || m_PlayerState == PlayerState.GrappleDeployed)
             {
                 _controller.Move(Vector3.up * jumpForce * _jumpMultiplier * Time.deltaTime);
             }
-            else if (_GrappleHook.m_PlayerState == GrappleHook.PlayerState.Grappling)
+            else if (m_PlayerState == PlayerState.Grappling)
             {
                 _controller.Move(_camera.transform.forward * jumpForce * _jumpMultiplier * Time.deltaTime);
             }

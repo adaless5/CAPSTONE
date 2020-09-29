@@ -4,6 +4,16 @@ using UnityEngine;
 
 public class ALTPlayerController : MonoBehaviour
 {
+    public enum PlayerState
+    {
+        Idle,
+        Grappling,
+        GrappleDeployed,
+    }
+
+    public PlayerState m_PlayerState { get; private set; }
+
+
     public Camera _camera;
     public float m_LookSensitivity = 100.0f;
     private float m_XRotation = 0f;
@@ -111,5 +121,10 @@ public class ALTPlayerController : MonoBehaviour
     {
         m_Momentum = direction * speed * grappleMultiplier;
         m_Momentum += Vector3.up * jumpMultiplier;
+    }
+
+    public void ChangePlayerState(PlayerState newPlayerState)
+    {
+        m_PlayerState = newPlayerState;
     }
 }

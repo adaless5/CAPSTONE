@@ -4,15 +4,6 @@ using UnityEngine;
 
 public class GrappleHook : Equipment
 {
-    public enum PlayerState
-    {
-        Idle,
-        Grappling,
-        GrappleDeployed,
-    }
-
-    public PlayerState m_PlayerState;
-
     public Transform m_GrappleHookTransform;
     public Transform m_PlayerPosition;
     public float m_GrappleHookSpeedMultiplier = 5.0f;
@@ -42,17 +33,17 @@ public class GrappleHook : Equipment
     {
         if (bIsActive && bIsObtained)
         {
-            switch (m_PlayerState)
+            switch (m_PlayerController.m_PlayerState)
             {
-                case PlayerState.Idle:
+                case ALTPlayerController.PlayerState.Idle:
                     UseTool();
                     break;
 
-                case PlayerState.Grappling:
+                case ALTPlayerController.PlayerState.Grappling:
                     HandleGrappleHookMovement();
                     break;
 
-                case PlayerState.GrappleDeployed:
+                case ALTPlayerController.PlayerState.GrappleDeployed:
                     HandleGrappleHookDeployed();
                     break;
             }
@@ -72,7 +63,7 @@ public class GrappleHook : Equipment
                 m_GrappleHookLength = 0.0f;
                 m_GrappleHookTransform.gameObject.SetActive(true);
                 m_GrappleHookTransform.localScale = Vector3.zero;
-                m_PlayerState = PlayerState.GrappleDeployed;
+                m_PlayerController.ChangePlayerState(ALTPlayerController.PlayerState.GrappleDeployed);
             }
         }
     }
@@ -89,7 +80,7 @@ public class GrappleHook : Equipment
 
         if (m_GrappleHookLength >= Vector3.Distance(m_PlayerPosition.position, m_GrappleTarget))
         {
-            m_PlayerState = PlayerState.Grappling;
+            m_PlayerController.ChangePlayerState(ALTPlayerController.PlayerState.Grappling);
         }
     }
 
@@ -125,7 +116,7 @@ public class GrappleHook : Equipment
     void DeactivateGrappleHook()
     {
         m_PlayerController.ResetGravity();
-        m_PlayerState = PlayerState.Idle;
+        m_PlayerController.ChangePlayerState(ALTPlayerController.PlayerState.Idle);
         m_GrappleHookTransform.localScale = Vector3.zero;
         gameObject.GetComponentInChildren<MeshRenderer>().enabled = false;
     }
