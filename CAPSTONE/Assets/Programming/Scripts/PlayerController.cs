@@ -207,6 +207,7 @@ public class PlayerController : MonoBehaviour
         _runBuildupMultiplier = GameSettings.runBuildupMultiplier;
     }
 
+
     public bool CheckForGrappleInput()
     {
         return Input.GetKeyDown(KeyCode.E);
@@ -221,5 +222,6 @@ public class PlayerController : MonoBehaviour
     {
         _Momentum = direction * speed * grappleMultiplier;
         _Momentum += Vector3.up * jumpMultiplier;
+
     }
 }
