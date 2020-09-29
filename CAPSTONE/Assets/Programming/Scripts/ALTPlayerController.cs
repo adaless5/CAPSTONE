@@ -16,6 +16,9 @@ public class ALTPlayerController : MonoBehaviour
     public float m_JumpHeight = 30.0f;
     public Vector3 m_Momentum { get; private set; } = Vector3.zero;
 
+    public Belt _equipmentBelt;
+    public Belt _weaponBelt;
+
     void Start()
     {
         Application.targetFrameRate = 120;
@@ -24,7 +27,8 @@ public class ALTPlayerController : MonoBehaviour
 
     void Update()
     {
-
+        PlayerRotation();
+        PlayerMovement();
     }
 
     public bool CheckForJumpInput()
@@ -32,7 +36,7 @@ public class ALTPlayerController : MonoBehaviour
         return Input.GetKeyDown(KeyCode.Space);
     }
 
-    public bool CheckForGrappleInput()
+    public bool CheckForUseEquipmentInput()
     {
         return Input.GetKeyDown(KeyCode.E);
     }

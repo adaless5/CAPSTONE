@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GrappleHook : MonoBehaviour
+public class GrappleHook : Equipment
 {
     public enum PlayerState
     {
@@ -14,6 +14,7 @@ public class GrappleHook : MonoBehaviour
     public PlayerState m_PlayerState;
 
     public Transform m_GrappleHookTransform;
+    public Transform m_PlayerPosition;
     public float m_GrappleHookSpeedMultiplier = 5.0f;
     float m_GrappleHookLength;
     public float m_AutoReleaseGrappleDistance = 2.0f;
@@ -29,40 +30,38 @@ public class GrappleHook : MonoBehaviour
 
     void Awake()
     {
-        m_GrappleHookTransform.gameObject.SetActive(false);
+        gameObject.GetComponentInChildren<MeshRenderer>().enabled = false;
     }
 
-    void Start()
+    public override void Start()
     {
-
+        base.Start();
     }
 
-    void Update()
+    public override void Update()
     {
-        switch (m_PlayerState)
+        if (bIsActive && bIsObtained)
         {
-            case PlayerState.Idle:
-                m_PlayerController.PlayerRotation();
-                m_PlayerController.PlayerMovement();
-                HandleGrappleHook();
-                break;
+            switch (m_PlayerState)
+            {
+                case PlayerState.Idle:
+                    UseTool();
+                    break;
 
-            case PlayerState.Grappling:
-                HandleGrappleHookMovement();
-                m_PlayerController.PlayerRotation();
-                break;
+                case PlayerState.Grappling:
+                    HandleGrappleHookMovement();
+                    break;
 
-            case PlayerState.GrappleDeployed:
-                HandleGrappleHookDeployed();
-                m_PlayerController.PlayerRotation();
-                m_PlayerController.PlayerMovement();
-                break;
+                case PlayerState.GrappleDeployed:
+                    HandleGrappleHookDeployed();
+                    break;
+            }
         }
     }
 
-    void HandleGrappleHook()
+    public override void UseTool()
     {
-        if (m_PlayerController.CheckForGrappleInput())
+        if (m_PlayerController.CheckForUseEquipmentInput())
         {
             Vector3 camPos = m_PlayerController._camera.transform.position;
             Vector3 camForwardVec = m_PlayerController._camera.transform.forward;
@@ -80,7 +79,7 @@ public class GrappleHook : MonoBehaviour
 
     void HandleGrappleHookDeployed()
     {
-        m_GrappleHookTransform.gameObject.SetActive(true);
+        gameObject.GetComponentInChildren<MeshRenderer>().enabled = true;
 
         m_GrappleHookTransform.LookAt(m_GrappleTarget);
 
@@ -88,7 +87,7 @@ public class GrappleHook : MonoBehaviour
 
         m_GrappleHookTransform.localScale = new Vector3(1, 1, m_GrappleHookLength);
 
-        if (m_GrappleHookLength >= Vector3.Distance(transform.position, m_GrappleTarget))
+        if (m_GrappleHookLength >= Vector3.Distance(m_PlayerPosition.position, m_GrappleTarget))
         {
             m_PlayerState = PlayerState.Grappling;
         }
@@ -98,8 +97,8 @@ public class GrappleHook : MonoBehaviour
     {
         m_GrappleHookTransform.LookAt(m_GrappleTarget);
 
-        float distFromGrappleTarget = Vector3.Distance(transform.position, m_GrappleTarget);
-        Vector3 grappleDirection = m_GrappleTarget - transform.position;
+        float distFromGrappleTarget = Vector3.Distance(m_PlayerPosition.position, m_GrappleTarget);
+        Vector3 grappleDirection = m_GrappleTarget - m_PlayerPosition.position;
         grappleDirection.Normalize();
 
         float speed = Mathf.Clamp(distFromGrappleTarget, m_MinGrappleSpeed, m_MaxGrappleSpeed);
@@ -111,7 +110,7 @@ public class GrappleHook : MonoBehaviour
             DeactivateGrappleHook();
         }
 
-        if (m_PlayerController.CheckForGrappleInput())
+        if (m_PlayerController.CheckForUseEquipmentInput())
         {
             DeactivateGrappleHook();
         }
@@ -125,8 +124,15 @@ public class GrappleHook : MonoBehaviour
 
     void DeactivateGrappleHook()
     {
-        //m_PlayerController.ResetGravity();
+        m_PlayerController.ResetGravity();
         m_PlayerState = PlayerState.Idle;
-        m_GrappleHookTransform.gameObject.SetActive(false);
+        m_GrappleHookTransform.localScale = Vector3.zero;
+        gameObject.GetComponentInChildren<MeshRenderer>().enabled = false;
+    }
+
+    public override void Deactivate()
+    {
+        base.Deactivate();
+        DeactivateGrappleHook();
     }
 }
