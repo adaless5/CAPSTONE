@@ -186,4 +186,10 @@ public class PlayerController : MonoBehaviour
         _runSpeed = GameSettings.runSpeed;
         _runBuildupMultiplier = GameSettings.runBuildupMultiplier;
     }
+
+
+    public bool CheckForMineInput()
+    {
+        return Input.GetKey(KeyCode.E);
+    }
 }
