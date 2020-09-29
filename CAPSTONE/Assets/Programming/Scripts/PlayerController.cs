@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    Camera _camera;
-    CharacterController _controller;
+    public Camera _camera { get; private set; }
+    public CharacterController _controller { get; private set; }
     public AnimationCurve _jumpFallOff; //Adjusts the force parameter over the life of the jump.
 
     //Private members [included in GameSettings]
@@ -28,7 +28,11 @@ public class PlayerController : MonoBehaviour
     float _horizontalInput;
     float _mouseX;
     float _mouseY;
-    //
+
+    // Members Anthony's added
+    Vector3 _Momentum;
+    public GrappleHook _GrappleHook;
+
 
     private void Awake()
     {
@@ -60,7 +64,7 @@ public class PlayerController : MonoBehaviour
     }
 
     //Handle player head rotation.
-    private void PlayerRotation()
+    public void PlayerRotation()
     {
         //Get Rotation Inputs
         _mouseX = Input.GetAxis("Mouse X") * _lookSensitivity * Time.deltaTime;
@@ -77,7 +81,7 @@ public class PlayerController : MonoBehaviour
     }
 
     //Handle player directional movement.
-    private void PlayerMovement()
+    public void PlayerMovement()
     {
         //Get Movement Inputs
         _horizontalInput = Input.GetAxis("Horizontal");
@@ -128,10 +132,18 @@ public class PlayerController : MonoBehaviour
             float jumpForce = _jumpFallOff.Evaluate(timeInAir);
 
             //Apply Jump force
-            _controller.Move(Vector3.up * jumpForce * _jumpMultiplier * Time.deltaTime);
 
-            //Break jump if player hits ceiling, and apply downward force to prevent player from sticking to the ceiling for a second.
-            if ((_controller.collisionFlags & CollisionFlags.Above) != 0)
+            if (_GrappleHook.m_PlayerState == GrappleHook.PlayerState.Idle || _GrappleHook.m_PlayerState == GrappleHook.PlayerState.GrappleDeployed)
+            {
+                _controller.Move(Vector3.up * jumpForce * _jumpMultiplier * Time.deltaTime);
+            }
+            else if (_GrappleHook.m_PlayerState == GrappleHook.PlayerState.Grappling)
+            {
+                _controller.Move(_camera.transform.forward * jumpForce * _jumpMultiplier * Time.deltaTime);
+            }
+
+                //Break jump if player hits ceiling, and apply downward force to prevent player from sticking to the ceiling for a second.
+                if ((_controller.collisionFlags & CollisionFlags.Above) != 0)
             {
                 _controller.Move(Vector3.down * _jumpMultiplier * Time.deltaTime);
                 break;
@@ -185,5 +197,21 @@ public class PlayerController : MonoBehaviour
         _walkSpeed = GameSettings.walkSpeed;
         _runSpeed = GameSettings.runSpeed;
         _runBuildupMultiplier = GameSettings.runBuildupMultiplier;
+    }
+
+    public bool CheckForGrappleInput()
+    {
+        return Input.GetKeyDown(KeyCode.E);
+    }
+
+    public bool CheckForJumpInput()
+    {
+        return Input.GetKeyDown(KeyCode.Space);
+    }
+
+    public void ApplyMomentum(Vector3 direction, float speed, float grappleMultiplier, float jumpMultiplier)
+    {
+        _Momentum = direction * speed * grappleMultiplier;
+        _Momentum += Vector3.up * jumpMultiplier;
     }
 }
