@@ -20,16 +20,16 @@ public class MineSpawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (m_playerController.CheckForMineInput())
-        {
-            if (m_bCanThrow)
-            {
-                ThrowMine();
-                m_bCanThrow = false;
-                timer = CoolDown;
-                Debug.Log("THROWN");
-            }
-        }
+        //if (m_playerController.CheckForMineInput())
+        //{
+        //    if (m_bCanThrow)
+        //    {
+        //        ThrowMine();
+        //        m_bCanThrow = false;
+        //        timer = CoolDown;
+        //        Debug.Log("THROWN");
+        //    }
+        //}
 
         if(!m_bCanThrow)
         {
