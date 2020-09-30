@@ -64,12 +64,19 @@ public class Belt : MonoBehaviour
         }
     }
 
+    public void EquipToolAtIndex(int index)
+    {
+        if(_Belt[index].GetComponentInChildren<Tool>().bIsObtained)
+        {
+            selectedWeaponIndex = index;
+            ChangeActiveEquipment();
+        }
+    }
+
     public void ObtainEquipmentAtIndex(int index)
     {
         _Belt[index].GetComponentInChildren<Tool>().ObtainEquipment();
 
-        selectedWeaponIndex = index;
-
-        ChangeActiveEquipment();
+        EquipToolAtIndex(index);
     }
 }

@@ -11,7 +11,14 @@ public class ALTPlayerController : MonoBehaviour
         GrappleDeployed,
     }
 
+    public enum ControllerState
+    {
+        Play, 
+        Menu,
+    }
+
     public PlayerState m_PlayerState { get; private set; }
+    public ControllerState m_ControllerState;
 
 
     public Camera _camera;
@@ -29,16 +36,43 @@ public class ALTPlayerController : MonoBehaviour
     public Belt _equipmentBelt;
     public Belt _weaponBelt;
 
+    public Canvas EquipmentWheel;
+
     void Start()
     {
+        EquipmentWheel.enabled = false;
         Application.targetFrameRate = 120;
         Cursor.lockState = CursorLockMode.Locked;
     }
 
     void Update()
     {
-        PlayerRotation();
-        PlayerMovement();
+        switch (m_ControllerState)
+        {
+            case ControllerState.Play:
+                PlayerRotation();
+                PlayerMovement();
+                break;
+
+            case ControllerState.Menu:
+                break;
+
+        }
+
+        if(Input.GetKeyDown(KeyCode.Q) && m_ControllerState == ControllerState.Play)
+        {
+            EquipmentWheel.enabled = true;
+            Cursor.lockState = CursorLockMode.None;
+            m_ControllerState = ControllerState.Menu;
+        }
+
+        if (Input.GetKeyUp(KeyCode.Q) && m_ControllerState == ControllerState.Menu)
+        {
+            EquipmentWheel.enabled = false;
+            Cursor.lockState = CursorLockMode.Locked;
+            m_ControllerState = ControllerState.Play;
+        }
+
     }
 
     public bool CheckForJumpInput()
@@ -127,4 +161,6 @@ public class ALTPlayerController : MonoBehaviour
     {
         m_PlayerState = newPlayerState;
     }
+
+
 }
