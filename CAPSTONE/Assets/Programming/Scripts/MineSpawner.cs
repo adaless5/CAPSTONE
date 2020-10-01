@@ -8,7 +8,7 @@ public class MineSpawner : MonoBehaviour
     public float Force = 20f;
     public float CoolDown = 5f;
     public GameObject minePrefab;
-    public PlayerController m_playerController;
+    public ALTPlayerController m_playerController;
 
     bool m_bCanThrow = true;
     float timer;
@@ -20,6 +20,7 @@ public class MineSpawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         //if (m_playerController.CheckForMineInput())
         //{
         //    if (m_bCanThrow)
@@ -30,6 +31,7 @@ public class MineSpawner : MonoBehaviour
         //        Debug.Log("THROWN");
         //    }
         //}
+
 
         if(!m_bCanThrow)
         {
