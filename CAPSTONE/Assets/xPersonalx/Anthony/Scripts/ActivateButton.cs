@@ -19,14 +19,23 @@ public class ActivateButton : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (IsToolObtained())
+        if (IsToolObtained() && !IsToolActive())
         {
             _button.interactable = true;
+        }
+        else if (IsToolActive())
+        {
+            _button.interactable = false;
         }
     }
 
     bool IsToolObtained()
     {
         return _Belt._Belt[_CorrespondingToolIndex].GetComponentInChildren<Tool>().bIsObtained;
+    }
+
+    bool IsToolActive()
+    {
+        return _Belt._Belt[_CorrespondingToolIndex].GetComponentInChildren<Tool>().bIsActive;
     }
 }

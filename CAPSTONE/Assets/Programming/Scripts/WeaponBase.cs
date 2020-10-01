@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class WeaponBase : MonoBehaviour
+public class WeaponBase : Weapon
 {
     [Header("Damage Settings")]
     public float m_damageAmount = 10.0f;
@@ -22,22 +22,38 @@ public class WeaponBase : MonoBehaviour
     [Header("Camera Settings")]
     public Camera gunCamera;
 
+    public ALTPlayerController _playercontroller;
 
-    private void Start()
+
+    public override void Start()
     {
         GetComponent<MeshRenderer>().enabled = true;
+        bIsActive = true;
+        bIsObtained = true;
     }
 
     // Update is called once per frame
-    void Update()
+    public override void Update()
+    {
+        if (bIsActive && _playercontroller.m_ControllerState == ALTPlayerController.ControllerState.Play)
+        {
+            GetComponent<MeshRenderer>().enabled = true;
+            UseTool();
+            OnTarget();
+        }
+        else if (!bIsActive)
+        {
+            GetComponent<MeshRenderer>().enabled = false;
+        }
+    }
+
+    public override void UseTool()
     {
         if (Input.GetButton("Fire1") && Time.time >= m_fireStart)
         {
             m_fireStart = Time.time + 1.0f / m_fireRate;
             OnShoot();
         }
-
-        OnTarget();
     }
 
     void OnShoot()
@@ -74,7 +90,7 @@ public class WeaponBase : MonoBehaviour
         }
     }
 
-   //VR - Plays Animation to focus reticule on targetting
+   //VR - Plays Animation to focus reticule on targeting
     void OnTarget()
     {
         RaycastHit targetInfo;

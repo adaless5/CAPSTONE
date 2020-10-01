@@ -465,7 +465,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 896868494}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &28993273
 MonoBehaviour:
@@ -1176,6 +1176,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 323fea2213e14cd40b8e343a10a2b17a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_ControllerState: 0
   _camera: {fileID: 896868497}
   m_LookSensitivity: 5
   _controller: {fileID: 157748172}
@@ -1184,6 +1185,7 @@ MonoBehaviour:
   m_JumpHeight: 30
   _equipmentBelt: {fileID: 0}
   _weaponBelt: {fileID: 0}
+  EquipmentWheel: {fileID: 0}
 --- !u!143 &157748172
 CharacterController:
   m_ObjectHideFlags: 0
@@ -2509,7 +2511,6 @@ MonoBehaviour:
   m_AreaLightEmissiveMeshShadowCastingMode: 0
   m_AreaLightEmissiveMeshMotionVectorGenerationMode: 0
   m_AreaLightEmissiveMeshLayer: -1
-
 --- !u!1 &783589132
 GameObject:
   m_ObjectHideFlags: 0
@@ -2640,7 +2641,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
-
 --- !u!1 &806794301
 GameObject:
   m_ObjectHideFlags: 0
@@ -3081,8 +3081,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1036718955}
-  - {fileID: 28993272}
   - {fileID: 1564272113}
+  - {fileID: 28993272}
   m_Father: {fileID: 157748173}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4126,7 +4126,7 @@ PrefabInstance:
         type: 3}
       propertyPath: reticuleAnimator
       value: 
-      objectReference: {fileID: 769994322}
+      objectReference: {fileID: 1524970504}
     - target: {fileID: 7191562193057307089, guid: ccd95a384bdca504bb411ca8699eb232,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4605,7 +4605,7 @@ Transform:
   m_LocalScale: {x: 0.5, y: 2, z: 0.5}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1359356647
 MonoBehaviour:
@@ -5110,6 +5110,12 @@ MonoBehaviour:
   m_AreaLightEmissiveMeshShadowCastingMode: 0
   m_AreaLightEmissiveMeshMotionVectorGenerationMode: 0
   m_AreaLightEmissiveMeshLayer: -1
+--- !u!95 &1524970504 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 4299551521238618597, guid: 64da80d2fa688bf4d8a956ef5dd14492,
+    type: 3}
+  m_PrefabInstance: {fileID: 1997672745}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1564272113 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7191562193057307089, guid: ccd95a384bdca504bb411ca8699eb232,

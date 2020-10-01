@@ -37,10 +37,12 @@ public class ALTPlayerController : MonoBehaviour
     public Belt _weaponBelt;
 
     public Canvas EquipmentWheel;
+    public Canvas WeaponWheel;
 
     void Start()
     {
         EquipmentWheel.enabled = false;
+        WeaponWheel.enabled = false;
         Application.targetFrameRate = 120;
         Cursor.lockState = CursorLockMode.Locked;
     }
@@ -73,6 +75,20 @@ public class ALTPlayerController : MonoBehaviour
             m_ControllerState = ControllerState.Play;
         }
 
+        if (Input.GetKeyDown(KeyCode.Tab) && m_ControllerState == ControllerState.Play)
+        {
+            WeaponWheel.enabled = true;
+            Cursor.lockState = CursorLockMode.None;
+            m_ControllerState = ControllerState.Menu;
+        }
+
+        if (Input.GetKeyUp(KeyCode.Tab) && m_ControllerState == ControllerState.Menu)
+        {
+            WeaponWheel.enabled = false;
+            Cursor.lockState = CursorLockMode.Locked;
+            m_ControllerState = ControllerState.Play;
+        }
+
     }
 
     public bool CheckForJumpInput()
@@ -85,12 +101,17 @@ public class ALTPlayerController : MonoBehaviour
         return Input.GetKeyDown(KeyCode.E);
     }
 
-    public bool CheckForAttackPushed()
+    public bool CheckForUseEquipmentInputReleased()
+    {
+        return Input.GetKeyUp(KeyCode.E);
+    }
+
+    public bool CheckForUseWeaponInput()
     {
         return Input.GetButtonDown("Fire1");
     }
 
-    public bool CheckForAttackReleased()
+    public bool CheckForUseWeaponInputReleased()
     {
         return Input.GetButtonUp("Fire1");
     }
