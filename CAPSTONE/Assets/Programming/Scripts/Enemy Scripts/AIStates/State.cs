@@ -4,7 +4,7 @@ using System.Security.Cryptography.X509Certificates;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
-public class State : MonoBehaviour 
+public class State : MonoBehaviour
 {
     public enum STATE
     {
@@ -67,6 +67,14 @@ public class State : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    public void LookTowards(Transform target, float turnspeed)
+    {
+        Quaternion targetRotation = Quaternion.LookRotation(target.position - _currentEnemy.transform.position);
+        float str;
+        str = Mathf.Min(turnspeed * Time.deltaTime, 1);
+        _currentEnemy.transform.rotation = Quaternion.Lerp(_currentEnemy.transform.rotation, targetRotation, str);
     }
 
 }
