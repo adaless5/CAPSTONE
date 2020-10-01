@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MineSpawner : MonoBehaviour
+public class MineSpawner : Weapon
 {
     public float Force = 20f;
     public float CoolDown = 5f;
@@ -12,28 +12,37 @@ public class MineSpawner : MonoBehaviour
 
     bool m_bCanThrow = true;
     float timer;
-    private void Start()
+    public override void Start()
     {
         timer = CoolDown;
+        bIsActive = false;
+        bIsObtained = true;
     }
 
     // Update is called once per frame
-    void Update()
+    public override void Update()
     {
+        if(bIsActive && m_playerController.m_ControllerState == ALTPlayerController.ControllerState.Play)
+        {
+            UseTool();
+        }
+    }
 
-        //if (m_playerController.CheckForMineInput())
-        //{
-        //    if (m_bCanThrow)
-        //    {
-        //        ThrowMine();
-        //        m_bCanThrow = false;
-        //        timer = CoolDown;
-        //        Debug.Log("THROWN");
-        //    }
-        //}
+    public override void UseTool()
+    {
+        if (m_playerController.CheckForUseWeaponInput())
+        {
+            if (m_bCanThrow)
+            {
+                ThrowMine();
+                m_bCanThrow = false;
+                timer = CoolDown;
+                Debug.Log("THROWN");
+            }
+        }
 
 
-        if(!m_bCanThrow)
+        if (!m_bCanThrow)
         {
             timer -= Time.deltaTime;
             Debug.Log("COOLDOWN");
@@ -42,7 +51,6 @@ public class MineSpawner : MonoBehaviour
             {
                 m_bCanThrow = true;
                 Debug.Log("RESET");
-
             }
         }
     }
