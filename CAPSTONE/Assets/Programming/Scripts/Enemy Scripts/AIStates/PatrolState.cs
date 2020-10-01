@@ -25,7 +25,8 @@ public class Patrol : State
             if (Vector3.Distance(_currentEnemy.transform.position, _patrolPoints[_currentPatrolIndex].transform.position) > 2)
             {
 
-                _currentEnemy.transform.rotation = Quaternion.RotateTowards(_currentEnemy.transform.rotation, _patrolPoints[_currentPatrolIndex].transform.rotation, 2f);
+                //  _currentEnemy.transform.rotation = Quaternion.RotateTowards(_currentEnemy.transform.rotation, _patrolPoints[_currentPatrolIndex].transform.rotation, 2f);
+                LookTowards(_patrolPoints[_currentPatrolIndex].transform, 4.0f);
                 _currentEnemy.transform.position = Vector3.MoveTowards(_currentEnemy.transform.position, _patrolPoints[_currentPatrolIndex].transform.position, _enemySpeed * Time.deltaTime);
             }
             else
