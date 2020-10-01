@@ -85,6 +85,16 @@ public class ALTPlayerController : MonoBehaviour
         return Input.GetKeyDown(KeyCode.E);
     }
 
+    public bool CheckForAttackPushed()
+    {
+        return Input.GetButtonDown("Fire1");
+    }
+
+    public bool CheckForAttackReleased()
+    {
+        return Input.GetButtonUp("Fire1");
+    }
+
     public void PlayerRotation()
     {
         float mouseX = Input.GetAxis("Mouse X") * m_LookSensitivity;
