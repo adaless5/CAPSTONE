@@ -75,6 +75,12 @@ public class GameSettingsEditorWindow : EditorWindow
                 _runBuildupMultiplier = GameSettings.runBuildupMultiplier;
                 _lookSensitivity = GameSettings.lookSensitivity;
             }
+
+            if (GUILayout.Button("Reset Prefs"))
+            {
+                PlayerPrefs.DeleteAll();
+                Debug.Log("Deleted Player Prefs");
+            }
         }
     }
 
