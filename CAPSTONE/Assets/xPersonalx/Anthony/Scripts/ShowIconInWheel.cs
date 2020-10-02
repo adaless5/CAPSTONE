@@ -6,8 +6,8 @@ using UnityEngine.UI;
 public class ShowIconInWheel : MonoBehaviour
 {
     public Image _Icon;
-    public Belt _Belt;
-    public int _CorrespondingToolIndex;
+    Belt _Belt;
+    public int _CorrespondingToolIndex = 0;
 
     private bool bCorrespondingToolIsObtained;
 
@@ -16,6 +16,8 @@ public class ShowIconInWheel : MonoBehaviour
     {
         _Icon = GetComponent<Image>();
         _Icon.enabled = false;
+
+        _Belt = GetComponentInParent<Belt>();
     }
 
     // Update is called once per frame
@@ -29,6 +31,13 @@ public class ShowIconInWheel : MonoBehaviour
 
     bool IsToolObtained()
     {
-        return _Belt._Belt[_CorrespondingToolIndex].GetComponentInChildren<Tool>().bIsObtained;
+        try
+        {
+            return _Belt._items[_CorrespondingToolIndex].GetComponentInChildren<Tool>().bIsObtained;
+        }
+        catch
+        {
+            return false;
+        }
     }
 }
