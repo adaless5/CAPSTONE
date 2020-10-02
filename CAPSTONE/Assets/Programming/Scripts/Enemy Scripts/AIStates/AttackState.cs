@@ -19,18 +19,17 @@ public class Attack : State
     public override void Update()
     {
         base.Update();
-        LookTowards(_playerPos, 4.0f);
+
         if (CanSeePlayer())
         {
             if (Vector3.Distance(_currentEnemy.transform.position, _playerPos.position) < _shootDistance)
             {
                 Debug.Log("Attack Code");
                 ShootPlayer();
-                _playerPos.position += new Vector3(0.0f, 1.0f, 0.0f);
             }
             else
             {
-                //   _currentEnemy.transform.LookAt(_playerPos.position);
+                _currentEnemy.transform.LookAt(_playerPos.position);
                 _currentEnemy.transform.position = Vector3.MoveTowards(_currentEnemy.transform.position, _playerPos.position, _enemySpeed * Time.deltaTime);
             }
         }
@@ -51,7 +50,6 @@ public class Attack : State
             if (Physics.Raycast(_currentEnemy.transform.position, _currentEnemy.transform.forward, out hit, _shootDistance))
             {
                 Debug.Log("Player hit");
-                //_playerPos.position += new Vector3(0.0f,1.0f,0.0f);
             }
             _shootTimer = 1f;
         }

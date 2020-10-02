@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class ActivateButton : MonoBehaviour
 {
     public Button _button;
-    public Belt _Belt;
+    Belt _Belt;
     public int _CorrespondingToolIndex;
 
     // Start is called before the first frame update
@@ -14,6 +14,8 @@ public class ActivateButton : MonoBehaviour
     {
         _button = GetComponent<Button>();
         _button.interactable = false;
+
+        _Belt = GetComponentInParent<Belt>();
     }
 
     // Update is called once per frame
@@ -31,11 +33,20 @@ public class ActivateButton : MonoBehaviour
 
     bool IsToolObtained()
     {
-        return _Belt._Belt[_CorrespondingToolIndex].GetComponentInChildren<Tool>().bIsObtained;
+        try{
+            return _Belt._items[_CorrespondingToolIndex].GetComponentInChildren<Tool>().bIsObtained;
+        }
+        catch{
+            return false;
+        }
     }
 
     bool IsToolActive()
     {
-        return _Belt._Belt[_CorrespondingToolIndex].GetComponentInChildren<Tool>().bIsActive;
+        try
+        {
+            return _Belt._items[_CorrespondingToolIndex].GetComponentInChildren<Tool>().bIsActive;
+        }
+        catch{return false;}
     }
 }
