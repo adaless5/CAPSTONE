@@ -39,6 +39,8 @@ public class ALTPlayerController : MonoBehaviour
     public Canvas EquipmentWheel;
     public Canvas WeaponWheel;
 
+    bool bIsInThermalView = false;
+
     void Start()
     {
         DontDestroyOnLoad(this);
@@ -110,6 +112,31 @@ public class ALTPlayerController : MonoBehaviour
                 hit.collider.gameObject.SendMessage("ChangeColor");
             }       
         }//
+
+        //Testing Thermal View To Show Group. This logic will be placed in a Thermal Goggle Equipment Class - Anthony.
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            ThermalSkin[] ThermalObjs = FindObjectsOfType<ThermalSkin>();
+
+            if (!bIsInThermalView)
+            {
+                foreach (ThermalSkin obj in ThermalObjs)
+                {
+                    obj.ChangeToThermalSkin();
+                }
+
+                bIsInThermalView = true;
+            }
+            else if (bIsInThermalView)
+            {
+                foreach (ThermalSkin obj in ThermalObjs)
+                {
+                    obj.ChangeToNormalSkin();
+                }
+
+                bIsInThermalView = false;
+            }
+        }
     }
 
     public bool CheckForJumpInput()
