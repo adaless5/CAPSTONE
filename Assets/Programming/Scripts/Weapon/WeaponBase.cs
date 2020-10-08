@@ -92,6 +92,14 @@ public class WeaponBase : Weapon, ISaveable
                 reticuleAnimator.SetTrigger("isTargetted");
             }
 
+            //************TEMP CODE FOR BREAKBLE WALLS************
+            DestructibleObject wall = hitInfo.transform.GetComponentInParent<DestructibleObject>();
+            if(wall)
+            {
+                wall.Break(gameObject);
+            }
+
+            //****************************************************
 
             //Force of impact on hit
             if (hitInfo.rigidbody != null)
