@@ -113,30 +113,30 @@ public class ALTPlayerController : MonoBehaviour
             }       
         }//
 
-        //Testing Thermal View To Show Group. This logic will be placed in a Thermal Goggle Equipment Class - Anthony.
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            ThermalSkin[] ThermalObjs = FindObjectsOfType<ThermalSkin>();
+        ////Testing Thermal View To Show Group. This logic will be placed in a Thermal Goggle Equipment Class - Anthony.
+        //if (Input.GetKeyDown(KeyCode.G))
+        //{
+        //    ThermalSkin[] ThermalObjs = FindObjectsOfType<ThermalSkin>();
 
-            if (!bIsInThermalView)
-            {
-                foreach (ThermalSkin obj in ThermalObjs)
-                {
-                    obj.ChangeToThermalSkin();
-                }
+        //    if (!bIsInThermalView)
+        //    {
+        //        foreach (ThermalSkin obj in ThermalObjs)
+        //        {
+        //            obj.ChangeToThermalSkin();
+        //        }
 
-                bIsInThermalView = true;
-            }
-            else if (bIsInThermalView)
-            {
-                foreach (ThermalSkin obj in ThermalObjs)
-                {
-                    obj.ChangeToNormalSkin();
-                }
+        //        bIsInThermalView = true;
+        //    }
+        //    else if (bIsInThermalView)
+        //    {
+        //        foreach (ThermalSkin obj in ThermalObjs)
+        //        {
+        //            obj.ChangeToNormalSkin();
+        //        }
 
-                bIsInThermalView = false;
-            }
-        }
+        //        bIsInThermalView = false;
+        //    }
+        //}
     }
 
     public bool CheckForJumpInput()
