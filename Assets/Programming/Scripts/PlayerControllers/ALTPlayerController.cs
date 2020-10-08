@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+
 
 public class ALTPlayerController : MonoBehaviour
 {
@@ -36,13 +38,18 @@ public class ALTPlayerController : MonoBehaviour
     public Belt _equipmentBelt;
     public Belt _weaponBelt;
 
+    public Health m_health;
+
     public Canvas EquipmentWheel;
     public Canvas WeaponWheel;
+
 
     void Start()
     {
         DontDestroyOnLoad(this);
 
+        m_health = GetComponent<Health>();
+        
         EquipmentWheel.enabled = false;
         WeaponWheel.enabled = false;
         Cursor.lockState = CursorLockMode.Locked;
@@ -110,6 +117,12 @@ public class ALTPlayerController : MonoBehaviour
                 hit.collider.gameObject.SendMessage("ChangeColor");
             }       
         }//
+
+        //Damage debug -LCC
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            m_health.TakeDamage(20.0f);
+        }
     }
 
     public bool CheckForJumpInput()

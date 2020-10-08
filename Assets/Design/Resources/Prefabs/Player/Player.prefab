@@ -7425,6 +7425,7 @@ GameObject:
   - component: {fileID: 7625975052174585823}
   - component: {fileID: 8447080584603787376}
   - component: {fileID: 5534154309489487828}
+  - component: {fileID: -550643398168935818}
   - component: {fileID: 5815963720737420726}
   m_Layer: 0
   m_Name: Player
@@ -7496,13 +7497,28 @@ MonoBehaviour:
   _camera: {fileID: 5825818126392136262}
   m_LookSensitivity: 5
   _controller: {fileID: 7625975052174585823}
-  m_MoveSpeed: 20
   m_Gravity: -60
   m_JumpHeight: 30
   _equipmentBelt: {fileID: 4071025813976165628}
   _weaponBelt: {fileID: 0}
+  m_health: {fileID: 0}
   EquipmentWheel: {fileID: 2865567885772579474}
   WeaponWheel: {fileID: 524490827525830312}
+--- !u!114 &-550643398168935818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5341162584005937555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 913eba093ff38004180fda1131e14c9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HP: 50
+  m_Armor: 100
+  m_ArmorCooldown: 2
 --- !u!114 &5815963720737420726
 MonoBehaviour:
   m_ObjectHideFlags: 0
