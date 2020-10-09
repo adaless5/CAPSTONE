@@ -44,6 +44,9 @@ public class ALTPlayerController : MonoBehaviour
     public Canvas WeaponWheel;
 
 
+
+    bool bIsInThermalView = false;
+
     void Start()
     {
         DontDestroyOnLoad(this);
@@ -52,6 +55,7 @@ public class ALTPlayerController : MonoBehaviour
         
         EquipmentWheel.enabled = false;
         WeaponWheel.enabled = false;
+
         Cursor.lockState = CursorLockMode.Locked;
     }
 
@@ -69,6 +73,7 @@ public class ALTPlayerController : MonoBehaviour
 
         }
 
+
         //Slowdown time idea -LCC
         if(Input.GetKeyDown(KeyCode.Q))// && m_ControllerState == ControllerState.Play)
         {
@@ -82,9 +87,11 @@ public class ALTPlayerController : MonoBehaviour
         {
             EquipmentWheel.enabled = false;
             Time.timeScale = 1;
+
             Cursor.lockState = CursorLockMode.Locked;
             m_ControllerState = ControllerState.Play;
         }
+
 
         if (Input.GetKeyDown(KeyCode.Tab))// && m_ControllerState == ControllerState.Play)
         {
@@ -100,6 +107,7 @@ public class ALTPlayerController : MonoBehaviour
             Time.timeScale = 1;
             Cursor.lockState = CursorLockMode.Locked;
             //m_ControllerState = ControllerState.Play;
+
         }
 
         //Test cube code (Remove this after Demo)
@@ -117,6 +125,7 @@ public class ALTPlayerController : MonoBehaviour
                 hit.collider.gameObject.SendMessage("ChangeColor");
             }       
         }//
+
 
         //Damage debug -LCC
         if (Input.GetKeyDown(KeyCode.L))
