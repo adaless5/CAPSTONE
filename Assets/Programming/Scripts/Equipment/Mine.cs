@@ -42,18 +42,24 @@ public class Mine : MonoBehaviour
             Instantiate(explosionParticleEffect, transform.position, transform.rotation);
         }
 
-        //applies forces to all nearby gameobjects
+
+        //checks if its a breakable wall and breaks it
         Collider[] hits = Physics.OverlapSphere(transform.position, BlastRadius);
-
-
 
         foreach (Collider obj in hits)
         {
-            if(obj.GetComponent<BreakableWall>())
+            if (obj.GetComponentInParent<DestructibleObject>())
             {
-                obj.GetComponent<BreakableWall>().Blowdedup();
+                obj.GetComponentInParent<DestructibleObject>().Break(gameObject);
+                //break;
             }
+        }
 
+        //applies forces to all nearby gameobjects
+        hits = Physics.OverlapSphere(transform.position, BlastRadius);
+
+        foreach (Collider obj in hits)
+        {
             if (obj.GetComponent<Rigidbody>())
             {
                 obj.GetComponent<Rigidbody>().AddExplosionForce(ExplosionForce, transform.position, BlastRadius);

@@ -72,6 +72,22 @@ public class Blade : Equipment, ISaveable
         return Damage;
     }
 
+    //TODO: Get this to work. goes in but doesnt get the Destructible object
+    private void OnTriggerEnter(Collider other)
+    {
+
+        if (other.transform.GetComponentInParent<DestructibleObject>())
+        {
+            Debug.Log("HIT");
+            other.transform.parent.GetComponent<DestructibleObject>().Break(gameObject);
+        }
+        //DestructibleObject wall = other.GetComponentInParent<DestructibleObject>();
+        //if(wall)
+        //{
+        //    wall.Break(gameObject);
+        //}
+    }
+
     public void SaveDataOnSceneChange()
     {
         SaveSystem.Save(gameObject.name, "bIsActive", bIsActive);
