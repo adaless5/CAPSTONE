@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+
 
 public class ALTPlayerController : MonoBehaviour
 {
@@ -36,8 +38,11 @@ public class ALTPlayerController : MonoBehaviour
     public Belt _equipmentBelt;
     public Belt _weaponBelt;
 
+    public Health m_health;
+
     public Canvas EquipmentWheel;
     public Canvas WeaponWheel;
+
 
 
     bool bIsInThermalView = false;
@@ -46,6 +51,8 @@ public class ALTPlayerController : MonoBehaviour
     {
         DontDestroyOnLoad(this);
 
+        m_health = GetComponent<Health>();
+        
         EquipmentWheel.enabled = false;
         WeaponWheel.enabled = false;
 
@@ -119,6 +126,12 @@ public class ALTPlayerController : MonoBehaviour
             }       
         }//
 
+
+        //Damage debug -LCC
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            m_health.TakeDamage(20.0f);
+        }
     }
 
     public bool CheckForJumpInput()
