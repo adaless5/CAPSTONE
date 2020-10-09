@@ -17,37 +17,16 @@ public class DestructibleObject : MonoBehaviour
     int index = 0;
     GameObject currentstate;
 
+
+    //TODO: add a timer when it reaches final state to disable object
+
     private void Start()
     {
         currentstate = DestructionStates[0];
     }
 
-    // Update is called once per frame
-    //void Update()
-    //{
-    //    timer -= Time.deltaTime;
-
-    //    if (timer <= 0)
-    //    {
-    //        timer = 3f;
-    //        if (index >= DestructionStates.Length - 1)
-    //        {
-    //            gameObject.SetActive(false);
-    //        }
-    //        else
-    //        {
-    //            Destroy(currentstate.gameObject);
-    //            Debug.Log(index.ToString());
-    //            currentstate = Instantiate(DestructionStates[index + 1], transform.position, transform.rotation, transform);
-    //        }
-
-    //        index++;
-    //    }
-    //}
-
     public void Break(GameObject obj)
     {
-         Debug.Log("HIT");
         if (Tags.Length != 0)
         {
             foreach (string t in Tags)
@@ -67,7 +46,7 @@ public class DestructibleObject : MonoBehaviour
 
     IEnumerator TriggerBreak()
     {
-        Debug.Log("WAITING");
+        //TODO: make timer only read the size of the array, so the timer array and object array can be different sizes
         if (Timers.Length != 0)
         {
             yield return new WaitForSeconds(Timers[index]);
@@ -77,10 +56,10 @@ public class DestructibleObject : MonoBehaviour
     }
 
     void CycleState()
-    {
-        Debug.Log("CYCLE");
+    { 
         if (index >= DestructionStates.Length - 1)
         {
+            //TODO: add a fade away before deleting
             gameObject.SetActive(false);
         }
         else
@@ -88,7 +67,7 @@ public class DestructibleObject : MonoBehaviour
             Destroy(currentstate.gameObject);
             Debug.Log(index.ToString());
             currentstate = Instantiate(DestructionStates[index + 1], transform.position, transform.rotation, transform);
+            index++;
         }
-        index++;
     }
 }
