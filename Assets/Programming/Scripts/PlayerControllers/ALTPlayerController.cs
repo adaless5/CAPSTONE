@@ -39,6 +39,7 @@ public class ALTPlayerController : MonoBehaviour
     public Canvas EquipmentWheel;
     public Canvas WeaponWheel;
 
+
     bool bIsInThermalView = false;
 
     void Start()
@@ -47,6 +48,7 @@ public class ALTPlayerController : MonoBehaviour
 
         EquipmentWheel.enabled = false;
         WeaponWheel.enabled = false;
+
         Cursor.lockState = CursorLockMode.Locked;
     }
 
@@ -64,6 +66,7 @@ public class ALTPlayerController : MonoBehaviour
 
         }
 
+
         //Slowdown time idea -LCC
         if(Input.GetKeyDown(KeyCode.Q))// && m_ControllerState == ControllerState.Play)
         {
@@ -77,9 +80,11 @@ public class ALTPlayerController : MonoBehaviour
         {
             EquipmentWheel.enabled = false;
             Time.timeScale = 1;
+
             Cursor.lockState = CursorLockMode.Locked;
             m_ControllerState = ControllerState.Play;
         }
+
 
         if (Input.GetKeyDown(KeyCode.Tab))// && m_ControllerState == ControllerState.Play)
         {
@@ -95,6 +100,7 @@ public class ALTPlayerController : MonoBehaviour
             Time.timeScale = 1;
             Cursor.lockState = CursorLockMode.Locked;
             //m_ControllerState = ControllerState.Play;
+
         }
 
         //Test cube code (Remove this after Demo)
@@ -113,30 +119,6 @@ public class ALTPlayerController : MonoBehaviour
             }       
         }//
 
-        ////Testing Thermal View To Show Group. This logic will be placed in a Thermal Goggle Equipment Class - Anthony.
-        //if (Input.GetKeyDown(KeyCode.G))
-        //{
-        //    ThermalSkin[] ThermalObjs = FindObjectsOfType<ThermalSkin>();
-
-        //    if (!bIsInThermalView)
-        //    {
-        //        foreach (ThermalSkin obj in ThermalObjs)
-        //        {
-        //            obj.ChangeToThermalSkin();
-        //        }
-
-        //        bIsInThermalView = true;
-        //    }
-        //    else if (bIsInThermalView)
-        //    {
-        //        foreach (ThermalSkin obj in ThermalObjs)
-        //        {
-        //            obj.ChangeToNormalSkin();
-        //        }
-
-        //        bIsInThermalView = false;
-        //    }
-        //}
     }
 
     public bool CheckForJumpInput()
