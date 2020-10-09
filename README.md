@@ -7,3 +7,4 @@ Equipment bar   Q
 Weapon bar      Tab
 Use Tool        E
 Use Weapon      Left Click
+Test Damage	L	
