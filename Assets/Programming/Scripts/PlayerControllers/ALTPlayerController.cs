@@ -39,13 +39,16 @@ public class ALTPlayerController : MonoBehaviour
     public Canvas EquipmentWheel;
     public Canvas WeaponWheel;
 
+
+    bool bIsInThermalView = false;
+
     void Start()
     {
         DontDestroyOnLoad(this);
 
         EquipmentWheel.enabled = false;
         WeaponWheel.enabled = false;
-        Application.targetFrameRate = 120;
+
         Cursor.lockState = CursorLockMode.Locked;
     }
 
@@ -63,32 +66,41 @@ public class ALTPlayerController : MonoBehaviour
 
         }
 
-        if(Input.GetKeyDown(KeyCode.Q) && m_ControllerState == ControllerState.Play)
+
+        //Slowdown time idea -LCC
+        if(Input.GetKeyDown(KeyCode.Q))// && m_ControllerState == ControllerState.Play)
         {
             EquipmentWheel.enabled = true;
+            Time.timeScale = 0.3f;
             Cursor.lockState = CursorLockMode.None;
-            m_ControllerState = ControllerState.Menu;
+            //m_ControllerState = ControllerState.Menu;
         }
 
-        if (Input.GetKeyUp(KeyCode.Q) && m_ControllerState == ControllerState.Menu)
+        if (Input.GetKeyUp(KeyCode.Q)) //&& m_ControllerState == ControllerState.Menu)
         {
             EquipmentWheel.enabled = false;
+            Time.timeScale = 1;
+
             Cursor.lockState = CursorLockMode.Locked;
             m_ControllerState = ControllerState.Play;
         }
 
-        if (Input.GetKeyDown(KeyCode.Tab) && m_ControllerState == ControllerState.Play)
+
+        if (Input.GetKeyDown(KeyCode.Tab))// && m_ControllerState == ControllerState.Play)
         {
             WeaponWheel.enabled = true;
+            Time.timeScale = 0.3f;
             Cursor.lockState = CursorLockMode.None;
-            m_ControllerState = ControllerState.Menu;
+            //m_ControllerState = ControllerState.Menu;
         }
 
-        if (Input.GetKeyUp(KeyCode.Tab) && m_ControllerState == ControllerState.Menu)
+        if (Input.GetKeyUp(KeyCode.Tab))// && m_ControllerState == ControllerState.Menu)
         {
             WeaponWheel.enabled = false;
+            Time.timeScale = 1;
             Cursor.lockState = CursorLockMode.Locked;
-            m_ControllerState = ControllerState.Play;
+            //m_ControllerState = ControllerState.Play;
+
         }
 
         //Test cube code (Remove this after Demo)
@@ -106,6 +118,7 @@ public class ALTPlayerController : MonoBehaviour
                 hit.collider.gameObject.SendMessage("ChangeColor");
             }       
         }//
+
     }
 
     public bool CheckForJumpInput()

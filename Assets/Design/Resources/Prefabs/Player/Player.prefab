@@ -803,6 +803,9 @@ GameObject:
   - component: {fileID: 2324546261994304791}
   - component: {fileID: 1294678359610851702}
   - component: {fileID: 8761802317193078688}
+
+  - component: {fileID: 3574740520164061487}
+
   m_Layer: 5
   m_Name: Icon
   m_TagString: Untagged
@@ -844,7 +847,9 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2016797944643661070}
-  m_Enabled: 0
+
+  m_Enabled: 1
+
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -867,6 +872,22 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+
+--- !u!114 &3574740520164061487
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2016797944643661070}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02160a77f4284314c872e908933acd02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _Icon: {fileID: 8761802317193078688}
+  _CorrespondingToolIndex: 2
+
 --- !u!1 &2340283688659431486
 GameObject:
   m_ObjectHideFlags: 0
@@ -5847,6 +5868,7 @@ Transform:
   - {fileID: 4183534190567601375}
   - {fileID: 4388876549647319748}
   - {fileID: 115584500046663571}
+  - {fileID: 6289700209966592180}
   m_Father: {fileID: 3094653446611372868}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5943,6 +5965,53 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 
+
+--- !u!1 &2802856246025625874
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6289700209966592180}
+  - component: {fileID: 4399674171908023782}
+  m_Layer: 0
+  m_Name: ThermalEquipment
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6289700209966592180
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2802856246025625874}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.1252708, y: 0.28522956, z: 0.60356903}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 568081014441193008}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4399674171908023782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2802856246025625874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a31c4c385aa8b84c823b739a166eac0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bIsActive: 0
+  bIsObtained: 0
+
 --- !u!1 &2913932990592433857
 GameObject:
   m_ObjectHideFlags: 0
@@ -6273,6 +6342,9 @@ GameObject:
   - component: {fileID: 3234475711152068802}
   - component: {fileID: 3566026018578774694}
   - component: {fileID: 302454792327827019}
+
+  - component: {fileID: 7885080173731204760}
+
   m_Layer: 5
   m_Name: Thermal_Button
   m_TagString: Untagged
@@ -6382,7 +6454,35 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3566026018578774694}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+
+      m_Calls:
+      - m_Target: {fileID: 4071025813976165628}
+        m_TargetAssemblyTypeName: Belt, Assembly-CSharp
+        m_MethodName: EquipToolAtIndex
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 2
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &7885080173731204760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3390205450737024223}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 324089b713efac4469225250028494a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _button: {fileID: 302454792327827019}
+  _CorrespondingToolIndex: 2
+
 --- !u!1 &3830981128702727235
 GameObject:
   m_ObjectHideFlags: 0
@@ -7496,7 +7596,9 @@ MonoBehaviour:
   _camera: {fileID: 5825818126392136262}
   m_LookSensitivity: 5
   _controller: {fileID: 7625975052174585823}
+
   m_MoveSpeed: 20
+
   m_Gravity: -60
   m_JumpHeight: 30
   _equipmentBelt: {fileID: 4071025813976165628}
