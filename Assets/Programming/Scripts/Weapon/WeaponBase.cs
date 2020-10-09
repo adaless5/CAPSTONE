@@ -81,7 +81,7 @@ public class WeaponBase : Weapon, ISaveable
             //Debug.Log(hitInfo.transform.name);
 
             //Only damages if asset has "Target" script
-            Target target = hitInfo.transform.GetComponent<Target>();
+            Health target = hitInfo.transform.GetComponent<Health>();
             if (target != null)
             {
                 target.TakeDamage(m_damageAmount);
@@ -122,7 +122,7 @@ public class WeaponBase : Weapon, ISaveable
             //Debug.Log(targetInfo.transform.name);
 
        
-            Target target = targetInfo.transform.GetComponent<Target>();
+            Health target = targetInfo.transform.GetComponent<Health>();
             if (target != null)
             {
                 reticuleAnimator.SetBool("isTargetted", true);
