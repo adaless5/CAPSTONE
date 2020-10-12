@@ -106,6 +106,13 @@ public class Health : MonoBehaviour, ISaveable
         OnHeal?.Invoke(healthToHeal);
     }
 
+    public void Heal(float healthToHeal)
+    {
+        m_HP = Mathf.Clamp(m_HP, 0, m_MaxHealth);
+        m_HP += healthToHeal;
+        Debug.Log("Healed" + healthToHeal + "amount");
+    }
+
     public void SaveDataOnSceneChange()
     {
         SaveSystem.Save(gameObject.name, "isDead", isDead);
