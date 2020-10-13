@@ -56,6 +56,8 @@ public class ALTPlayerController : MonoBehaviour
         EquipmentWheel.enabled = false;
         WeaponWheel.enabled = false;
 
+        EventBroker.CallOnPlayerSpawned(gameObject);
+
         Cursor.lockState = CursorLockMode.Locked;
     }
 
@@ -131,6 +133,10 @@ public class ALTPlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.L))
         {
             m_health.TakeDamage(20.0f);
+        }
+        else if (Input.GetKeyDown(KeyCode.H))
+        {
+            m_health.Heal(20.0f);
         }
     }
 

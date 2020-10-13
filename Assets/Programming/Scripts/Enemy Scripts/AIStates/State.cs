@@ -4,7 +4,7 @@ using System.Security.Cryptography.X509Certificates;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
-public class State : MonoBehaviour 
+public class State
 {
     public enum STATE
     {

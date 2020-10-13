@@ -9,12 +9,18 @@ public class DroneAI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _currentState = new Patrol(gameObject, _patrolPoints, GameObject.FindGameObjectWithTag("Player").transform);
+        EventBroker.OnPlayerSpawned += EventStart;
+    }
+
+    private void EventStart(GameObject player)
+    {
+        _currentState = new Patrol(gameObject, _patrolPoints, player.transform);
     }
 
     // Update is called once per frame
     void Update()
     {
-        _currentState = _currentState.Process();
+        if (_currentState != null)
+            _currentState = _currentState.Process();
     }
 }
