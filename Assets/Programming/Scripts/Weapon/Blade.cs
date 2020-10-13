@@ -79,7 +79,7 @@ public class Blade : Equipment, ISaveable
         if (other.transform.GetComponentInParent<DestructibleObject>())
         {
             Debug.Log("HIT");
-            other.transform.parent.GetComponent<DestructibleObject>().Break(gameObject);
+            other.transform.parent.GetComponent<DestructibleObject>().Break(gameObject.tag);
         }
         //DestructibleObject wall = other.GetComponentInParent<DestructibleObject>();
         //if(wall)

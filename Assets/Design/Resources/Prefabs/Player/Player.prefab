@@ -803,9 +803,7 @@ GameObject:
   - component: {fileID: 2324546261994304791}
   - component: {fileID: 1294678359610851702}
   - component: {fileID: 8761802317193078688}
-
   - component: {fileID: 3574740520164061487}
-
   m_Layer: 5
   m_Name: Icon
   m_TagString: Untagged
@@ -847,22 +845,20 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2016797944643661070}
-
   m_Enabled: 1
-
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 0
+  m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 0
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 663cb3e1ef0cc4245bcc062279d0d82f, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -872,7 +868,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
-
 --- !u!114 &3574740520164061487
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -887,7 +882,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _Icon: {fileID: 8761802317193078688}
   _CorrespondingToolIndex: 2
-
 --- !u!1 &2340283688659431486
 GameObject:
   m_ObjectHideFlags: 0
@@ -5965,7 +5959,6 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 
-
 --- !u!1 &2802856246025625874
 GameObject:
   m_ObjectHideFlags: 0
@@ -6011,7 +6004,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bIsActive: 0
   bIsObtained: 0
-
 --- !u!1 &2913932990592433857
 GameObject:
   m_ObjectHideFlags: 0
@@ -6342,9 +6334,7 @@ GameObject:
   - component: {fileID: 3234475711152068802}
   - component: {fileID: 3566026018578774694}
   - component: {fileID: 302454792327827019}
-
   - component: {fileID: 7885080173731204760}
-
   m_Layer: 5
   m_Name: Thermal_Button
   m_TagString: Untagged
@@ -6454,20 +6444,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3566026018578774694}
   m_OnClick:
     m_PersistentCalls:
-
-      m_Calls:
-      - m_Target: {fileID: 4071025813976165628}
-        m_TargetAssemblyTypeName: Belt, Assembly-CSharp
-        m_MethodName: EquipToolAtIndex
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 2
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &7885080173731204760
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6482,7 +6459,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _button: {fileID: 302454792327827019}
   _CorrespondingToolIndex: 2
-
 --- !u!1 &3830981128702727235
 GameObject:
   m_ObjectHideFlags: 0
@@ -7597,13 +7573,11 @@ MonoBehaviour:
   _camera: {fileID: 5825818126392136262}
   m_LookSensitivity: 5
   _controller: {fileID: 7625975052174585823}
-  
-  m_MoveSpeed: 20
   m_Gravity: -60
   m_JumpHeight: 30
   _equipmentBelt: {fileID: 4071025813976165628}
-  _weaponBelt: {fileID: 0}
-  m_health: {fileID: 0}
+  _weaponBelt: {fileID: 2271671246309865545}
+  m_health: {fileID: -550643398168935818}
   EquipmentWheel: {fileID: 2865567885772579474}
   WeaponWheel: {fileID: 524490827525830312}
 --- !u!114 &-550643398168935818
@@ -7621,6 +7595,7 @@ MonoBehaviour:
   m_HP: 50
   m_Armor: 100
   m_ArmorCooldown: 2
+  m_ArmorRefreshRate: 0.3
 --- !u!114 &5815963720737420726
 MonoBehaviour:
   m_ObjectHideFlags: 0

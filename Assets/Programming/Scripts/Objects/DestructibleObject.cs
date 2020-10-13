@@ -9,29 +9,33 @@ public class DestructibleObject : MonoBehaviour
     [SerializeField] GameObject[] DestructionStates;
 
     [Tooltip("This list should contain the time of how long you want a state to linger after being hit. The element of the timers line up with the elements of states")]
-    [SerializeField] int[] Timers;
+    [SerializeField] float[] Timers;
 
     [Tooltip("This list should contain the tags of things that can break the object")]
     [SerializeField] string[] Tags;
 
+    [Tooltip("This variable should contain the amount of time that the last state lingers before disappearing")]
+    [SerializeField] float deathtimer;
+
     int index = 0;
     GameObject currentstate;
+    
+    //TODO:: SET UP SAVING
 
-
-    //TODO: add a timer when it reaches final state to disable object
 
     private void Start()
     {
         currentstate = DestructionStates[0];
     }
 
-    public void Break(GameObject obj)
+    public void Break(string tag)
     {
+        //TODO: THIS DONT WORK
         if (Tags.Length != 0)
         {
             foreach (string t in Tags)
             {
-                if (obj.tag == t)
+                if (tag == t)
                 {
                     StartCoroutine(TriggerBreak());
                     break;
@@ -44,10 +48,25 @@ public class DestructibleObject : MonoBehaviour
         }
     }
 
+    void CycleState()
+    {
+        if (index < DestructionStates.Length - 1)
+        {
+            Destroy(currentstate.gameObject);
+            currentstate = Instantiate(DestructionStates[index + 1], transform.position, transform.rotation, transform);
+            index++;
+           // Debug.Log(index.ToString());
+        }
+
+        if (index >= DestructionStates.Length - 1)
+        {
+            //start death 
+            StartCoroutine(TriggerDeath());
+        }
+    }
     IEnumerator TriggerBreak()
     {
-        //TODO: make timer only read the size of the array, so the timer array and object array can be different sizes
-        if (Timers.Length != 0)
+        if (index < Timers.Length)
         {
             yield return new WaitForSeconds(Timers[index]);
         }
@@ -55,19 +74,35 @@ public class DestructibleObject : MonoBehaviour
         CycleState();
     }
 
-    void CycleState()
-    { 
-        if (index >= DestructionStates.Length - 1)
+    IEnumerator TriggerDeath()
+    {
+        yield return new WaitForSeconds(deathtimer);
+
+        StartCoroutine(TriggerFadeOut());
+    }
+
+    IEnumerator TriggerFadeOut()
+    {
+        //TODO: This works but only if the shader on the object supports alpha
+       // Debug.Log(currentstate);
+        MeshRenderer[] rends = currentstate.GetComponentsInChildren<MeshRenderer>();
+       // Debug.Log(rends.Length.ToString());
+        foreach (MeshRenderer mshr in rends)
         {
-            //TODO: add a fade away before deleting
-            gameObject.SetActive(false);
+            float fadeDurationInSeconds = 1f;
+            float timeout = 0.05f;
+            float fadeAmount = 1 / (fadeDurationInSeconds / timeout);
+
+            for (float f = 1; f >= -0.05; f -= fadeAmount)
+            {
+                Color c = mshr.material.color;
+                c.a = f;
+                mshr.material.color = c;
+                yield return new WaitForSeconds(timeout);
+               // Debug.Log(mshr.material.color.ToString());
+            }
         }
-        else
-        {
-            Destroy(currentstate.gameObject);
-            Debug.Log(index.ToString());
-            currentstate = Instantiate(DestructionStates[index + 1], transform.position, transform.rotation, transform);
-            index++;
-        }
+
+        gameObject.SetActive(false);
     }
 }

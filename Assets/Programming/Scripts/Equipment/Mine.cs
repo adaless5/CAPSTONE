@@ -50,7 +50,7 @@ public class Mine : MonoBehaviour
         {
             if (obj.GetComponentInParent<DestructibleObject>())
             {
-                obj.GetComponentInParent<DestructibleObject>().Break(gameObject);
+                obj.GetComponentInParent<DestructibleObject>().Break(gameObject.tag);
                 //break;
             }
         }

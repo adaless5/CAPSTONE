@@ -30,6 +30,9 @@ public class WeaponBase : Weapon, ISaveable
 
         gunCamera = GameObject.FindObjectOfType<Camera>();
 
+        //TODO:: editor rests tag to nothing for some reason. forcing tag here
+        gameObject.tag = "Player_Weapon";
+
         GetComponent<MeshRenderer>().enabled = true;
         bIsActive = true;
         bIsObtained = true;
@@ -92,14 +95,12 @@ public class WeaponBase : Weapon, ISaveable
                 reticuleAnimator.SetTrigger("isTargetted");
             }
 
-            //************TEMP CODE FOR BREAKBLE WALLS************
+            //checks if breakable wall
             DestructibleObject wall = hitInfo.transform.GetComponentInParent<DestructibleObject>();
             if(wall)
             {
-                wall.Break(gameObject);
+                wall.Break(gameObject.tag);
             }
-
-            //****************************************************
 
             //Force of impact on hit
             if (hitInfo.rigidbody != null)
