@@ -38,6 +38,8 @@ public class Health : MonoBehaviour, ISaveable
 
     bool isDead = false;
 
+    public HealthBarUI healthBar;
+
     void Awake()
     {
         LoadDataOnSceneEnter();
@@ -45,6 +47,8 @@ public class Health : MonoBehaviour, ISaveable
 
         //if (isDead) GetComponent<MeshRenderer>().enabled = false;
         //else GetComponent<MeshRenderer>().enabled = true;
+
+        healthBar.SetMaxHealth(m_MaxHealth);
     }
 
     void OnDisable()
@@ -63,8 +67,9 @@ public class Health : MonoBehaviour, ISaveable
         }
         else
         {
-
             m_HP -= damage;
+            healthBar.SetHealth(m_HP);
+
             if (m_HP <= 0.0f)
             {
                 Die();
