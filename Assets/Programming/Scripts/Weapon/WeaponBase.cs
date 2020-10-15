@@ -29,10 +29,6 @@ public class WeaponBase : Weapon, ISaveable
     {
 
         gunCamera = GameObject.FindObjectOfType<Camera>();
-
-        //TODO:: editor rests tag to nothing for some reason. forcing tag here
-        gameObject.tag = "Player_Weapon";
-
         GetComponent<MeshRenderer>().enabled = true;
         bIsActive = true;
         bIsObtained = true;

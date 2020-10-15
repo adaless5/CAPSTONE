@@ -24,6 +24,8 @@ public class Blade : Equipment, ISaveable
         hitbox.enabled = false;
         hitbox.isTrigger = true;
         GetComponent<MeshRenderer>().enabled = false;
+
+        
     }
 
     void Awake()
@@ -72,20 +74,15 @@ public class Blade : Equipment, ISaveable
         return Damage;
     }
 
-    //TODO: Get this to work. goes in but doesnt get the Destructible object
     private void OnTriggerEnter(Collider other)
     {
-
-        if (other.transform.GetComponentInParent<DestructibleObject>())
+        Debug.Log(gameObject.tag);
+        DestructibleObject obj = other.GetComponentInParent<DestructibleObject>();
+        if (obj)
         {
             Debug.Log("HIT");
-            other.transform.parent.GetComponent<DestructibleObject>().Break(gameObject.tag);
+            obj.Break(gameObject.tag);
         }
-        //DestructibleObject wall = other.GetComponentInParent<DestructibleObject>();
-        //if(wall)
-        //{
-        //    wall.Break(gameObject);
-        //}
     }
 
     public void SaveDataOnSceneChange()

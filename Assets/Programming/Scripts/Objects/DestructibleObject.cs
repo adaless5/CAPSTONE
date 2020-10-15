@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DestructibleObject : MonoBehaviour
+public class DestructibleObject : MonoBehaviour, ISaveable
 {
-    // Start is called before the first frame update
     [Tooltip("This list should contain every version of the mesh starting from least broken and ending in broken")]
     [SerializeField] GameObject[] DestructionStates;
 
@@ -18,19 +17,45 @@ public class DestructibleObject : MonoBehaviour
     [SerializeField] float deathtimer;
 
     int index = 0;
+    bool isDead;
     GameObject currentstate;
-    
-    //TODO:: SET UP SAVING
-
 
     private void Start()
     {
         currentstate = DestructionStates[0];
+        isDead = false;
+    }
+
+    private void Awake()
+    {
+        LoadDataOnSceneEnter();
+        SaveSystem.SaveEvent += SaveDataOnSceneChange;
+
+
+        Debug.Log(isDead);
+        if (isDead == true)
+        {
+            gameObject.SetActive(false);
+        }
+    }
+
+    public void SaveDataOnSceneChange()
+    {
+        SaveSystem.Save(gameObject.name, "isBroken", isDead);
+    }
+
+    public void LoadDataOnSceneEnter()
+    {
+        isDead = SaveSystem.LoadBool(gameObject.name, "isBroken");
+    }
+
+    public void OnDisable()
+    {
+        SaveSystem.SaveEvent -= SaveDataOnSceneChange;
     }
 
     public void Break(string tag)
     {
-        //TODO: THIS DONT WORK
         if (Tags.Length != 0)
         {
             foreach (string t in Tags)
@@ -55,7 +80,6 @@ public class DestructibleObject : MonoBehaviour
             Destroy(currentstate.gameObject);
             currentstate = Instantiate(DestructionStates[index + 1], transform.position, transform.rotation, transform);
             index++;
-           // Debug.Log(index.ToString());
         }
 
         if (index >= DestructionStates.Length - 1)
@@ -78,31 +102,9 @@ public class DestructibleObject : MonoBehaviour
     {
         yield return new WaitForSeconds(deathtimer);
 
-        StartCoroutine(TriggerFadeOut());
-    }
-
-    IEnumerator TriggerFadeOut()
-    {
-        //TODO: This works but only if the shader on the object supports alpha
-       // Debug.Log(currentstate);
-        MeshRenderer[] rends = currentstate.GetComponentsInChildren<MeshRenderer>();
-       // Debug.Log(rends.Length.ToString());
-        foreach (MeshRenderer mshr in rends)
-        {
-            float fadeDurationInSeconds = 1f;
-            float timeout = 0.05f;
-            float fadeAmount = 1 / (fadeDurationInSeconds / timeout);
-
-            for (float f = 1; f >= -0.05; f -= fadeAmount)
-            {
-                Color c = mshr.material.color;
-                c.a = f;
-                mshr.material.color = c;
-                yield return new WaitForSeconds(timeout);
-               // Debug.Log(mshr.material.color.ToString());
-            }
-        }
-
+        isDead = true;
+        Debug.Log(isDead);
         gameObject.SetActive(false);
     }
+
 }
