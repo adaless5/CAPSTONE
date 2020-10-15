@@ -52,7 +52,35 @@ public class ALTPlayerController : MonoBehaviour
         DontDestroyOnLoad(this);
 
         m_health = GetComponent<Health>();
-        
+
+        Belt[] beltsInScene; 
+        beltsInScene = FindObjectsOfType<Belt>();
+        foreach(Belt obj in beltsInScene)
+        {
+            if (obj.tag == "EquipmentBelt")
+            {
+                _equipmentBelt = obj; 
+            }
+            else if(obj.tag == "WeaponBelt")
+            {
+                _weaponBelt = obj; 
+            }
+        }
+
+        Canvas[] wheelsInScene;
+        wheelsInScene = FindObjectsOfType<Canvas>();
+        foreach (Canvas obj in wheelsInScene)
+        {
+            if (obj.tag == "EquipmentWheel")
+            {
+                EquipmentWheel = obj;
+            }
+            else if (obj.tag == "WeaponWheel")
+            {
+                WeaponWheel = obj;
+            }
+        }
+
         EquipmentWheel.enabled = false;
         WeaponWheel.enabled = false;
 

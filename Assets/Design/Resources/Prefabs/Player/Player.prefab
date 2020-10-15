@@ -522,7 +522,7 @@ GameObject:
   - component: {fileID: 182575044663830712}
   m_Layer: 5
   m_Name: Equipment_Wheel_Canvas
-  m_TagString: Untagged
+  m_TagString: EquipmentWheel
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5843,7 +5843,7 @@ GameObject:
   - component: {fileID: 4071025813976165628}
   m_Layer: 0
   m_Name: Equipment_Belt
-  m_TagString: Untagged
+  m_TagString: EquipmentBelt
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6471,7 +6471,7 @@ GameObject:
   - component: {fileID: 2271671246309865545}
   m_Layer: 0
   m_Name: Weapon_Belt
-  m_TagString: Untagged
+  m_TagString: WeaponBelt
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7575,11 +7575,11 @@ MonoBehaviour:
   _controller: {fileID: 7625975052174585823}
   m_Gravity: -60
   m_JumpHeight: 30
-  _equipmentBelt: {fileID: 4071025813976165628}
-  _weaponBelt: {fileID: 2271671246309865545}
+  _equipmentBelt: {fileID: 0}
+  _weaponBelt: {fileID: 0}
   m_health: {fileID: -550643398168935818}
-  EquipmentWheel: {fileID: 2865567885772579474}
-  WeaponWheel: {fileID: 524490827525830312}
+  EquipmentWheel: {fileID: 0}
+  WeaponWheel: {fileID: 0}
 --- !u!114 &-550643398168935818
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7622,7 +7622,7 @@ GameObject:
   - component: {fileID: 1369609581342696854}
   m_Layer: 5
   m_Name: Weapon_Wheel_Canvas
-  m_TagString: Untagged
+  m_TagString: WeaponWheel
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
