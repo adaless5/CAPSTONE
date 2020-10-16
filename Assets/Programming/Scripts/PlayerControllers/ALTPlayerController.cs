@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEditor.SceneManagement;
 using UnityEngine;
-
+using UnityEngine.Rendering;
 
 public class ALTPlayerController : MonoBehaviour
 {
@@ -39,6 +39,7 @@ public class ALTPlayerController : MonoBehaviour
     public Belt _weaponBelt;
 
     public Health m_health;
+    public Armor m_armor;
 
     public Canvas EquipmentWheel;
     public Canvas WeaponWheel;
@@ -52,9 +53,43 @@ public class ALTPlayerController : MonoBehaviour
         DontDestroyOnLoad(this);
 
         m_health = GetComponent<Health>();
-        
+        m_armor = GetComponent<Armor>();
+
+
+        Belt[] beltsInScene; 
+        beltsInScene = FindObjectsOfType<Belt>();
+        foreach(Belt obj in beltsInScene)
+        {
+            if (obj.tag == "EquipmentBelt")
+            {
+                _equipmentBelt = obj; 
+            }
+            else if(obj.tag == "WeaponBelt")
+            {
+                _weaponBelt = obj; 
+            }
+        }
+
+        Canvas[] wheelsInScene;
+        wheelsInScene = FindObjectsOfType<Canvas>();
+        foreach (Canvas obj in wheelsInScene)
+        {
+            if (obj.tag == "EquipmentWheel")
+            {
+                EquipmentWheel = obj;
+            }
+            else if (obj.tag == "WeaponWheel")
+            {
+                WeaponWheel = obj;
+            }
+        }
+
         EquipmentWheel.enabled = false;
         WeaponWheel.enabled = false;
+
+        EventBroker.CallOnPlayerSpawned(gameObject);
+
+        m_health.OnTakeDamage += m_armor.ResetArmorTimer;
 
         Cursor.lockState = CursorLockMode.Locked;
     }
@@ -130,8 +165,29 @@ public class ALTPlayerController : MonoBehaviour
         //Damage debug -LCC
         if (Input.GetKeyDown(KeyCode.L))
         {
-            m_health.TakeDamage(20.0f);
+            TakeDamage(20.0f);
         }
+        else if (Input.GetKeyDown(KeyCode.H))
+        {
+            m_health.Heal(20.0f);
+        }
+    }
+
+    private void TakeDamage(float damage)
+    {
+        if (m_armor.GetCurrentArmor() > 0)
+        {
+            m_armor.TakeDamage(damage);
+        }
+        else
+        {
+            m_health.TakeDamage(damage);
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        print(collision.GetContact(0).normal);
     }
 
     public bool CheckForJumpInput()
@@ -217,6 +273,14 @@ public class ALTPlayerController : MonoBehaviour
             {
                 m_YVelocity = m_JumpHeight;
             }
+        }
+        else if (!_controller.isGrounded)
+        {
+            if (_controller.collisionFlags.ToString() == "Above")
+            {
+                m_YVelocity = -2.0f;
+            }
+            
         }
     }
 
