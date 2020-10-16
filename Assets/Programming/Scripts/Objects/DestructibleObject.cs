@@ -1,9 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class DestructibleObject : MonoBehaviour, ISaveable
 {
+    bool bDebug = true;
+
     [Tooltip("This list should contain every version of the mesh starting from least broken and ending in broken")]
     [SerializeField] GameObject[] DestructionStates;
 
@@ -16,14 +19,18 @@ public class DestructibleObject : MonoBehaviour, ISaveable
     [Tooltip("This variable should contain the amount of time that the last state lingers before disappearing")]
     [SerializeField] float deathtimer;
 
-    int index = 0;
-    bool isDead;
-    GameObject currentstate;
+    [SerializeField] bool IsSaved;
+
+    int _index = 0;
+    bool _bisDead = false;
+    GameObject _currentstate;
+
+    //TODO:GET FADE OUT WORKING
 
     private void Start()
     {
-        currentstate = DestructionStates[0];
-        isDead = false;
+        _currentstate = DestructionStates[0];
+        //isDead = false;
     }
 
     private void Awake()
@@ -32,21 +39,32 @@ public class DestructibleObject : MonoBehaviour, ISaveable
         SaveSystem.SaveEvent += SaveDataOnSceneChange;
 
 
-        Debug.Log(isDead);
-        if (isDead == true)
+        if(bDebug)Debug.Log(_bisDead);
+
+        _currentstate = DestructionStates[0];
+        if (_bisDead == true)
         {
-            gameObject.SetActive(false);
+            Collider[] col = _currentstate.GetComponentsInChildren<Collider>();
+            MeshRenderer[] mesh = _currentstate.GetComponentsInChildren<MeshRenderer>();
+            foreach (MeshRenderer r in mesh)
+            {
+                r.enabled = false;
+            }
+            foreach (Collider c in col)
+            {
+                c.enabled = false;
+            }
         }
     }
 
     public void SaveDataOnSceneChange()
     {
-        SaveSystem.Save(gameObject.name, "isBroken", isDead);
+        SaveSystem.Save(gameObject.name, "isBroken", _bisDead);
     }
 
     public void LoadDataOnSceneEnter()
     {
-        isDead = SaveSystem.LoadBool(gameObject.name, "isBroken");
+        _bisDead = SaveSystem.LoadBool(gameObject.name, "isBroken");
     }
 
     public void OnDisable()
@@ -75,14 +93,21 @@ public class DestructibleObject : MonoBehaviour, ISaveable
 
     void CycleState()
     {
-        if (index < DestructionStates.Length - 1)
+        if (_index < DestructionStates.Length - 1)
         {
-            Destroy(currentstate.gameObject);
-            currentstate = Instantiate(DestructionStates[index + 1], transform.position, transform.rotation, transform);
-            index++;
+            if (_currentstate == gameObject)
+            {
+                gameObject.GetComponentInChildren<MeshRenderer>().enabled = false;
+            }
+            else
+            {
+                Destroy(_currentstate.gameObject);
+            }
+            _currentstate = Instantiate(DestructionStates[_index + 1], transform.position, transform.rotation, transform);
+            _index++;
         }
 
-        if (index >= DestructionStates.Length - 1)
+        if (_index >= DestructionStates.Length - 1)
         {
             //start death 
             StartCoroutine(TriggerDeath());
@@ -90,9 +115,9 @@ public class DestructibleObject : MonoBehaviour, ISaveable
     }
     IEnumerator TriggerBreak()
     {
-        if (index < Timers.Length)
+        if (_index < Timers.Length)
         {
-            yield return new WaitForSeconds(Timers[index]);
+            yield return new WaitForSeconds(Timers[_index]);
         }
 
         CycleState();
@@ -102,9 +127,19 @@ public class DestructibleObject : MonoBehaviour, ISaveable
     {
         yield return new WaitForSeconds(deathtimer);
 
-        isDead = true;
-        Debug.Log(isDead);
-        gameObject.SetActive(false);
+        if(IsSaved)_bisDead = true;
+
+        Collider[] col = _currentstate.GetComponentsInChildren<Collider>();
+        MeshRenderer[] mesh = _currentstate.GetComponentsInChildren<MeshRenderer>();
+        foreach(MeshRenderer r in mesh)
+        {
+             r.enabled = false;
+        }
+        foreach (Collider c in col)
+        {
+            c.enabled = false;
+        }
+        // gameObject.SetActive(false);
     }
 
 }

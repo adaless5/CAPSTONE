@@ -8,7 +8,7 @@ public class Blade : Equipment, ISaveable
     [SerializeField] int Damage = 50;
     public ALTPlayerController playerController;
 
-    Animator animation;
+    Animator animationswing;
     BoxCollider hitbox;
 
     Camera _cam;
@@ -18,7 +18,7 @@ public class Blade : Equipment, ISaveable
     {
         //base.Start(); 
 
-        animation = GetComponent<Animator>();
+        animationswing = GetComponent<Animator>();
         hitbox = GetComponent<BoxCollider>();
 
         hitbox.enabled = false;
@@ -59,12 +59,12 @@ public class Blade : Equipment, ISaveable
     {
         if (playerController.CheckForUseEquipmentInput())
         {
-            animation.SetBool("attacking", true);
+            animationswing.SetBool("attacking", true);
             hitbox.enabled = true;
         }
         else if (playerController.CheckForUseEquipmentInputReleased())
         {
-            animation.SetBool("attacking", false);
+            animationswing.SetBool("attacking", false);
             hitbox.enabled = false;
         }
     }
