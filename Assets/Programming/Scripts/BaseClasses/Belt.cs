@@ -10,12 +10,11 @@ public class Belt : MonoBehaviour
     void Start()
     {
         _items = GetComponentsInChildren<Tool>();
-        //Debug.Log(_items.Length);
     }
 
     void Update()
     {
-        //WeaponScrollWheel();
+
     }
 
     void ToolScrollWheel()
