@@ -29,9 +29,10 @@ public class Health : MonoBehaviour, ISaveable
 
     void Start()
     {
-        healthBar.SetMaxHealth(m_MaxHealth);
+        if (healthBar != null)
+            healthBar.SetMaxHealth(m_MaxHealth);
     }
-    
+
     void Awake()
     {
         LoadDataOnSceneEnter();
@@ -52,8 +53,9 @@ public class Health : MonoBehaviour, ISaveable
         CallOnTakeDamage(damage);
 
         m_HP -= damage;
-        healthBar.SetHealth(m_HP);
-        
+        if (healthBar != null)
+            healthBar.SetHealth(m_HP);
+
         if (m_HP <= 0.0f)
         {
             Die();
@@ -92,7 +94,9 @@ public class Health : MonoBehaviour, ISaveable
     {
         CallOnHeal(healthToHeal);
         m_HP += healthToHeal;
-        healthBar.SetHealth(m_HP);
+
+        if (healthBar != null)
+            healthBar.SetHealth(m_HP);
 
         m_HP = Mathf.Clamp(m_HP, 0, m_MaxHealth);
         Debug.Log("Healed" + healthToHeal + "amount");
