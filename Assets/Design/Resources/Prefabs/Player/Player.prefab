@@ -7503,6 +7503,7 @@ GameObject:
   - component: {fileID: 5534154309489487828}
   - component: {fileID: -550643398168935818}
   - component: {fileID: 5815963720737420726}
+  - component: {fileID: 3207576798768987432}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -7578,6 +7579,7 @@ MonoBehaviour:
   _equipmentBelt: {fileID: 4071025813976165628}
   _weaponBelt: {fileID: 2271671246309865545}
   m_health: {fileID: -550643398168935818}
+  m_armor: {fileID: 0}
   EquipmentWheel: {fileID: 2865567885772579474}
   WeaponWheel: {fileID: 524490827525830312}
 --- !u!114 &-550643398168935818
@@ -7593,11 +7595,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_HP: 50
-  m_HasArmor: 1
-  m_Armor: 0
-  m_ArmorCooldown: 6
-  m_ArmorRefreshRate: 0.3
-  m_HasTakenDamage: 0
   m_IsLoadingShield: 0
 --- !u!114 &5815963720737420726
 MonoBehaviour:
@@ -7611,6 +7608,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 522f076172c148f4091ef302ecf3a35d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3207576798768987432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5341162584005937555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1fdc544c34a54344a1f7f64a4ff2a65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ArmorCooldown: 0
+  m_ArmorRefreshRate: 0
+  m_MaxArmor: 0
+  m_ArmorTimer: 0
 --- !u!1 &5490685996351227277
 GameObject:
   m_ObjectHideFlags: 0

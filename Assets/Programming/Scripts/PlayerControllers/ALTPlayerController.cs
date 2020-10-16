@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEditor.SceneManagement;
 using UnityEngine;
-
+using UnityEngine.Rendering;
 
 public class ALTPlayerController : MonoBehaviour
 {
@@ -39,6 +39,7 @@ public class ALTPlayerController : MonoBehaviour
     public Belt _weaponBelt;
 
     public Health m_health;
+    public Armor m_armor;
 
     public Canvas EquipmentWheel;
     public Canvas WeaponWheel;
@@ -52,11 +53,14 @@ public class ALTPlayerController : MonoBehaviour
         DontDestroyOnLoad(this);
 
         m_health = GetComponent<Health>();
-        
+        m_armor = GetComponent<Armor>();
+
         EquipmentWheel.enabled = false;
         WeaponWheel.enabled = false;
 
         EventBroker.CallOnPlayerSpawned(gameObject);
+
+        m_health.OnTakeDamage += m_armor.ResetArmorTimer;
 
         Cursor.lockState = CursorLockMode.Locked;
     }
@@ -132,11 +136,23 @@ public class ALTPlayerController : MonoBehaviour
         //Damage debug -LCC
         if (Input.GetKeyDown(KeyCode.L))
         {
-            m_health.TakeDamage(20.0f);
+            TakeDamage(20.0f);
         }
         else if (Input.GetKeyDown(KeyCode.H))
         {
             m_health.Heal(20.0f);
+        }
+    }
+
+    private void TakeDamage(float damage)
+    {
+        if (m_armor.GetCurrentArmor() > 0)
+        {
+            m_armor.TakeDamage(damage);
+        }
+        else
+        {
+            m_health.TakeDamage(damage);
         }
     }
 

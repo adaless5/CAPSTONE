@@ -10,25 +10,12 @@ public class Health : MonoBehaviour, ISaveable
     [Header("Health Settings")]
     [SerializeField]
     private float m_HP = 50.0f;
-
-    private float m_MaxArmor = 100f;
     private float m_MaxHealth = 100f;
 
-    [Space]
-    [Header("Shield Settings (CHECK OFF ARMOR BOOL TO ACTIVATE ARMOR)")]
-    [SerializeField]
-    private bool m_HasArmor = false;
-    [SerializeField]
-    private float m_Armor = 0.0f;
-    [SerializeField]
-    private float m_ArmorCooldown = 6f;
-    [SerializeField]
-    private float m_ArmorRefreshRate = 0.3f;
+
 
     [Space]
     [Header("Debug Variables")]
-    [SerializeField]
-    private bool m_HasTakenDamage = false;
     [SerializeField]
     private bool m_IsLoadingShield = false;
 
@@ -38,7 +25,7 @@ public class Health : MonoBehaviour, ISaveable
 
     bool isDead = false;
 
-    public HealthBarUI healthBar;
+    //public HealthBarUI healthBar;
 
     void Awake()
     {
@@ -47,8 +34,7 @@ public class Health : MonoBehaviour, ISaveable
 
         //if (isDead) GetComponent<MeshRenderer>().enabled = false;
         //else GetComponent<MeshRenderer>().enabled = true;
-
-        healthBar.SetMaxHealth(m_MaxHealth);
+        //healthBar.SetMaxHealth(m_MaxHealth);
     }
 
     void OnDisable()
@@ -58,71 +44,21 @@ public class Health : MonoBehaviour, ISaveable
 
     public void TakeDamage(float damage)
     {
+        CallOnTakeDamage(damage);
 
-        StartCoroutine(CheckHealth());
-        if (m_Armor > 0)
-        {
-            m_Armor -= damage;
-            Debug.Log("Damage to Armor, Current Armor at " + m_Armor);
-        }
-        else
-        {
-            m_HP -= damage;
-            healthBar.SetHealth(m_HP);
+        m_HP -= damage;
 
-            if (m_HP <= 0.0f)
-            {
-                Die();
-            }
+        if (m_HP <= 0.0f)
+        {
+            Die();
         }
+
 
         //Clamp values -LCC
-        m_Armor = Mathf.Clamp(m_Armor, 0, m_MaxArmor);
         m_HP = Mathf.Clamp(m_HP, 0, m_MaxHealth);
 
     }
 
-    private void Update()
-    {
-        if (m_HasArmor)
-        {
-            if (m_Armor == 0 && m_IsLoadingShield == false)
-            {
-                m_IsLoadingShield = true;
-                StartCoroutine(ReloadArmor());
-            }
-        }
-    }
-
-
-    public IEnumerator CheckHealth()
-    {
-        StopCoroutine(ReloadArmor());
-        m_HasTakenDamage = true;
-        yield return new WaitForSeconds(5.0f);
-        m_HasTakenDamage = false;
-    }
-
-    public IEnumerator ReloadArmor()
-    {
-        Debug.Log("Shield Depleated!");
-        yield return new WaitForSeconds(m_ArmorCooldown);
-
-        if (!m_HasTakenDamage)
-        {
-            while (m_Armor != m_MaxArmor)
-            {
-                Debug.Log("Regenerating...");
-
-                m_Armor += 20f;
-                yield return new WaitForSeconds(m_ArmorRefreshRate);
-            }
-        }
-
-        m_IsLoadingShield = false;
-        //Debug.Log("Shield Regenerated");
-        yield return null;
-    }
 
     //VR - Currently destroying gameObjects when damaged, can look into creating object pool for recyclable assets later on
     void Die()
