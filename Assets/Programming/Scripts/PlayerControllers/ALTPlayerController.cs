@@ -162,6 +162,11 @@ public class ALTPlayerController : MonoBehaviour
         }
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        print(collision.GetContact(0).normal);
+    }
+
     public bool CheckForJumpInput()
     {
         return Input.GetKeyDown(KeyCode.Space);
@@ -245,6 +250,14 @@ public class ALTPlayerController : MonoBehaviour
             {
                 m_YVelocity = m_JumpHeight;
             }
+        }
+        else if (!_controller.isGrounded)
+        {
+            if (_controller.collisionFlags.ToString() == "Above")
+            {
+                m_YVelocity = -2.0f;
+            }
+            
         }
     }
 
