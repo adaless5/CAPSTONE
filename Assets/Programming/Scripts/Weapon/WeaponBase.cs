@@ -29,7 +29,6 @@ public class WeaponBase : Weapon, ISaveable
     {
 
         gunCamera = GameObject.FindObjectOfType<Camera>();
-
         GetComponent<MeshRenderer>().enabled = true;
         bIsActive = true;
         bIsObtained = true;
@@ -92,14 +91,12 @@ public class WeaponBase : Weapon, ISaveable
                 reticuleAnimator.SetTrigger("isTargetted");
             }
 
-            //************TEMP CODE FOR BREAKBLE WALLS************
+            //checks if breakable wall
             DestructibleObject wall = hitInfo.transform.GetComponentInParent<DestructibleObject>();
             if(wall)
             {
-                wall.Break(gameObject);
+                wall.Break(gameObject.tag);
             }
-
-            //****************************************************
 
             //Force of impact on hit
             if (hitInfo.rigidbody != null)

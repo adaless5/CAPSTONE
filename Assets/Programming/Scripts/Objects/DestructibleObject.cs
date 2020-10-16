@@ -1,37 +1,84 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class DestructibleObject : MonoBehaviour
+public class DestructibleObject : MonoBehaviour, ISaveable
 {
-    // Start is called before the first frame update
+    bool bDebug = true;
+
     [Tooltip("This list should contain every version of the mesh starting from least broken and ending in broken")]
     [SerializeField] GameObject[] DestructionStates;
 
     [Tooltip("This list should contain the time of how long you want a state to linger after being hit. The element of the timers line up with the elements of states")]
-    [SerializeField] int[] Timers;
+    [SerializeField] float[] Timers;
 
     [Tooltip("This list should contain the tags of things that can break the object")]
     [SerializeField] string[] Tags;
 
-    int index = 0;
-    GameObject currentstate;
+    [Tooltip("This variable should contain the amount of time that the last state lingers before disappearing")]
+    [SerializeField] float deathtimer;
 
+    [SerializeField] bool IsSaved;
 
-    //TODO: add a timer when it reaches final state to disable object
+    int _index = 0;
+    bool _bisDead = false;
+    GameObject _currentstate;
+
+    //TODO:GET FADE OUT WORKING
 
     private void Start()
     {
-        currentstate = DestructionStates[0];
+        _currentstate = DestructionStates[0];
+        //isDead = false;
     }
 
-    public void Break(GameObject obj)
+    private void Awake()
+    {
+        LoadDataOnSceneEnter();
+        SaveSystem.SaveEvent += SaveDataOnSceneChange;
+
+
+        if(bDebug)Debug.Log(_bisDead);
+
+        _currentstate = DestructionStates[0];
+        if (_bisDead == true)
+        {
+            Collider[] col = _currentstate.GetComponentsInChildren<Collider>();
+            MeshRenderer[] mesh = _currentstate.GetComponentsInChildren<MeshRenderer>();
+            foreach (MeshRenderer r in mesh)
+            {
+                r.enabled = false;
+            }
+            foreach (Collider c in col)
+            {
+                c.enabled = false;
+            }
+        }
+    }
+
+    public void SaveDataOnSceneChange()
+    {
+        SaveSystem.Save(gameObject.name, "isBroken", _bisDead);
+    }
+
+    public void LoadDataOnSceneEnter()
+    {
+        _bisDead = SaveSystem.LoadBool(gameObject.name, "isBroken");
+    }
+
+    public void OnDisable()
+    {
+        SaveSystem.SaveEvent -= SaveDataOnSceneChange;
+    }
+
+    public void Break(string tag)
     {
         if (Tags.Length != 0)
         {
             foreach (string t in Tags)
             {
-                if (obj.tag == t)
+                if (tag == t)
                 {
                     StartCoroutine(TriggerBreak());
                     break;
@@ -44,30 +91,55 @@ public class DestructibleObject : MonoBehaviour
         }
     }
 
+    void CycleState()
+    {
+        if (_index < DestructionStates.Length - 1)
+        {
+            if (_currentstate == gameObject)
+            {
+                gameObject.GetComponentInChildren<MeshRenderer>().enabled = false;
+            }
+            else
+            {
+                Destroy(_currentstate.gameObject);
+            }
+            _currentstate = Instantiate(DestructionStates[_index + 1], transform.position, transform.rotation, transform);
+            _index++;
+        }
+
+        if (_index >= DestructionStates.Length - 1)
+        {
+            //start death 
+            StartCoroutine(TriggerDeath());
+        }
+    }
     IEnumerator TriggerBreak()
     {
-        //TODO: make timer only read the size of the array, so the timer array and object array can be different sizes
-        if (Timers.Length != 0)
+        if (_index < Timers.Length)
         {
-            yield return new WaitForSeconds(Timers[index]);
+            yield return new WaitForSeconds(Timers[_index]);
         }
 
         CycleState();
     }
 
-    void CycleState()
-    { 
-        if (index >= DestructionStates.Length - 1)
+    IEnumerator TriggerDeath()
+    {
+        yield return new WaitForSeconds(deathtimer);
+
+        if(IsSaved)_bisDead = true;
+
+        Collider[] col = _currentstate.GetComponentsInChildren<Collider>();
+        MeshRenderer[] mesh = _currentstate.GetComponentsInChildren<MeshRenderer>();
+        foreach(MeshRenderer r in mesh)
         {
-            //TODO: add a fade away before deleting
-            gameObject.SetActive(false);
+             r.enabled = false;
         }
-        else
+        foreach (Collider c in col)
         {
-            Destroy(currentstate.gameObject);
-            Debug.Log(index.ToString());
-            currentstate = Instantiate(DestructionStates[index + 1], transform.position, transform.rotation, transform);
-            index++;
+            c.enabled = false;
         }
+        // gameObject.SetActive(false);
     }
+
 }

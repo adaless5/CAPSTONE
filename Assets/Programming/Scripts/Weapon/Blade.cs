@@ -8,7 +8,7 @@ public class Blade : Equipment, ISaveable
     [SerializeField] int Damage = 50;
     public ALTPlayerController playerController;
 
-    Animator animation;
+    Animator animationswing;
     BoxCollider hitbox;
 
     Camera _cam;
@@ -18,12 +18,14 @@ public class Blade : Equipment, ISaveable
     {
         //base.Start(); 
 
-        animation = GetComponent<Animator>();
+        animationswing = GetComponent<Animator>();
         hitbox = GetComponent<BoxCollider>();
 
         hitbox.enabled = false;
         hitbox.isTrigger = true;
         GetComponent<MeshRenderer>().enabled = false;
+
+        
     }
 
     void Awake()
@@ -57,12 +59,12 @@ public class Blade : Equipment, ISaveable
     {
         if (playerController.CheckForUseEquipmentInput())
         {
-            animation.SetBool("attacking", true);
+            animationswing.SetBool("attacking", true);
             hitbox.enabled = true;
         }
         else if (playerController.CheckForUseEquipmentInputReleased())
         {
-            animation.SetBool("attacking", false);
+            animationswing.SetBool("attacking", false);
             hitbox.enabled = false;
         }
     }
@@ -72,20 +74,15 @@ public class Blade : Equipment, ISaveable
         return Damage;
     }
 
-    //TODO: Get this to work. goes in but doesnt get the Destructible object
     private void OnTriggerEnter(Collider other)
     {
-
-        if (other.transform.GetComponentInParent<DestructibleObject>())
+        Debug.Log(gameObject.tag);
+        DestructibleObject obj = other.GetComponentInParent<DestructibleObject>();
+        if (obj)
         {
             Debug.Log("HIT");
-            other.transform.parent.GetComponent<DestructibleObject>().Break(gameObject);
+            obj.Break(gameObject.tag);
         }
-        //DestructibleObject wall = other.GetComponentInParent<DestructibleObject>();
-        //if(wall)
-        //{
-        //    wall.Break(gameObject);
-        //}
     }
 
     public void SaveDataOnSceneChange()
