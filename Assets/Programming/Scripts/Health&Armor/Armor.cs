@@ -17,6 +17,8 @@ public class Armor : MonoBehaviour
     [SerializeField]
     private float m_ArmorTimer;
 
+    public ArmorBarUI armorBar;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -25,6 +27,8 @@ public class Armor : MonoBehaviour
         m_MaxArmor = 100f;
         m_ArmorCooldown = 6f;
         m_ArmorTimer = m_ArmorCooldown;
+
+        armorBar.SetMaxArmor(m_MaxArmor);
     }
 
 
@@ -44,6 +48,8 @@ public class Armor : MonoBehaviour
         {
 
             m_Armor -= damage;
+            armorBar.SetArmor(m_Armor);
+
             Debug.Log("Damage to Armor, Current Armor at " + m_Armor);
         }
 
@@ -73,6 +79,7 @@ public class Armor : MonoBehaviour
             Debug.Log("Regenerating...");
 
             m_Armor += 20f;
+            armorBar.SetArmor(m_Armor);
             yield return new WaitForSeconds(m_ArmorRefreshRate);
         }
 

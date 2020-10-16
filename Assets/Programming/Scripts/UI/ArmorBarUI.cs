@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HealthBarUI : MonoBehaviour
+public class ArmorBarUI : MonoBehaviour
 {
+
     public Slider slider;
 
     private void Awake()
@@ -12,16 +13,15 @@ public class HealthBarUI : MonoBehaviour
         slider = GetComponent<Slider>();
     }
 
-    public void SetMaxHealth(float HP)
+    public void SetMaxArmor(float armor)
     {
-        slider.maxValue = HP;
-        slider.value = HP;
+        slider.maxValue = armor;
+        slider.value = armor;
     }
 
-    public void SetHealth(float HP)
+    public void SetArmor(float armor)
     {
-        slider.value = HP;
+        slider.value = armor;
     }
 
- 
 }

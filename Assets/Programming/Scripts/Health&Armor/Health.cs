@@ -25,16 +25,21 @@ public class Health : MonoBehaviour, ISaveable
 
     bool isDead = false;
 
-    //public HealthBarUI healthBar;
+    public HealthBarUI healthBar;
 
+    void Start()
+    {
+        healthBar.SetMaxHealth(m_MaxHealth);
+    }
+    
     void Awake()
     {
         LoadDataOnSceneEnter();
         SaveSystem.SaveEvent += SaveDataOnSceneChange;
 
+
         //if (isDead) GetComponent<MeshRenderer>().enabled = false;
         //else GetComponent<MeshRenderer>().enabled = true;
-        //healthBar.SetMaxHealth(m_MaxHealth);
     }
 
     void OnDisable()
@@ -47,7 +52,8 @@ public class Health : MonoBehaviour, ISaveable
         CallOnTakeDamage(damage);
 
         m_HP -= damage;
-
+        healthBar.SetHealth(m_HP);
+        
         if (m_HP <= 0.0f)
         {
             Die();
@@ -60,7 +66,6 @@ public class Health : MonoBehaviour, ISaveable
     }
 
 
-    //VR - Currently destroying gameObjects when damaged, can look into creating object pool for recyclable assets later on
     void Die()
     {
         isDead = true;
@@ -85,7 +90,10 @@ public class Health : MonoBehaviour, ISaveable
 
     public void Heal(float healthToHeal)
     {
+        CallOnHeal(healthToHeal);
         m_HP += healthToHeal;
+        healthBar.SetHealth(m_HP);
+
         m_HP = Mathf.Clamp(m_HP, 0, m_MaxHealth);
         Debug.Log("Healed" + healthToHeal + "amount");
     }
