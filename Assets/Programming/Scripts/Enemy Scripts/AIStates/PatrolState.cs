@@ -1,11 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Patrol : State
 {
     int _currentPatrolIndex = 0;
-    public Patrol(GameObject enemy, Transform[] pp, Transform playerposition) : base(enemy, pp, playerposition)
+    public Patrol(GameObject enemy, Transform[] pp, Transform playerposition, NavMeshAgent nav) : base(enemy, pp, playerposition, nav)
     {
         _stateName = STATE.PATROL;
 
@@ -20,32 +21,32 @@ public class Patrol : State
     {
         base.Update();
 
-        if (_currentPatrolIndex != _patrolPoints.Length)
-        {
-            if (Vector3.Distance(_currentEnemy.transform.position, _patrolPoints[_currentPatrolIndex].transform.position) > 2)
-            {
-
-                _currentEnemy.transform.rotation = Quaternion.RotateTowards(_currentEnemy.transform.rotation, _patrolPoints[_currentPatrolIndex].transform.rotation, 2f);
-                _currentEnemy.transform.position = Vector3.MoveTowards(_currentEnemy.transform.position, _patrolPoints[_currentPatrolIndex].transform.position, _enemySpeed * Time.deltaTime);
-            }
-            else
-            {
-                Debug.Log("Patrol point reached");
-                _currentPatrolIndex++;
-            }
-        }
-        else
-        {
-            _currentPatrolIndex = 0;
-        }
+        if (!_navMeshAgent.pathPending && _navMeshAgent.remainingDistance < 0.5f)
+            MoveToNextPoint();
 
         if (CanSeePlayer())
         {
-            _nextState = new Attack(_currentEnemy, _patrolPoints, _playerPos);
+            _navMeshAgent.ResetPath();
+            _nextState = new Attack(_currentEnemy, _patrolPoints, _playerPos, _navMeshAgent);
             _stage = EVENT.EXIT;
         }
 
     }
+
+    void MoveToNextPoint()
+    {
+        if(_patrolPoints.Length == 0)
+        {
+            Debug.LogError("No Patrol Points Set!");
+            return;
+        }
+
+        _navMeshAgent.destination = _patrolPoints[_currentPatrolIndex].transform.position;
+
+        _currentPatrolIndex = (_currentPatrolIndex + 1) % _patrolPoints.Length;
+    }
+
+
 
     public override void Exit()
     {
