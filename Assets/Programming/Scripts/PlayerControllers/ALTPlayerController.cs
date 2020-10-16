@@ -52,7 +52,35 @@ public class ALTPlayerController : MonoBehaviour
         DontDestroyOnLoad(this);
 
         m_health = GetComponent<Health>();
-        
+
+        Belt[] beltsInScene; 
+        beltsInScene = FindObjectsOfType<Belt>();
+        foreach(Belt obj in beltsInScene)
+        {
+            if (obj.tag == "EquipmentBelt")
+            {
+                _equipmentBelt = obj; 
+            }
+            else if(obj.tag == "WeaponBelt")
+            {
+                _weaponBelt = obj; 
+            }
+        }
+
+        Canvas[] wheelsInScene;
+        wheelsInScene = FindObjectsOfType<Canvas>();
+        foreach (Canvas obj in wheelsInScene)
+        {
+            if (obj.tag == "EquipmentWheel")
+            {
+                EquipmentWheel = obj;
+            }
+            else if (obj.tag == "WeaponWheel")
+            {
+                WeaponWheel = obj;
+            }
+        }
+
         EquipmentWheel.enabled = false;
         WeaponWheel.enabled = false;
 
@@ -132,6 +160,11 @@ public class ALTPlayerController : MonoBehaviour
         {
             m_health.TakeDamage(20.0f);
         }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        print(collision.GetContact(0).normal);
     }
 
     public bool CheckForJumpInput()
@@ -217,6 +250,14 @@ public class ALTPlayerController : MonoBehaviour
             {
                 m_YVelocity = m_JumpHeight;
             }
+        }
+        else if (!_controller.isGrounded)
+        {
+            if (_controller.collisionFlags.ToString() == "Above")
+            {
+                m_YVelocity = -2.0f;
+            }
+            
         }
     }
 
