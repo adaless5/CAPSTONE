@@ -12,8 +12,6 @@ public class Health : MonoBehaviour, ISaveable
     private float m_HP = 50.0f;
     private float m_MaxHealth = 100f;
 
-
-
     [Space]
     [Header("Debug Variables")]
     [SerializeField]
@@ -90,16 +88,31 @@ public class Health : MonoBehaviour, ISaveable
         OnHeal?.Invoke(healthToHeal);
     }
 
+    public bool IsAtFullHealth()
+    {
+        if(m_HP < m_MaxHealth)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
     public void Heal(float healthToHeal)
     {
-        CallOnHeal(healthToHeal);
-        m_HP += healthToHeal;
+        if(m_HP < m_MaxHealth)
+        {
+            CallOnHeal(healthToHeal);
+            m_HP += healthToHeal;
 
-        if (healthBar != null)
-            healthBar.SetHealth(m_HP);
+            if (healthBar != null)
+                healthBar.SetHealth(m_HP);
 
-        m_HP = Mathf.Clamp(m_HP, 0, m_MaxHealth);
-        Debug.Log("Healed" + healthToHeal + "amount");
+            m_HP = Mathf.Clamp(m_HP, 0, m_MaxHealth);
+            Debug.Log("Healed" + healthToHeal + "amount");
+        }
     }
 
     public void SaveDataOnSceneChange()
