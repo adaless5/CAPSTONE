@@ -98,6 +98,7 @@ public class DestructibleObject : MonoBehaviour, ISaveable
             if (_currentstate == gameObject)
             {
                 gameObject.GetComponentInChildren<MeshRenderer>().enabled = false;
+                gameObject.GetComponentInChildren<Collider>().enabled = false;
             }
             else
             {

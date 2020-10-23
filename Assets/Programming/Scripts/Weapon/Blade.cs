@@ -5,11 +5,12 @@ using UnityEngine;
 
 public class Blade : Equipment, ISaveable
 {
-    [SerializeField] int Damage = 50;
+    [SerializeField] int Damage { get; } = 50;
     public ALTPlayerController playerController;
 
-    Animator animationswing;
-    BoxCollider hitbox;
+    Animator _animationswing;
+    BoxCollider _hitbox;
+    bool _bisAttacking;
 
     Camera _cam;
 
@@ -17,12 +18,12 @@ public class Blade : Equipment, ISaveable
     public override void Start()
     {
         //base.Start(); 
+        _bisAttacking = false;
+        _animationswing = GetComponent<Animator>();
+        _hitbox = GetComponent<BoxCollider>();
 
-        animationswing = GetComponent<Animator>();
-        hitbox = GetComponent<BoxCollider>();
-
-        hitbox.enabled = false;
-        hitbox.isTrigger = true;
+        _hitbox.enabled = false;
+        _hitbox.isTrigger = true;
         GetComponent<MeshRenderer>().enabled = false;
 
         
@@ -57,16 +58,19 @@ public class Blade : Equipment, ISaveable
 
     public override void UseTool()
     {
-        if (playerController.CheckForUseEquipmentInput())
+        if (playerController.CheckForUseEquipmentInput() && _bisAttacking == false)
         {
-            animationswing.SetBool("attacking", true);
-            hitbox.enabled = true;
+            Debug.Log("Swing");
+            _animationswing.SetTrigger("Swing");
+            _hitbox.enabled = true;
+            _bisAttacking = true;
         }
-        else if (playerController.CheckForUseEquipmentInputReleased())
+        else if (playerController.CheckForUseEquipmentInputReleased() && _bisAttacking == true)
         {
-            animationswing.SetBool("attacking", false);
-            hitbox.enabled = false;
+            _hitbox.enabled = false;
+            _bisAttacking = false;
         }
+
     }
 
     public int GetDamage()
@@ -76,13 +80,13 @@ public class Blade : Equipment, ISaveable
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(gameObject.tag);
         DestructibleObject obj = other.GetComponentInParent<DestructibleObject>();
         if (obj)
         {
             Debug.Log("HIT");
             obj.Break(gameObject.tag);
         }
+        _hitbox.enabled = false;
     }
 
     public void SaveDataOnSceneChange()
