@@ -70,6 +70,13 @@ public class Health : MonoBehaviour, ISaveable
 
     void Die()
     {
+        //Temporary Spawning Stuff - Anthony
+        Spawner spawner = GetComponent<Spawner>();
+        if (spawner != null)
+        {
+            spawner.Spawn();
+        }
+
         isDead = true;
         //Destroy(gameObject);
         gameObject.SetActive(false);
