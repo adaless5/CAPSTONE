@@ -95,29 +95,30 @@ public class CreatureWeapon : Weapon, ISaveable
             Quaternion rot = Quaternion.LookRotation(Vector3.forward * 200.0f + bulletDeviation);
             Vector3 finalFowardVector = transform.rotation * rot * Vector3.forward;
             finalFowardVector += transform.position;
-            RaycastHit hit;
 
-            Debug.DrawLine(finalFowardVector, transform.forward, Color.red);
+            ///CreatureProjectile creatureProjectile = Instantiate(CreatureProjectile, finalFowardVector, Quaternion.identity);
 
-            if (Physics.Raycast(finalFowardVector, transform.forward,out hit, m_weaponRange))
-            {
+            //if (Physics.Raycast(finalFowardVector, transform.forward,out hit, m_weaponRange))
+            //{
 
-                //Only damages if asset has "Target" script
-                Health target = hit.transform.GetComponent<Health>();
-                if (target != null)
-                {
-                    target.TakeDamage(m_damageAmount);
-                }
-                else
-                {
-                }
-                //Force of impact on hit
-                if (hit.rigidbody != null)
-                {
-                    hit.rigidbody.AddForce(-hit.normal * m_hitImpact, ForceMode.Impulse);
-                }
+            //    //Only damages if asset has "Target" script
+            //    Health target = hit.transform.GetComponent<Health>();
+            //    if (target != null)
+            //    {
+            //        target.TakeDamage(m_damageAmount);
+            //    }
+            //    else
+            //    {
+            //    }
+            //    //Force of impact on hit
+            //    if (hit.rigidbody != null)
+            //    {
+            //        hit.rigidbody.AddForce(-hit.normal * m_hitImpact, ForceMode.Impulse);
+            //    }
 
-            }
+            //}
+
+
         }
 
     }
