@@ -4,6 +4,9 @@ using System.Data;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
+
+
+
 //VR - This class is a damage system for any target/enemy
 public class Health : MonoBehaviour, ISaveable
 {
@@ -52,9 +55,11 @@ public class Health : MonoBehaviour, ISaveable
     {
         CallOnTakeDamage(damage);
 
+
         m_HP -= damage;
         if (healthBar != null)
             healthBar.SetHealth(m_HP);
+
 
         if (m_HP <= 0.0f)
         {

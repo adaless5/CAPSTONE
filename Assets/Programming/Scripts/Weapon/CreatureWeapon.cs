@@ -10,20 +10,27 @@ public class CreatureWeapon : Weapon, ISaveable
 {
     public Camera _camera;
     public ParticleSystem _spreadEffect;
+    GameObject _creatureProjectile;
 
     private int _bulletClip = 8;
+
+    public void Awake()
+    {
+        _creatureProjectile = (GameObject)Resources.Load("Prefabs/Weapon/Creature Projectile");
+
+    }
 
     // Start is called before the first frame update
     public override void Start()
     {
-
+       
         _camera = FindObjectOfType<Camera>();
         GetComponent<MeshRenderer>().enabled = false;
         bIsActive = false;
         bIsObtained = false;
 
         m_fireRate = 0.5f;
-        m_hitImpact = 10.0f;
+        m_hitImpact = 5.0f;
     }
     public override void UseTool()
     {
@@ -96,7 +103,8 @@ public class CreatureWeapon : Weapon, ISaveable
             Vector3 finalFowardVector = transform.rotation * rot * Vector3.forward;
             finalFowardVector += transform.position;
 
-            ///CreatureProjectile creatureProjectile = Instantiate(CreatureProjectile, finalFowardVector, Quaternion.identity);
+            GameObject creatureProjectile = Instantiate(_creatureProjectile, finalFowardVector, Quaternion.identity);
+            creatureProjectile.GetComponent<Rigidbody>().AddForce(transform.forward * m_hitImpact, ForceMode.Impulse);
 
             //if (Physics.Raycast(finalFowardVector, transform.forward,out hit, m_weaponRange))
             //{
