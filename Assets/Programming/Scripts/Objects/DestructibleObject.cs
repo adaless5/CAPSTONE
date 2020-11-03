@@ -8,18 +8,18 @@ public class DestructibleObject : MonoBehaviour, ISaveable
     bool bDebug = true;
 
     [Tooltip("This list should contain every version of the mesh starting from least broken and ending in broken")]
-    [SerializeField] GameObject[] DestructionStates;
+    [SerializeField] GameObject[] DestructionStates = { };
 
     [Tooltip("This list should contain the time of how long you want a state to linger after being hit. The element of the timers line up with the elements of states")]
-    [SerializeField] float[] Timers;
+    [SerializeField] float[] Timers = { };
 
     [Tooltip("This list should contain the tags of things that can break the object")]
-    [SerializeField] string[] Tags;
+    [SerializeField] string[] Tags = { };
 
     [Tooltip("This variable should contain the amount of time that the last state lingers before disappearing")]
-    [SerializeField] float deathtimer;
+    [SerializeField] float deathtimer = 0;
 
-    [SerializeField] bool IsSaved;
+    [SerializeField] bool IsSaved = false;
 
     int _index = 0;
     bool _bisDead = false;
