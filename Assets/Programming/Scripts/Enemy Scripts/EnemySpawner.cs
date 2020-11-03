@@ -22,7 +22,7 @@ public class EnemySpawner : MonoBehaviour
         for (int i = 0; i < amountToSpawn; i++)
         {
             GameObject newEnemy = Instantiate(enemyToSpawn, transform);
-            newEnemy.GetComponent<Rigidbody>().AddForce(new Vector3(0, UnityEngine.Random.Range(0, 50),0), ForceMode.Impulse);
+            //newEnemy.GetComponent<Rigidbody>().AddForce(new Vector3(0, UnityEngine.Random.Range(0, 50),0), ForceMode.Impulse);
         }
     }
 
