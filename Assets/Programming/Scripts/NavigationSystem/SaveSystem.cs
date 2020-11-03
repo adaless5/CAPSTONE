@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-
+//Wrapper around unity's built in persisten save system. This simplifies the overall system. adds new functionality and
+//allows for objects with the same name in different scenes to be saved without overwritting accidently.
 public class SaveSystem : MonoBehaviour
 {
     public enum LoadType
@@ -16,12 +18,7 @@ public class SaveSystem : MonoBehaviour
         BOOL,
     }
 
-    bool isFirstLoad = true;
-
-    private static string _sceneName;
-
     public delegate void SaveEventDelegate();
-
     public static SaveEventDelegate SaveEvent;
 
     public static void Save(string gameObjectName, string variableName, int val)
@@ -48,10 +45,15 @@ public class SaveSystem : MonoBehaviour
         }
     }
 
-    public static void Save<T>(string gameObjectName, string variableName, T obj)
+    //public static void Save<T>(string gameObjectName, string variableName, T obj)
+    //{
+    //    string json = JsonUtility.ToJson(obj);
+    //    PlayerPrefs.SetString(GetSaveID(gameObjectName,variableName), json);
+    //}
+
+    public static void StaticSaveString(string key, string val)
     {
-        string json = JsonUtility.ToJson(obj);
-        PlayerPrefs.SetString(GetSaveID(gameObjectName,variableName), json);
+        PlayerPrefs.SetString(key, val);
     }
 
     public static int LoadInt(string gameObjectName, string variableName)
@@ -75,35 +77,41 @@ public class SaveSystem : MonoBehaviour
         return PlayerPrefs.GetString(GetSaveID(gameObjectName,variableName));
     }
 
+    public static string StaticLoadString(string key)
+    {
+        return PlayerPrefs.GetString(key);
+    }
+
     public static float LoadFloat(string gameObjectName, string variableName)
     {
         return PlayerPrefs.GetFloat(GetSaveID(gameObjectName,variableName));
     }
 
-    public static T LoadObject<T>(string gameObjectName, string variableName)
+    //public static T LoadObject<T>(string gameObjectName, string variableName)
+    //{
+
+    //    T obj = JsonUtility.FromJson<T>(PlayerPrefs.GetString(GetSaveID(gameObjectName,variableName)));
+    //    return obj;
+
+    //}
+
+    public static void RemoveAtKey(string gameObjectName, string variableName)
     {
-
-        T obj = JsonUtility.FromJson<T>(GetSaveID(gameObjectName,variableName));
-        return obj;
-
+        PlayerPrefs.DeleteKey(GetSaveID(gameObjectName, variableName));
     }
 
     public static void ResetSaveEventDelegateList()
     {
-        
         //Remove all delegates subscribed to SaveEvent.
         foreach (System.Delegate d in SaveEvent.GetInvocationList())
         {
             SaveEvent -= (SaveEventDelegate)d;
         }
-
     }
 
     public static string GetSaveID(string gameObjectName, string variableName)
     {
         return (gameObjectName + variableName + SceneManager.GetActiveScene().name);
     }
-
-
 
 }
