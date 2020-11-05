@@ -1,18 +1,8 @@
-﻿using UnityEngine;
+﻿using JetBrains.Annotations;
+using UnityEngine;
 
 public class WeaponBase : Weapon, ISaveable
 {
-    [Header("Damage Settings")]
-    public float m_damageAmount = 10.0f;
-
-    [Header("Weapon Settings")]
-    public int m_ammoAmount = 6; //not being used currently
-    public float m_fireRate = 10.0f;
-    public float m_hitImpact = 50.0f;
-    public float m_weaponRange = 50.0f;
-
-    private float m_fireStart = 0.0f;
-
     [Header("UI Elements - ParticleFX and Reticule")]
     public ParticleSystem muzzleFlash;
     public GameObject impactFX;
@@ -24,9 +14,20 @@ public class WeaponBase : Weapon, ISaveable
 
     public ALTPlayerController _playercontroller;
 
+    void Awake()
+    {
+        LoadDataOnSceneEnter();
+        SaveSystem.SaveEvent += SaveDataOnSceneChange;
+        m_ammoAmount = 6;
+        m_fireRate = 10.0f;
+        m_hitImpact = 50.0f;
+        m_weaponRange = 50.0f;
+        m_fireStart = 0.0f;
+    }
 
     public override void Start()
     {
+
 
         gunCamera = GameObject.FindObjectOfType<Camera>();
         GetComponent<MeshRenderer>().enabled = true;
@@ -34,11 +35,6 @@ public class WeaponBase : Weapon, ISaveable
         bIsObtained = true;
     }
 
-    void Awake()
-    {
-        LoadDataOnSceneEnter();
-        SaveSystem.SaveEvent += SaveDataOnSceneChange;
-    }
 
     void OnDisable()
     {

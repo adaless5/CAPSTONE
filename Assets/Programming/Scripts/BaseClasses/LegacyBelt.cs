@@ -2,15 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Belt : MonoBehaviour
+public class LegacyBelt : MonoBehaviour
 {
     public Tool[] _items;
     public int selectedWeaponIndex = 0;
 
-    protected void Start()
+    void Start()
     {
         _items = GetComponentsInChildren<Tool>();
+        EventBroker.OnPickupWeapon += WeaponBeltPickup;
+    }
 
+    void Update()
+    {
+    }
+
+    public void WeaponBeltPickup(int weaponIndex)
+    {
+        Debug.Log("Weapon Obtained, weapon size " + _items.Length);
+       ObtainEquipmentAtIndex(weaponIndex);
     }
 
     void ToolScrollWheel()
@@ -39,7 +49,7 @@ public class Belt : MonoBehaviour
         }
     }
 
-    public void ChangeActiveEquipment()
+    void ChangeActiveEquipment()
     {
         int i = 0;
 

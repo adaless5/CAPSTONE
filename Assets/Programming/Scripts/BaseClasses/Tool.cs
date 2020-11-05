@@ -7,6 +7,7 @@ public abstract class Tool : MonoBehaviour
     public bool bIsActive = false;
     public bool bIsObtained = false;
 
+
     public virtual void Start()
     {
         //bIsActive = false;
