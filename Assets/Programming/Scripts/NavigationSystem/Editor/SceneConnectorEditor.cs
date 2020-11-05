@@ -317,7 +317,7 @@ public class SceneConnectorEditor : Editor
     private void SaveData(string goToConnectorName = "")
     {
         //Save Connector to persistant data
-        _data = new SceneConnector.SceneConnectorData(_base.transform, _ID, _sceneName, target.name, _type, _goesToID, _goesToScene);
+        _data = new SceneConnector.SceneConnectorData(_base.GetComponentInChildren<PlayerStart>().transform, _ID, _sceneName, target.name, _type, _goesToID, _goesToScene);
         _data.destinationConnectorName = goToConnectorName;
         SaveSystem.Save(target.name + _sceneName,"", _data.ToString());
         if(bDebug)Debug.Log("SAVED : " + target.name + _data.ToString() );
