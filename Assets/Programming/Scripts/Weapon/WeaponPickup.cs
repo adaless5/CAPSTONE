@@ -2,18 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EquipmentPickup : MonoBehaviour, ISaveable
+public class WeaponPickup : MonoBehaviour
 {
-    [SerializeField] int _CorrespondingEquipmentBeltIndex = 0;
-
-   
+    public WeaponType _pickUpWeapon;
+    int weaponNum;
     bool isUsed = false;
 
     void Awake()
     {
         LoadDataOnSceneEnter();
         SaveSystem.SaveEvent += SaveDataOnSceneChange;
-        
+        weaponNum = 2;
         if (isUsed) GetComponent<MeshRenderer>().enabled = false;
         else GetComponent<MeshRenderer>().enabled = true;
     }
@@ -27,8 +26,11 @@ public class EquipmentPickup : MonoBehaviour, ISaveable
     {
         if (other.gameObject.tag == "Player")
         {
-            Belt belt = other.gameObject.GetComponentInChildren<Belt>();
-            belt.ObtainEquipmentAtIndex(_CorrespondingEquipmentBeltIndex);
+
+            //GameObject g = GameObject.FindGameObjectWithTag("WeaponBelt");
+            //Belt b = g.GetComponent<Belt>();
+            EventBroker.CallOnPickupWeapon(weaponNum);
+            //b.EquipToolAtIndex(weaponNum);
             isUsed = true;
             GetComponent<MeshRenderer>().enabled = false;
             //Destroy(gameObject);
@@ -39,7 +41,7 @@ public class EquipmentPickup : MonoBehaviour, ISaveable
     {
         SaveSystem.Save(gameObject.name, "isEnabled", isUsed);
         //Debug.Log(isUsed);
-    }   
+    }
 
     public void LoadDataOnSceneEnter()
     {
