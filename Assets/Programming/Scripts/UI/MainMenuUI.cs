@@ -11,6 +11,8 @@ public class MainMenuUI : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        //SceneManager.LoadScene("MainMenu", LoadSceneMode.Additive);
+        //get info from save system and load accordnaly
     }
 
     public void ExitGame()
