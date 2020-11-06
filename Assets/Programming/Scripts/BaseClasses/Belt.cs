@@ -7,13 +7,9 @@ public class Belt : MonoBehaviour
     public Tool[] _items;
     public int selectedWeaponIndex = 0;
 
-    void Start()
+    protected void Start()
     {
         _items = GetComponentsInChildren<Tool>();
-    }
-
-    void Update()
-    {
 
     }
 
@@ -43,7 +39,7 @@ public class Belt : MonoBehaviour
         }
     }
 
-    void ChangeActiveEquipment()
+    public void ChangeActiveEquipment()
     {
         int i = 0;
 

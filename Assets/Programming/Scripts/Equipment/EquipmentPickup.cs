@@ -6,6 +6,7 @@ public class EquipmentPickup : MonoBehaviour, ISaveable
 {
     [SerializeField] int _CorrespondingEquipmentBeltIndex = 0;
 
+   
     bool isUsed = false;
 
     void Awake()
