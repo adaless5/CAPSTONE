@@ -5,7 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class UnloadTrigger : MonoBehaviour
 {
-
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;

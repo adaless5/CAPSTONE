@@ -145,7 +145,10 @@ public class SceneManagerEditorWindow : EditorWindow
                                     if (SceneManager.sceneCount > 1) s = "-";
                                     if (GUILayout.Button(s, EditorStyles.miniButtonLeft))
                                     {
-                                        
+                                        //Save All open Scenes to prevent data corruption between scene loads.
+                                        SaveOpenScenes();
+                                        //
+
                                         try { EditorSceneManager.CloseScene(SceneManager.GetSceneByPath(
                                             "Assets/Scenes/" + _levels[levelIndex].Name + "/" + _scenes[levelIndex][sceneIndex].Name),true);
                                             }
@@ -158,6 +161,8 @@ public class SceneManagerEditorWindow : EditorWindow
                                 //Else Display Load Scene Button
                                 if (GUILayout.Button("Load", EditorStyles.miniButtonLeft))
                                 {
+                                    SaveOpenScenes();
+
                                     try { EditorSceneManager.OpenScene("Assets/Scenes/" + _levels[levelIndex].Name + "/" + _scenes[levelIndex][sceneIndex].Name); }
                                     catch { Debug.Log("Scene Manager : Scene not found"); }
                                 }
@@ -233,6 +238,14 @@ public class SceneManagerEditorWindow : EditorWindow
         }
         //
         GUILayout.EndScrollView();
+    }
+
+    private void SaveOpenScenes()
+    {
+        for (int i = 0; i < SceneManager.sceneCount; i++)
+        {
+            EditorSceneManager.SaveScene(SceneManager.GetSceneAt(i));
+        }
     }
 
     //Set load button color to green if the scene is currently loaded. else set it to grey.
