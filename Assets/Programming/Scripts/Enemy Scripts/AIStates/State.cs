@@ -68,15 +68,15 @@ public class State
         NavMeshHit hit;
         if (!_navMeshAgent.Raycast(_playerPos.position, out hit))
         {
-            Debug.Log("Player not hiding");
+            //Debug.Log("Player not hiding");
             if (direction.magnitude < _visualDistance && angle < _visualAngle)
             {
-                Debug.Log("Player found");
+                //Debug.Log("Player found");
                 return true;
             }
 
         }
-        Debug.Log("Player hiding");
+        //Debug.Log("Player hiding");
         return false;
     }
 

@@ -10,7 +10,6 @@ public class LegacyBelt : MonoBehaviour
     void Start()
     {
         _items = GetComponentsInChildren<Tool>();
-        EventBroker.OnPickupWeapon += WeaponBeltPickup;
     }
 
     void Update()

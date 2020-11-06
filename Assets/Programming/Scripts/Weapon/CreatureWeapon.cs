@@ -59,41 +59,7 @@ public class CreatureWeapon : Weapon, ISaveable
 
     void OnShoot()
     {
-        //_spreadEffect.Play();
-        //RaycastHit hitInfo;
-        //if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hitInfo, m_weaponRange))
-        //{
-        //    //Debug.Log(hitInfo.transform.name);
 
-        //    //Only damages if asset has "Target" script
-        //    Health target = hitInfo.transform.GetComponent<Health>();
-        //    if (target != null)
-        //    {
-        //        target.TakeDamage(m_damageAmount);
-        //    }
-        //    else
-        //    {
-        //    }
-
-        //    //checks if breakable wall
-        //    DestructibleObject wall = hitInfo.transform.GetComponentInParent<DestructibleObject>();
-        //    if (wall)
-        //    {
-        //        wall.Break(gameObject.tag);
-        //    }
-
-        //    //Force of impact on hit
-        //    if (hitInfo.rigidbody != null)
-        //    {
-        //        hitInfo.rigidbody.AddForce(-hitInfo.normal * m_hitImpact);
-        //    }
-
-        //    //Particle effects on hit
-        //    //GameObject hitImpact = Instantiate(impactFX, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
-        //    //Destroy(hitImpact, 2.0f);
-        //}
-
-        //Debug.Log("Begin Shooting...");
 
 
         for (int i = 0; i < _bulletClip; i++)
@@ -104,27 +70,10 @@ public class CreatureWeapon : Weapon, ISaveable
             finalFowardVector += transform.position;
 
             GameObject creatureProjectile = Instantiate(_creatureProjectile, finalFowardVector, Quaternion.identity);
+            //Vector3 randomSize = new Vector3(Random)
+            //creatureProjectile.transform.localScale = ;
             creatureProjectile.GetComponent<Rigidbody>().AddForce(transform.forward * m_hitImpact, ForceMode.Impulse);
 
-            //if (Physics.Raycast(finalFowardVector, transform.forward,out hit, m_weaponRange))
-            //{
-
-            //    //Only damages if asset has "Target" script
-            //    Health target = hit.transform.GetComponent<Health>();
-            //    if (target != null)
-            //    {
-            //        target.TakeDamage(m_damageAmount);
-            //    }
-            //    else
-            //    {
-            //    }
-            //    //Force of impact on hit
-            //    if (hit.rigidbody != null)
-            //    {
-            //        hit.rigidbody.AddForce(-hit.normal * m_hitImpact, ForceMode.Impulse);
-            //    }
-
-            //}
 
 
         }
