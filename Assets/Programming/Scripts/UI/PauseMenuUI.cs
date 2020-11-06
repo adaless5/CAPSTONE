@@ -52,6 +52,7 @@ public class PauseMenuUI : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         Player.GetComponent<ALTPlayerController>().enabled = true;
+        SaveSystem.SaveRespawnInfo(Player.transform, Player.scene.name);
         Destroy(Player);
         SceneManager.LoadScene(0);
         //SceneManager.LoadScene("MainMenu", LoadSceneMode.Additive);
@@ -60,6 +61,8 @@ public class PauseMenuUI : MonoBehaviour
 
     public void ExitGame()
     {
+        //
+        SaveSystem.SaveRespawnInfo(Player.transform, Player.scene.name);
         Debug.Log("Exit");
         Application.Quit();
     }
