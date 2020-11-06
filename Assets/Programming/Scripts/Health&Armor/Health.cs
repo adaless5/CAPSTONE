@@ -20,7 +20,7 @@ public class Health : MonoBehaviour, ISaveable
     [SerializeField]
     private bool m_IsLoadingShield = false;
 
-    public event Action<float> OnTakeDamage;
+    public event Action<float> OnTakeHealthDamage;
     public event Action<float> OnHeal;
     public event Action OnDeath;
 
@@ -39,7 +39,7 @@ public class Health : MonoBehaviour, ISaveable
         LoadDataOnSceneEnter();
         SaveSystem.SaveEvent += SaveDataOnSceneChange;
 
-
+        OnTakeHealthDamage += TakeDamage;
         //if (isDead) GetComponent<MeshRenderer>().enabled = false;
         //else GetComponent<MeshRenderer>().enabled = true;
     }
@@ -51,7 +51,6 @@ public class Health : MonoBehaviour, ISaveable
 
     public void TakeDamage(float damage)
     {
-        CallOnTakeDamage(damage);
 
 
         m_HP -= damage;
@@ -85,9 +84,9 @@ public class Health : MonoBehaviour, ISaveable
         gameObject.SetActive(false);
     }
 
-    public void CallOnTakeDamage(float damageToTake)
+    public void CallOnTakeHealthDamage(float damageToTake)
     {
-        OnTakeDamage?.Invoke(damageToTake);
+        OnTakeHealthDamage?.Invoke(damageToTake);
     }
 
     public void CallOnDeath()

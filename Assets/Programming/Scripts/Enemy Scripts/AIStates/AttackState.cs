@@ -7,9 +7,10 @@ using UnityEngine.AI;
 public class Attack : State
 {
     float _shootTimer = 0.5f;
+    public float _enemyDamage = 20.0f;
     public Attack(GameObject enemy, Transform[] pp, Transform playerposition, NavMeshAgent nav) : base(enemy, pp, playerposition, nav)
     {
-        _stateName = STATE.ATTACK;
+        _stateName = STATENAME.ATTACK;
 
     }
 
@@ -24,10 +25,12 @@ public class Attack : State
 
         if (CanSeePlayer())
         {
-            _currentEnemy.transform.LookAt(_playerPos.position);
+
+
+            LookAt(_playerPos);
+
             if (Vector3.Distance(_currentEnemy.transform.position, _playerPos.position) < _shootDistance)
             {
-                Debug.Log("Attack Code");
                 ShootPlayer();
             }
             else
@@ -45,7 +48,6 @@ public class Attack : State
     public void ShootPlayer()
     {
         _shootTimer -= Time.deltaTime;
-        Debug.Log("ShootPlayer called");
         Vector3 bulletDeviation = Random.insideUnitCircle * _maxDeviation;
         Quaternion rot = Quaternion.LookRotation(Vector3.forward * _bulletRange + bulletDeviation);
         Vector3 finalFowardVector = _currentEnemy.transform.rotation * rot * Vector3.forward;
@@ -55,10 +57,13 @@ public class Attack : State
         Debug.DrawRay(finalFowardVector, _currentEnemy.transform.forward * _shootDistance, Color.green);
         if (_shootTimer <= 0)
         {
-            if (Physics.Raycast(finalFowardVector, _currentEnemy.transform.forward *_shootDistance, out hit, _shootDistance))
+            if (Physics.Raycast(finalFowardVector, _currentEnemy.transform.forward * _shootDistance, out hit, _shootDistance))
             {
                 if (hit.transform.tag == "Player")
+                {
                     Debug.Log("Player hit");
+                    _playerPos.gameObject.GetComponent<ALTPlayerController>().CallOnTakeDamage(_enemyDamage);
+                }
                 else
                 {
                     Debug.Log("Player not hit");

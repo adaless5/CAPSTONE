@@ -8,7 +8,7 @@ public class Patrol : State
     int _currentPatrolIndex = 0;
     public Patrol(GameObject enemy, Transform[] pp, Transform playerposition, NavMeshAgent nav) : base(enemy, pp, playerposition, nav)
     {
-        _stateName = STATE.PATROL;
+        _stateName = STATENAME.PATROL;
 
     }
 
@@ -20,7 +20,7 @@ public class Patrol : State
     public override void Update()
     {
         base.Update();
-
+        LookAt(_patrolPoints[_currentPatrolIndex]);
         if (!_navMeshAgent.pathPending && _navMeshAgent.remainingDistance < 0.5f)
             MoveToNextPoint();
 
@@ -45,7 +45,6 @@ public class Patrol : State
 
         _currentPatrolIndex = (_currentPatrolIndex + 1) % _patrolPoints.Length;
     }
-
 
 
     public override void Exit()

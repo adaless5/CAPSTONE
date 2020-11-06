@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 //using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -45,8 +46,17 @@ public class ALTPlayerController : MonoBehaviour
     public Canvas WeaponWheel;
 
 
+    public event Action<float> OnTakeDamage;
+    public event Action<float> OnHeal;
+    public event Action OnDeath;
+
 
     bool bIsInThermalView = false;
+
+    private void Awake()
+    {
+        OnTakeDamage += TakeDamage;
+    }
 
     void Start()
     {
@@ -55,6 +65,7 @@ public class ALTPlayerController : MonoBehaviour
         m_health = GetComponent<Health>();
         m_armor = GetComponent<Armor>();
 
+        Application.targetFrameRate = 60;
 
         Belt[] beltsInScene; 
         beltsInScene = FindObjectsOfType<Belt>();
@@ -89,7 +100,7 @@ public class ALTPlayerController : MonoBehaviour
 
         EventBroker.CallOnPlayerSpawned(gameObject);
 
-        m_health.OnTakeDamage += m_armor.ResetArmorTimer;
+        OnTakeDamage += m_armor.ResetArmorTimer;
 
         Cursor.lockState = CursorLockMode.Locked;
     }
@@ -300,6 +311,21 @@ public class ALTPlayerController : MonoBehaviour
     public void ChangePlayerState(PlayerState newPlayerState)
     {
         m_PlayerState = newPlayerState;
+    }
+
+    public void CallOnTakeDamage(float damageToTake)
+    {
+        OnTakeDamage?.Invoke(damageToTake);
+    }
+
+    public void CallOnDeath()
+    {
+        OnDeath?.Invoke();
+    }
+
+    public void CallOnHeal(float healthToHeal)
+    {
+        OnHeal?.Invoke(healthToHeal);
     }
 
 

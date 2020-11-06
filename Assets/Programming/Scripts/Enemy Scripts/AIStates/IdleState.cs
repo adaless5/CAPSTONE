@@ -7,7 +7,7 @@ public class Idle : State
 {
     public Idle(GameObject enemy, Transform[] pp, Transform playerposition, NavMeshAgent nav) : base(enemy, pp, playerposition, nav)
     {
-        _stateName = STATE.IDLE;
+        _stateName = STATENAME.IDLE;
 
     }
 
