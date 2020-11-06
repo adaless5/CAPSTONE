@@ -7,7 +7,7 @@ using UnityEngine.AI;
 
 public class State
 {
-    public enum STATE
+    public enum STATENAME
     {
         IDLE, PATROL, FOLLOW, ATTACK
     };
@@ -17,7 +17,7 @@ public class State
         ENTER, UPDATE, EXIT
     };
 
-    public STATE _stateName;
+    public STATENAME _stateName;
     protected State _nextState;
     protected EVENT _stage;
     protected float _enemySpeed = 2f;
@@ -26,11 +26,15 @@ public class State
     protected Transform _playerPos;
     protected NavMeshAgent _navMeshAgent;
 
-    protected float _visualDistance = 10.0f;
-    protected float _visualAngle = 180.0f;
+    protected float _visualDistance = 30.0f;
+    protected float _visualAngle = 90.0f;
     protected float _shootDistance = 7.0f;
     protected float _bulletRange = 300.0f;
     protected float _maxDeviation = 350.0f;
+    protected float _rotDamp = 10.0f;
+
+    private Quaternion _desiredRot;
+    
     public State(GameObject enemy, Transform[] pp, Transform playerposition, NavMeshAgent nav)
     {
         _currentEnemy = enemy;
@@ -78,6 +82,12 @@ public class State
         }
         //Debug.Log("Player hiding");
         return false;
+    }
+
+    public void LookAt(Transform thingToLookAt)
+    {
+        _desiredRot = Quaternion.LookRotation(thingToLookAt.position - _currentEnemy.transform.position);
+        _currentEnemy.transform.rotation = Quaternion.Slerp(_currentEnemy.transform.rotation, _desiredRot, Time.deltaTime * _rotDamp);
     }
 
 }

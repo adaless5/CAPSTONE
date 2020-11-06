@@ -65,6 +65,7 @@ public class ALTPlayerController : MonoBehaviour
         m_health = GetComponent<Health>();
         m_armor = GetComponent<Armor>();
 
+        Application.targetFrameRate = 60;
 
         Belt[] beltsInScene; 
         beltsInScene = FindObjectsOfType<Belt>();

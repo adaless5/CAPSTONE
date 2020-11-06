@@ -10,7 +10,7 @@ public class Attack : State
     public float _enemyDamage = 20.0f;
     public Attack(GameObject enemy, Transform[] pp, Transform playerposition, NavMeshAgent nav) : base(enemy, pp, playerposition, nav)
     {
-        _stateName = STATE.ATTACK;
+        _stateName = STATENAME.ATTACK;
 
     }
 
@@ -25,7 +25,10 @@ public class Attack : State
 
         if (CanSeePlayer())
         {
-            _currentEnemy.transform.LookAt(_playerPos.position);
+
+
+            LookAt(_playerPos);
+
             if (Vector3.Distance(_currentEnemy.transform.position, _playerPos.position) < _shootDistance)
             {
                 ShootPlayer();
