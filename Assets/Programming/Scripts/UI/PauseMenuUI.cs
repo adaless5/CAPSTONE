@@ -9,11 +9,6 @@ public class PauseMenuUI : MonoBehaviour
     public GameObject PauseMenu;
     public GameObject Player;
 
-
-    private void Awake()
-    {
-
-    }
     // Update is called once per frame
     void Update()
     {
@@ -57,12 +52,20 @@ public class PauseMenuUI : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         Player.GetComponent<ALTPlayerController>().enabled = true;
+        SaveSystem.SaveRespawnInfo(Player.transform, Player.scene.name);
+        Destroy(Player);
         SceneManager.LoadScene(0);
+        //SceneManager.LoadScene("MainMenu", LoadSceneMode.Additive);
+        //tigger save and exit
     }
 
     public void ExitGame()
     {
+        //
+        SaveSystem.SaveRespawnInfo(Player.transform, Player.scene.name);
         Debug.Log("Exit");
         Application.Quit();
     }
+
+
 }

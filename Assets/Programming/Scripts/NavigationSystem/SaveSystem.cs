@@ -118,9 +118,9 @@ public class SaveSystem : MonoBehaviour
     const string RESPAWN_INFO_REGISTRY_ID = "_respawnInfo";
     public class RespawnInfo_Data
     {
-        Vector3 pos;
-        Quaternion rot;
-        string sceneName { get; set; }
+        public Vector3 pos;
+        public Quaternion rot;
+        public string sceneName { get; set; }
 
         public RespawnInfo_Data(Transform t, string sceneName)
         {
