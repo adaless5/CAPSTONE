@@ -115,7 +115,7 @@ public class SaveSystem : MonoBehaviour
     /// RespawnInfo
     ///
 
-    const string RESPAWN_INFO_REGISTRY_ID = "_respawnInfo";
+    public const string RESPAWN_INFO_REGISTRY_ID = "_respawnInfo";
     public class RespawnInfo_Data
     {
         public Vector3 pos;
