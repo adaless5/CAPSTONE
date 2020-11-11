@@ -69,7 +69,8 @@ public class CreatureWeapon : Weapon, ISaveable
             Vector3 finalFowardVector = transform.rotation * rot * Vector3.forward;
             finalFowardVector += transform.position;
 
-            GameObject creatureProjectile = Instantiate(_creatureProjectile, finalFowardVector, Quaternion.identity);
+            //GameObject creatureProjectile = Instantiate(_creatureProjectile, finalFowardVector, Quaternion.identity);
+            GameObject creatureProjectile = ObjectPool.Instance.SpawnFromPool("Creature", finalFowardVector, Quaternion.identity);
             //Vector3 randomSize = new Vector3(Random)
             //creatureProjectile.transform.localScale = ;
             creatureProjectile.GetComponent<Rigidbody>().AddForce(transform.forward * m_hitImpact, ForceMode.Impulse);
