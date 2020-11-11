@@ -21,7 +21,5 @@ public class HealthBarUI : MonoBehaviour
     public void SetHealth(float HP)
     {
         slider.value = HP;
-    }
-
- 
+    } 
 }

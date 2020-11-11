@@ -39,7 +39,6 @@ public class WeaponPickup : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
-
             //GameObject g = GameObject.FindGameObjectWithTag("WeaponBelt");
             //Belt b = g.GetComponent<Belt>();
             EventBroker.CallOnPickupWeapon(weaponNum);
