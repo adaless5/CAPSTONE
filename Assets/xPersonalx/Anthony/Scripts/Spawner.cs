@@ -18,7 +18,7 @@ public class Spawner : MonoBehaviour
     Vector3 _Position;
     Quaternion _Rotation;
 
-    [SerializeField] bool bSpawnOnAwake;
+    [SerializeField] bool bSpawnOnAwake = true;
     bool bBeginSpawning;
     public float _IntervalBetweenSpawn = 3.0f;
     float _Timer = 0.0f;

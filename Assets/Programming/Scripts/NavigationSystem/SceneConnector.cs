@@ -141,7 +141,7 @@ public class SceneConnector : MonoBehaviour
         public string destinationConnectorName { get; set; }
 
         //Main Constructor
-        public SceneConnectorData(Transform t, string ID, string sceneName, string name, SceneConnector.SceneConnectorType type, string goesToID, string goesToScene)
+        public SceneConnectorData(Transform t, string ID, string sceneName, string name, SceneConnectorType type, string goesToID, string goesToScene)
         {
             pos = t.position;
             rot = t.rotation;

@@ -3,11 +3,19 @@ using UnityEngine;
 
 public class WeaponBase : Weapon, ISaveable
 {
+    //Not being used yet, will be implemented with Ammo Pickups - VR
+    public enum AmmoTypes
+    {
+        Default,
+        Creature,
+        Explosive,
+    }
+
     [Header("UI Elements - ParticleFX and Reticule")]
     public ParticleSystem muzzleFlash;
     public GameObject impactFX;
-    public Animator reticuleAnimator;   
-    
+    public Animator reticuleAnimator;      
+
 
     [Header("Camera Settings")]
     public Camera gunCamera;
@@ -27,8 +35,6 @@ public class WeaponBase : Weapon, ISaveable
 
     public override void Start()
     {
-
-
         gunCamera = GameObject.FindObjectOfType<Camera>();
         GetComponent<MeshRenderer>().enabled = true;
         bIsActive = true;
@@ -62,12 +68,21 @@ public class WeaponBase : Weapon, ISaveable
         if (Input.GetButton("Fire1") && Time.time >= m_fireStart)
         {
             m_fireStart = Time.time + 1.0f / m_fireRate;
-            OnShoot();
+            if(m_ammoAmount > 0)
+            {
+                OnShoot();
+            }
+            else
+            {
+                Debug.Log("Out of Ammo");
+            }
         }
     }
 
     void OnShoot()
     {
+        Debug.Log(m_ammoAmount);
+
         muzzleFlash.Play();
 
         RaycastHit hitInfo;
@@ -104,6 +119,8 @@ public class WeaponBase : Weapon, ISaveable
             GameObject hitImpact = Instantiate(impactFX, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
             Destroy(hitImpact, 2.0f);
         }
+
+        m_ammoAmount--;
     }
 
    //VR - Plays Animation to focus reticule on targeting

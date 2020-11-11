@@ -59,7 +59,7 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         //Apply GameSettings to player controller
-        LoadGameSettings();
+        //LoadGameSettings();
     }
 
     private void Update()
@@ -195,17 +195,17 @@ public class PlayerController : MonoBehaviour
     }
 
     //Loads game settings from Editor Prefs.
-    private void LoadGameSettings()
-    {
-        _jumpKey = GameSettings.jumpKey;
-        _jumpMultiplier = GameSettings.jumpMultiplier;
-        _lookSensitivity = GameSettings.lookSensitivity;
-        _runKey = GameSettings.runKey;
-        _movementSpeed = GameSettings.walkSpeed;
-        _walkSpeed = GameSettings.walkSpeed;
-        _runSpeed = GameSettings.runSpeed;
-        _runBuildupMultiplier = GameSettings.runBuildupMultiplier;
-    }
+    //private void LoadGameSettings()
+    //{
+    //    _jumpKey = GameSettings.jumpKey;
+    //    _jumpMultiplier = GameSettings.jumpMultiplier;
+    //    _lookSensitivity = GameSettings.lookSensitivity;
+    //    _runKey = GameSettings.runKey;
+    //    _movementSpeed = GameSettings.walkSpeed;
+    //    _walkSpeed = GameSettings.walkSpeed;
+    //    _runSpeed = GameSettings.runSpeed;
+    //    _runBuildupMultiplier = GameSettings.runBuildupMultiplier;
+    //}
 
 
     public bool CheckForGrappleInput()

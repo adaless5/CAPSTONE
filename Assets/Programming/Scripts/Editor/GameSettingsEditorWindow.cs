@@ -1,6 +1,8 @@
-﻿
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using UnityEngine.SceneManagement;
 
 public class GameSettingsEditorWindow : EditorWindow
 {
@@ -29,57 +31,63 @@ public class GameSettingsEditorWindow : EditorWindow
 
         if (_showPlayerSettings)
         {
-            DrawUILine(Color.grey);
+            //DrawUILine(Color.grey);
 
-            ////Jump Settings
-            EditorGUILayout.LabelField("Jump Settings", EditorStyles.boldLabel);
+            //////Jump Settings
+            //EditorGUILayout.LabelField("Jump Settings", EditorStyles.boldLabel);
 
-            //Set Jump Key
-            _jumpKey = (KeyCode)EditorGUILayout.EnumPopup("    Jump Key:", _jumpKey);
+            ////Set Jump Key
+            //_jumpKey = (KeyCode)EditorGUILayout.EnumPopup("    Jump Key:", _jumpKey);
 
-            //Set Jump multiplier
-            _jumpMultiplier = EditorGUILayout.Slider("    Jump Height:", _jumpMultiplier, 1.0f, 20.0f);
-            ////
+            ////Set Jump multiplier
+            //_jumpMultiplier = EditorGUILayout.Slider("    Jump Height:", _jumpMultiplier, 1.0f, 20.0f);
+            //////
 
-            DrawUILine(Color.grey);
+            //DrawUILine(Color.grey);
 
-            ////Movement Settings
-            EditorGUILayout.LabelField("Movement Settings", EditorStyles.boldLabel);
+            //////Movement Settings
+            //EditorGUILayout.LabelField("Movement Settings", EditorStyles.boldLabel);
 
-            //Set Run Key
-            _runKey = (KeyCode)EditorGUILayout.EnumPopup("    Run Key:", _runKey);
+            ////Set Run Key
+            //_runKey = (KeyCode)EditorGUILayout.EnumPopup("    Run Key:", _runKey);
 
-            //Set Walk / Run Speed
-            EditorGUILayout.LabelField("    Walking Speed:  " + _walkSpeed.ToString(".0") + "    Running Speed:  " + _runSpeed.ToString(".0"));
-            EditorGUILayout.MinMaxSlider(ref _walkSpeed, ref _runSpeed, 1.0f, 15.0f);
+            ////Set Walk / Run Speed
+            //EditorGUILayout.LabelField("    Walking Speed:  " + _walkSpeed.ToString(".0") + "    Running Speed:  " + _runSpeed.ToString(".0"));
+            //EditorGUILayout.MinMaxSlider(ref _walkSpeed, ref _runSpeed, 1.0f, 15.0f);
 
-            //Set Run Buildup Speed
-            _runBuildupMultiplier = EditorGUILayout.Slider("    Run Buildup Speed:", _runBuildupMultiplier, 1.0f, 5.0f);
+            ////Set Run Buildup Speed
+            //_runBuildupMultiplier = EditorGUILayout.Slider("    Run Buildup Speed:", _runBuildupMultiplier, 1.0f, 5.0f);
 
-            //Set Look Sensitivity
-            _lookSensitivity = EditorGUILayout.Slider("    Look Sensitivity:", _lookSensitivity, 100.0f, 600.0f);
-            ////
+            ////Set Look Sensitivity
+            //_lookSensitivity = EditorGUILayout.Slider("    Look Sensitivity:", _lookSensitivity, 100.0f, 600.0f);
+            //////
 
-            DrawUILine(Color.grey);
+            //DrawUILine(Color.grey);
 
-            if (GUILayout.Button("Reset To Default"))
-            {
-                GameSettings.ResetToDefault("Player");
+            //if (GUILayout.Button("Reset To Default"))
+            //{
+            //    GameSettings.ResetToDefault("Player");
 
-                //Update values in editor.
-                _jumpKey = GameSettings.jumpKey;
-                _jumpMultiplier = GameSettings.jumpMultiplier;
-                _runKey = GameSettings.runKey;
-                _walkSpeed = GameSettings.walkSpeed;
-                _runSpeed = GameSettings.runSpeed;
-                _runBuildupMultiplier = GameSettings.runBuildupMultiplier;
-                _lookSensitivity = GameSettings.lookSensitivity;
-            }
+            //    //Update values in editor.
+            //    _jumpKey = GameSettings.jumpKey;
+            //    _jumpMultiplier = GameSettings.jumpMultiplier;
+            //    _runKey = GameSettings.runKey;
+            //    _walkSpeed = GameSettings.walkSpeed;
+            //    _runSpeed = GameSettings.runSpeed;
+            //    _runBuildupMultiplier = GameSettings.runBuildupMultiplier;
+            //    _lookSensitivity = GameSettings.lookSensitivity;
+            //}
 
             if (GUILayout.Button("Reset Prefs"))
             {
                 PlayerPrefs.DeleteAll();
                 Debug.Log("Deleted Player Prefs");
+            }
+
+            if (GUILayout.Button("Delete Respawn Info"))
+            {
+                PlayerPrefs.DeleteKey(SaveSystem.RESPAWN_INFO_REGISTRY_ID);
+                Debug.Log("Deleted Respawn Info");
             }
         }
     }
@@ -87,7 +95,7 @@ public class GameSettingsEditorWindow : EditorWindow
     //This runs everytime the editor window changes.
     void OnInspectorUpdate()
     {
-        this.Repaint();
+        Repaint();
         SavePlayerSettings();
     }
 
