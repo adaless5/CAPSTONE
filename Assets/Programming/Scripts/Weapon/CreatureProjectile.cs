@@ -8,7 +8,8 @@ public class CreatureProjectile : MonoBehaviour
     Health _targetHealth;
     private float _damageTimer;
     public float _maxDamageTime;
-    private float _lifeTime;
+    //private 
+    public float _lifeTime;
     // Start is called before the first frame update
 
     private void Awake()
@@ -26,6 +27,7 @@ public class CreatureProjectile : MonoBehaviour
     void Update()
     {
         _lifeTime -= Time.deltaTime;
+
         if (_lifeTime >= 0)
         {
             if (_targetHealth != null)
@@ -43,6 +45,17 @@ public class CreatureProjectile : MonoBehaviour
             _lifeTime = 3.0f;
             ObjectPool.Instance.ReturnToPool("Creature", this.gameObject);
         }
+
+    }
+    private void OnEnable()
+    {
+        _lifeTime = 3.0f;
+    }
+
+    private void OnDisable()
+    {
+        DeStick();
+        _lifeTime = 3.0f;
     }
 
     private void OnCollisionEnter(Collision collision)
