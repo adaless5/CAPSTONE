@@ -1,5 +1,7 @@
 ﻿using JetBrains.Annotations;
 using UnityEngine;
+using System.Collections;
+using UnityEngine.Rendering;
 
 public class WeaponBase : Weapon, ISaveable
 {
@@ -14,19 +16,21 @@ public class WeaponBase : Weapon, ISaveable
     [Header("UI Elements - ParticleFX and Reticule")]
     public ParticleSystem muzzleFlash;
     public GameObject impactFX;
-    public Animator reticuleAnimator;      
+    public Animator reticuleAnimator;  
 
 
     [Header("Camera Settings")]
     public Camera gunCamera;
 
     public ALTPlayerController _playercontroller;
+   
 
     void Awake()
     {
         LoadDataOnSceneEnter();
         SaveSystem.SaveEvent += SaveDataOnSceneChange;
-        m_ammoAmount = 6;
+        m_weaponClipSize = 6;
+        m_reloadTime = 2.0f;
         m_fireRate = 10.0f;
         m_hitImpact = 50.0f;
         m_weaponRange = 50.0f;
@@ -35,10 +39,18 @@ public class WeaponBase : Weapon, ISaveable
 
     public override void Start()
     {
+        m_currentAmmoCount = m_weaponClipSize;
+        m_overallAmmoCount = m_currentAmmoCount;
+
         gunCamera = GameObject.FindObjectOfType<Camera>();
         GetComponent<MeshRenderer>().enabled = true;
         bIsActive = true;
-        bIsObtained = true;
+        bIsObtained = true;        
+    }
+
+    void OnEnable()
+    {
+        bIsReloading = false;
     }
 
 
@@ -49,8 +61,7 @@ public class WeaponBase : Weapon, ISaveable
 
     // Update is called once per frame
     public override void Update()
-    {
-
+    {       
         if (bIsActive && _playercontroller.m_ControllerState == ALTPlayerController.ControllerState.Play)
         {
             GetComponent<MeshRenderer>().enabled = true;
@@ -65,10 +76,22 @@ public class WeaponBase : Weapon, ISaveable
 
     public override void UseTool()
     {
+        if(bIsReloading)
+        {
+            return;
+        }
+
+        //Currently reloading automatically, can change based on player input at later date
+        if (m_currentAmmoCount <= 0)
+        {
+            StartCoroutine(OnReload());
+            return;
+        }
+
         if (Input.GetButton("Fire1") && Time.time >= m_fireStart)
         {
             m_fireStart = Time.time + 1.0f / m_fireRate;
-            if(m_ammoAmount > 0)
+            if(m_currentAmmoCount > 0)
             {
                 OnShoot();
             }
@@ -79,9 +102,31 @@ public class WeaponBase : Weapon, ISaveable
         }
     }
 
+    IEnumerator OnReload()
+    {
+        bIsReloading = true;
+        Debug.Log("Reloading ammo");
+
+        yield return new WaitForSeconds(m_reloadTime);
+
+        m_currentAmmoCount = m_weaponClipSize;
+        bIsReloading = false;
+
+        Debug.Log("Reload Complete");
+    }
+
+    //Function for AmmoPickup class
+    public void AmmoPickup(int numberOfClips)
+    {
+        m_overallAmmoCount += (m_weaponClipSize * numberOfClips);
+        Debug.Log("Picked up ammo. Overall ammo: " + m_overallAmmoCount);
+    }
+
+
     void OnShoot()
     {
-        Debug.Log(m_ammoAmount);
+        Debug.Log("Current Ammo: " + m_currentAmmoCount);
+        Debug.Log("Overall Ammo: " + m_overallAmmoCount);
 
         muzzleFlash.Play();
 
@@ -120,7 +165,9 @@ public class WeaponBase : Weapon, ISaveable
             Destroy(hitImpact, 2.0f);
         }
 
-        m_ammoAmount--;
+        //Using ammo
+        m_currentAmmoCount--;
+        m_overallAmmoCount--; 
     }
 
    //VR - Plays Animation to focus reticule on targeting
