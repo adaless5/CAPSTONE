@@ -60,4 +60,13 @@ public class ObjectPool : MonoBehaviour
 
         return objectToSpawn;
     }
+
+    public void ReturnToPool(string tag, GameObject objectToReturn)
+    {
+        if(_poolDictionary.ContainsKey(tag))
+        {
+            _poolDictionary[tag].Enqueue(objectToReturn);
+            objectToReturn.SetActive(false);
+        }    
+    }
 }

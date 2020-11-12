@@ -92,11 +92,8 @@ public class SceneConnectorEditor : Editor
         if (!SceneConnectorMatchesSavedData())
         {
             GUI.backgroundColor = Color.red;
-            if (bConnectorMatchesSavedData) //Remove Connector from registry if data no longer matches the saved data.
-            {
-                bConnectorMatchesSavedData = false;
-                RemoveData();
-            }
+            RemoveData();
+            
         }
         else
         {
@@ -264,7 +261,9 @@ public class SceneConnectorEditor : Editor
     //Returns true if stored data for the connector matches the current state of the connector.
     private bool SceneConnectorMatchesSavedData()
     {
-        return (_data.pos == _base.transform.position && _data.rot == _base.transform.rotation
+        Transform t = _base.GetComponentInChildren<PlayerStart>().transform;
+
+        return (_data.pos == t.position && _data.rot == t.rotation 
             && !IDisBlank() && _ID.Equals(_data.ID) && _data.name == target.name
             && !SceneConnectorRegistry.IsEmpty()) ? true : false;
     }
@@ -319,7 +318,7 @@ public class SceneConnectorEditor : Editor
         //Save Connector to persistant data
         _data = new SceneConnector.SceneConnectorData(_base.GetComponentInChildren<PlayerStart>().transform, _ID, _sceneName, target.name, _type, _goesToID, _goesToScene);
         _data.destinationConnectorName = goToConnectorName;
-        SaveSystem.Save(target.name + _sceneName,"", _data.ToString());
+        SaveSystem.Save(target.name + _sceneName,"", _data.ToString(),SaveSystem.SaveType.CONNECTOR);
         if(bDebug)Debug.Log("SAVED : " + target.name + _data.ToString() );
 
         //Save Connector data to SceneConnectorRegistry
@@ -334,6 +333,9 @@ public class SceneConnectorEditor : Editor
         SceneConnectorRegistry.RemoveAllDestinationInfoWithDestinationID(_ID);
         SaveSystem.RemoveAtKey(target.name + _sceneName, "");
     }
+
+    //This runs everytime the editor window changes.
+
 
     //Draw UI line. (Unique to this editor)
     private static void DrawUILine(Color color, int thickness = 2, int padding = 10)

@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEditor;
 using UnityEditor.Rendering;
 using UnityEngine;
@@ -22,7 +24,7 @@ public class SceneConnector : MonoBehaviour
     public string _destinationSceneName;
     public string _destinationSceneID = "";
 
-    Object _unloadTrigger;
+    UnityEngine.Object _unloadTrigger;
     SceneConnectorData _data;
 
     void Awake()
@@ -44,12 +46,6 @@ public class SceneConnector : MonoBehaviour
         yield return new WaitForSeconds(.5f);
     }
 
-    IEnumerator LoadNewSceneAsync(LoadSceneMode loadingMode, string destinationScene)
-    {
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(destinationScene,loadingMode);
-        while (!asyncLoad.isDone) yield return null;
-    }
-
     IEnumerator LoadNewScene_Portal(SceneConnectorData registryData, Transform playerTransform)
     {
         yield return StartCoroutine(DispatchSave());
@@ -57,12 +53,6 @@ public class SceneConnector : MonoBehaviour
 
         playerTransform.position = registryData.pos;
         playerTransform.rotation = registryData.rot;
-    }
-
-    IEnumerator SaveThenLoadNewScene(LoadSceneMode loadingMode)
-    {
-        yield return StartCoroutine(DispatchSave());
-        SceneManager.LoadScene(_destinationSceneName,loadingMode);
     }
 
     void OnTriggerEnter(Collider other)
@@ -243,6 +233,67 @@ public class SceneConnector : MonoBehaviour
         }
     }
 
+
+    ///
+    /// IMPORT/EXPORT Scene Connector Data to TEXT
+    ///
+    public static void ImportConnectorDataFromText()
+    {
+        try
+        {
+            using (StreamReader sr = new StreamReader("Assets/Design/Resources/Data/Connector_Data.txt"))
+            {
+                //Read each line
+                string line;
+                int count = 0;
+                while ((line = sr.ReadLine()) != null)
+                {
+                    SceneConnectorData data = new SceneConnectorData();
+                    data.FromString(line);
+
+                    if (!SceneConnectorRegistry.Contains(data.ID)) 
+                    { 
+                        SceneConnectorRegistry.Add(data);
+                        SaveSystem.Save(data.name + data.sceneName, "", data.ToString(), SaveSystem.SaveType.CONNECTOR);
+                        count++; 
+                    } 
+                }
+                Debug.Log("Import Connector Data : Found " + count + " new Scene Connectors");
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.Log("The file could not be read: " + e.Message);
+        }
+    }
+
+    public static void ExportConnectorDataFromText()
+    {
+
+        //Clear the file contents
+        FileStream fileStream = File.Open("Assets/Design/Resources/Data/Connector_Data.txt", FileMode.Open);
+        fileStream.SetLength(0);
+        fileStream.Close();
+        //
+
+        //Export Data
+        List<SceneConnectorData> data = SceneConnectorRegistry.GetRegistry();
+
+        using (StreamWriter sw = new StreamWriter("Assets/Design/Resources/Data/Connector_Data.txt"))
+        {
+            foreach (SceneConnectorData connector in data)
+            {
+                sw.WriteLine(connector.ToString());
+            }
+
+            Debug.Log("Export Connector Data : " + data.Count + " Connectors Successfully Exported to Text");
+        }
+    }
+
+    ///
+    /// IMPORT/EXPORT Scene Connector Data to TEXT End
+    ///
+
 }
 
 
@@ -269,36 +320,36 @@ public class SceneConnector : MonoBehaviour
 
 //Debug.Log(_ID);
 
-            // If its a portal we must reposition the player.
-            // if (_sceneTriggerType == SceneTriggerType.Portal)
-            // {
-            //     Reset Player Position and orient Rotation.
-            //     if (_ID != "")// If id is not default, look in new scene for portal with same ID    
-            //     {
-            //         GameObject[] sceneTriggers = GameObject.FindGameObjectsWithTag("SceneTrigger");
-                    
-            //         foreach (GameObject trigger in sceneTriggers)
-            //         {
-            //             if (trigger.scene.name ==  SceneManager.GetActiveScene().name)
-            //             {
-            //                 Debug.Log(trigger.scene.name);
-                            
-            //                 found portal with same ID
-            //                 if(_GoToID == trigger.GetComponent<SceneTrigger>()._ID)
-            //                 {
-            //                     Debug.Log(trigger.GetComponentInChildren<PlayerStart>().GetComponent<Transform>().transform.position);
+// If its a portal we must reposition the player.
+// if (_sceneTriggerType == SceneTriggerType.Portal)
+// {
+//     Reset Player Position and orient Rotation.
+//     if (_ID != "")// If id is not default, look in new scene for portal with same ID    
+//     {
+//         GameObject[] sceneTriggers = GameObject.FindGameObjectsWithTag("SceneTrigger");
 
-            //                     Reposition Player
-            //                     GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>().transform.position = 
-            //                         trigger.GetComponentInChildren<PlayerStart>().GetComponent<Transform>().transform.position;
+//         foreach (GameObject trigger in sceneTriggers)
+//         {
+//             if (trigger.scene.name ==  SceneManager.GetActiveScene().name)
+//             {
+//                 Debug.Log(trigger.scene.name);
 
-            //                     GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>().transform.rotation = 
-            //                         trigger.GetComponentInChildren<PlayerStart>().GetComponent<Transform>().transform.rotation;
-                                
-            //                     break;
-            //                 }
-            //             }
-                        
-            //         }
-            //     } 
-            // }
+//                 found portal with same ID
+//                 if(_GoToID == trigger.GetComponent<SceneTrigger>()._ID)
+//                 {
+//                     Debug.Log(trigger.GetComponentInChildren<PlayerStart>().GetComponent<Transform>().transform.position);
+
+//                     Reposition Player
+//                     GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>().transform.position = 
+//                         trigger.GetComponentInChildren<PlayerStart>().GetComponent<Transform>().transform.position;
+
+//                     GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>().transform.rotation = 
+//                         trigger.GetComponentInChildren<PlayerStart>().GetComponent<Transform>().transform.rotation;
+
+//                     break;
+//                 }
+//             }
+
+//         }
+//     } 
+// }

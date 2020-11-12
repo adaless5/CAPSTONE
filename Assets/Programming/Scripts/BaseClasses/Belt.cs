@@ -72,4 +72,9 @@ public class Belt : MonoBehaviour
         _items[index].GetComponentInChildren<Tool>().ObtainEquipment();
         EquipToolAtIndex(index);
     }
+
+    public Tool GetToolAtIndex(int index)
+    {
+        return _items[index].GetComponentInChildren<Tool>();
+    }
 }

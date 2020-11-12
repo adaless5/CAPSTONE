@@ -12,7 +12,20 @@ public class WeaponPickup : MonoBehaviour
     {
         LoadDataOnSceneEnter();
         SaveSystem.SaveEvent += SaveDataOnSceneChange;
-        weaponNum = 2;
+
+        switch (_pickUpWeapon)
+        {
+            case WeaponType.BaseWeapon:
+                weaponNum = 0;
+                break;
+            case WeaponType.GrenadeWeapon:
+                weaponNum = 1;
+                break;
+            case WeaponType.CreatureWeapon:
+                weaponNum = 2;
+                break;
+        }
+
         if (isUsed) GetComponent<MeshRenderer>().enabled = false;
         else GetComponent<MeshRenderer>().enabled = true;
     }
@@ -26,7 +39,6 @@ public class WeaponPickup : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
-
             //GameObject g = GameObject.FindGameObjectWithTag("WeaponBelt");
             //Belt b = g.GetComponent<Belt>();
             EventBroker.CallOnPickupWeapon(weaponNum);

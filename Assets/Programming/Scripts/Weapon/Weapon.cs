@@ -11,7 +11,6 @@ public enum WeaponType
 }
 public abstract class Weapon : Tool
 {
-
     [Header("Weapon Selected")]
     [SerializeField]
     private WeaponType _weapon;
@@ -22,7 +21,12 @@ public abstract class Weapon : Tool
 
     [Header("Weapon Settings")]
     [SerializeField]
-    protected int m_ammoAmount = 6; //not being used currently
+    protected int m_weaponClipSize = 6;
+    protected int m_currentAmmoCount;
+    protected int m_overallAmmoCount;
+
+    [SerializeField]
+    protected float m_reloadTime = 2.0f;
     [SerializeField]
     protected float m_fireRate = 10.0f;
     [SerializeField]
@@ -32,4 +36,5 @@ public abstract class Weapon : Tool
     [Space]
 
     protected float m_fireStart = 0.0f;
+    protected bool bIsReloading = false;
 }

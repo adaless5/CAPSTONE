@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using UnityEngine;
 
-
-
 public class CreatureWeapon : Weapon, ISaveable
 {
     public Camera _camera;
@@ -23,7 +21,7 @@ public class CreatureWeapon : Weapon, ISaveable
     // Start is called before the first frame update
     public override void Start()
     {
-       
+
         _camera = FindObjectOfType<Camera>();
         GetComponent<MeshRenderer>().enabled = false;
         bIsActive = false;
@@ -69,10 +67,22 @@ public class CreatureWeapon : Weapon, ISaveable
             Vector3 finalFowardVector = transform.rotation * rot * Vector3.forward;
             finalFowardVector += transform.position;
 
-            GameObject creatureProjectile = Instantiate(_creatureProjectile, finalFowardVector, Quaternion.identity);
-            //Vector3 randomSize = new Vector3(Random)
-            //creatureProjectile.transform.localScale = ;
-            creatureProjectile.GetComponent<Rigidbody>().AddForce(transform.forward * m_hitImpact, ForceMode.Impulse);
+            //GameObject creatureProjectile = Instantiate(_creatureProjectile, finalFowardVector, Quaternion.identity);
+            if (ObjectPool.Instance != null)
+            {
+                if (ObjectPool.Instance._poolDictionary.ContainsKey("Creature"))
+                {
+                    GameObject creatureProjectile = ObjectPool.Instance.SpawnFromPool("Creature", finalFowardVector, Quaternion.identity);
+                    float randomfloat = UnityEngine.Random.Range(0.1f, 0.5f);
+                    Vector3 randomSize = new Vector3(randomfloat, randomfloat, randomfloat);
+                    creatureProjectile.transform.localScale = randomSize;
+                    creatureProjectile.GetComponent<Rigidbody>().AddForce(transform.forward * m_hitImpact, ForceMode.Impulse);
+                }
+            }
+            else
+            {
+                Debug.LogError("Object Pool not initialized! Create an Object Pool prefab");
+            }
 
 
 

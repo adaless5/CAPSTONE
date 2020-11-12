@@ -45,11 +45,9 @@ public class ALTPlayerController : MonoBehaviour
     public Canvas EquipmentWheel;
     public Canvas WeaponWheel;
 
-
     public event Action<float> OnTakeDamage;
     public event Action<float> OnHeal;
     public event Action OnDeath;
-
 
     bool bIsInThermalView = false;
 

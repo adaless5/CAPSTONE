@@ -16,30 +16,43 @@ public class SaveSystem : MonoBehaviour
     {
         DEFAULT,
         CONNECTOR,
+        RESPAWNINFO,
     }
 
     public static void Save(string gameObjectName, string variableName, int val, SaveType saveType = SaveType.DEFAULT)
     {
-        PlayerPrefs.SetInt(GetSaveID(gameObjectName,variableName), val);
+        string id = GetSaveID(gameObjectName, variableName);
+        PlayerPrefs.SetInt(id, val);
+
+        if (saveType == SaveType.DEFAULT) DefaultIDRegistry.Add(id);
     }
 
     public static void Save(string gameObjectName, string variableName, string val, SaveType saveType = SaveType.DEFAULT)
     {
-        PlayerPrefs.SetString(GetSaveID(gameObjectName,variableName), val);
+        string id = GetSaveID(gameObjectName, variableName);
+        PlayerPrefs.SetString(id, val);
+
+        if (saveType == SaveType.DEFAULT) DefaultIDRegistry.Add(id);
     }
 
     public static void Save(string gameObjectName, string variableName, float val, SaveType saveType = SaveType.DEFAULT)
     {
-        PlayerPrefs.SetFloat(GetSaveID(gameObjectName,variableName), val);
+        string id = GetSaveID(gameObjectName, variableName);
+        PlayerPrefs.SetFloat(id, val);
+
+        if (saveType == SaveType.DEFAULT) DefaultIDRegistry.Add(id);
     }
 
     public static void Save(string gameObjectName, string variableName, bool val, SaveType saveType = SaveType.DEFAULT)
     {
+        string id = GetSaveID(gameObjectName, variableName);
         switch (val)
         {
-            case false: PlayerPrefs.SetInt(GetSaveID(gameObjectName,variableName), 0); break;
-            case true: PlayerPrefs.SetInt(GetSaveID(gameObjectName,variableName), 1); break;
+            case false: PlayerPrefs.SetInt(id, 0); break;
+            case true: PlayerPrefs.SetInt(id, 1); break;
         }
+
+        if (saveType == SaveType.DEFAULT) DefaultIDRegistry.Add(id);
     }
 
     public static void StaticSaveString(string key, string val, SaveType saveType = SaveType.DEFAULT)
@@ -55,12 +68,12 @@ public class SaveSystem : MonoBehaviour
 
     public static int LoadInt(string gameObjectName, string variableName)
     {
-        return PlayerPrefs.GetInt(GetSaveID(gameObjectName,variableName));
+        return PlayerPrefs.GetInt(GetSaveID(gameObjectName, variableName));
     }
 
     public static bool LoadBool(string gameObjectName, string variableName)
     {
-        int val = PlayerPrefs.GetInt(GetSaveID(gameObjectName,variableName));
+        int val = PlayerPrefs.GetInt(GetSaveID(gameObjectName, variableName));
         switch (val)
         {
             case 0: return false;
@@ -71,7 +84,7 @@ public class SaveSystem : MonoBehaviour
 
     public static string LoadString(string gameObjectName, string variableName)
     {
-        return PlayerPrefs.GetString(GetSaveID(gameObjectName,variableName));
+        return PlayerPrefs.GetString(GetSaveID(gameObjectName, variableName));
     }
 
     public static string StaticLoadString(string key)
@@ -81,7 +94,7 @@ public class SaveSystem : MonoBehaviour
 
     public static float LoadFloat(string gameObjectName, string variableName)
     {
-        return PlayerPrefs.GetFloat(GetSaveID(gameObjectName,variableName));
+        return PlayerPrefs.GetFloat(GetSaveID(gameObjectName, variableName));
     }
 
     //public static T LoadObject<T>(string gameObjectName, string variableName)
@@ -112,7 +125,7 @@ public class SaveSystem : MonoBehaviour
     }
 
     /// 
-    /// RespawnInfo
+    /// RespawnInfo Registry
     ///
 
     public const string RESPAWN_INFO_REGISTRY_ID = "_respawnInfo";
@@ -132,7 +145,7 @@ public class SaveSystem : MonoBehaviour
         {
             pos = Vector3.zero;
             rot = Quaternion.identity;
-            sceneName = null; 
+            sceneName = null;
         }
 
         public override string ToString()
@@ -179,7 +192,7 @@ public class SaveSystem : MonoBehaviour
     public static void SaveRespawnInfo(Transform playerTransform, string sceneName)
     {
         RespawnInfo_Data data = new RespawnInfo_Data(playerTransform, sceneName);
-        SaveSystem.StaticSaveString(RESPAWN_INFO_REGISTRY_ID, data.ToString());
+        StaticSaveString(RESPAWN_INFO_REGISTRY_ID, data.ToString(), SaveType.RESPAWNINFO);
     }
 
     public static RespawnInfo_Data FetchRespawnInfo()
@@ -190,6 +203,6 @@ public class SaveSystem : MonoBehaviour
     }
 
     /// 
-    /// RespawnInfo END
+    /// RespawnInfo Registry END
     ///
 }
