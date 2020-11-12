@@ -11,14 +11,16 @@ public class DroneAI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
         EventBroker.OnPlayerSpawned += EventStart;
         _navMeshAgent = GetComponent<NavMeshAgent>();
-        
+
     }
 
     private void EventStart(GameObject player)
     {
-        _currentState = new Patrol(gameObject, _patrolPoints, player.transform, _navMeshAgent);
+        if (this != null)
+            _currentState = new Patrol(gameObject, _patrolPoints, player.transform, _navMeshAgent);
     }
 
     // Update is called once per frame

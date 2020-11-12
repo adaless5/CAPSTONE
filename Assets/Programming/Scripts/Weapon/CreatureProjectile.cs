@@ -8,12 +8,13 @@ public class CreatureProjectile : MonoBehaviour
     Health _targetHealth;
     private float _damageTimer;
     public float _maxDamageTime;
-    //private 
     public float _lifeTime;
+    Transform _transformOrigin;
     // Start is called before the first frame update
 
     private void Awake()
     {
+        _transformOrigin = transform;
         _rigidBody = GetComponent<Rigidbody>();
     }
 
@@ -21,6 +22,10 @@ public class CreatureProjectile : MonoBehaviour
     {
         _damageTimer = _maxDamageTime;
         _lifeTime = 3.0f;
+        if (ObjectPool.Instance != null)
+        {
+            _transformOrigin = ObjectPool.Instance.transform;
+        }
     }
 
     // Update is called once per frame
@@ -54,6 +59,7 @@ public class CreatureProjectile : MonoBehaviour
 
     private void OnDisable()
     {
+
         DeStick();
         _lifeTime = 3.0f;
     }
@@ -71,6 +77,7 @@ public class CreatureProjectile : MonoBehaviour
     }
     void DeStick()
     {
+        transform.parent = ObjectPool.Instance.transform;
         _rigidBody.isKinematic = false;
         _rigidBody.detectCollisions = true;
     }

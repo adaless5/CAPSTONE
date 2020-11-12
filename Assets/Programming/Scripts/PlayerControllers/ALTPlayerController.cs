@@ -16,7 +16,7 @@ public class ALTPlayerController : MonoBehaviour
 
     public enum ControllerState
     {
-        Play, 
+        Play,
         Menu,
     }
 
@@ -65,17 +65,17 @@ public class ALTPlayerController : MonoBehaviour
 
         Application.targetFrameRate = 60;
 
-        Belt[] beltsInScene; 
+        Belt[] beltsInScene;
         beltsInScene = FindObjectsOfType<Belt>();
-        foreach(Belt obj in beltsInScene)
+        foreach (Belt obj in beltsInScene)
         {
             if (obj.tag == "EquipmentBelt")
             {
-                _equipmentBelt = obj; 
+                _equipmentBelt = obj;
             }
-            else if(obj.tag == "WeaponBelt")
+            else if (obj.tag == "WeaponBelt")
             {
-                _weaponBelt = obj; 
+                _weaponBelt = obj;
             }
         }
 
@@ -106,82 +106,87 @@ public class ALTPlayerController : MonoBehaviour
     void Update()
     {
 
-            switch (m_ControllerState)
+        switch (m_ControllerState)
+        {
+            case ControllerState.Play:
+                PlayerRotation();
+                PlayerMovement();
+                break;
+
+            case ControllerState.Menu:
+                break;
+
+        }
+
+
+        //Slowdown time idea -LCC
+        if (Input.GetKeyDown(KeyCode.Q))// && m_ControllerState == ControllerState.Play)
+        {
+            EquipmentWheel.enabled = true;
+            Time.timeScale = 0.3f;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            //m_ControllerState = ControllerState.Menu;
+        }
+
+        if (Input.GetKeyUp(KeyCode.Q)) //&& m_ControllerState == ControllerState.Menu)
+        {
+            EquipmentWheel.enabled = false;
+            Time.timeScale = 1;
+
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+
+            m_ControllerState = ControllerState.Play;
+        }
+
+
+        if (Input.GetKeyDown(KeyCode.Tab))// && m_ControllerState == ControllerState.Play)
+        {
+            WeaponWheel.enabled = true;
+            Time.timeScale = 0.3f;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            //m_ControllerState = ControllerState.Menu;
+        }
+
+        if (Input.GetKeyUp(KeyCode.Tab))// && m_ControllerState == ControllerState.Menu)
+        {
+            WeaponWheel.enabled = false;
+            Time.timeScale = 1;
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            //m_ControllerState = ControllerState.Play;
+
+        }
+
+        //Test cube code (Remove this after Demo)
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            Vector3 forward = _camera.transform.TransformDirection(Vector3.forward) * 3;
+
+            RaycastHit hit;
+
+
+            Debug.DrawRay(_camera.transform.position, forward, Color.green, 5);
+
+            if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, 10.0f, 1 << 4, QueryTriggerInteraction.Ignore))
             {
-                case ControllerState.Play:
-                    PlayerRotation();
-                    PlayerMovement();
-                    break;
-
-                case ControllerState.Menu:
-                    break;
-
+                hit.collider.gameObject.SendMessage("ChangeColor");
             }
+        }//
 
 
-            //Slowdown time idea -LCC
-            if (Input.GetKeyDown(KeyCode.Q))// && m_ControllerState == ControllerState.Play)
-            {
-                EquipmentWheel.enabled = true;
-                Time.timeScale = 0.3f;
-                Cursor.lockState = CursorLockMode.None;
-                //m_ControllerState = ControllerState.Menu;
-            }
+        //Damage debug -LCC
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            TakeDamage(20.0f);
+        }
+        else if (Input.GetKeyDown(KeyCode.H))
+        {
+            m_health.Heal(20.0f);
+        }
 
-            if (Input.GetKeyUp(KeyCode.Q)) //&& m_ControllerState == ControllerState.Menu)
-            {
-                EquipmentWheel.enabled = false;
-                Time.timeScale = 1;
-
-                Cursor.lockState = CursorLockMode.Locked;
-                m_ControllerState = ControllerState.Play;
-            }
-
-
-            if (Input.GetKeyDown(KeyCode.Tab))// && m_ControllerState == ControllerState.Play)
-            {
-                WeaponWheel.enabled = true;
-                Time.timeScale = 0.3f;
-                Cursor.lockState = CursorLockMode.None;
-                //m_ControllerState = ControllerState.Menu;
-            }
-
-            if (Input.GetKeyUp(KeyCode.Tab))// && m_ControllerState == ControllerState.Menu)
-            {
-                WeaponWheel.enabled = false;
-                Time.timeScale = 1;
-                Cursor.lockState = CursorLockMode.Locked;
-                //m_ControllerState = ControllerState.Play;
-
-            }
-
-            //Test cube code (Remove this after Demo)
-            if (Input.GetKeyDown(KeyCode.F))
-            {
-                Vector3 forward = _camera.transform.TransformDirection(Vector3.forward) * 3;
-
-                RaycastHit hit;
-
-
-                Debug.DrawRay(_camera.transform.position, forward, Color.green, 5);
-
-                if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, 10.0f, 1 << 4, QueryTriggerInteraction.Ignore))
-                {
-                    hit.collider.gameObject.SendMessage("ChangeColor");
-                }
-            }//
-
-
-            //Damage debug -LCC
-            if (Input.GetKeyDown(KeyCode.L))
-            {
-                TakeDamage(20.0f);
-            }
-            else if (Input.GetKeyDown(KeyCode.H))
-            {
-                m_health.Heal(20.0f);
-            }
-        
     }
 
     private void TakeDamage(float damage)
@@ -228,14 +233,14 @@ public class ALTPlayerController : MonoBehaviour
 
     public void PlayerRotation()
     {
-            float mouseX = Input.GetAxis("Mouse X") * m_LookSensitivity;
-            float mouseY = Input.GetAxis("Mouse Y") * m_LookSensitivity;
+        float mouseX = Input.GetAxis("Mouse X") * m_LookSensitivity;
+        float mouseY = Input.GetAxis("Mouse Y") * m_LookSensitivity;
 
-            m_XRotation += mouseY;
-            m_XRotation = Mathf.Clamp(m_XRotation, -90.0f, 90.0f);
+        m_XRotation += mouseY;
+        m_XRotation = Mathf.Clamp(m_XRotation, -90.0f, 90.0f);
 
-            _camera.transform.localRotation = Quaternion.Euler(-m_XRotation, 0f, 0f);
-            transform.Rotate(Vector3.up * mouseX);
+        _camera.transform.localRotation = Quaternion.Euler(-m_XRotation, 0f, 0f);
+        transform.Rotate(Vector3.up * mouseX);
     }
 
     public void PlayerMovement()
@@ -291,7 +296,7 @@ public class ALTPlayerController : MonoBehaviour
             {
                 m_YVelocity = -2.0f;
             }
-            
+
         }
     }
 
