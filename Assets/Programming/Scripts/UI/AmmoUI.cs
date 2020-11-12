@@ -1,22 +1,23 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 
 public class AmmoUI : MonoBehaviour
-{
-    
-
+{    
+    public static int m_overallAmmo;
+    public static int m_currentAmmo;
+    Text m_text;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-       
-    }
+        m_text = GetComponent<Text>();       
+    }  
 
-    // Update is called once per frame
-    void Update()
+    public void SetAmmoText(int currentAmmo, int overallAmmo)
     {
-        
+        m_text.text = "" + currentAmmo + "\n\n" + overallAmmo;
     }
 }
