@@ -7,6 +7,7 @@ public class Mine : MonoBehaviour
     public float FuzeTimer = 3f;
     public float BlastRadius = 10f;
     public float ExplosionForce = 2000f;
+    public int Damage = 50;
 
     public GameObject explosionParticleEffect;
 
@@ -54,11 +55,20 @@ public class Mine : MonoBehaviour
             }
         }
 
-        //applies forces to all nearby gameobjects
+        //applies damage and forces to all nearby gameobjects
         hits = Physics.OverlapSphere(transform.position, BlastRadius);
 
         foreach (Collider obj in hits)
         {
+            //applies damage
+            Health target = obj.transform.GetComponent<Health>();
+            if (target != null)
+            {
+                Debug.Log("Damage");
+                target.TakeDamage(Damage);
+
+            }
+
             if (obj.GetComponent<Rigidbody>())
             {
                 obj.GetComponent<Rigidbody>().AddExplosionForce(ExplosionForce, transform.position, BlastRadius);
