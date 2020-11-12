@@ -39,11 +39,9 @@ public class AmmoPickup : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         //doesn't work at the moment, should after merges - VR
-        WeaponBase playerAmmo = (WeaponBase)other.GetComponent<WeaponBelt>().GetToolAtIndex(weaponIndex);
-        if (playerAmmo != null)
-        {
-            playerAmmo.AmmoPickup(m_amountOfClipsInPickup);
-            Destroy(gameObject);
-        }
+        // WeaponBase playerAmmo = (WeaponBase)other.gameObject.GetComponent<WeaponBelt>().GetToolAtIndex(weaponIndex);
+        EventBroker.CallOnAmmoPickup(ammoType, m_amountOfClipsInPickup);
+        Destroy(gameObject);
+        
     }
 }
