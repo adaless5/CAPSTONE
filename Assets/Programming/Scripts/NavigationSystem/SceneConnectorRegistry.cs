@@ -9,7 +9,7 @@ public static class SceneConnectorRegistry
     static bool bDebug = false;
 
     static List<SceneConnector.SceneConnectorData> _SCRegistry;
-    const string _SCRegistryKey = "_SCRegistry";
+    public const string _SCRegistryKey = "_SCRegistry";
 
     public static List<SceneConnector.SceneConnectorData> GetRegistry()
     {
@@ -36,7 +36,7 @@ public static class SceneConnectorRegistry
         if (bDebug) Debug.Log("Scene Connector Registry [Added to Registry] : " + obj.ToString());
 
         //Update saved registry in persistent data persistent data.
-        SaveSystem.StaticSaveString(_SCRegistryKey, RegistryToString(_SCRegistry));
+        SaveSystem.StaticSaveString(_SCRegistryKey, RegistryToString(_SCRegistry),SaveSystem.SaveType.CONNECTOR);
     }
 
     //Remove The connector at the given ID from the connector registry
@@ -62,7 +62,7 @@ public static class SceneConnectorRegistry
         }
 
         //Update saved registry in persistent data persistent data.
-        SaveSystem.StaticSaveString(_SCRegistryKey, RegistryToString(_SCRegistry));
+        SaveSystem.StaticSaveString(_SCRegistryKey, RegistryToString(_SCRegistry),SaveSystem.SaveType.CONNECTOR);
     }
 
     public static bool Contains(string id)
@@ -136,7 +136,7 @@ public static class SceneConnectorRegistry
         return items;
     }
 
-    public static string RegistryToString(List<SceneConnector.SceneConnectorData> scRegistry)
+    static string RegistryToString(List<SceneConnector.SceneConnectorData> scRegistry)
     {
         string str = "";
 
@@ -148,7 +148,7 @@ public static class SceneConnectorRegistry
         return str;
     }
 
-    public static List<SceneConnector.SceneConnectorData> FromString(string str)
+    static List<SceneConnector.SceneConnectorData> FromString(string str)
     {
         string s = "";
         _SCRegistry = new List<SceneConnector.SceneConnectorData>();
@@ -187,7 +187,7 @@ public static class SceneConnectorRegistry
         }
 
         //Update saved registry in persistent data persistent data.
-        SaveSystem.StaticSaveString(_SCRegistryKey, RegistryToString(_SCRegistry));
+        SaveSystem.StaticSaveString(_SCRegistryKey, RegistryToString(_SCRegistry),SaveSystem.SaveType.CONNECTOR);
     }
 
     //Removes the destination information from the item with the given ID.
@@ -210,7 +210,7 @@ public static class SceneConnectorRegistry
         }
 
         //Update saved registry in persistent data persistent data.
-        SaveSystem.StaticSaveString(_SCRegistryKey, RegistryToString(_SCRegistry));
+        SaveSystem.StaticSaveString(_SCRegistryKey, RegistryToString(_SCRegistry),SaveSystem.SaveType.CONNECTOR);
     }
 
     //Removes all destination information from items with the given destinationID
@@ -233,7 +233,7 @@ public static class SceneConnectorRegistry
         }
 
         //Update saved registry in persistent data persistent data.
-        SaveSystem.StaticSaveString(_SCRegistryKey, RegistryToString(_SCRegistry));
+        SaveSystem.StaticSaveString(_SCRegistryKey, RegistryToString(_SCRegistry),SaveSystem.SaveType.CONNECTOR);
     }
 
     
