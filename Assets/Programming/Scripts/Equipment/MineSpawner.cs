@@ -16,7 +16,7 @@ public class MineSpawner : Weapon, ISaveable
     {
         timer = CoolDown;
         bIsActive = false;
-        bIsObtained = true;
+        bIsObtained = false;
     }
 
     void Awake()
