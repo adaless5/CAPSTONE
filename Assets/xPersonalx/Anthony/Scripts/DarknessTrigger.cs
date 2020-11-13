@@ -44,7 +44,7 @@ public class DarknessTrigger : MonoBehaviour
     void Update()
     {
         //The problem here is that the Darkness trigger spawns in before the player so if I init this on awake it returns a null
-        //After release 1 this will probably be a good candidate for Leo's event broker. I think. 
+        //After release 1 this will probably be a good candidate for Leo's event broker. 
         if(_playerController == null)
         {
             _playerController = FindObjectOfType<ALTPlayerController>();
