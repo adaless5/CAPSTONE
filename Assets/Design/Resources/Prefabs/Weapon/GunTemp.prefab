@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7191562193057307094}
   - component: {fileID: 7191562193057307095}
   - component: {fileID: 7191562193057307088}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: GunTemp
   m_TagString: Player_Weapon
   m_Icon: {fileID: 0}
@@ -112,8 +112,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bIsActive: 0
   bIsObtained: 0
+  _weapon: 0
   m_damageAmount: 10
-  m_ammoAmount: 6
+  m_weaponClipSize: 6
+  m_reloadTime: 2
   m_fireRate: 10
   m_hitImpact: 200
   m_weaponRange: 50
@@ -189,6 +191,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: MuzzleFX
+      objectReference: {fileID: 0}
+    - target: {fileID: 681355423836803582, guid: 4d9ee4fe5fcbb864c9e3fc2064394382,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4d9ee4fe5fcbb864c9e3fc2064394382, type: 3}

@@ -14,18 +14,14 @@ public class CreatureProjectile : MonoBehaviour
 
     private void Awake()
     {
-        _transformOrigin = transform;
         _rigidBody = GetComponent<Rigidbody>();
+        _transformOrigin = ObjectPool.Instance.transform;
     }
 
     void Start()
     {
         _damageTimer = _maxDamageTime;
         _lifeTime = 3.0f;
-        if (ObjectPool.Instance != null)
-        {
-            _transformOrigin = ObjectPool.Instance.transform;
-        }
     }
 
     // Update is called once per frame
@@ -48,7 +44,8 @@ public class CreatureProjectile : MonoBehaviour
         else
         {
             _lifeTime = 3.0f;
-            ObjectPool.Instance.ReturnToPool("Creature", this.gameObject);
+            transform.parent = _transformOrigin;
+            ObjectPool.Instance.ReturnToPool("Creature", gameObject);
         }
 
     }
@@ -59,8 +56,13 @@ public class CreatureProjectile : MonoBehaviour
 
     private void OnDisable()
     {
+        if (transform.parent != _transformOrigin)
+        {
+            
+            DeStick();
 
-        DeStick();
+        }
+
         _lifeTime = 3.0f;
     }
 
@@ -77,9 +79,9 @@ public class CreatureProjectile : MonoBehaviour
     }
     void DeStick()
     {
-        transform.parent = ObjectPool.Instance.transform;
         _rigidBody.isKinematic = false;
         _rigidBody.detectCollisions = true;
+
     }
     void Stick()
     {
