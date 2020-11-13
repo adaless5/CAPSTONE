@@ -47,12 +47,14 @@ public class ALTPlayerController : MonoBehaviour
     public event Action<float> OnHeal;
     public event Action OnDeath;
 
-    private bool bIsGrounded;
+    private bool bNotOnSlope;
     private Vector3 _hitNormal;
     float _slopeLimit = 45.0f;
 
     bool bIsInThermalView = false;
     bool bIsInDarknessVolume = false;
+
+    const float SLOPE_SLIDE_SPEED = 50.0f;
 
     private void Awake()
     {
@@ -62,12 +64,12 @@ public class ALTPlayerController : MonoBehaviour
     void Start()
     {
         DontDestroyOnLoad(this);
+        Application.targetFrameRate = 60;
+        Cursor.lockState = CursorLockMode.Locked;
 
+        //Initializing Members
         m_health = GetComponent<Health>();
         m_armor = GetComponent<Armor>();
-
-        Application.targetFrameRate = 60;
-
         _equipmentBelt = FindObjectOfType<Belt>();
         _weaponBelt = FindObjectOfType<WeaponBelt>();
 
@@ -87,72 +89,29 @@ public class ALTPlayerController : MonoBehaviour
             }
         }
 
+        //Subscribing to Event Broker
         EventBroker.CallOnPlayerSpawned(gameObject);
-
         OnTakeDamage += m_armor.ResetArmorTimer;
 
-        Cursor.lockState = CursorLockMode.Locked;
     }
 
     void Update()
     {
-            switch (m_ControllerState)
-            {
-                case ControllerState.Play:
-                    PlayerRotation();
-                    PlayerMovement();
-                    break;
+        switch (m_ControllerState)
+        {
+            case ControllerState.Play:
+                PlayerRotation();
+                PlayerMovement();
+                break;
 
-                case ControllerState.Menu:
-                    break;
-            }
+            case ControllerState.Menu:
+                PlayerRotation();
+                PlayerMovement();
+            break;
+        }
 
-            if (Input.GetKeyDown(KeyCode.Q))
-            {
-                EquipmentWheel.enabled = true;
-                Time.timeScale = 0.3f;
-                Cursor.lockState = CursorLockMode.None;
-            }
+        HandleEquipmentWheels();
 
-            if (Input.GetKeyUp(KeyCode.Q))
-            {
-                EquipmentWheel.enabled = false;
-                Time.timeScale = 1;
-
-                Cursor.lockState = CursorLockMode.Locked;
-                m_ControllerState = ControllerState.Play;
-            }
-
-
-            if (Input.GetKeyDown(KeyCode.Tab))
-            {
-                WeaponWheel.enabled = true;
-                Time.timeScale = 0.3f;
-                Cursor.lockState = CursorLockMode.None;
-            }
-
-            if (Input.GetKeyUp(KeyCode.Tab))
-            {
-                WeaponWheel.enabled = false;
-                Time.timeScale = 1;
-                Cursor.lockState = CursorLockMode.Locked;
-            }
-
-            ////Test cube code (Remove this after Demo)
-            //if (Input.GetKeyDown(KeyCode.F))
-            //{
-            //    Vector3 forward = _camera.transform.TransformDirection(Vector3.forward) * 3;
-
-            //    RaycastHit hit;
-
-
-            //    Debug.DrawRay(_camera.transform.position, forward, Color.green, 5);
-
-            //    if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, 10.0f, 1 << 4, QueryTriggerInteraction.Ignore))
-            //    {
-            //        hit.collider.gameObject.SendMessage("ChangeColor");
-            //    }
-            //}//
     }
 
     private void TakeDamage(float damage)
@@ -165,11 +124,6 @@ public class ALTPlayerController : MonoBehaviour
         {
             m_health.TakeDamage(damage);
         }
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
@@ -204,14 +158,14 @@ public class ALTPlayerController : MonoBehaviour
 
     public void PlayerRotation()
     {
-            float mouseX = Input.GetAxis("Mouse X") * m_LookSensitivity;
-            float mouseY = Input.GetAxis("Mouse Y") * m_LookSensitivity;
+        float mouseX = Input.GetAxis("Mouse X") * m_LookSensitivity;
+        float mouseY = Input.GetAxis("Mouse Y") * m_LookSensitivity;
 
-            m_XRotation += mouseY;
-            m_XRotation = Mathf.Clamp(m_XRotation, -90.0f, 90.0f);
+        m_XRotation += mouseY;
+        m_XRotation = Mathf.Clamp(m_XRotation, -90.0f, 90.0f);
 
-            _camera.transform.localRotation = Quaternion.Euler(-m_XRotation, 0f, 0f);
-            transform.Rotate(Vector3.up * mouseX);
+        _camera.transform.localRotation = Quaternion.Euler(-m_XRotation, 0f, 0f);
+        transform.Rotate(Vector3.up * mouseX);
     }
 
     public void PlayerMovement()
@@ -221,7 +175,7 @@ public class ALTPlayerController : MonoBehaviour
 
         m_Velocity = transform.right * x * m_MoveSpeed + transform.forward * z * m_MoveSpeed;
 
-        if (bIsGrounded)
+        if (bNotOnSlope)
         {
             HandleJump();
         }
@@ -230,20 +184,23 @@ public class ALTPlayerController : MonoBehaviour
 
         m_Velocity += m_Momentum;
 
-        if (!bIsGrounded && m_PlayerState != PlayerState.Grappling)
+        //If player is on slope apply Vector parallel to ground to movement vector. 
+        if (!bNotOnSlope && m_PlayerState != PlayerState.Grappling)
         {
-            m_Velocity.x += (1f - _hitNormal.y) * _hitNormal.x * (50.0f);
-            m_Velocity.z += (1f - _hitNormal.y) * _hitNormal.z * (50.0f);
+            m_Velocity.x += (1f - _hitNormal.y) * _hitNormal.x * (SLOPE_SLIDE_SPEED);
+            m_Velocity.z += (1f - _hitNormal.y) * _hitNormal.z * (SLOPE_SLIDE_SPEED);
         }
 
         _controller.Move(m_Velocity * Time.deltaTime);
 
         print(Vector3.Angle(Vector3.up, _hitNormal));
 
-        bIsGrounded = (Vector3.Angle(Vector3.up, _hitNormal) <= _slopeLimit);
+        //Establish whether player is on slope using angle between player's up vec and collison normal. 
+        bNotOnSlope = (Vector3.Angle(Vector3.up, _hitNormal) <= _slopeLimit);
+
         if(Vector3.Angle(Vector3.up, _hitNormal) > 80.0f)
         {
-            bIsGrounded = true;
+            bNotOnSlope = true;
         }
 
         if (m_Momentum.magnitude >= 0f)
@@ -284,6 +241,43 @@ public class ALTPlayerController : MonoBehaviour
             {
                 m_YVelocity = -2.0f;
             }
+        }
+    }
+
+    void HandleEquipmentWheels()
+    {
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            EquipmentWheel.enabled = true;
+            Time.timeScale = 0.3f;
+            Cursor.lockState = CursorLockMode.None;
+            m_ControllerState = ControllerState.Menu;
+        }
+
+        if (Input.GetKeyUp(KeyCode.Q))
+        {
+            EquipmentWheel.enabled = false;
+            Time.timeScale = 1;
+
+            Cursor.lockState = CursorLockMode.Locked;
+            m_ControllerState = ControllerState.Play;
+        }
+
+
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            WeaponWheel.enabled = true;
+            Time.timeScale = 0.3f;
+            Cursor.lockState = CursorLockMode.None;
+            m_ControllerState = ControllerState.Menu;
+        }
+
+        if (Input.GetKeyUp(KeyCode.Tab))
+        {
+            WeaponWheel.enabled = false;
+            Time.timeScale = 1;
+            Cursor.lockState = CursorLockMode.Locked;
+            m_ControllerState = ControllerState.Play;
         }
     }
 
@@ -336,5 +330,10 @@ public class ALTPlayerController : MonoBehaviour
     public bool GetDarknessVolume()
     {
         return bIsInDarknessVolume;
+    }
+
+    public ControllerState GetControllerState()
+    {
+        return m_ControllerState;
     }
 }
