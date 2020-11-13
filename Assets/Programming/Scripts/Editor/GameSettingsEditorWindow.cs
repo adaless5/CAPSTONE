@@ -6,17 +6,9 @@ using UnityEngine.SceneManagement;
 
 public class GameSettingsEditorWindow : EditorWindow
 {
-    bool _showPlayerSettings = true;
-
-    //Player Setting members.
-    KeyCode _jumpKey = GameSettings.jumpKey;
-    float _jumpMultiplier = GameSettings.jumpMultiplier;
-    KeyCode _runKey = GameSettings.runKey;
-    float _walkSpeed = GameSettings.walkSpeed;
-    float _runSpeed = GameSettings.runSpeed;
-    float _runBuildupMultiplier = GameSettings.runBuildupMultiplier;
-    float _lookSensitivity = GameSettings.lookSensitivity;
-    //
+    bool _showGeneralSettings = true;
+    bool _exportConnector = false;
+    bool _clearAllFoldout = false;
 
     [MenuItem("Window/GameSettings")]
     static void ShowWindow()
@@ -27,67 +19,47 @@ public class GameSettingsEditorWindow : EditorWindow
     //Handles the drawing of the Game Settings editor window.
     void OnGUI()
     {
-        _showPlayerSettings = EditorGUILayout.Foldout(_showPlayerSettings, "Player Settings");
+        _showGeneralSettings = EditorGUILayout.Foldout(_showGeneralSettings, "General Settings");
 
-        if (_showPlayerSettings)
+        if (_showGeneralSettings)
         {
-            //DrawUILine(Color.grey);
 
-            //////Jump Settings
-            //EditorGUILayout.LabelField("Jump Settings", EditorStyles.boldLabel);
-
-            ////Set Jump Key
-            //_jumpKey = (KeyCode)EditorGUILayout.EnumPopup("    Jump Key:", _jumpKey);
-
-            ////Set Jump multiplier
-            //_jumpMultiplier = EditorGUILayout.Slider("    Jump Height:", _jumpMultiplier, 1.0f, 20.0f);
-            //////
-
-            //DrawUILine(Color.grey);
-
-            //////Movement Settings
-            //EditorGUILayout.LabelField("Movement Settings", EditorStyles.boldLabel);
-
-            ////Set Run Key
-            //_runKey = (KeyCode)EditorGUILayout.EnumPopup("    Run Key:", _runKey);
-
-            ////Set Walk / Run Speed
-            //EditorGUILayout.LabelField("    Walking Speed:  " + _walkSpeed.ToString(".0") + "    Running Speed:  " + _runSpeed.ToString(".0"));
-            //EditorGUILayout.MinMaxSlider(ref _walkSpeed, ref _runSpeed, 1.0f, 15.0f);
-
-            ////Set Run Buildup Speed
-            //_runBuildupMultiplier = EditorGUILayout.Slider("    Run Buildup Speed:", _runBuildupMultiplier, 1.0f, 5.0f);
-
-            ////Set Look Sensitivity
-            //_lookSensitivity = EditorGUILayout.Slider("    Look Sensitivity:", _lookSensitivity, 100.0f, 600.0f);
-            //////
-
-            //DrawUILine(Color.grey);
-
-            //if (GUILayout.Button("Reset To Default"))
-            //{
-            //    GameSettings.ResetToDefault("Player");
-
-            //    //Update values in editor.
-            //    _jumpKey = GameSettings.jumpKey;
-            //    _jumpMultiplier = GameSettings.jumpMultiplier;
-            //    _runKey = GameSettings.runKey;
-            //    _walkSpeed = GameSettings.walkSpeed;
-            //    _runSpeed = GameSettings.runSpeed;
-            //    _runBuildupMultiplier = GameSettings.runBuildupMultiplier;
-            //    _lookSensitivity = GameSettings.lookSensitivity;
-            //}
-
-            if (GUILayout.Button("Reset Prefs"))
+            if (GUILayout.Button("Reset Saved Data"))
             {
-                PlayerPrefs.DeleteAll();
-                Debug.Log("Deleted Player Prefs");
+                DefaultIDRegistry.DeleteAll();
             }
 
             if (GUILayout.Button("Delete Respawn Info"))
             {
                 PlayerPrefs.DeleteKey(SaveSystem.RESPAWN_INFO_REGISTRY_ID);
                 Debug.Log("Deleted Respawn Info");
+            }
+
+            DrawUILine(Color.grey);
+            GUILayout.Label("Import/Export Scene Connector Data");
+
+            if (GUILayout.Button("Import"))
+            {
+                SceneConnector.ImportConnectorDataFromText();
+            }
+
+            _exportConnector = EditorGUILayout.Foldout(_exportConnector, "Export Connectors ( Import first! )");
+            if (_exportConnector)
+            {
+                if (GUILayout.Button("Export"))
+                {
+                    SceneConnector.ExportConnectorDataFromText();
+                }
+            }
+
+            _clearAllFoldout = EditorGUILayout.Foldout(_clearAllFoldout, "Clear All Data [Dangerous]");
+            if (_clearAllFoldout)
+            {
+                if (GUILayout.Button("Delete ALL Saved Data"))
+                {
+                    PlayerPrefs.DeleteAll();
+                    Debug.Log("ALL SAVED DATA DELETED");
+                }
             }
         }
     }
@@ -96,7 +68,6 @@ public class GameSettingsEditorWindow : EditorWindow
     void OnInspectorUpdate()
     {
         Repaint();
-        SavePlayerSettings();
     }
 
     //Draws a simple UI line.
@@ -109,17 +80,4 @@ public class GameSettingsEditorWindow : EditorWindow
         r.width += 6;
         EditorGUI.DrawRect(r, color);
     }
-
-    //Saves the Player Settings using Editor Prefs. this allows data to persist through rebuilds.
-    private void SavePlayerSettings()
-    {
-        EditorPrefs.SetString("GameSettings_jumpKey", _jumpKey.ToString());
-        EditorPrefs.SetFloat("GameSettings_jumpMultiplier", _jumpMultiplier);
-        EditorPrefs.SetString("GameSettings_runKey", _runKey.ToString());
-        EditorPrefs.SetFloat("GameSettings_walkSpeed", _walkSpeed);
-        EditorPrefs.SetFloat("GameSettings_runSpeed", _runSpeed);
-        EditorPrefs.SetFloat("GameSettings_runBuildUpMultiplier", _runBuildupMultiplier);
-        EditorPrefs.SetFloat("GameSettings_lookSensitivity", _lookSensitivity);
-    }
-
 }

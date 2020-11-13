@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Tracing;
 using UnityEngine;
 
 public class EventBroker
@@ -8,7 +9,7 @@ public class EventBroker
     public static event Action<GameObject> SpawnEnemy;
     public static event Action<GameObject> OnPlayerSpawned;
     public static event Action<int> OnPickupWeapon;
-
+    public static event Action<WeaponType, int> OnAmmoPickup;
 
     public static void CallSpawnEnemy(GameObject enemyToSpawn)
     {
@@ -22,6 +23,11 @@ public class EventBroker
     public static void CallOnPickupWeapon(int weaponIndex)
     {
         OnPickupWeapon?.Invoke(weaponIndex);
+    }
+
+    public static void CallOnAmmoPickup(WeaponType type, int clipAmount)
+    {
+        OnAmmoPickup?.Invoke(type, clipAmount);
     }
 
 }

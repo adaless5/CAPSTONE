@@ -23,10 +23,12 @@ public class WeaponBase : Weapon, ISaveable
     public Camera gunCamera;
 
     public ALTPlayerController _playercontroller;
+    public AmmoUI m_ammoUI;
    
 
     void Awake()
     {
+        EventBroker.OnAmmoPickup += AmmoPickup;
         LoadDataOnSceneEnter();
         SaveSystem.SaveEvent += SaveDataOnSceneChange;
         m_weaponClipSize = 6;
@@ -39,8 +41,12 @@ public class WeaponBase : Weapon, ISaveable
 
     public override void Start()
     {
+        //Initializing AmmoCount and UI
         m_currentAmmoCount = m_weaponClipSize;
         m_overallAmmoCount = m_currentAmmoCount;
+
+        if (m_ammoUI != null)
+            m_ammoUI.SetAmmoText(m_currentAmmoCount, m_overallAmmoCount);
 
         gunCamera = GameObject.FindObjectOfType<Camera>();
         GetComponent<MeshRenderer>().enabled = true;
@@ -82,7 +88,7 @@ public class WeaponBase : Weapon, ISaveable
         }
 
         //Currently reloading automatically, can change based on player input at later date
-        if (m_currentAmmoCount <= 0)
+        if (m_currentAmmoCount <= 0 && m_overallAmmoCount >= 6)
         {
             StartCoroutine(OnReload());
             return;
@@ -110,16 +116,18 @@ public class WeaponBase : Weapon, ISaveable
         yield return new WaitForSeconds(m_reloadTime);
 
         m_currentAmmoCount = m_weaponClipSize;
+        m_overallAmmoCount -= m_weaponClipSize;
+        m_ammoUI.SetAmmoText(m_currentAmmoCount, m_overallAmmoCount);
         bIsReloading = false;
 
         Debug.Log("Reload Complete");
     }
 
     //Function for AmmoPickup class
-    public void AmmoPickup(int numberOfClips)
+    public void AmmoPickup(WeaponType type, int numberOfClips)
     {
         m_overallAmmoCount += (m_weaponClipSize * numberOfClips);
-        Debug.Log("Picked up ammo. Overall ammo: " + m_overallAmmoCount);
+        m_ammoUI.SetAmmoText(m_currentAmmoCount, m_overallAmmoCount);
     }
 
 
@@ -166,8 +174,9 @@ public class WeaponBase : Weapon, ISaveable
         }
 
         //Using ammo
-        m_currentAmmoCount--;
-        m_overallAmmoCount--; 
+        m_currentAmmoCount--;        
+        if (m_ammoUI != null)
+            m_ammoUI.SetAmmoText(m_currentAmmoCount, m_overallAmmoCount);
     }
 
    //VR - Plays Animation to focus reticule on targeting
