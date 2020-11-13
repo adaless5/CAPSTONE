@@ -39,6 +39,8 @@ public class TEMP_Roamer : MonoBehaviour
     public float        _AttackRange;                   // The distance from the player at which the roamer will begin to attack.
     public float        _AttackEscapeRange;             // The extra distance on top of the follow range that the player must escape in order to escape the roamer's attack range.
     public float        _AttackTime;                    // Counts down the next attack.
+    public float        _HitRange;
+    public float        _HitDamage;
 
            RoamerState  _CurrentState;                  // The current state of the roamer.
 
@@ -132,9 +134,35 @@ public class TEMP_Roamer : MonoBehaviour
             SetRandomWanderPatrolPoint();
         }
     }
-    void Attack()   
+    void Attack()
     {
-        transform.forward += new Vector3(1.0f,1.0f,1.0f);
+        if (_IsAttacking == true)
+        {
+            _IsAttacking = false;
+            _AttackTime = 0.5f;
+            RaycastHit hitInfo;
+            if (Physics.SphereCast(transform.position,10.0f, _Player.transform.position - transform.position,  out hitInfo, _AttackRange))
+             {
+                ALTPlayerController target = hitInfo.transform.gameObject.GetComponent<ALTPlayerController>();
+                 if (target != null)
+                 {
+                     target.CallOnTakeDamage(_HitDamage);
+                }
+             }
+            
+            }
+            else
+            {
+                LookTowards(_Player.transform.position, 6);
+                _AttackTime -= Time.fixedDeltaTime;
+                if (_AttackTime < 0.0f)
+                {
+
+                    _IsAttacking = true;
+                }
+            }
+
+        Debug.DrawRay(transform.position, (_Player.transform.position - transform.position) * _AttackRange, Color.white, 0.5f, false);
     }
     void Follow()
     {
@@ -214,7 +242,7 @@ public class TEMP_Roamer : MonoBehaviour
 
     bool FromAttackToFollow()
     {
-        return Vector3.Distance(transform.position, _Player.transform.position) > _AttackRange;
+        return Vector3.Distance(transform.position, _Player.transform.position) > _AttackRange + _AttackEscapeRange;
     }
     bool FromFollowToPatrol()
     {
@@ -222,7 +250,7 @@ public class TEMP_Roamer : MonoBehaviour
     }
     bool FromFollowToAttack()
     {
-        return Vector3.Distance(transform.position, _Player.transform.position) < _AttackRange - _AttackEscapeRange;
+        return Vector3.Distance(transform.position, _Player.transform.position) < _AttackRange;
     }
     bool FromPatrolToFollow()
     {
