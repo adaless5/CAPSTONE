@@ -15,7 +15,7 @@ public class ALTPlayerController : MonoBehaviour
 
     public enum ControllerState
     {
-        Play, 
+        Play,
         Menu,
     }
 
@@ -72,6 +72,7 @@ public class ALTPlayerController : MonoBehaviour
         m_armor = GetComponent<Armor>();
         _equipmentBelt = FindObjectOfType<Belt>();
         _weaponBelt = FindObjectOfType<WeaponBelt>();
+
 
         Canvas[] wheelsInScene;
         wheelsInScene = FindObjectsOfType<Canvas>();
