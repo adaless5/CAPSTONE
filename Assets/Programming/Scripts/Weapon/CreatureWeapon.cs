@@ -12,8 +12,9 @@ public class CreatureWeapon : Weapon, ISaveable
 
     private int _bulletClip = 8;
 
-    public void Awake()
+    private void Awake()
     {
+        base.Awake();
         _creatureProjectile = (GameObject)Resources.Load("Prefabs/Weapon/Creature Projectile");
 
     }
@@ -32,7 +33,7 @@ public class CreatureWeapon : Weapon, ISaveable
     }
     public override void UseTool()
     {
-        if (Input.GetButton("Fire1") && Time.time >= m_fireStart)
+        if (_playerController.CheckForUseWeaponInput() && Time.time >= m_fireStart)
         {
             m_fireStart = Time.time + 1.0f / m_fireRate;
             OnShoot();
@@ -40,16 +41,18 @@ public class CreatureWeapon : Weapon, ISaveable
     }
     public override void Update()
     {
-
-        if (bIsActive)
+        if (_playerController != null)
         {
-            GetComponent<MeshRenderer>().enabled = true;
-            UseTool();
-            OnTarget();
-        }
-        else if (!bIsActive)
-        {
-            GetComponent<MeshRenderer>().enabled = false;
+            if (bIsActive)
+            {
+                GetComponent<MeshRenderer>().enabled = true;
+                UseTool();
+                OnTarget();
+            }
+            else if (!bIsActive)
+            {
+                GetComponent<MeshRenderer>().enabled = false;
+            }
         }
     }
 
