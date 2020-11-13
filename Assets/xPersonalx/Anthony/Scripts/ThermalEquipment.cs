@@ -6,11 +6,24 @@ public class ThermalEquipment : Equipment
 {
     ALTPlayerController _playerController; 
     bool bIsInThermalView = false;
+    Light _directionalLight;
 
     // Start is called before the first frame update
     public override void Start()
     {
-        _playerController = FindObjectOfType<ALTPlayerController>(); 
+        _playerController = FindObjectOfType<ALTPlayerController>();
+
+        Light[] lightarray = FindObjectsOfType<Light>();
+
+        foreach (Light light in lightarray)
+        {
+            if (light.gameObject.tag == "Dir Light")
+            {
+                _directionalLight = light;
+
+                break;
+            }
+        }
     }
 
     // Update is called once per frame
@@ -37,6 +50,18 @@ public class ThermalEquipment : Equipment
                         obj.ChangeToThermalSkin();
                     }
 
+                    if (_directionalLight != null)
+                    {
+                        if (_playerController.GetDarknessVolume())
+                        {
+                            _directionalLight.color = new Vector4(0.0f, 0.0f, 0.0f, 1.0f);
+                        }
+                        else if(!_playerController.GetDarknessVolume())
+                        {
+                            _directionalLight.color = new Vector4(0.0f, 0.0f, 1.0f, 1.0f);
+                        }
+                    }
+
                     bIsInThermalView = true;
                 }
                 else if (bIsInThermalView)
@@ -46,9 +71,23 @@ public class ThermalEquipment : Equipment
                         obj.ChangeToNormalSkin();
                     }
 
+                    if (_directionalLight != null)
+                    {
+                        if (_playerController.GetDarknessVolume())
+                        {
+                            _directionalLight.color = new Vector4(0.0f, 0.0f, 0.0f, 1.0f);
+                        }
+                        else if (!_playerController.GetDarknessVolume())
+                        {
+                            _directionalLight.color = new Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+                        }
+                    }
+
                     bIsInThermalView = false;
                 }
             }
+
+            _playerController.SetThermalView(bIsInThermalView);
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-//using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -22,7 +21,6 @@ public class ALTPlayerController : MonoBehaviour
 
     public PlayerState m_PlayerState { get; private set; }
     public ControllerState m_ControllerState;
-
 
     public Camera _camera;
     public float m_LookSensitivity = 100.0f;
@@ -49,7 +47,12 @@ public class ALTPlayerController : MonoBehaviour
     public event Action<float> OnHeal;
     public event Action OnDeath;
 
+    private bool bIsGrounded;
+    private Vector3 _hitNormal;
+    float _slopeLimit = 45.0f;
+
     bool bIsInThermalView = false;
+    bool bIsInDarknessVolume = false;
 
     private void Awake()
     {
@@ -65,19 +68,8 @@ public class ALTPlayerController : MonoBehaviour
 
         Application.targetFrameRate = 60;
 
-        Belt[] beltsInScene; 
-        beltsInScene = FindObjectsOfType<Belt>();
-        foreach(Belt obj in beltsInScene)
-        {
-            if (obj.tag == "EquipmentBelt")
-            {
-                _equipmentBelt = obj; 
-            }
-            else if(obj.tag == "WeaponBelt")
-            {
-                _weaponBelt = obj; 
-            }
-        }
+        _equipmentBelt = FindObjectOfType<Belt>();
+        _weaponBelt = FindObjectOfType<WeaponBelt>();
 
         Canvas[] wheelsInScene;
         wheelsInScene = FindObjectsOfType<Canvas>();
@@ -86,15 +78,14 @@ public class ALTPlayerController : MonoBehaviour
             if (obj.tag == "EquipmentWheel")
             {
                 EquipmentWheel = obj;
+                EquipmentWheel.enabled = false;
             }
             else if (obj.tag == "WeaponWheel")
             {
                 WeaponWheel = obj;
+                WeaponWheel.enabled = false;
             }
         }
-
-        EquipmentWheel.enabled = false;
-        WeaponWheel.enabled = false;
 
         EventBroker.CallOnPlayerSpawned(gameObject);
 
@@ -105,7 +96,6 @@ public class ALTPlayerController : MonoBehaviour
 
     void Update()
     {
-
             switch (m_ControllerState)
             {
                 case ControllerState.Play:
@@ -115,20 +105,16 @@ public class ALTPlayerController : MonoBehaviour
 
                 case ControllerState.Menu:
                     break;
-
             }
 
-
-            //Slowdown time idea -LCC
-            if (Input.GetKeyDown(KeyCode.Q))// && m_ControllerState == ControllerState.Play)
+            if (Input.GetKeyDown(KeyCode.Q))
             {
                 EquipmentWheel.enabled = true;
                 Time.timeScale = 0.3f;
                 Cursor.lockState = CursorLockMode.None;
-                //m_ControllerState = ControllerState.Menu;
             }
 
-            if (Input.GetKeyUp(KeyCode.Q)) //&& m_ControllerState == ControllerState.Menu)
+            if (Input.GetKeyUp(KeyCode.Q))
             {
                 EquipmentWheel.enabled = false;
                 Time.timeScale = 1;
@@ -138,50 +124,35 @@ public class ALTPlayerController : MonoBehaviour
             }
 
 
-            if (Input.GetKeyDown(KeyCode.Tab))// && m_ControllerState == ControllerState.Play)
+            if (Input.GetKeyDown(KeyCode.Tab))
             {
                 WeaponWheel.enabled = true;
                 Time.timeScale = 0.3f;
                 Cursor.lockState = CursorLockMode.None;
-                //m_ControllerState = ControllerState.Menu;
             }
 
-            if (Input.GetKeyUp(KeyCode.Tab))// && m_ControllerState == ControllerState.Menu)
+            if (Input.GetKeyUp(KeyCode.Tab))
             {
                 WeaponWheel.enabled = false;
                 Time.timeScale = 1;
                 Cursor.lockState = CursorLockMode.Locked;
-                //m_ControllerState = ControllerState.Play;
-
             }
 
-            //Test cube code (Remove this after Demo)
-            if (Input.GetKeyDown(KeyCode.F))
-            {
-                Vector3 forward = _camera.transform.TransformDirection(Vector3.forward) * 3;
+            ////Test cube code (Remove this after Demo)
+            //if (Input.GetKeyDown(KeyCode.F))
+            //{
+            //    Vector3 forward = _camera.transform.TransformDirection(Vector3.forward) * 3;
 
-                RaycastHit hit;
-
-
-                Debug.DrawRay(_camera.transform.position, forward, Color.green, 5);
-
-                if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, 10.0f, 1 << 4, QueryTriggerInteraction.Ignore))
-                {
-                    hit.collider.gameObject.SendMessage("ChangeColor");
-                }
-            }//
+            //    RaycastHit hit;
 
 
-            //Damage debug -LCC
-            if (Input.GetKeyDown(KeyCode.L))
-            {
-                TakeDamage(20.0f);
-            }
-            else if (Input.GetKeyDown(KeyCode.H))
-            {
-                m_health.Heal(20.0f);
-            }
-        
+            //    Debug.DrawRay(_camera.transform.position, forward, Color.green, 5);
+
+            //    if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, 10.0f, 1 << 4, QueryTriggerInteraction.Ignore))
+            //    {
+            //        hit.collider.gameObject.SendMessage("ChangeColor");
+            //    }
+            //}//
     }
 
     private void TakeDamage(float damage)
@@ -198,7 +169,12 @@ public class ALTPlayerController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        print(collision.GetContact(0).normal);
+
+    }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        _hitNormal = hit.normal;
     }
 
     public bool CheckForJumpInput()
@@ -245,13 +221,30 @@ public class ALTPlayerController : MonoBehaviour
 
         m_Velocity = transform.right * x * m_MoveSpeed + transform.forward * z * m_MoveSpeed;
 
-        HandleJump();
+        if (bIsGrounded)
+        {
+            HandleJump();
+        }
 
         ApplyGravity();
 
         m_Velocity += m_Momentum;
 
+        if (!bIsGrounded && m_PlayerState != PlayerState.Grappling)
+        {
+            m_Velocity.x += (1f - _hitNormal.y) * _hitNormal.x * (50.0f);
+            m_Velocity.z += (1f - _hitNormal.y) * _hitNormal.z * (50.0f);
+        }
+
         _controller.Move(m_Velocity * Time.deltaTime);
+
+        print(Vector3.Angle(Vector3.up, _hitNormal));
+
+        bIsGrounded = (Vector3.Angle(Vector3.up, _hitNormal) <= _slopeLimit);
+        if(Vector3.Angle(Vector3.up, _hitNormal) > 80.0f)
+        {
+            bIsGrounded = true;
+        }
 
         if (m_Momentum.magnitude >= 0f)
         {
@@ -291,7 +284,6 @@ public class ALTPlayerController : MonoBehaviour
             {
                 m_YVelocity = -2.0f;
             }
-            
         }
     }
 
@@ -326,5 +318,23 @@ public class ALTPlayerController : MonoBehaviour
         OnHeal?.Invoke(healthToHeal);
     }
 
+    public void SetThermalView(bool isThermal)
+    {
+        bIsInThermalView = isThermal;
+    }
 
+    public bool GetThermalView()
+    {
+        return bIsInThermalView;
+    }
+
+    public void SetDarknessVolume(bool isDark)
+    {
+        bIsInDarknessVolume = isDark;
+    }
+
+    public bool GetDarknessVolume()
+    {
+        return bIsInDarknessVolume;
+    }
 }
