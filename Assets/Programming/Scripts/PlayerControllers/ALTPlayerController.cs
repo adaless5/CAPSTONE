@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-//using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Rendering;
@@ -33,6 +32,7 @@ public class ALTPlayerController : MonoBehaviour
     public ControllerState m_ControllerState;
     public ControllerType m_ControllerType;
 
+
     public PauseMenuUI _pauseMenu;
 
     public Camera _camera;
@@ -60,7 +60,14 @@ public class ALTPlayerController : MonoBehaviour
     public event Action<float> OnHeal;
     public event Action OnDeath;
 
+    private bool bNotOnSlope;
+    private Vector3 _hitNormal;
+    float _slopeLimit = 45.0f;
+
     bool bIsInThermalView = false;
+    bool bIsInDarknessVolume = false;
+
+    const float SLOPE_SLIDE_SPEED = 50.0f;
 
     string[] _controllerNames;
     float joyX;
@@ -69,7 +76,7 @@ public class ALTPlayerController : MonoBehaviour
     int _wepIndex;
 
     Button[] _equipButtons;
-
+    Button[] _wepButtons;
 
     float joyAngle;
 
@@ -83,25 +90,15 @@ public class ALTPlayerController : MonoBehaviour
     void Start()
     {
         DontDestroyOnLoad(this);
+        Application.targetFrameRate = 60;
+        Cursor.lockState = CursorLockMode.Locked;
 
+        //Initializing Members
         m_health = GetComponent<Health>();
         m_armor = GetComponent<Armor>();
+        _equipmentBelt = FindObjectOfType<Belt>();
+        _weaponBelt = FindObjectOfType<WeaponBelt>();
 
-        Application.targetFrameRate = 60;
-
-        Belt[] beltsInScene;
-        beltsInScene = FindObjectsOfType<Belt>();
-        foreach (Belt obj in beltsInScene)
-        {
-            if (obj.tag == "EquipmentBelt")
-            {
-                _equipmentBelt = obj;
-            }
-            else if (obj.tag == "WeaponBelt")
-            {
-                _weaponBelt = obj;
-            }
-        }
 
         Canvas[] wheelsInScene;
         wheelsInScene = FindObjectsOfType<Canvas>();
@@ -110,23 +107,23 @@ public class ALTPlayerController : MonoBehaviour
             if (obj.tag == "EquipmentWheel")
             {
                 EquipmentWheel = obj;
+                EquipmentWheel.enabled = false;
             }
             else if (obj.tag == "WeaponWheel")
             {
                 WeaponWheel = obj;
+                WeaponWheel.enabled = false;
             }
         }
 
-        EquipmentWheel.enabled = false;
-        WeaponWheel.enabled = false;
-
+        //Subscribing to Event Broker
         EventBroker.CallOnPlayerSpawned(gameObject);
-
         OnTakeDamage += m_armor.ResetArmorTimer;
 
         Cursor.lockState = CursorLockMode.Locked;
 
         _equipButtons = _equipmentBelt.GetComponentsInChildren<Button>();
+        _wepButtons = _weaponBelt.GetComponentsInChildren<Button>();
     }
 
     void Update()
@@ -152,50 +149,13 @@ public class ALTPlayerController : MonoBehaviour
         {
             _pauseMenu.Pause();
         }
+        
+        HandleEquipmentWheels();
 
-        //Slowdown time idea -LCC
-        if (Input.GetButtonDown("EquipmentBelt"))// && m_ControllerState == ControllerState.Play)
+
+        if (EquipmentWheel.enabled == true )
         {
-            EquipmentWheel.enabled = true;
-            Time.timeScale = 0.3f;
-            Cursor.lockState = CursorLockMode.None;
-            CursorVisibility();
-            m_ControllerState = ControllerState.Menu;
-        }
-
-        if (Input.GetButtonUp("EquipmentBelt")) //&& m_ControllerState == ControllerState.Menu)
-        {
-            EquipmentWheel.enabled = false;
-            Time.timeScale = 1;
-
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-
-            m_ControllerState = ControllerState.Play;
-        }
-
-
-        if (Input.GetButtonDown("WeaponBelt"))// && m_ControllerState == ControllerState.Play)
-        {
-            WeaponWheel.enabled = true;
-            Time.timeScale = 0.3f;
-            Cursor.lockState = CursorLockMode.None;
-            CursorVisibility();
-            m_ControllerState = ControllerState.Menu;
-        }
-
-        if (Input.GetButtonUp("WeaponBelt"))// && m_ControllerState == ControllerState.Menu)
-        {
-            WeaponWheel.enabled = false;
-            Time.timeScale = 1;
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-            m_ControllerState = ControllerState.Play;
-
-        }
-
-        if (EquipmentWheel.enabled == true)
-        {
+            EventSystem.current.SetSelectedGameObject(null);
             joyX = 0;
             joyY = 0;
             if (m_ControllerType == ControllerType.Controller)
@@ -222,33 +182,36 @@ public class ALTPlayerController : MonoBehaviour
                 EventSystem.current.SetSelectedGameObject(_equipButtons[_equipIndex].gameObject);
             }
         }
-
-        //Test cube code (Remove this after Demo)
-        if (Input.GetKeyDown(KeyCode.F))
+        if (WeaponWheel.enabled == true)
         {
-            Vector3 forward = _camera.transform.TransformDirection(Vector3.forward) * 3;
-
-            RaycastHit hit;
-
-
-            Debug.DrawRay(_camera.transform.position, forward, Color.green, 5);
-
-            if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, 10.0f, 1 << 4, QueryTriggerInteraction.Ignore))
+            EventSystem.current.SetSelectedGameObject(null);
+            joyX = 0;
+            joyY = 0;
+            if (m_ControllerType == ControllerType.Controller)
             {
-                hit.collider.gameObject.SendMessage("ChangeColor");
+
+                joyX += Input.GetAxis("Mouse X") * m_LookSensitivity;
+                joyY += Input.GetAxis("Mouse Y") * m_LookSensitivity;
+
+
+                joyAngle = Mathf.Atan2(joyX, joyY) * Mathf.Rad2Deg;
+                Debug.Log(joyAngle);
+                if (joyAngle > -90.0f && joyAngle < -45.0f)
+                {
+                    _wepIndex = 1;
+                }
+                if (joyAngle > -45.0f && joyAngle < 0.0f)
+                {
+                    _wepIndex = 0;
+                }
+                if (joyAngle > 0.0f && joyAngle < 90.0f)
+                {
+                    _wepIndex = 2;
+                }
+                EventSystem.current.SetSelectedGameObject(_wepButtons[_wepIndex].gameObject);
             }
-        }//
-
-
-        //Damage debug -LCC
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            TakeDamage(20.0f);
         }
-        else if (Input.GetKeyDown(KeyCode.H))
-        {
-            m_health.Heal(20.0f);
-        }
+
 
     }
 
@@ -291,9 +254,9 @@ public class ALTPlayerController : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        print(collision.GetContact(0).normal);
+        _hitNormal = hit.normal;
     }
 
     public bool CheckForJumpInput()
@@ -346,13 +309,33 @@ public class ALTPlayerController : MonoBehaviour
 
         m_Velocity = transform.right * x * m_MoveSpeed + transform.forward * z * m_MoveSpeed;
 
-        HandleJump();
+        if (bNotOnSlope)
+        {
+            HandleJump();
+        }
 
         ApplyGravity();
 
         m_Velocity += m_Momentum;
 
+        //If player is on slope apply Vector parallel to ground to movement vector. 
+        if (!bNotOnSlope && m_PlayerState != PlayerState.Grappling)
+        {
+            m_Velocity.x += (1f - _hitNormal.y) * _hitNormal.x * (SLOPE_SLIDE_SPEED);
+            m_Velocity.z += (1f - _hitNormal.y) * _hitNormal.z * (SLOPE_SLIDE_SPEED);
+        }
+
         _controller.Move(m_Velocity * Time.deltaTime);
+
+        print(Vector3.Angle(Vector3.up, _hitNormal));
+
+        //Establish whether player is on slope using angle between player's up vec and collison normal. 
+        bNotOnSlope = (Vector3.Angle(Vector3.up, _hitNormal) <= _slopeLimit);
+
+        if (Vector3.Angle(Vector3.up, _hitNormal) > 80.0f)
+        {
+            bNotOnSlope = true;
+        }
 
         if (m_Momentum.magnitude >= 0f)
         {
@@ -399,6 +382,43 @@ public class ALTPlayerController : MonoBehaviour
         }
     }
 
+    void HandleEquipmentWheels()
+    {
+        if (Input.GetButtonDown("EquipmentBelt"))
+        {
+            EquipmentWheel.enabled = true;
+            Time.timeScale = 0.3f;
+            Cursor.lockState = CursorLockMode.None;
+            m_ControllerState = ControllerState.Menu;
+        }
+
+        if (Input.GetButtonUp("EquipmentBelt"))
+        {
+            EquipmentWheel.enabled = false;
+            Time.timeScale = 1;
+            Cursor.lockState = CursorLockMode.Locked;
+            m_ControllerState = ControllerState.Play;
+        }
+
+
+        if (Input.GetButtonDown("WeaponBelt"))
+        {
+            WeaponWheel.enabled = true;
+            Time.timeScale = 0.3f;
+            Cursor.lockState = CursorLockMode.None;
+            m_ControllerState = ControllerState.Menu;
+            
+        }
+
+        if (Input.GetButtonUp("WeaponBelt"))
+        {
+            WeaponWheel.enabled = false;
+            Time.timeScale = 1;
+            Cursor.lockState = CursorLockMode.Locked;
+            m_ControllerState = ControllerState.Play;
+        }
+    }
+
     public void ResetGravity()
     {
         m_YVelocity = 0.0f;
@@ -430,5 +450,28 @@ public class ALTPlayerController : MonoBehaviour
         OnHeal?.Invoke(healthToHeal);
     }
 
+    public void SetThermalView(bool isThermal)
+    {
+        bIsInThermalView = isThermal;
+    }
 
+    public bool GetThermalView()
+    {
+        return bIsInThermalView;
+    }
+
+    public void SetDarknessVolume(bool isDark)
+    {
+        bIsInDarknessVolume = isDark;
+    }
+
+    public bool GetDarknessVolume()
+    {
+        return bIsInDarknessVolume;
+    }
+
+    public ControllerState GetControllerState()
+    {
+        return m_ControllerState;
+    }
 }

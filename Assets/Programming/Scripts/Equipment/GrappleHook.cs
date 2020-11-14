@@ -100,7 +100,7 @@ public class GrappleHook : Equipment, ISaveable
         Vector3 grappleDirection = m_GrappleTarget - m_PlayerPosition.position;
         grappleDirection.Normalize();
 
-        float speed = Mathf.Clamp(distFromGrappleTarget, m_MinGrappleSpeed, m_MaxGrappleSpeed);
+        float speed = 50.0f;
 
         m_PlayerController._controller.Move(grappleDirection * m_GrappleHookSpeedMultiplier * speed * Time.deltaTime);
 
