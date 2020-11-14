@@ -2,7 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Rendering;
+
+public enum ControllerType
+{
+    Mouse,
+    Controller,
+}
 
 public class ALTPlayerController : MonoBehaviour
 {
@@ -13,6 +20,8 @@ public class ALTPlayerController : MonoBehaviour
         GrappleDeployed,
     }
 
+
+
     public enum ControllerState
     {
         Play,
@@ -21,7 +30,11 @@ public class ALTPlayerController : MonoBehaviour
 
     public PlayerState m_PlayerState { get; private set; }
     public ControllerState m_ControllerState;
+    public ControllerType m_ControllerType;
 
+
+    public PauseMenuUI _pauseMenu;
+    
     public Camera _camera;
     public float m_LookSensitivity = 100.0f;
     private float m_XRotation = 0f;
@@ -55,6 +68,12 @@ public class ALTPlayerController : MonoBehaviour
     bool bIsInDarknessVolume = false;
 
     const float SLOPE_SLIDE_SPEED = 50.0f;
+
+    string[] _controllerNames;
+    float joyX;
+    float joyY;
+
+    bool isSelected = false;
 
     private void Awake()
     {
@@ -98,6 +117,9 @@ public class ALTPlayerController : MonoBehaviour
 
     void Update()
     {
+
+        ControllerCheck();
+
         switch (m_ControllerState)
         {
             case ControllerState.Play:
@@ -108,11 +130,110 @@ public class ALTPlayerController : MonoBehaviour
             case ControllerState.Menu:
                 PlayerRotation();
                 PlayerMovement();
-            break;
+                break;
+
+        }
+
+        if (Input.GetButtonDown("Pause"))
+        {
+            _pauseMenu.Pause();
+        }
+
+        //Slowdown time idea -LCC
+        if (Input.GetButtonDown("EquipmentBelt"))// && m_ControllerState == ControllerState.Play)
+        {
+            EquipmentWheel.enabled = true;
+            Time.timeScale = 0.3f;
+            Cursor.lockState = CursorLockMode.None;
+            CursorVisibility();
+            m_ControllerState = ControllerState.Menu;
+        }
+
+        if (Input.GetButtonUp("EquipmentBelt")) //&& m_ControllerState == ControllerState.Menu)
+        {
+            EquipmentWheel.enabled = false;
+            Time.timeScale = 1;
+
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+
+            m_ControllerState = ControllerState.Play;
+        }
+
+
+        if (Input.GetButtonDown("WeaponBelt"))// && m_ControllerState == ControllerState.Play)
+        {
+            WeaponWheel.enabled = true;
+            Time.timeScale = 0.3f;
+            Cursor.lockState = CursorLockMode.None;
+            CursorVisibility();
+            m_ControllerState = ControllerState.Menu;
+        }
+
+        if (Input.GetButtonUp("WeaponBelt"))// && m_ControllerState == ControllerState.Menu)
+        {
+            WeaponWheel.enabled = false;
+            Time.timeScale = 1;
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            m_ControllerState = ControllerState.Play;
+
+        }
+
+        if (EquipmentWheel.enabled == true)
+        {
+            joyX = 0;
+            joyY = 0;
+            if (m_ControllerType == ControllerType.Controller)
+            {
+                joyX += Input.GetAxis("Mouse X") * m_LookSensitivity;
+                joyY += Input.GetAxis("Mouse Y") * m_LookSensitivity;
+
+                float joyAngle = Mathf.Atan2(joyX, joyY) * Mathf.Rad2Deg;
+                Debug.Log(joyAngle);
+                if (joyAngle < 90)
+                {
+                    Button[] buttons = EquipmentWheel.GetComponentsInChildren<Button>();
+
+                    foreach (Button b in buttons)
+                    {
+                        if (b.name.Contains("Grapple"))
+                            b.image.sprite = b.spriteState.highlightedSprite;
+                    }
+
+                }
+            }
         }
 
         HandleEquipmentWheels();
 
+    }
+
+    private void ControllerCheck()
+    {
+        _controllerNames = Input.GetJoystickNames();
+        if (_controllerNames[0].Contains("Controller"))
+        {
+            m_ControllerType = ControllerType.Controller;
+        }
+        else
+        {
+            m_ControllerType = ControllerType.Mouse;
+        }
+    }
+
+    private void CursorVisibility()
+    {
+        //switch (m_ControllerType)
+        //{
+        //    case ControllerType.Controller:
+        //        Cursor.visible = false;
+        //        break;
+        //    case ControllerType.Mouse:
+        //        Cursor.visible = true;
+        //        break;
+        //}
+        Cursor.visible = true;
     }
 
     private void TakeDamage(float damage)
@@ -134,27 +255,29 @@ public class ALTPlayerController : MonoBehaviour
 
     public bool CheckForJumpInput()
     {
-        return Input.GetKeyDown(KeyCode.Space);
+        return Input.GetButtonDown("Jump");
     }
 
     public bool CheckForUseEquipmentInput()
     {
-        return Input.GetKeyDown(KeyCode.E);
+        return Input.GetButtonDown("Equipment");
     }
 
     public bool CheckForUseEquipmentInputReleased()
     {
-        return Input.GetKeyUp(KeyCode.E);
+        return Input.GetButtonUp("Equipment");
     }
 
     public bool CheckForUseWeaponInput()
     {
-        return Input.GetButtonDown("Fire1");
+        bool rightTrigger = Mathf.Abs(Input.GetAxis("Fire1")) == 0 ? false : true;
+        return Input.GetButtonDown("Fire1") || rightTrigger;
     }
 
     public bool CheckForUseWeaponInputReleased()
     {
-        return Input.GetButtonUp("Fire1");
+        bool rightTrigger = Mathf.Abs(Input.GetAxis("Fire1")) == 0 ? true : false;
+        return Input.GetButtonUp("Fire1") || rightTrigger;
     }
 
     public void PlayerRotation()
@@ -162,11 +285,15 @@ public class ALTPlayerController : MonoBehaviour
         float mouseX = Input.GetAxis("Mouse X") * m_LookSensitivity;
         float mouseY = Input.GetAxis("Mouse Y") * m_LookSensitivity;
 
-        m_XRotation += mouseY;
-        m_XRotation = Mathf.Clamp(m_XRotation, -90.0f, 90.0f);
 
-        _camera.transform.localRotation = Quaternion.Euler(-m_XRotation, 0f, 0f);
-        transform.Rotate(Vector3.up * mouseX);
+
+        if (m_ControllerState == ControllerState.Play)
+        {
+            m_XRotation += mouseY;
+            m_XRotation = Mathf.Clamp(m_XRotation, -90.0f, 90.0f);
+            _camera.transform.localRotation = Quaternion.Euler(-m_XRotation, 0f, 0f);
+            transform.Rotate(Vector3.up * mouseX);
+        }
     }
 
     public void PlayerMovement()

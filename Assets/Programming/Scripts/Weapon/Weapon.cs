@@ -35,6 +35,20 @@ public abstract class Weapon : Tool
     protected float m_weaponRange = 50.0f;
     [Space]
 
+    protected ALTPlayerController _playerController;
     protected float m_fireStart = 0.0f;
     protected bool bIsReloading = false;
+
+    protected void Awake()
+    {
+        EventBroker.OnPlayerSpawned += InitializePlayer;
+    }
+
+    protected void InitializePlayer(GameObject player)
+    {
+        _playerController = player.GetComponent<ALTPlayerController>();
+        Debug.Log(_playerController);
+    }
+
 }
+

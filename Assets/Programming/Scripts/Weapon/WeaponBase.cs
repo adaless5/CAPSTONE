@@ -22,12 +22,12 @@ public class WeaponBase : Weapon, ISaveable
     [Header("Camera Settings")]
     public Camera gunCamera;
 
-    public ALTPlayerController _playercontroller;
     public AmmoUI m_ammoUI;
    
 
     void Awake()
     {
+        base.Awake();
         EventBroker.OnAmmoPickup += AmmoPickup;
         LoadDataOnSceneEnter();
         SaveSystem.SaveEvent += SaveDataOnSceneChange;
@@ -67,17 +67,21 @@ public class WeaponBase : Weapon, ISaveable
 
     // Update is called once per frame
     public override void Update()
-    {       
-        if (bIsActive && _playercontroller.m_ControllerState == ALTPlayerController.ControllerState.Play)
+    {
+        if (_playerController != null)
         {
-            GetComponent<MeshRenderer>().enabled = true;
-            UseTool();
-            OnTarget();
+            if (bIsActive && _playerController.m_ControllerState == ALTPlayerController.ControllerState.Play)
+            {
+                GetComponent<MeshRenderer>().enabled = true;
+                UseTool();
+                OnTarget();
+            }
+            else if (!bIsActive)
+            {
+                GetComponent<MeshRenderer>().enabled = false;
+            }
         }
-        else if (!bIsActive)
-        {
-            GetComponent<MeshRenderer>().enabled = false;
-        }
+
     }
 
     public override void UseTool()
@@ -94,7 +98,7 @@ public class WeaponBase : Weapon, ISaveable
             return;
         }
 
-        if (Input.GetButton("Fire1") && Time.time >= m_fireStart)
+        if (_playerController.CheckForUseWeaponInput() && Time.time >= m_fireStart)
         {
             m_fireStart = Time.time + 1.0f / m_fireRate;
             if(m_currentAmmoCount > 0)
