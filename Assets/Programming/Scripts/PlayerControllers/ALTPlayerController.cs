@@ -117,8 +117,10 @@ public class ALTPlayerController : MonoBehaviour
 
     void Update()
     {
-
-        ControllerCheck();
+        if(_controllerNames != null)
+        {
+            ControllerCheck();
+        }
 
         switch (m_ControllerState)
         {
