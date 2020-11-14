@@ -140,22 +140,19 @@ public class TEMP_Roamer : MonoBehaviour
         {
             _IsAttacking = false;
             _AttackTime = 0.5f;
-            RaycastHit hitInfo;
-            Vector3 tilt = new Vector3(0.0f,0.2f,0.0f);
-            if (Physics.Raycast(transform.position, _Player.transform.position - transform.position + tilt,  out hitInfo, _AttackRange))
-             {
-                ALTPlayerController target = hitInfo.transform.gameObject.GetComponent<ALTPlayerController>();
-                 if (target != null)
-                 {
-                     target.CallOnTakeDamage(_HitDamage);
-                }
-             }
+
+            if (_Player != null)
+            {
+               _Player.transform.GetComponent<ALTPlayerController>().CallOnTakeDamage(_HitDamage);
+            }
+             
             
             }
             else
             {
                 LookTowards(_Player.transform.position, 6);
                 _AttackTime -= Time.fixedDeltaTime;
+
                 if (_AttackTime < 0.0f)
                 {
 
@@ -163,7 +160,6 @@ public class TEMP_Roamer : MonoBehaviour
                 }
             }
 
-        Debug.DrawRay(transform.position, (_Player.transform.position - transform.position) * _AttackRange, Color.white, 0.5f, false);
     }
     void Follow()
     {
