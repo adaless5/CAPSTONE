@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 
 public class MainMenuUI : MonoBehaviour
 {
+    public GameObject firstOption;
     public void StartGame()
     {
         Time.timeScale = 1f;
@@ -23,6 +25,12 @@ public class MainMenuUI : MonoBehaviour
         }
 
         //get info from save system and load accordnaly
+    }
+
+    public void InitializeMenu()
+    {
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(firstOption);
     }
 
     public void ExitGame()

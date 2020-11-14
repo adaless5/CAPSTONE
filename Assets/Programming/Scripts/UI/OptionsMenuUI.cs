@@ -4,12 +4,15 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
+
 
 public class OptionsMenuUI : MonoBehaviour
 {
+    public GameObject firstOption;
     public AudioMixer audioMaster;
     public TMP_Dropdown resolutionMenu;
-    
+
     Resolution[] resolutions;
     private void Start()
     {
@@ -19,14 +22,14 @@ public class OptionsMenuUI : MonoBehaviour
         List<string> data = new List<string>();
         int index = 0;
 
-        for(int i = 0; i < resolutions.Length; i++)
+        for (int i = 0; i < resolutions.Length; i++)
         {
             string resData = resolutions[i].width + " x " + resolutions[i].height;
             data.Add(resData);
 
-            if(resolutions[i].width == Screen.currentResolution.width)
+            if (resolutions[i].width == Screen.currentResolution.width)
             {
-                if(resolutions[i].height == Screen.currentResolution.height)
+                if (resolutions[i].height == Screen.currentResolution.height)
                 {
                     index = i;
                 }
@@ -58,4 +61,12 @@ public class OptionsMenuUI : MonoBehaviour
         Resolution resolution = resolutions[index];
         Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
     }
+
+    public void SetOptions()
+    {
+        Debug.Log("Options");
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(firstOption);
+    }
+
 }
