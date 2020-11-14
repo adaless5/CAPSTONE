@@ -6,6 +6,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Rendering;
 
+public enum ControllerType
+{
+    Mouse,
+    Controller,
+}
+
 public class ALTPlayerController : MonoBehaviour
 {
     public enum PlayerState
@@ -15,11 +21,6 @@ public class ALTPlayerController : MonoBehaviour
         GrappleDeployed,
     }
 
-    public enum ControllerType
-    {
-        Mouse,
-        Controller,
-    }
 
 
     public enum ControllerState
@@ -32,6 +33,7 @@ public class ALTPlayerController : MonoBehaviour
     public ControllerState m_ControllerState;
     public ControllerType m_ControllerType;
 
+    public PauseMenuUI _pauseMenu;
 
     public Camera _camera;
     public float m_LookSensitivity = 100.0f;
@@ -137,6 +139,10 @@ public class ALTPlayerController : MonoBehaviour
 
         }
 
+        if (Input.GetButtonDown("Pause"))
+        {
+            _pauseMenu.Pause();
+        }
 
         //Slowdown time idea -LCC
         if (Input.GetButtonDown("EquipmentBelt"))// && m_ControllerState == ControllerState.Play)
@@ -189,7 +195,7 @@ public class ALTPlayerController : MonoBehaviour
                 joyY += Input.GetAxis("Mouse Y") * m_LookSensitivity;
 
                 float joyAngle = Mathf.Atan2(joyX, joyY) * Mathf.Rad2Deg;
-
+                Debug.Log(joyAngle);
                 if (joyAngle < 90)
                 {
                     Button[] buttons = EquipmentWheel.GetComponentsInChildren<Button>();

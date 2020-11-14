@@ -78,6 +78,11 @@ public class CreatureProjectile : MonoBehaviour
             transform.parent = collision.transform;
             Stick();
         }
+        DestructibleObject wall = collision.transform.GetComponentInParent<DestructibleObject>();
+        if (wall)
+        {
+            wall.Break(gameObject.tag);
+        }
     }
     void DeStick()
     {

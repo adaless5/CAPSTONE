@@ -2,27 +2,44 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 
 public class PauseMenuUI : MonoBehaviour
 {
     public static bool GameIsPaused = false;
     public GameObject PauseMenu;
+    public GameObject OptionsMenu;
     public GameObject Player;
+    EventSystem _input;
+    public GameObject pauseFirst;
+
+    ControllerType _playerContType;
+    private void Start()
+    {
+        _input = FindObjectOfType<EventSystem>();
+    }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.P))
+        if (Input.GetButtonDown("Pause"))
         {
             if (GameIsPaused)
             {
-                Unpause();
+                    Unpause();
             }
             else
             {
                 Pause();
+
             }
         }
+    }
+
+    private void OnEnable()
+    {
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(pauseFirst);
     }
 
     public void Unpause()
@@ -35,8 +52,9 @@ public class PauseMenuUI : MonoBehaviour
         Player.GetComponent<ALTPlayerController>().enabled = true;
     }
 
-    void Pause()
+    public void Pause()
     {
+        enabled = true;
         PauseMenu.SetActive(true);
         Time.timeScale = 0f;
         GameIsPaused = true;
@@ -65,6 +83,11 @@ public class PauseMenuUI : MonoBehaviour
         SaveSystem.SaveRespawnInfo(Player.transform, Player.scene.name);
         Debug.Log("Exit");
         Application.Quit();
+    }
+
+    public bool IsGamePaused()
+    {
+        return GameIsPaused;
     }
 
 
