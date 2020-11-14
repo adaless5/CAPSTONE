@@ -86,7 +86,6 @@ public class CreatureProjectile : MonoBehaviour
     }
     void DeStick()
     {
-        Debug.Log("Destick");
         _rigidBody.isKinematic = false;
         _rigidBody.detectCollisions = true;
 
