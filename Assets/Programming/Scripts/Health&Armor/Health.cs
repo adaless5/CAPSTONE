@@ -65,6 +65,7 @@ public class Health : MonoBehaviour, ISaveable
 
     void Die()
     {
+        CallOnDeath();
         //Temporary Spawning Stuff - Anthony
         Spawner spawner = GetComponent<Spawner>();
         if (spawner != null)
