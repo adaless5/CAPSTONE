@@ -31,14 +31,13 @@ public class EquipmentPickup : MonoBehaviour, ISaveable
             belt.ObtainEquipmentAtIndex(_CorrespondingEquipmentBeltIndex);
             isUsed = true;
             GetComponent<MeshRenderer>().enabled = false;
-            //Destroy(gameObject);
+            GetComponent<SphereCollider>().enabled = false;
         }
     }
 
     public void SaveDataOnSceneChange()
     {
         SaveSystem.Save(gameObject.name, "isEnabled", isUsed);
-        //Debug.Log(isUsed);
     }   
 
     public void LoadDataOnSceneEnter()
