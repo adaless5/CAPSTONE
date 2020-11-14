@@ -117,7 +117,7 @@ public class ALTPlayerController : MonoBehaviour
 
     void Update()
     {
-        if(_controllerNames != null)
+        if (_controllerNames != null)
         {
             ControllerCheck();
         }
@@ -213,14 +213,18 @@ public class ALTPlayerController : MonoBehaviour
 
     private void ControllerCheck()
     {
+
         _controllerNames = Input.GetJoystickNames();
-        if (_controllerNames[0].Contains("Controller"))
+        if (_controllerNames != null)
         {
-            m_ControllerType = ControllerType.Controller;
-        }
-        else
-        {
-            m_ControllerType = ControllerType.Mouse;
+            if (_controllerNames[0].Contains("Controller"))
+            {
+                m_ControllerType = ControllerType.Controller;
+            }
+            else
+            {
+                m_ControllerType = ControllerType.Mouse;
+            }
         }
     }
 
