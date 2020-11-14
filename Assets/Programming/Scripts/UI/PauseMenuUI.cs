@@ -10,14 +10,10 @@ public class PauseMenuUI : MonoBehaviour
     public GameObject PauseMenu;
     public GameObject OptionsMenu;
     public GameObject Player;
-    EventSystem _input;
     public GameObject pauseFirst;
 
     ControllerType _playerContType;
-    private void Start()
-    {
-        _input = FindObjectOfType<EventSystem>();
-    }
+
 
     // Update is called once per frame
     void Update()
@@ -56,6 +52,8 @@ public class PauseMenuUI : MonoBehaviour
     {
         enabled = true;
         PauseMenu.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(pauseFirst);
         Time.timeScale = 0f;
         GameIsPaused = true;
         Cursor.lockState = CursorLockMode.None;

@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 public class PauseOptionsMenuUI : MonoBehaviour
 {
+    public GameObject firstSlider;
     public Slider slider;
     public AudioMixer audioMaster;
     private PauseMenuUI _pauseMenu;
@@ -20,7 +21,7 @@ public class PauseOptionsMenuUI : MonoBehaviour
     {
         Debug.Log("Options Menu");
         EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(FindObjectOfType<Slider>().gameObject);
+        EventSystem.current.SetSelectedGameObject(firstSlider);
     }
 
     private void Update()

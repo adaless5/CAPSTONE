@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Rendering;
-
+using UnityEngine.EventSystems;
 public enum ControllerType
 {
     Mouse,
@@ -65,6 +65,13 @@ public class ALTPlayerController : MonoBehaviour
     string[] _controllerNames;
     float joyX;
     float joyY;
+    int _equipIndex;
+    int _wepIndex;
+
+    Button[] _equipButtons;
+
+
+    float joyAngle;
 
     bool isSelected = false;
 
@@ -118,6 +125,8 @@ public class ALTPlayerController : MonoBehaviour
         OnTakeDamage += m_armor.ResetArmorTimer;
 
         Cursor.lockState = CursorLockMode.Locked;
+
+        _equipButtons = _equipmentBelt.GetComponentsInChildren<Button>();
     }
 
     void Update()
@@ -191,22 +200,26 @@ public class ALTPlayerController : MonoBehaviour
             joyY = 0;
             if (m_ControllerType == ControllerType.Controller)
             {
+
                 joyX += Input.GetAxis("Mouse X") * m_LookSensitivity;
                 joyY += Input.GetAxis("Mouse Y") * m_LookSensitivity;
 
-                float joyAngle = Mathf.Atan2(joyX, joyY) * Mathf.Rad2Deg;
+
+                joyAngle = Mathf.Atan2(joyX, joyY) * Mathf.Rad2Deg;
                 Debug.Log(joyAngle);
-                if (joyAngle < 90)
+                if (joyAngle > -90.0f && joyAngle < -45.0f)
                 {
-                    Button[] buttons = EquipmentWheel.GetComponentsInChildren<Button>();
-
-                    foreach (Button b in buttons)
-                    {
-                        if (b.name.Contains("Grapple"))
-                            b.image.sprite = b.spriteState.highlightedSprite;
-                    }
-
+                    _equipIndex = 1;
                 }
+                if (joyAngle > -45.0f && joyAngle < 0.0f)
+                {
+                    _equipIndex = 0;
+                }
+                if (joyAngle > 0.0f && joyAngle < 90.0f)
+                {
+                    _equipIndex = 2;
+                }
+                EventSystem.current.SetSelectedGameObject(_equipButtons[_equipIndex].gameObject);
             }
         }
 
@@ -364,22 +377,25 @@ public class ALTPlayerController : MonoBehaviour
 
     void HandleJump()
     {
-        if (_controller.isGrounded)
+        if (m_ControllerState == ControllerState.Play)
         {
-            m_YVelocity = 0f;
-
-            if (CheckForJumpInput())
+            if (_controller.isGrounded)
             {
-                m_YVelocity = m_JumpHeight;
-            }
-        }
-        else if (!_controller.isGrounded)
-        {
-            if (_controller.collisionFlags.ToString() == "Above")
-            {
-                m_YVelocity = -2.0f;
-            }
+                m_YVelocity = 0f;
 
+                if (CheckForJumpInput())
+                {
+                    m_YVelocity = m_JumpHeight;
+                }
+            }
+            else if (!_controller.isGrounded)
+            {
+                if (_controller.collisionFlags.ToString() == "Above")
+                {
+                    m_YVelocity = -2.0f;
+                }
+
+            }
         }
     }
 
