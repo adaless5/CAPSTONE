@@ -141,7 +141,8 @@ public class TEMP_Roamer : MonoBehaviour
             _IsAttacking = false;
             _AttackTime = 0.5f;
             RaycastHit hitInfo;
-            if (Physics.SphereCast(transform.position,10.0f, _Player.transform.position - transform.position,  out hitInfo, _AttackRange))
+            Vector3 tilt = new Vector3(0.0f,0.2f,0.0f);
+            if (Physics.Raycast(transform.position, _Player.transform.position - transform.position + tilt,  out hitInfo, _AttackRange))
              {
                 ALTPlayerController target = hitInfo.transform.gameObject.GetComponent<ALTPlayerController>();
                  if (target != null)
@@ -259,7 +260,7 @@ public class TEMP_Roamer : MonoBehaviour
 
     void MakeIdle()
     {
-        if (_CurrentState != RoamerState.Attack && _CurrentState != RoamerState.Follow)
+        if (_CurrentState == RoamerState.Wander)
         {
             if (_UntilNextIdleTime >= 0.0f)
             {
