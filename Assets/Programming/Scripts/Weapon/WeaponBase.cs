@@ -16,7 +16,8 @@ public class WeaponBase : Weapon, ISaveable
     [Header("UI Elements - ParticleFX and Reticule")]
     public ParticleSystem muzzleFlash;
     public GameObject impactFX;
-    public Animator reticuleAnimator;  
+    public Animator reticuleAnimator;
+    public Animator outOfAmmoAnimator;
 
 
     [Header("Camera Settings")]
@@ -107,6 +108,7 @@ public class WeaponBase : Weapon, ISaveable
             }
             else
             {
+                outOfAmmoAnimator.SetBool("bIsOut", true);
                 Debug.Log("Out of Ammo");
             }
         }
@@ -124,6 +126,7 @@ public class WeaponBase : Weapon, ISaveable
         m_ammoUI.SetAmmoText(m_currentAmmoCount, m_overallAmmoCount);
         bIsReloading = false;
 
+        outOfAmmoAnimator.SetBool("bIsOut", false);
         Debug.Log("Reload Complete");
     }
 
@@ -181,6 +184,10 @@ public class WeaponBase : Weapon, ISaveable
         m_currentAmmoCount--;        
         if (m_ammoUI != null)
             m_ammoUI.SetAmmoText(m_currentAmmoCount, m_overallAmmoCount);
+        if(m_currentAmmoCount == 0 && m_overallAmmoCount == 0)
+        {
+            outOfAmmoAnimator.SetBool("bIsOut", true);
+        }
     }
 
    //VR - Plays Animation to focus reticule on targeting
@@ -190,7 +197,6 @@ public class WeaponBase : Weapon, ISaveable
         if (Physics.Raycast(gunCamera.transform.position, gunCamera.transform.forward, out targetInfo, m_weaponRange))
         {
             //Debug.Log(targetInfo.transform.name);
-
        
             Health target = targetInfo.transform.GetComponent<Health>();
             if (target != null)

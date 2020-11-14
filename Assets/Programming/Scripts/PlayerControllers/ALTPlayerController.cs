@@ -132,6 +132,7 @@ public class ALTPlayerController : MonoBehaviour
         {
             ControllerCheck();
         }
+
         switch (m_ControllerState)
         {
             case ControllerState.Play:
