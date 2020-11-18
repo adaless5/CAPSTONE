@@ -8,8 +8,8 @@ public class CreatureProjectile : MonoBehaviour
     Health _targetHealth;
     private float _damageTimer;
     public float _maxDamageTime;
-    //private 
     public float _lifeTime;
+    Transform _transformOrigin;
     // Start is called before the first frame update
 
     private void Awake()
@@ -19,6 +19,7 @@ public class CreatureProjectile : MonoBehaviour
 
     void Start()
     {
+        _transformOrigin = ObjectPool.Instance.transform;
         _damageTimer = _maxDamageTime;
         _lifeTime = 3.0f;
     }
@@ -43,7 +44,15 @@ public class CreatureProjectile : MonoBehaviour
         else
         {
             _lifeTime = 3.0f;
-            ObjectPool.Instance.ReturnToPool("Creature", this.gameObject);
+            transform.parent = _transformOrigin;
+            DeStick();
+            ObjectPool.Instance.ReturnToPool("Creature", gameObject);
+        }
+
+        if (gameObject.activeSelf == false)
+        {
+            transform.parent = _transformOrigin;
+            DeStick();
         }
 
     }
@@ -54,8 +63,9 @@ public class CreatureProjectile : MonoBehaviour
 
     private void OnDisable()
     {
-        DeStick();
         _lifeTime = 3.0f;
+        transform.parent = _transformOrigin;
+        DeStick();
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -68,11 +78,17 @@ public class CreatureProjectile : MonoBehaviour
             transform.parent = collision.transform;
             Stick();
         }
+        DestructibleObject wall = collision.transform.GetComponentInParent<DestructibleObject>();
+        if (wall)
+        {
+            wall.Break(gameObject.tag);
+        }
     }
     void DeStick()
     {
         _rigidBody.isKinematic = false;
         _rigidBody.detectCollisions = true;
+
     }
     void Stick()
     {

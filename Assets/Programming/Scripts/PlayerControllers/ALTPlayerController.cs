@@ -2,7 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Rendering;
+using UnityEngine.EventSystems;
+public enum ControllerType
+{
+    Mouse,
+    Controller,
+}
 
 public class ALTPlayerController : MonoBehaviour
 {
@@ -13,14 +20,20 @@ public class ALTPlayerController : MonoBehaviour
         GrappleDeployed,
     }
 
+
+
     public enum ControllerState
     {
-        Play, 
+        Play,
         Menu,
     }
 
     public PlayerState m_PlayerState { get; private set; }
     public ControllerState m_ControllerState;
+    public ControllerType m_ControllerType;
+
+
+    public PauseMenuUI _pauseMenu;
 
     public Camera _camera;
     public float m_LookSensitivity = 100.0f;
@@ -57,6 +70,19 @@ public class ALTPlayerController : MonoBehaviour
     const float SLOPE_SLIDE_SPEED = 1.0f;
     const float SLOPE_SLIDE_EXPONENT = 8.0f;
 
+    string[] _controllerNames;
+    float joyX;
+    float joyY;
+    int _equipIndex;
+    int _wepIndex;
+
+    Button[] _equipButtons;
+    Button[] _wepButtons;
+
+    float joyAngle;
+
+    bool isSelected = false;
+
     private void Awake()
     {
         OnTakeDamage += TakeDamage;
@@ -73,6 +99,7 @@ public class ALTPlayerController : MonoBehaviour
         m_armor = GetComponent<Armor>();
         _equipmentBelt = FindObjectOfType<Belt>();
         _weaponBelt = FindObjectOfType<WeaponBelt>();
+
 
         Canvas[] wheelsInScene;
         wheelsInScene = FindObjectsOfType<Canvas>();
@@ -94,10 +121,19 @@ public class ALTPlayerController : MonoBehaviour
         EventBroker.CallOnPlayerSpawned(gameObject);
         OnTakeDamage += m_armor.ResetArmorTimer;
 
+        Cursor.lockState = CursorLockMode.Locked;
+
+        _equipButtons = _equipmentBelt.GetComponentsInChildren<Button>();
+        _wepButtons = _weaponBelt.GetComponentsInChildren<Button>();
     }
 
     void Update()
     {
+        if (_controllerNames != null)
+        {
+            ControllerCheck();
+        }
+
         switch (m_ControllerState)
         {
             case ControllerState.Play:
@@ -108,11 +144,109 @@ public class ALTPlayerController : MonoBehaviour
             case ControllerState.Menu:
                 PlayerRotation();
                 PlayerMovement();
-            break;
+                break;
+
         }
 
+        if (Input.GetButtonDown("Pause"))
+        {
+            _pauseMenu.Pause();
+        }
+        
         HandleEquipmentWheels();
 
+
+        if (EquipmentWheel.enabled == true )
+        {
+            EventSystem.current.SetSelectedGameObject(null);
+            joyX = 0;
+            joyY = 0;
+            if (m_ControllerType == ControllerType.Controller)
+            {
+
+                joyX += Input.GetAxis("Mouse X") * m_LookSensitivity;
+                joyY += Input.GetAxis("Mouse Y") * m_LookSensitivity;
+
+
+                joyAngle = Mathf.Atan2(joyX, joyY) * Mathf.Rad2Deg;
+                Debug.Log(joyAngle);
+                if (joyAngle > -90.0f && joyAngle < -45.0f)
+                {
+                    _equipIndex = 1;
+                }
+                if (joyAngle > -45.0f && joyAngle < 0.0f)
+                {
+                    _equipIndex = 0;
+                }
+                if (joyAngle > 0.0f && joyAngle < 90.0f)
+                {
+                    _equipIndex = 2;
+                }
+                EventSystem.current.SetSelectedGameObject(_equipButtons[_equipIndex].gameObject);
+            }
+        }
+        if (WeaponWheel.enabled == true)
+        {
+            EventSystem.current.SetSelectedGameObject(null);
+            joyX = 0;
+            joyY = 0;
+            if (m_ControllerType == ControllerType.Controller)
+            {
+
+                joyX += Input.GetAxis("Mouse X") * m_LookSensitivity;
+                joyY += Input.GetAxis("Mouse Y") * m_LookSensitivity;
+
+
+                joyAngle = Mathf.Atan2(joyX, joyY) * Mathf.Rad2Deg;
+                Debug.Log(joyAngle);
+                if (joyAngle > -90.0f && joyAngle < -45.0f)
+                {
+                    _wepIndex = 1;
+                }
+                if (joyAngle > -45.0f && joyAngle < 0.0f)
+                {
+                    _wepIndex = 0;
+                }
+                if (joyAngle > 0.0f && joyAngle < 90.0f)
+                {
+                    _wepIndex = 2;
+                }
+                EventSystem.current.SetSelectedGameObject(_wepButtons[_wepIndex].gameObject);
+            }
+        }
+
+
+    }
+
+    private void ControllerCheck()
+    {
+
+        _controllerNames = Input.GetJoystickNames();
+        if (_controllerNames != null)
+        {
+            if (_controllerNames[0].Contains("Controller"))
+            {
+                m_ControllerType = ControllerType.Controller;
+            }
+            else
+            {
+                m_ControllerType = ControllerType.Mouse;
+            }
+        }
+    }
+
+    private void CursorVisibility()
+    {
+        //switch (m_ControllerType)
+        //{
+        //    case ControllerType.Controller:
+        //        Cursor.visible = false;
+        //        break;
+        //    case ControllerType.Mouse:
+        //        Cursor.visible = true;
+        //        break;
+        //}
+        Cursor.visible = true;
     }
 
     private void TakeDamage(float damage)
@@ -134,27 +268,29 @@ public class ALTPlayerController : MonoBehaviour
 
     public bool CheckForJumpInput()
     {
-        return Input.GetKeyDown(KeyCode.Space);
+        return Input.GetButtonDown("Jump");
     }
 
     public bool CheckForUseEquipmentInput()
     {
-        return Input.GetKeyDown(KeyCode.E);
+        return Input.GetButtonDown("Equipment");
     }
 
     public bool CheckForUseEquipmentInputReleased()
     {
-        return Input.GetKeyUp(KeyCode.E);
+        return Input.GetButtonUp("Equipment");
     }
 
     public bool CheckForUseWeaponInput()
     {
-        return Input.GetButtonDown("Fire1");
+        bool rightTrigger = Mathf.Abs(Input.GetAxis("Fire1")) == 0 ? false : true;
+        return Input.GetButtonDown("Fire1") || rightTrigger;
     }
 
     public bool CheckForUseWeaponInputReleased()
     {
-        return Input.GetButtonUp("Fire1");
+        bool rightTrigger = Mathf.Abs(Input.GetAxis("Fire1")) == 0 ? true : false;
+        return Input.GetButtonUp("Fire1") || rightTrigger;
     }
 
     public void PlayerRotation()
@@ -162,11 +298,15 @@ public class ALTPlayerController : MonoBehaviour
         float mouseX = Input.GetAxis("Mouse X") * m_LookSensitivity;
         float mouseY = Input.GetAxis("Mouse Y") * m_LookSensitivity;
 
-        m_XRotation += mouseY;
-        m_XRotation = Mathf.Clamp(m_XRotation, -90.0f, 90.0f);
 
-        _camera.transform.localRotation = Quaternion.Euler(-m_XRotation, 0f, 0f);
-        transform.Rotate(Vector3.up * mouseX);
+
+        if (m_ControllerState == ControllerState.Play)
+        {
+            m_XRotation += mouseY;
+            m_XRotation = Mathf.Clamp(m_XRotation, -90.0f, 90.0f);
+            _camera.transform.localRotation = Quaternion.Euler(-m_XRotation, 0f, 0f);
+            transform.Rotate(Vector3.up * mouseX);
+        }
     }
 
     public void PlayerMovement()
@@ -232,27 +372,31 @@ public class ALTPlayerController : MonoBehaviour
 
     void HandleJump()
     {
-        if (_controller.isGrounded)
+        if (m_ControllerState == ControllerState.Play)
         {
-            m_YVelocity = 0f;
+            if (_controller.isGrounded)
+            {
+                m_YVelocity = 0f;
 
-            if (CheckForJumpInput())
-            {
-                m_YVelocity = m_JumpHeight;
+                if (CheckForJumpInput())
+                {
+                    m_YVelocity = m_JumpHeight;
+                }
             }
-        }
-        else if (!_controller.isGrounded)
-        {
-            if (_controller.collisionFlags.ToString() == "Above")
+            else if (!_controller.isGrounded)
             {
-                m_YVelocity = -2.0f;
+                if (_controller.collisionFlags.ToString() == "Above")
+                {
+                    m_YVelocity = -2.0f;
+                }
+
             }
         }
     }
 
     void HandleEquipmentWheels()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetButtonDown("EquipmentBelt"))
         {
             EquipmentWheel.enabled = true;
             Time.timeScale = 0.3f;
@@ -260,25 +404,25 @@ public class ALTPlayerController : MonoBehaviour
             m_ControllerState = ControllerState.Menu;
         }
 
-        if (Input.GetKeyUp(KeyCode.Q))
+        if (Input.GetButtonUp("EquipmentBelt"))
         {
             EquipmentWheel.enabled = false;
             Time.timeScale = 1;
-
             Cursor.lockState = CursorLockMode.Locked;
             m_ControllerState = ControllerState.Play;
         }
 
 
-        if (Input.GetKeyDown(KeyCode.Tab))
+        if (Input.GetButtonDown("WeaponBelt"))
         {
             WeaponWheel.enabled = true;
             Time.timeScale = 0.3f;
             Cursor.lockState = CursorLockMode.None;
             m_ControllerState = ControllerState.Menu;
+            
         }
 
-        if (Input.GetKeyUp(KeyCode.Tab))
+        if (Input.GetButtonUp("WeaponBelt"))
         {
             WeaponWheel.enabled = false;
             Time.timeScale = 1;

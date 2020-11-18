@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4786689151961805616}
   - component: {fileID: 7316461695465342970}
   - component: {fileID: 3874141464092385155}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Creature Weapon
   m_TagString: Player_Creature
   m_Icon: {fileID: 0}
@@ -60,8 +60,8 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -2510483096459867325, guid: ff7bf75ba7c9aa34daa5c6c9c99bea5e, type: 3}
-  - {fileID: 1655422142602207159, guid: ff7bf75ba7c9aa34daa5c6c9c99bea5e, type: 3}
+  - {fileID: 2100000, guid: 7dcec60b8caf8764b824ad20f1c83837, type: 2}
+  - {fileID: 2100000, guid: 5d328994d04dd4442bd7f1d68864f668, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -99,7 +99,8 @@ MonoBehaviour:
   bIsObtained: 0
   _weapon: 2
   m_damageAmount: 10
-  m_ammoAmount: 6
+  m_weaponClipSize: 6
+  m_reloadTime: 2
   m_fireRate: 30
   m_hitImpact: 50
   m_weaponRange: 50
