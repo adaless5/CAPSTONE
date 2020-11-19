@@ -16,18 +16,19 @@ public class WeaponBase : Weapon, ISaveable
     [Header("UI Elements - ParticleFX and Reticule")]
     public ParticleSystem muzzleFlash;
     public GameObject impactFX;
-    public Animator reticuleAnimator;  
+    public Animator reticuleAnimator;
+    public Animator outOfAmmoAnimator;
 
 
     [Header("Camera Settings")]
     public Camera gunCamera;
 
-    public ALTPlayerController _playercontroller;
     public AmmoUI m_ammoUI;
    
 
     void Awake()
     {
+        base.Awake();
         EventBroker.OnAmmoPickup += AmmoPickup;
         LoadDataOnSceneEnter();
         SaveSystem.SaveEvent += SaveDataOnSceneChange;
@@ -67,17 +68,21 @@ public class WeaponBase : Weapon, ISaveable
 
     // Update is called once per frame
     public override void Update()
-    {       
-        if (bIsActive && _playercontroller.m_ControllerState == ALTPlayerController.ControllerState.Play)
+    {
+        if (_playerController != null)
         {
-            GetComponent<MeshRenderer>().enabled = true;
-            UseTool();
-            OnTarget();
+            if (bIsActive && _playerController.m_ControllerState == ALTPlayerController.ControllerState.Play)
+            {
+                GetComponent<MeshRenderer>().enabled = true;
+                UseTool();
+                OnTarget();
+            }
+            else if (!bIsActive)
+            {
+                GetComponent<MeshRenderer>().enabled = false;
+            }
         }
-        else if (!bIsActive)
-        {
-            GetComponent<MeshRenderer>().enabled = false;
-        }
+
     }
 
     public override void UseTool()
@@ -94,7 +99,7 @@ public class WeaponBase : Weapon, ISaveable
             return;
         }
 
-        if (Input.GetButton("Fire1") && Time.time >= m_fireStart)
+        if (_playerController.CheckForUseWeaponInput() && Time.time >= m_fireStart)
         {
             m_fireStart = Time.time + 1.0f / m_fireRate;
             if(m_currentAmmoCount > 0)
@@ -103,6 +108,7 @@ public class WeaponBase : Weapon, ISaveable
             }
             else
             {
+                outOfAmmoAnimator.SetBool("bIsOut", true);
                 Debug.Log("Out of Ammo");
             }
         }
@@ -120,6 +126,7 @@ public class WeaponBase : Weapon, ISaveable
         m_ammoUI.SetAmmoText(m_currentAmmoCount, m_overallAmmoCount);
         bIsReloading = false;
 
+        outOfAmmoAnimator.SetBool("bIsOut", false);
         Debug.Log("Reload Complete");
     }
 
@@ -177,6 +184,10 @@ public class WeaponBase : Weapon, ISaveable
         m_currentAmmoCount--;        
         if (m_ammoUI != null)
             m_ammoUI.SetAmmoText(m_currentAmmoCount, m_overallAmmoCount);
+        if(m_currentAmmoCount == 0 && m_overallAmmoCount == 0)
+        {
+            outOfAmmoAnimator.SetBool("bIsOut", true);
+        }
     }
 
    //VR - Plays Animation to focus reticule on targeting
@@ -186,7 +197,6 @@ public class WeaponBase : Weapon, ISaveable
         if (Physics.Raycast(gunCamera.transform.position, gunCamera.transform.forward, out targetInfo, m_weaponRange))
         {
             //Debug.Log(targetInfo.transform.name);
-
        
             Health target = targetInfo.transform.GetComponent<Health>();
             if (target != null)
