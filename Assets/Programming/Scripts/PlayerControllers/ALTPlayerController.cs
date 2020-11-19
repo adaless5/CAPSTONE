@@ -67,7 +67,8 @@ public class ALTPlayerController : MonoBehaviour
     bool bIsInThermalView = false;
     bool bIsInDarknessVolume = false;
 
-    const float SLOPE_SLIDE_SPEED = 50.0f;
+    const float SLOPE_SLIDE_SPEED = 1.0f;
+    const float SLOPE_SLIDE_EXPONENT = 8.0f;
 
     string[] _controllerNames;
     float joyX;
@@ -324,11 +325,16 @@ public class ALTPlayerController : MonoBehaviour
 
         m_Velocity += m_Momentum;
 
+        float angle_percentage = Vector3.Angle(Vector3.up, _hitNormal) / 90.0f;
+
         //If player is on slope apply Vector parallel to ground to movement vector. 
         if (!bNotOnSlope && m_PlayerState != PlayerState.Grappling)
         {
-            m_Velocity.x += (1f - _hitNormal.y) * _hitNormal.x * (SLOPE_SLIDE_SPEED);
-            m_Velocity.z += (1f - _hitNormal.y) * _hitNormal.z * (SLOPE_SLIDE_SPEED);
+            m_Velocity.x = 0.0f;
+            m_Velocity.z = 0.0f;
+            m_Velocity.y += m_Gravity ;
+            m_Velocity.x += (1f - _hitNormal.y) * _hitNormal.x * Mathf.Pow((SLOPE_SLIDE_SPEED / angle_percentage), SLOPE_SLIDE_EXPONENT);
+            m_Velocity.z += (1f - _hitNormal.y) * _hitNormal.z * Mathf.Pow((SLOPE_SLIDE_SPEED / angle_percentage), SLOPE_SLIDE_EXPONENT);
         }
 
         _controller.Move(m_Velocity * Time.deltaTime);
@@ -338,7 +344,7 @@ public class ALTPlayerController : MonoBehaviour
         //Establish whether player is on slope using angle between player's up vec and collison normal. 
         bNotOnSlope = (Vector3.Angle(Vector3.up, _hitNormal) <= _slopeLimit);
 
-        if (Vector3.Angle(Vector3.up, _hitNormal) > 80.0f)
+        if (Vector3.Angle(Vector3.up, _hitNormal) > 90.0f - Mathf.Epsilon)
         {
             bNotOnSlope = true;
         }
