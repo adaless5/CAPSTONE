@@ -51,12 +51,12 @@ public class WeaponPickup : MonoBehaviour
 
     public void SaveDataOnSceneChange()
     {
-        SaveSystem.Save(gameObject.name, "isEnabled", isUsed);
+        SaveSystem.Save(gameObject.name, "isEnabled", gameObject.scene.name, isUsed);
         //Debug.Log(isUsed);
     }
 
     public void LoadDataOnSceneEnter()
     {
-        isUsed = SaveSystem.LoadBool(gameObject.name, "isEnabled");
+        isUsed = SaveSystem.LoadBool(gameObject.name, "isEnabled", gameObject.scene.name);
     }
 }

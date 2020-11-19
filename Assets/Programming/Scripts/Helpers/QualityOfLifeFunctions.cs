@@ -26,5 +26,22 @@ public static class QualityOfLifeFunctions
         }
         
         return array;
-    } 
+    }
+
+    public static bool CloseEnough(Vector3 v1, Vector3 v2)
+    {
+        if (!Mathf.Approximately(v1.x, v2.x)) return false;
+        else if (!Mathf.Approximately(v1.y, v2.y)) return false;
+        else if (!Mathf.Approximately(v1.z, v2.z)) return false;
+        return true;
+    }
+
+    public static bool CloseEnough(Quaternion q1, Quaternion q2)
+    {
+        if (!Mathf.Approximately(q1.x, q2.x)) return false;
+        else if (!Mathf.Approximately(q1.y, q2.y)) return false;
+        else if (!Mathf.Approximately(q1.z, q2.z)) return false;
+        else if (!Mathf.Approximately(q1.w, q2.w)) return false;
+        return true;
+    }
 }

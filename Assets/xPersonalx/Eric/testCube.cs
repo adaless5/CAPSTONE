@@ -45,13 +45,13 @@ public class testCube : MonoBehaviour, ISaveable
 
     public void SaveDataOnSceneChange()
     {
-        SaveSystem.Save(gameObject.name, "colorToggle", colorToggle);
+        SaveSystem.Save(gameObject.name, "colorToggle", gameObject.scene.name, colorToggle);
 
     }
 
     public void LoadDataOnSceneEnter()
     {
-        colorToggle = SaveSystem.LoadBool(gameObject.name, "colorToggle");
+        colorToggle = SaveSystem.LoadBool(gameObject.name, "colorToggle", gameObject.scene.name);
     }
 
 

@@ -32,7 +32,7 @@ public class SceneConnectorEditor : Editor
         _data = new SceneConnector.SceneConnectorData(_base.transform, "", _sceneName, target.name, _type, "", "");
 
         //LOAD DATA
-        _data.FromString(SaveSystem.LoadString(target.name + _sceneName, ""));
+        _data.FromString(SaveSystem.LoadString(target.name + _sceneName, "",_sceneName));
         if (bDebug) Debug.Log("LOADED : " + target.name + _data.ToString());
 
         //Synchronize members with _data
@@ -92,8 +92,11 @@ public class SceneConnectorEditor : Editor
         if (!SceneConnectorMatchesSavedData())
         {
             GUI.backgroundColor = Color.red;
-            RemoveData();
-            
+            if (bConnectorMatchesSavedData)
+            {
+                RemoveData();
+                bConnectorMatchesSavedData = false;
+            }
         }
         else
         {
@@ -263,8 +266,9 @@ public class SceneConnectorEditor : Editor
     {
         Transform t = _base.GetComponentInChildren<PlayerStart>().transform;
 
-        return (_data.pos == t.position && _data.rot == t.rotation 
-            && !IDisBlank() && _ID.Equals(_data.ID) && _data.name == target.name
+        return (QualityOfLifeFunctions.CloseEnough(_data.pos,t.position) 
+            && QualityOfLifeFunctions.CloseEnough(_data.rot, t.rotation)
+            && _ID.Equals(_data.ID) && _data.name == target.name
             && !SceneConnectorRegistry.IsEmpty()) ? true : false;
     }
 
@@ -318,7 +322,7 @@ public class SceneConnectorEditor : Editor
         //Save Connector to persistant data
         _data = new SceneConnector.SceneConnectorData(_base.GetComponentInChildren<PlayerStart>().transform, _ID, _sceneName, target.name, _type, _goesToID, _goesToScene);
         _data.destinationConnectorName = goToConnectorName;
-        SaveSystem.Save(target.name + _sceneName,"", _data.ToString(),SaveSystem.SaveType.CONNECTOR);
+        SaveSystem.Save(target.name + _sceneName,"",_sceneName, _data.ToString(),SaveSystem.SaveType.CONNECTOR);
         if(bDebug)Debug.Log("SAVED : " + target.name + _data.ToString() );
 
         //Save Connector data to SceneConnectorRegistry
@@ -331,7 +335,7 @@ public class SceneConnectorEditor : Editor
     {
         SceneConnectorRegistry.Remove(_ID);
         SceneConnectorRegistry.RemoveAllDestinationInfoWithDestinationID(_ID);
-        SaveSystem.RemoveAtKey(target.name + _sceneName, "");
+        SaveSystem.RemoveAtKey(target.name + _sceneName, "",_sceneName);
     }
 
     //This runs everytime the editor window changes.

@@ -42,7 +42,7 @@ public class SceneConnector : MonoBehaviour
 
     IEnumerator DispatchSave()
     {
-        SaveSystem.SaveEvent.Invoke();
+        //SaveSystem.SaveEvent.Invoke();
         yield return new WaitForSeconds(.5f);
     }
 
@@ -62,7 +62,7 @@ public class SceneConnector : MonoBehaviour
         {
             //Fetch connector data from permanent save
             _data = new SceneConnectorData(transform, "", "", "", _type, "", "");
-            _data.FromString(SaveSystem.LoadString(name + SceneManager.GetActiveScene().name, ""));
+            _data.FromString(SaveSystem.LoadString(name + gameObject.scene.name, "", gameObject.scene.name));
 
             switch (_data.type)
             {
@@ -254,7 +254,7 @@ public class SceneConnector : MonoBehaviour
                     if (!SceneConnectorRegistry.Contains(data.ID)) 
                     { 
                         SceneConnectorRegistry.Add(data);
-                        SaveSystem.Save(data.name + data.sceneName, "", data.ToString(), SaveSystem.SaveType.CONNECTOR);
+                        SaveSystem.Save(data.name + data.sceneName, "", data.sceneName, data.ToString(), SaveSystem.SaveType.CONNECTOR);
                         count++; 
                     } 
                 }

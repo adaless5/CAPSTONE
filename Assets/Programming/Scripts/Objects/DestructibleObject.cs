@@ -59,12 +59,12 @@ public class DestructibleObject : MonoBehaviour, ISaveable
 
     public void SaveDataOnSceneChange()
     {
-        SaveSystem.Save(gameObject.name, "isBroken", _bisDead);
+        SaveSystem.Save(gameObject.name, "isBroken", gameObject.scene.name, _bisDead);
     }
 
     public void LoadDataOnSceneEnter()
     {
-        _bisDead = SaveSystem.LoadBool(gameObject.name, "isBroken");
+        _bisDead = SaveSystem.LoadBool(gameObject.name, "isBroken", gameObject.scene.name);
     }
 
     public void OnDisable()
