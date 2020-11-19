@@ -194,7 +194,6 @@ public class ALTPlayerController : MonoBehaviour
 
         _controller.Move(m_Velocity * Time.deltaTime);
 
-        print(Vector3.Angle(Vector3.up, _hitNormal));
 
         //Establish whether player is on slope using angle between player's up vec and collison normal. 
         bNotOnSlope = (Vector3.Angle(Vector3.up, _hitNormal) <= _slopeLimit);

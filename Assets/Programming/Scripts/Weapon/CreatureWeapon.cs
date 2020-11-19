@@ -28,7 +28,7 @@ public class CreatureWeapon : Weapon, ISaveable
         bIsObtained = false;
 
         m_fireRate = 0.5f;
-        m_hitImpact = 5.0f;
+        m_hitImpact = 10.0f;
     }
     public override void UseTool()
     {
