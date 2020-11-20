@@ -20,8 +20,8 @@ public class CreatureProjectile : MonoBehaviour
     void Start()
     {
         _transformOrigin = ObjectPool.Instance.transform;
-        _damageTimer = _maxDamageTime;
-        _lifeTime = 3.0f;
+        _damageTimer = 0;
+        _lifeTime = 6.0f;
     }
 
     // Update is called once per frame
@@ -64,7 +64,7 @@ public class CreatureProjectile : MonoBehaviour
     private void OnDisable()
     {
         _lifeTime = 3.0f;
-        transform.parent = _transformOrigin;
+        //transform.parent = _transformOrigin;
         DeStick();
     }
 

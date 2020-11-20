@@ -21,6 +21,8 @@ public class DroneAI : MonoBehaviour
     {
         if (this != null)
             _currentState = new Patrol(gameObject, _patrolPoints, player.transform, _navMeshAgent);
+
+        
     }
 
     // Update is called once per frame
@@ -28,5 +30,6 @@ public class DroneAI : MonoBehaviour
     {
         if (_currentState != null)
             _currentState = _currentState.Process();
+
     }
 }
