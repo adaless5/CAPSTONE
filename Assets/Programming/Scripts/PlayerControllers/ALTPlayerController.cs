@@ -20,8 +20,6 @@ public class ALTPlayerController : MonoBehaviour
         GrappleDeployed,
     }
 
-
-
     public enum ControllerState
     {
         Play,
@@ -60,14 +58,16 @@ public class ALTPlayerController : MonoBehaviour
     public event Action<float> OnHeal;
     public event Action OnDeath;
 
-    private bool bNotOnSlope;
     private Vector3 _hitNormal;
-    float _slopeLimit = 45.0f;
+    float _slopeLimit = 120.0f;
+    float _slopeAngle;
+    Vector3 _slopeAcceleration;
+    float _slopeSpeed = 500.0f;
 
     bool bIsInThermalView = false;
     bool bIsInDarknessVolume = false;
 
-    const float SLOPE_SLIDE_SPEED = 1.0f;
+    const float SLOPE_SLIDE_SPEED = 5.0f;
     const float SLOPE_SLIDE_EXPONENT = 8.0f;
 
     string[] _controllerNames;
@@ -82,6 +82,8 @@ public class ALTPlayerController : MonoBehaviour
     float joyAngle;
 
     bool isSelected = false;
+
+    bool bOnSlope = false;
 
     private void Awake()
     {
@@ -127,11 +129,39 @@ public class ALTPlayerController : MonoBehaviour
         _wepButtons = _weaponBelt.GetComponentsInChildren<Button>();
     }
 
-    void Update()
+    void FixedUpdate()
     {
-        if (_controllerNames != null)
+        float dist = 10.0f;
+        Vector3 dir = new Vector3(0.0f, -1.0f, 0.0f);
+        RaycastHit hit;
+
+        Debug.DrawRay(transform.position, dir * dist, Color.green);
+
+        if (Physics.Raycast(transform.position,  dir, out hit, dist))
         {
-            ControllerCheck();
+            
+            Debug.DrawRay(transform.position, hit.normal * dist, Color.yellow);
+            _hitNormal = hit.normal;
+            //Debug.DrawRay(transform.position, Vector3.Cross(_hitNormal, transform.forward), Color.cyan);
+            _slopeAngle = Vector3.Angle(dir * dist, hit.normal);
+            //print("Slope Angle: " + slopeangle);
+            _slopeAcceleration = transform.TransformDirection(m_Velocity);
+            Vector3 groundTangent = _slopeAcceleration - Vector3.Project(_slopeAcceleration, hit.normal);
+            groundTangent.Normalize();
+            _slopeAcceleration = groundTangent;
+            Debug.DrawRay(transform.position, _slopeAcceleration * dist, Color.cyan);
+
+            if(_controller.isGrounded && _slopeAngle <= 140.0f )
+            {
+                bOnSlope = true;
+                print("Is On Slope. Slope Angle = " + _slopeAngle + " Gameobject = " + hit.collider.gameObject.name);
+            }
+            else
+            {
+                bOnSlope = false;
+                print("Is Not On Slope. Slope Angle = " + _slopeAngle + " Gameobject = " + hit.collider.gameObject.name);
+            }
+
         }
 
         switch (m_ControllerState)
@@ -147,6 +177,12 @@ public class ALTPlayerController : MonoBehaviour
                 break;
 
         }
+
+        if (_controllerNames != null)
+        {
+            ControllerCheck();
+        }
+
 
         if (Input.GetButtonDown("Pause"))
         {
@@ -187,7 +223,7 @@ public class ALTPlayerController : MonoBehaviour
         }
         if (WeaponWheel.enabled == true)
         {
-            EventSystem.current.SetSelectedGameObject(null);
+            //EventSystem.current.SetSelectedGameObject(null);
             joyX = 0;
             joyY = 0;
             if (m_ControllerType == ControllerType.Controller)
@@ -263,7 +299,7 @@ public class ALTPlayerController : MonoBehaviour
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        _hitNormal = hit.normal;
+        //_hitNormal = hit.normal;
     }
 
     public bool CheckForJumpInput()
@@ -316,7 +352,7 @@ public class ALTPlayerController : MonoBehaviour
 
         m_Velocity = transform.right * x * m_MoveSpeed + transform.forward * z * m_MoveSpeed;
 
-        if (bNotOnSlope)
+        if (!bOnSlope)
         {
             HandleJump();
         }
@@ -325,29 +361,28 @@ public class ALTPlayerController : MonoBehaviour
 
         m_Velocity += m_Momentum;
 
-        float angle_percentage = Vector3.Angle(Vector3.up, _hitNormal) / 90.0f;
+        //float angle_percentage = Vector3.Angle(Vector3.up, _hitNormal) / 90.0;
 
         //If player is on slope apply Vector parallel to ground to movement vector. 
-        if (!bNotOnSlope && m_PlayerState != PlayerState.Grappling)
+        if (bOnSlope && m_PlayerState != PlayerState.Grappling)
         {
-            m_Velocity.x = 0.0f;
-            m_Velocity.z = 0.0f;
-            m_Velocity.y += m_Gravity ;
-            m_Velocity.x += (1f - _hitNormal.y) * _hitNormal.x * Mathf.Pow((SLOPE_SLIDE_SPEED / angle_percentage), SLOPE_SLIDE_EXPONENT);
-            m_Velocity.z += (1f - _hitNormal.y) * _hitNormal.z * Mathf.Pow((SLOPE_SLIDE_SPEED / angle_percentage), SLOPE_SLIDE_EXPONENT);
+            //m_Velocity.x = 0.0f;
+            //m_Velocity.z = 0.0f;
+            m_Velocity.y += m_Gravity;
+            m_Velocity = Vector3.Lerp(m_Velocity, _slopeAcceleration * _slopeSpeed, Time.deltaTime);
         }
 
         _controller.Move(m_Velocity * Time.deltaTime);
 
-        print(Vector3.Angle(Vector3.up, _hitNormal));
+        //print(Vector3.Angle(Vector3.up, _hitNormal));
 
         //Establish whether player is on slope using angle between player's up vec and collison normal. 
-        bNotOnSlope = (Vector3.Angle(Vector3.up, _hitNormal) <= _slopeLimit);
+        //bNotOnSlope = (Vector3.Angle(Vector3.up, _hitNormal) <= _slopeLimit);
 
-        if (Vector3.Angle(Vector3.up, _hitNormal) > 90.0f - Mathf.Epsilon)
-        {
-            bNotOnSlope = true;
-        }
+        //if (Vector3.Angle(Vector3.up, _hitNormal) > 90.0f - Mathf.Epsilon)
+        //{
+        //    bNotOnSlope = true;
+        //}
 
         if (m_Momentum.magnitude >= 0f)
         {
