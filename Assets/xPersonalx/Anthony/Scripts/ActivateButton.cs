@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class ActivateButton : MonoBehaviour
+public class ActivateButton : MonoBehaviour, IPointerEnterHandler
 {
     Button _button;
     Belt _Belt;
@@ -15,8 +16,12 @@ public class ActivateButton : MonoBehaviour
         _Belt = GetComponentInParent<Belt>();
 
         _button = GetComponent<Button>();
-        _button.onClick.AddListener(EquipToolAtCorrespondingToolIndex); 
+        //_button.onClick.AddListener(EquipToolAtCorrespondingToolIndex); 
+        
         _button.interactable = false;
+
+        if (IsToolActive())
+            _button.Select();
 
     }
 
@@ -29,8 +34,15 @@ public class ActivateButton : MonoBehaviour
         }
         else if (IsToolActive())
         {
-            _button.interactable = false;
+            _button.Select();
         }
+    }
+
+
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        EquipToolAtCorrespondingToolIndex();
     }
 
     bool IsToolObtained()
