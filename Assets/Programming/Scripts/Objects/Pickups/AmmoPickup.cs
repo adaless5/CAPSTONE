@@ -11,10 +11,13 @@ public class AmmoPickup : MonoBehaviour
     public int m_clipSize = 6;
     Pickup m_ammoPickup;
 
+    bool isPickedUp;
+
     // Start is called before the first frame update
     void Start()
     {
         m_ammoPickup = GetComponent<Pickup>();
+        isPickedUp = false;
     }
 
     void Awake()
@@ -37,11 +40,13 @@ public class AmmoPickup : MonoBehaviour
 
     // Update is called once per frame
     private void OnTriggerEnter(Collider other)
-    {
-        //doesn't work at the moment, should after merges - VR
+    {       
         // WeaponBase playerAmmo = (WeaponBase)other.gameObject.GetComponent<WeaponBelt>().GetToolAtIndex(weaponIndex);
-        EventBroker.CallOnAmmoPickup(ammoType, m_amountOfClipsInPickup);
-        Destroy(gameObject);
-        
+        if(isPickedUp == false)
+        {
+            isPickedUp = true;
+            EventBroker.CallOnAmmoPickup(ammoType, m_amountOfClipsInPickup);
+            Destroy(gameObject);
+        }
     }
 }

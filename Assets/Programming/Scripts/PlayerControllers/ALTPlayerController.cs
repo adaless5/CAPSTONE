@@ -52,7 +52,7 @@ public class ALTPlayerController : MonoBehaviour
     public Belt _weaponBelt;
 
     public Health m_health;
-    public Armor m_armor;
+    public Armor m_armor;  
 
     public Canvas EquipmentWheel;
     public Canvas WeaponWheel;
@@ -85,7 +85,7 @@ public class ALTPlayerController : MonoBehaviour
     bool isSelected = false;
 
     private void Awake()
-    {
+    {        
         OnTakeDamage += TakeDamage;
     }
 
@@ -97,7 +97,7 @@ public class ALTPlayerController : MonoBehaviour
 
         //Initializing Members
         m_health = GetComponent<Health>();
-        m_armor = GetComponent<Armor>();
+        m_armor = GetComponent<Armor>();     
         _equipmentBelt = FindObjectOfType<Belt>();
         _weaponBelt = FindObjectOfType<WeaponBelt>();
 
@@ -268,6 +268,7 @@ public class ALTPlayerController : MonoBehaviour
         else
         {
             m_health.TakeDamage(damage);
+             
         }
     }
 
@@ -348,7 +349,6 @@ public class ALTPlayerController : MonoBehaviour
         }
 
         _controller.Move(m_Velocity * Time.deltaTime);
-
 
         //Establish whether player is on slope using angle between player's up vec and collison normal. 
         bNotOnSlope = (Vector3.Angle(Vector3.up, _hitNormal) <= _slopeLimit);
