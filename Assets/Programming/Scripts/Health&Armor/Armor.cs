@@ -58,12 +58,12 @@ public class Armor : MonoBehaviour
 
     void Update()
     {
-        if (m_Armor == 0)
+        if (m_Armor < m_MaxArmor)
         {
             m_ArmorTimer -= Time.deltaTime;
         }
         
-        if (m_ArmorTimer < 0)
+        if (m_ArmorTimer <= 0)
         {
             m_ArmorTimer = m_ArmorCooldown;
             StartCoroutine(ReloadArmor());
