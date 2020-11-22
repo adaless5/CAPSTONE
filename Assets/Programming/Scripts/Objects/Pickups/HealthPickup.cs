@@ -16,7 +16,7 @@ public class HealthPickup : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         Health playerHP = other.GetComponent<Health>();
-        if (playerHP)
+        if (playerHP && m_healthPickup != null)
         {
             if (!playerHP.IsAtFullHealth())
             {
