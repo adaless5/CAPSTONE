@@ -22,10 +22,8 @@ public class Attack : State
     public override void Update()
     {
         base.Update();
-
         if (CanSeePlayer())
         {
-
 
             LookAt(_playerPos);
 
@@ -53,11 +51,12 @@ public class Attack : State
         Vector3 finalFowardVector = _currentEnemy.transform.rotation * rot * Vector3.forward;
         finalFowardVector += _currentEnemy.transform.position;
         RaycastHit hit;
+        Vector3 playerDir = _playerPos.position - _currentEnemy.transform.position;
 
-        Debug.DrawRay(finalFowardVector, _currentEnemy.transform.forward * _shootDistance, Color.green);
+        Debug.DrawRay(finalFowardVector, playerDir * _shootDistance, Color.green);
         if (_shootTimer <= 0)
         {
-            if (Physics.Raycast(finalFowardVector, _currentEnemy.transform.forward * _shootDistance, out hit, _shootDistance))
+            if (Physics.Raycast(finalFowardVector, playerDir * _shootDistance, out hit, _shootDistance))
             {
                 if (hit.transform.tag == "Player")
                 {

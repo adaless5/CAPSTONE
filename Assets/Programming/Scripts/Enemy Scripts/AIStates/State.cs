@@ -34,7 +34,7 @@ public class State
     protected float _rotDamp = 10.0f;
 
     private Quaternion _desiredRot;
-    
+
     public State(GameObject enemy, Transform[] pp, Transform playerposition, NavMeshAgent nav)
     {
         _currentEnemy = enemy;
@@ -69,17 +69,18 @@ public class State
         Vector3 direction = _playerPos.position - _currentEnemy.transform.position;
         float angle = Vector3.Angle(direction, _currentEnemy.transform.forward);
 
+
         NavMeshHit hit;
         if (!_navMeshAgent.Raycast(_playerPos.position, out hit))
         {
-            //Debug.Log("Player not hiding");
             if (direction.magnitude < _visualDistance && angle < _visualAngle)
             {
                 //Debug.Log("Player found");
                 return true;
             }
-
         }
+
+
         //Debug.Log("Player hiding");
         return false;
     }

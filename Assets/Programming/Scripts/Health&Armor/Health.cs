@@ -28,8 +28,10 @@ public class Health : MonoBehaviour, ISaveable
 
     void Start()
     {
+        healthBar = FindObjectOfType<HealthBarUI>();
+
         if (healthBar != null)
-            healthBar.SetMaxHealth(m_MaxHealth);
+           healthBar.SetMaxHealth(m_MaxHealth);
     }
 
     void Awake()
@@ -76,6 +78,7 @@ public class Health : MonoBehaviour, ISaveable
         isDead = true;
         //Destroy(gameObject);
         gameObject.SetActive(false);
+        transform.DetachChildren();
     }
 
     public void CallOnTakeHealthDamage(float damageToTake)

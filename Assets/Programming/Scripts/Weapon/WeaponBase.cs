@@ -38,6 +38,7 @@ public class WeaponBase : Weapon, ISaveable
         m_hitImpact = 50.0f;
         m_weaponRange = 50.0f;
         m_fireStart = 0.0f;
+        outOfAmmoAnimator = FindObjectOfType<AmmoUI>().GetComponent<Animator>();      
     }
 
     public override void Start()
@@ -50,6 +51,7 @@ public class WeaponBase : Weapon, ISaveable
             m_ammoUI.SetAmmoText(m_currentAmmoCount, m_overallAmmoCount);
 
         gunCamera = GameObject.FindObjectOfType<Camera>();
+        
         GetComponent<MeshRenderer>().enabled = true;
         bIsActive = true;
         bIsObtained = true;        
@@ -93,7 +95,7 @@ public class WeaponBase : Weapon, ISaveable
         }
 
         //Currently reloading automatically, can change based on player input at later date
-        if (m_currentAmmoCount <= 0 && m_overallAmmoCount >= 6)
+        if (m_currentAmmoCount <= 0 && m_overallAmmoCount >= 6 || Input.GetButtonDown("Reload"))
         {
             StartCoroutine(OnReload());
             return;
@@ -121,8 +123,12 @@ public class WeaponBase : Weapon, ISaveable
 
         yield return new WaitForSeconds(m_reloadTime);
 
-        m_currentAmmoCount = m_weaponClipSize;
-        m_overallAmmoCount -= m_weaponClipSize;
+       while(m_currentAmmoCount < m_weaponClipSize && m_overallAmmoCount > 0)
+        {
+           m_currentAmmoCount++;
+           m_overallAmmoCount--;    
+        }       
+
         m_ammoUI.SetAmmoText(m_currentAmmoCount, m_overallAmmoCount);
         bIsReloading = false;
 
@@ -152,7 +158,7 @@ public class WeaponBase : Weapon, ISaveable
 
             //Only damages if asset has "Target" script
             Health target = hitInfo.transform.GetComponent<Health>();
-            if (target != null)
+            if (target != null && target.gameObject.tag != "Player")
             {
                 target.TakeDamage(m_damageAmount);
                 reticuleAnimator.SetTrigger("isTargetted");
@@ -199,7 +205,7 @@ public class WeaponBase : Weapon, ISaveable
             //Debug.Log(targetInfo.transform.name);
        
             Health target = targetInfo.transform.GetComponent<Health>();
-            if (target != null)
+            if (target != null && target.gameObject.tag != "Player")
             {
                 reticuleAnimator.SetBool("isTargetted", true);
             }

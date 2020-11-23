@@ -387,7 +387,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -1.4335022, y: 0.0034484863}
+  m_AnchoredPosition: {x: -11.6, y: -8.6}
   m_SizeDelta: {x: -2.8670044, y: -0.006954193}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2015620896
@@ -3214,6 +3214,7 @@ GameObject:
   - component: {fileID: 5317141236891337173}
   - component: {fileID: 5628005310371962701}
   - component: {fileID: 9030966665346086339}
+  - component: {fileID: 3071094781508063445}
   m_Layer: 9
   m_Name: HUD
   m_TagString: Untagged
@@ -3304,6 +3305,21 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &3071094781508063445
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3947086299160732736}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3468ef6f888c53d4380d21f1cdb32dc7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_healthUI: {fileID: 0}
+  m_armorUI: {fileID: 0}
+  m_ammoUI: {fileID: 0}
 --- !u!1 &3987769228802818061
 GameObject:
   m_ObjectHideFlags: 0
@@ -3690,7 +3706,7 @@ Animator:
   m_GameObject: {fileID: 4141205591349442875}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 7b000f7453b1b3f469f26152c43be167, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -6899,6 +6915,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 366880540873360629}
     m_Modifications:
+    - target: {fileID: 3819901122162054977, guid: 5cfee47750749cc45a95f577ae14f0a6,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 3843353458027199320, guid: 5cfee47750749cc45a95f577ae14f0a6,
         type: 3}
       propertyPath: m_Name
