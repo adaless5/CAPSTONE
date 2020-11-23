@@ -19,33 +19,33 @@ public class SaveSystem : MonoBehaviour
         RESPAWNINFO,
     }
 
-    public static void Save(string gameObjectName, string variableName, int val, SaveType saveType = SaveType.DEFAULT)
+    public static void Save(string gameObjectName, string variableName,string sceneName, int val, SaveType saveType = SaveType.DEFAULT)
     {
-        string id = GetSaveID(gameObjectName, variableName);
+        string id = GetSaveID(gameObjectName, variableName, sceneName);
         PlayerPrefs.SetInt(id, val);
 
         if (saveType == SaveType.DEFAULT) DefaultIDRegistry.Add(id);
     }
 
-    public static void Save(string gameObjectName, string variableName, string val, SaveType saveType = SaveType.DEFAULT)
+    public static void Save(string gameObjectName, string variableName, string sceneName, string val, SaveType saveType = SaveType.DEFAULT)
     {
-        string id = GetSaveID(gameObjectName, variableName);
+        string id = GetSaveID(gameObjectName, variableName, sceneName);
         PlayerPrefs.SetString(id, val);
 
         if (saveType == SaveType.DEFAULT) DefaultIDRegistry.Add(id);
     }
 
-    public static void Save(string gameObjectName, string variableName, float val, SaveType saveType = SaveType.DEFAULT)
+    public static void Save(string gameObjectName, string variableName, string sceneName, float val, SaveType saveType = SaveType.DEFAULT)
     {
-        string id = GetSaveID(gameObjectName, variableName);
+        string id = GetSaveID(gameObjectName, variableName, sceneName);
         PlayerPrefs.SetFloat(id, val);
 
         if (saveType == SaveType.DEFAULT) DefaultIDRegistry.Add(id);
     }
 
-    public static void Save(string gameObjectName, string variableName, bool val, SaveType saveType = SaveType.DEFAULT)
+    public static void Save(string gameObjectName, string variableName, string sceneName, bool val, SaveType saveType = SaveType.DEFAULT)
     {
-        string id = GetSaveID(gameObjectName, variableName);
+        string id = GetSaveID(gameObjectName, variableName, sceneName);
         switch (val)
         {
             case false: PlayerPrefs.SetInt(id, 0); break;
@@ -60,20 +60,14 @@ public class SaveSystem : MonoBehaviour
         PlayerPrefs.SetString(key, val);
     }
 
-    //public static void Save<T>(string gameObjectName, string variableName, T obj)
-    //{
-    //    string json = JsonUtility.ToJson(obj);
-    //    PlayerPrefs.SetString(GetSaveID(gameObjectName,variableName), json);
-    //}
-
-    public static int LoadInt(string gameObjectName, string variableName)
+    public static int LoadInt(string gameObjectName, string variableName, string sceneName)
     {
-        return PlayerPrefs.GetInt(GetSaveID(gameObjectName, variableName));
+        return PlayerPrefs.GetInt(GetSaveID(gameObjectName, variableName, sceneName));
     }
 
-    public static bool LoadBool(string gameObjectName, string variableName)
+    public static bool LoadBool(string gameObjectName, string variableName, string sceneName)
     {
-        int val = PlayerPrefs.GetInt(GetSaveID(gameObjectName, variableName));
+        int val = PlayerPrefs.GetInt(GetSaveID(gameObjectName, variableName, sceneName));
         switch (val)
         {
             case 0: return false;
@@ -82,9 +76,9 @@ public class SaveSystem : MonoBehaviour
         }
     }
 
-    public static string LoadString(string gameObjectName, string variableName)
+    public static string LoadString(string gameObjectName, string variableName, string sceneName)
     {
-        return PlayerPrefs.GetString(GetSaveID(gameObjectName, variableName));
+        return PlayerPrefs.GetString(GetSaveID(gameObjectName, variableName, sceneName));
     }
 
     public static string StaticLoadString(string key)
@@ -92,22 +86,14 @@ public class SaveSystem : MonoBehaviour
         return PlayerPrefs.GetString(key);
     }
 
-    public static float LoadFloat(string gameObjectName, string variableName)
+    public static float LoadFloat(string gameObjectName, string variableName, string sceneName)
     {
-        return PlayerPrefs.GetFloat(GetSaveID(gameObjectName, variableName));
+        return PlayerPrefs.GetFloat(GetSaveID(gameObjectName, variableName,sceneName));
     }
 
-    //public static T LoadObject<T>(string gameObjectName, string variableName)
-    //{
-
-    //    T obj = JsonUtility.FromJson<T>(PlayerPrefs.GetString(GetSaveID(gameObjectName,variableName)));
-    //    return obj;
-
-    //}
-
-    public static void RemoveAtKey(string gameObjectName, string variableName)
+    public static void RemoveAtKey(string gameObjectName, string variableName, string sceneName)
     {
-        PlayerPrefs.DeleteKey(GetSaveID(gameObjectName, variableName));
+        PlayerPrefs.DeleteKey(GetSaveID(gameObjectName, variableName, sceneName));
     }
 
     public static void ResetSaveEventDelegateList()
@@ -119,9 +105,9 @@ public class SaveSystem : MonoBehaviour
         }
     }
 
-    public static string GetSaveID(string gameObjectName, string variableName)
+    public static string GetSaveID(string gameObjectName, string variableName, string sceneName)
     {
-        return (gameObjectName + variableName + SceneManager.GetActiveScene().name);
+        return (gameObjectName + variableName + sceneName);
     }
 
     /// 

@@ -125,32 +125,32 @@ public class Health : MonoBehaviour, ISaveable
 
     public void SaveDataOnSceneChange()
     {
-        SaveSystem.Save(gameObject.name, "isDead", isDead);
+        SaveSystem.Save(gameObject.name, "isDead", gameObject.scene.name, isDead);
 
-        SaveSystem.Save(gameObject.name, "posX", transform.position.x);
-        SaveSystem.Save(gameObject.name, "posY", transform.position.y);
-        SaveSystem.Save(gameObject.name, "posZ", transform.position.z);
+        SaveSystem.Save(gameObject.name, "posX", gameObject.scene.name, transform.position.x);
+        SaveSystem.Save(gameObject.name, "posY", gameObject.scene.name, transform.position.y);
+        SaveSystem.Save(gameObject.name, "posZ", gameObject.scene.name, transform.position.z);
 
-        SaveSystem.Save(gameObject.name, "rotX", transform.rotation.x);
-        SaveSystem.Save(gameObject.name, "rotY", transform.rotation.y);
-        SaveSystem.Save(gameObject.name, "rotZ", transform.rotation.z);
-        SaveSystem.Save(gameObject.name, "rotW", transform.rotation.w);
+        SaveSystem.Save(gameObject.name, "rotX", gameObject.scene.name, transform.rotation.x);
+        SaveSystem.Save(gameObject.name, "rotY", gameObject.scene.name, transform.rotation.y);
+        SaveSystem.Save(gameObject.name, "rotZ", gameObject.scene.name, transform.rotation.z);
+        SaveSystem.Save(gameObject.name, "rotW", gameObject.scene.name, transform.rotation.w);
     }
 
     public void LoadDataOnSceneEnter()
     {
-        isDead = SaveSystem.LoadBool(gameObject.name, "isDead");
+        isDead = SaveSystem.LoadBool(gameObject.name, "isDead", gameObject.scene.name);
 
-        if (SaveSystem.LoadFloat(gameObject.name, "posX") != 0)
+        if (SaveSystem.LoadFloat(gameObject.name, "posX", gameObject.scene.name) != 0)
         {
-            transform.position = new Vector3(SaveSystem.LoadFloat(gameObject.name, "posX"), SaveSystem.LoadFloat(gameObject.name, "posY"), SaveSystem.LoadFloat(gameObject.name, "posZ"));
+            transform.position = new Vector3(SaveSystem.LoadFloat(gameObject.name, "posX", gameObject.scene.name), SaveSystem.LoadFloat(gameObject.name, "posY", gameObject.scene.name), SaveSystem.LoadFloat(gameObject.name, "posZ", gameObject.scene.name));
         }
 
         transform.rotation = new Quaternion(
-            SaveSystem.LoadFloat(gameObject.name, "rotX"),
-            SaveSystem.LoadFloat(gameObject.name, "rotY"),
-            SaveSystem.LoadFloat(gameObject.name, "rotZ"),
-            SaveSystem.LoadFloat(gameObject.name, "rotW"));
+            SaveSystem.LoadFloat(gameObject.name, "rotX", gameObject.scene.name),
+            SaveSystem.LoadFloat(gameObject.name, "rotY", gameObject.scene.name),
+            SaveSystem.LoadFloat(gameObject.name, "rotZ", gameObject.scene.name),
+            SaveSystem.LoadFloat(gameObject.name, "rotW", gameObject.scene.name));
     }
 
 }

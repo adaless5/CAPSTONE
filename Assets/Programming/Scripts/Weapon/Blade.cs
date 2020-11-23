@@ -91,14 +91,14 @@ public class Blade : Equipment, ISaveable
 
     public void SaveDataOnSceneChange()
     {
-        SaveSystem.Save(gameObject.name, "bIsActive", bIsActive);
-        SaveSystem.Save(gameObject.name, "bIsObtained", bIsObtained);
+        SaveSystem.Save(gameObject.name, "bIsActive", gameObject.scene.name, bIsActive);
+        SaveSystem.Save(gameObject.name, "bIsObtained", gameObject.scene.name, bIsObtained);
 
     }   
 
     public void LoadDataOnSceneEnter()
     {
-        bIsActive = SaveSystem.LoadBool(gameObject.name, "bIsActive");
-        bIsObtained = SaveSystem.LoadBool(gameObject.name, "bIsObtained");
+        bIsActive = SaveSystem.LoadBool(gameObject.name, "bIsActive", gameObject.scene.name);
+        bIsObtained = SaveSystem.LoadBool(gameObject.name, "bIsObtained", gameObject.scene.name);
     }
 }

@@ -37,11 +37,11 @@ public class EquipmentPickup : MonoBehaviour, ISaveable
 
     public void SaveDataOnSceneChange()
     {
-        SaveSystem.Save(gameObject.name, "isEnabled", isUsed);
+        SaveSystem.Save(gameObject.name, "isEnabled",gameObject.scene.name, isUsed);
     }   
 
     public void LoadDataOnSceneEnter()
     {
-        isUsed = SaveSystem.LoadBool(gameObject.name, "isEnabled");
+        isUsed = SaveSystem.LoadBool(gameObject.name, "isEnabled", gameObject.scene.name);
     }
 }

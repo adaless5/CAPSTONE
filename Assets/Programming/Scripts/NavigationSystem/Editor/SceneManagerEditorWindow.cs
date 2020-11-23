@@ -203,7 +203,7 @@ public class SceneManagerEditorWindow : EditorWindow
                                         {
                                             SceneConnectorRegistry.Remove(connector.ID);
                                             SceneConnectorRegistry.RemoveAllDestinationInfoWithDestinationID(connector.ID);
-                                            SaveSystem.RemoveAtKey(connector.name + connector.sceneName,"");
+                                            SaveSystem.RemoveAtKey(connector.name + connector.sceneName,"",connector.sceneName);
                                         }
                                         GUI.backgroundColor = Color.grey;
                                     }
