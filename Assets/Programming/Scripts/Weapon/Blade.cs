@@ -6,18 +6,23 @@ using UnityEngine;
 public class Blade : Equipment, ISaveable
 {
     [SerializeField] int Damage { get; } = 50;
+    [SerializeField] float KnockBackForce = 1500f;
     public ALTPlayerController playerController;
 
     Animator _animationswing;
     BoxCollider _hitbox;
     bool _bisAttacking;
 
-    Camera _cam;
-
     // Start is called before the first frame update
     public override void Start()
     {
         //base.Start(); 
+
+        if(playerController == null)
+        {
+            playerController = FindObjectOfType<ALTPlayerController>();
+        }
+
         _bisAttacking = false;
         _animationswing = GetComponent<Animator>();
         _hitbox = GetComponent<BoxCollider>();
@@ -60,7 +65,6 @@ public class Blade : Equipment, ISaveable
     {
         if (playerController.CheckForUseEquipmentInput() && _bisAttacking == false)
         {
-            Debug.Log("Swing");
             _animationswing.SetTrigger("Swing");
             _hitbox.enabled = true;
             _bisAttacking = true;
@@ -73,18 +77,34 @@ public class Blade : Equipment, ISaveable
 
     }
 
-    public int GetDamage()
-    {
-        return Damage;
-    }
-
     private void OnTriggerEnter(Collider other)
     {
-        DestructibleObject obj = other.GetComponentInParent<DestructibleObject>();
-        if (obj)
+        if (other.GetComponentInParent<DestructibleObject>())
         {
-            Debug.Log("HIT");
-            obj.Break(gameObject.tag);
+            DestructibleObject obj = other.GetComponentInParent<DestructibleObject>();
+            if (obj)
+            {
+                obj.Break(gameObject.tag);
+                return;
+            }
+        }
+        if(other.GetComponentInParent<Health>())
+        {
+            Health target = other.transform.GetComponent<Health>();
+            if (target != null)
+            {
+                target.TakeDamage(Damage);
+            }
+        }
+        if(other.GetComponent<Rigidbody>())
+        {
+            Rigidbody target = other.transform.GetComponent<Rigidbody>();
+
+            if (target != null)
+            {
+                Vector3 hitDir = playerController.transform.position - target.transform.position;
+                target.AddForce(hitDir.normalized * -KnockBackForce);
+            }
         }
         _hitbox.enabled = false;
     }
