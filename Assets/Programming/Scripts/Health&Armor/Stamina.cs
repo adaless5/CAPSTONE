@@ -10,35 +10,37 @@ public class Stamina : MonoBehaviour
     [SerializeField]
     private float m_maxStamina;
     [SerializeField]
-    private float m_energyLossAmount;
-    [SerializeField]
-    private float m_energyRegenAmount;
+    private float m_energyAmount;    
     [SerializeField]
     private float m_regenRate;
-    [SerializeField]
+
+    private float m_timerMax;
     private float m_staminaTimer;
+
+    public StaminaUI staminaBar;
+    private bool bIsRegenerating;
 
     // Start is called before the first frame update
     void Start()
     {
-        m_stamina = 100f;
-        m_energyLossAmount = 5f;
-        m_energyRegenAmount = 15f;
+        //stamina settings
         m_maxStamina = 100f;
-        m_regenRate = 0.3f;
-        m_staminaTimer = 3f;
+        m_stamina = m_maxStamina;
+        m_energyAmount = 2f;       
+        m_regenRate = 0.25f;       
+        bIsRegenerating = false;
+        m_timerMax = 0.15f;
+        m_staminaTimer = m_timerMax;
+
+        //stamina UI        
+        staminaBar = FindObjectOfType<StaminaUI>();
+        if (staminaBar != null)
+            staminaBar.SetMaxStamina(m_maxStamina);
     }
+
     void Update()
     {
-        if (m_stamina < m_maxStamina)
-        {
-            m_staminaTimer -= Time.deltaTime;
-        }
-
-        if (m_staminaTimer <= 0)
-        {            
-            StartCoroutine(RegenerateStamina());
-        }
+        
     }
 
     public float GetCurrentStamina()
@@ -48,23 +50,44 @@ public class Stamina : MonoBehaviour
 
     public void UseStamina()
     {
-        if(m_stamina > 0)
+        bIsRegenerating = false;
+        
+        if (m_stamina > 0)
         {
-            m_stamina -= m_energyLossAmount;
+            
+            m_staminaTimer -= Time.deltaTime;
+            if (m_staminaTimer <= 0)
+            {
+                m_stamina -= m_energyAmount;
+                m_staminaTimer = m_timerMax;
+
+                if (staminaBar != null)
+                    staminaBar.SetStamina(m_stamina);
+                Debug.Log("Losing Stamina. Stamina at " + m_stamina);
+            }        
+
         }
-        Debug.Log("Losing Stamina. Stamina at " + m_stamina);
+        m_stamina = Mathf.Clamp(m_stamina, 0, m_maxStamina);
     }
 
     public IEnumerator RegenerateStamina()
     {
-        while (m_stamina != m_maxStamina)
+        bIsRegenerating = true;
+        while (m_stamina < m_maxStamina && bIsRegenerating == true)
         {
             Debug.Log("Regenerating...");
 
-            m_stamina += m_energyRegenAmount;            
+            m_stamina += m_energyAmount;
+            Debug.Log("Stamina amount: " + m_stamina);
             yield return new WaitForSeconds(m_regenRate);
+
+            if (staminaBar != null)
+                staminaBar.SetStamina(m_stamina);
+
+            m_stamina = Mathf.Clamp(m_stamina, 0, m_maxStamina);
         }
 
+        bIsRegenerating = false;
         Debug.Log("Stamina Regenerated");
         yield return null;
     }

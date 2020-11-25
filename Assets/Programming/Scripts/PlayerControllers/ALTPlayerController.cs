@@ -295,6 +295,7 @@ public class ALTPlayerController : MonoBehaviour
             m_health.TakeDamage(damage);             
         }
     }
+  
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
@@ -330,8 +331,15 @@ public class ALTPlayerController : MonoBehaviour
 
     public bool CheckForSprintInput()
     {
-        return Input.GetButton("Sprint");
+        return Input.GetButton("Sprint");        
     }
+
+    public bool CheckForSprintInputReleased()
+    {
+        return Input.GetButtonUp("Sprint");
+    }
+
+
 
     public void PlayerRotation()
     {
@@ -352,9 +360,15 @@ public class ALTPlayerController : MonoBehaviour
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
         
-        if(CheckForSprintInput())
+        //Sprinting logic & use of player's stamina - VR
+        if(CheckForSprintInput() && m_stamina.GetCurrentStamina() > 0)
         {
             m_Velocity = transform.right * x * m_SprintSpeed + transform.forward * z * m_SprintSpeed;
+            m_stamina.UseStamina();
+        }
+        else if(CheckForSprintInputReleased())
+        {
+            m_stamina.StartCoroutine(m_stamina.RegenerateStamina());
         }
         else
         {
