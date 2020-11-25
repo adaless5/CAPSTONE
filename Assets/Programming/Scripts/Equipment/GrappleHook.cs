@@ -16,8 +16,10 @@ public class GrappleHook : Equipment, ISaveable
     public float m_GrappleDeploySpeed = 100.0f;
     public float m_GrappleMomentumMultiplier = 7.0f;
     public float m_GrappleJumpMultiplier = 60.0f;
+    const float MAX_GRAPPLE_DIST = 100.0f;
 
     public ALTPlayerController m_PlayerController;
+    public GameObject m_GrappleMarker;
 
     void Awake()
     {
@@ -25,6 +27,8 @@ public class GrappleHook : Equipment, ISaveable
         SaveSystem.SaveEvent += SaveDataOnSceneChange;
 
         gameObject.GetComponentInChildren<MeshRenderer>().enabled = false;
+        m_GrappleMarker.GetComponent<SpriteRenderer>().enabled = false;
+        //m_GrappleMarker.transform.rotation = new Quaternion()
     }
 
     void OnDisable()
@@ -56,6 +60,26 @@ public class GrappleHook : Equipment, ISaveable
                     break;
             }
         }
+
+        Vector3 camPos = m_PlayerController._camera.transform.position;
+        Vector3 camForwardVec = m_PlayerController._camera.transform.forward;
+        if(bIsActive && bIsObtained)
+        {
+            if (Physics.Raycast(camPos, camForwardVec, out RaycastHit raycastHit, MAX_GRAPPLE_DIST))
+            {
+                print("Within Grapple Distance");
+                m_GrappleMarker.transform.position = raycastHit.point;
+
+                m_GrappleMarker.GetComponent<SpriteRenderer>().enabled = true;
+            }
+            else
+            {
+                print("Not Within Grapple Distance");
+                //m_GrappleMarker.transform.position = Vector3.zero;
+                m_GrappleMarker.GetComponent<SpriteRenderer>().enabled = false;
+            }
+        }
+
     }
 
     public override void UseTool()
@@ -65,7 +89,7 @@ public class GrappleHook : Equipment, ISaveable
             Vector3 camPos = m_PlayerController._camera.transform.position;
             Vector3 camForwardVec = m_PlayerController._camera.transform.forward;
 
-            if (Physics.Raycast(camPos, camForwardVec, out RaycastHit raycastHit))
+            if (Physics.Raycast(camPos, camForwardVec, out RaycastHit raycastHit, MAX_GRAPPLE_DIST))
             {
                 m_GrappleTarget = raycastHit.point;
                 m_GrappleHookLength = 0.0f;
