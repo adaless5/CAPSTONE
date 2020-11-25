@@ -34,7 +34,7 @@ public class WeaponBase : Weapon, ISaveable
         SaveSystem.SaveEvent += SaveDataOnSceneChange;
         m_weaponClipSize = 6;
         m_reloadTime = 2.0f;
-        m_fireRate = 10.0f;
+        m_fireRate = 0.4f; //Default Gun shoots every 2.5 seconds, can be adjusted in editor - VR
         m_hitImpact = 50.0f;
         m_weaponRange = 50.0f;
         m_fireStart = 0.0f;
