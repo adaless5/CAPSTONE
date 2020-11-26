@@ -25,6 +25,7 @@ public class ALTPlayerController : MonoBehaviour
     {
         Play,
         Menu,
+        Wheel,
     }
 
     public PlayerState m_PlayerState { get; private set; }
@@ -50,7 +51,8 @@ public class ALTPlayerController : MonoBehaviour
     public Belt _weaponBelt;
 
     public Health m_health;
-    public Armor m_armor;  
+    public Armor m_armor;
+
 
     public Canvas EquipmentWheel;
     public Canvas WeaponWheel;
@@ -83,9 +85,15 @@ public class ALTPlayerController : MonoBehaviour
 
     bool bOnSlope = false;
 
+    //Death mechanic stuff
+    bool isDead = false;
+    Vector3 _respawnPosition;
+
     private void Awake()
-    {        
+    {
         OnTakeDamage += TakeDamage;
+        _respawnPosition = gameObject.transform.position;
+        m_ControllerState = ControllerState.Play;
     }
 
     void Start()
@@ -96,7 +104,7 @@ public class ALTPlayerController : MonoBehaviour
 
         //Initializing Members
         m_health = GetComponent<Health>();
-        m_armor = GetComponent<Armor>();     
+        m_armor = GetComponent<Armor>();
         _equipmentBelt = FindObjectOfType<Belt>();
         _weaponBelt = FindObjectOfType<WeaponBelt>();
 
@@ -120,6 +128,7 @@ public class ALTPlayerController : MonoBehaviour
         //Subscribing to Event Broker
         EventBroker.CallOnPlayerSpawned(gameObject);
         OnTakeDamage += m_armor.ResetArmorTimer;
+        EventBroker.OnPlayerDeath += PlayerDeath;
 
         Cursor.lockState = CursorLockMode.Locked;
 
@@ -143,10 +152,11 @@ public class ALTPlayerController : MonoBehaviour
                 break;
 
             case ControllerState.Menu:
-                PlayerRotation();
-                PlayerMovement();
                 break;
 
+            case ControllerState.Wheel:
+                PlayerMovement();
+                break;
         }
 
         if (Input.GetButtonDown("Pause"))
@@ -156,6 +166,10 @@ public class ALTPlayerController : MonoBehaviour
 
         HandleEquipmentWheels();
 
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            EventBroker.CallOnPlayerDeath();
+        }
 
         if (EquipmentWheel.enabled == true)
         {
@@ -227,7 +241,7 @@ public class ALTPlayerController : MonoBehaviour
             }
         }
 
-        if (Physics.Raycast(transform.position,  dir, out hit, dist))
+        if (Physics.Raycast(transform.position, dir, out hit, dist))
         {
             _hitNormal = hit.normal;
 
@@ -241,7 +255,7 @@ public class ALTPlayerController : MonoBehaviour
 
             _slopeAcceleration = groundTangent;
 
-            if(_controller.isGrounded && _slopeAngle <= 140.0f )
+            if (_controller.isGrounded && _slopeAngle <= 140.0f)
             {
                 bOnSlope = true;
             }
@@ -251,6 +265,32 @@ public class ALTPlayerController : MonoBehaviour
             }
 
         }
+
+        //Stand in death animation -LCC
+        if(isDead)
+            gameObject.transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(new Vector3(0, 0, 100)), Time.deltaTime * 5.0f);
+    }
+
+    //Death and Respawn functionality -LCC
+    public void PlayerRespawn()
+    {
+        m_health.Heal(m_health.GetMaxHealth());
+        isDead = false;
+        m_ControllerState = ControllerState.Play;
+        _controller.enabled = true;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        gameObject.transform.position = _respawnPosition;
+        gameObject.transform.rotation = Quaternion.identity;
+    }
+
+    void PlayerDeath()
+    {
+        _controller.enabled = false;
+        m_ControllerState = ControllerState.Menu;
+        isDead = true;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
     private void ControllerCheck()
@@ -292,7 +332,7 @@ public class ALTPlayerController : MonoBehaviour
         else
         {
             m_health.TakeDamage(damage);
-             
+
         }
     }
 
@@ -333,15 +373,11 @@ public class ALTPlayerController : MonoBehaviour
         float mouseX = Input.GetAxis("Mouse X") * m_LookSensitivity;
         float mouseY = Input.GetAxis("Mouse Y") * m_LookSensitivity;
 
+        m_XRotation += mouseY;
+        m_XRotation = Mathf.Clamp(m_XRotation, -90.0f, 90.0f);
+        _camera.transform.localRotation = Quaternion.Euler(-m_XRotation, 0f, 0f);
+        transform.Rotate(Vector3.up * mouseX);
 
-
-        if (m_ControllerState == ControllerState.Play)
-        {
-            m_XRotation += mouseY;
-            m_XRotation = Mathf.Clamp(m_XRotation, -90.0f, 90.0f);
-            _camera.transform.localRotation = Quaternion.Euler(-m_XRotation, 0f, 0f);
-            transform.Rotate(Vector3.up * mouseX);
-        }
     }
 
     public void PlayerMovement()
@@ -421,7 +457,7 @@ public class ALTPlayerController : MonoBehaviour
             EquipmentWheel.enabled = true;
             Time.timeScale = 0.3f;
             Cursor.lockState = CursorLockMode.None;
-            m_ControllerState = ControllerState.Menu;
+            m_ControllerState = ControllerState.Wheel;
         }
 
         if (Input.GetButtonUp("EquipmentBelt"))
@@ -438,7 +474,7 @@ public class ALTPlayerController : MonoBehaviour
             WeaponWheel.enabled = true;
             Time.timeScale = 0.3f;
             Cursor.lockState = CursorLockMode.None;
-            m_ControllerState = ControllerState.Menu;
+            m_ControllerState = ControllerState.Wheel;
 
         }
 
