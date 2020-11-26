@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class MineSpawner : Weapon, ISaveable
 {
-    public float Force = 20f;
+    public float Force = 800f;
     public float CoolDown = 5f;
     public GameObject minePrefab;
     public ALTPlayerController m_playerController;
@@ -23,6 +23,11 @@ public class MineSpawner : Weapon, ISaveable
     {
         LoadDataOnSceneEnter();
         SaveSystem.SaveEvent += SaveDataOnSceneChange;
+
+        if(m_playerController == null)
+        {
+            m_playerController = FindObjectOfType<ALTPlayerController>();
+        }
     }
 
     void OnDisable()
@@ -72,6 +77,7 @@ public class MineSpawner : Weapon, ISaveable
         if(mine)
         {
             mine.GetComponent<Rigidbody>().AddForce(transform.forward * Force);
+            mine.GetComponent<Rigidbody>().AddTorque(new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), -90f));
         }
     }
 
