@@ -79,6 +79,8 @@ public class ALTPlayerController : MonoBehaviour
 
     float joyAngle;
 
+    const float POST_JUMP_FALL_MULTIPLIER = 60.0f;
+
     bool isSelected = false;
 
     bool bOnSlope = false;
@@ -308,6 +310,11 @@ public class ALTPlayerController : MonoBehaviour
         return Input.GetButtonDown("Jump");
     }
 
+    public bool CheckForJumpInputReleased()
+    {
+        return Input.GetButtonUp("Jump");
+    }
+
     public bool CheckForUseEquipmentInput()
     {
         return Input.GetButtonDown("Equipment");
@@ -411,7 +418,17 @@ public class ALTPlayerController : MonoBehaviour
                 {
                     m_YVelocity = -2.0f;
                 }
-
+                if(CheckForJumpInputReleased() && m_YVelocity > 0.0f)
+                {
+                   if (m_YVelocity > 0.01f)
+                    {
+                        m_YVelocity *= 0.5f;
+                    }
+                   else
+                    {
+                        m_YVelocity = 0.0f;
+                    }
+                }
             }
         }
     }
