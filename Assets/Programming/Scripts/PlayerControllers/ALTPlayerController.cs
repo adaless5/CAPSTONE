@@ -42,6 +42,7 @@ public class ALTPlayerController : MonoBehaviour
     Vector3 m_Velocity;
     float m_YVelocity;
     float m_MoveSpeed = 10.0f;
+    float m_SprintSpeed = 15.0f;
     public float m_Gravity = -60.0f;
     public float m_JumpHeight = 30.0f;
     public Vector3 m_Momentum { get; private set; } = Vector3.zero;
@@ -50,7 +51,8 @@ public class ALTPlayerController : MonoBehaviour
     public Belt _weaponBelt;
 
     public Health m_health;
-    public Armor m_armor;  
+    public Armor m_armor;
+    public Stamina m_stamina;
 
     public Canvas EquipmentWheel;
     public Canvas WeaponWheel;
@@ -83,6 +85,8 @@ public class ALTPlayerController : MonoBehaviour
 
     bool bOnSlope = false;
 
+   
+
     private void Awake()
     {        
         OnTakeDamage += TakeDamage;
@@ -96,7 +100,8 @@ public class ALTPlayerController : MonoBehaviour
 
         //Initializing Members
         m_health = GetComponent<Health>();
-        m_armor = GetComponent<Armor>();     
+        m_armor = GetComponent<Armor>();
+        m_stamina = GetComponent<Stamina>();
         _equipmentBelt = FindObjectOfType<Belt>();
         _weaponBelt = FindObjectOfType<WeaponBelt>();
 
@@ -194,9 +199,6 @@ public class ALTPlayerController : MonoBehaviour
             joyY = 0;
 
             {
-
-
-
                 if (m_ControllerType == ControllerType.Controller)
                 {
                     joyX += Input.GetAxis("Mouse X") * m_LookSensitivity;
@@ -249,7 +251,6 @@ public class ALTPlayerController : MonoBehaviour
             {
                 bOnSlope = false;
             }
-
         }
     }
 
@@ -291,10 +292,10 @@ public class ALTPlayerController : MonoBehaviour
         }
         else
         {
-            m_health.TakeDamage(damage);
-             
+            m_health.TakeDamage(damage);             
         }
     }
+  
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
@@ -328,12 +329,22 @@ public class ALTPlayerController : MonoBehaviour
         return Input.GetButtonUp("Fire1") || rightTrigger;
     }
 
+    public bool CheckForSprintInput()
+    {
+        return Input.GetButton("Sprint");        
+    }
+
+    public bool CheckForSprintInputReleased()
+    {
+        return Input.GetButtonUp("Sprint");
+    }
+
+
+
     public void PlayerRotation()
     {
         float mouseX = Input.GetAxis("Mouse X") * m_LookSensitivity;
         float mouseY = Input.GetAxis("Mouse Y") * m_LookSensitivity;
-
-
 
         if (m_ControllerState == ControllerState.Play)
         {
@@ -348,8 +359,21 @@ public class ALTPlayerController : MonoBehaviour
     {
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
-
-        m_Velocity = transform.right * x * m_MoveSpeed + transform.forward * z * m_MoveSpeed;
+        
+        //Sprinting logic & use of player's stamina - VR
+        if(CheckForSprintInput() && m_stamina.GetCurrentStamina() > 0)
+        {
+            m_Velocity = transform.right * x * m_SprintSpeed + transform.forward * z * m_SprintSpeed;
+            m_stamina.UseStamina();
+        }
+        else if(CheckForSprintInputReleased())
+        {
+            m_stamina.StartCoroutine(m_stamina.RegenerateStamina());
+        }
+        else
+        {
+            m_Velocity = transform.right * x * m_MoveSpeed + transform.forward * z * m_MoveSpeed;
+        }
 
         if (!bOnSlope)
         {
