@@ -22,7 +22,7 @@ public class TEST_EnemyDamage : MonoBehaviour
         Blade blade = other.GetComponent<Blade>();
         if(blade)
         {
-            health -= blade.GetDamage();
+            //health -= blade.GetDamage();
         }
     }
 }
