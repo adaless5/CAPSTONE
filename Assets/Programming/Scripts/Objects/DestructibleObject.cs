@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class DestructibleObject : MonoBehaviour, ISaveable
 {
-    bool bDebug = true;
+    bool bDebug = false;
 
     [Tooltip("This list should contain every version of the mesh starting from least broken and ending in broken")]
     [SerializeField] GameObject[] DestructionStates = { };

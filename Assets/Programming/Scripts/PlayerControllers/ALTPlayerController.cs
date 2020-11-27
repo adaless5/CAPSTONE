@@ -425,6 +425,7 @@ public class ALTPlayerController : MonoBehaviour
                 if (CheckForJumpInput())
                 {
                     m_YVelocity = m_JumpHeight;
+                    GetComponent<AudioManager_Footsteps>().TriggerJump(false);
                 }
             }
             else if (!_controller.isGrounded)

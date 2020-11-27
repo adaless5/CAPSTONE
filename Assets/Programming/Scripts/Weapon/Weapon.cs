@@ -58,7 +58,7 @@ public abstract class Weapon : Tool
     protected void InitializePlayer(GameObject player)
     {
         _playerController = player.GetComponent<ALTPlayerController>();
-        Debug.Log(_playerController);
+        //Debug.Log(_playerController);
     }
 
 }

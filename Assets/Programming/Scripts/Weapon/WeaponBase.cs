@@ -184,9 +184,11 @@ public class WeaponBase : Weapon, ISaveable
 
     void OnShoot()
     {
+
         //Weapon Recoil amount 
         m_AccumlatedRecoil.z += Vector3.back.z * m_recoilForce;       
         m_AccumlatedRecoil = Vector3.ClampMagnitude(m_AccumlatedRecoil, m_maxRecoilDistance);
+
 
         muzzleFlash.Play();
 

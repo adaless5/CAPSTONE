@@ -28,6 +28,7 @@ public static class QualityOfLifeFunctions
         return array;
     }
 
+
     public static bool CloseEnough(Vector3 v1, Vector3 v2)
     {
         if (!Mathf.Approximately(v1.x, v2.x)) return false;
@@ -43,5 +44,16 @@ public static class QualityOfLifeFunctions
         else if (!Mathf.Approximately(q1.z, q2.z)) return false;
         else if (!Mathf.Approximately(q1.w, q2.w)) return false;
         return true;
+    }
+
+    public static float Scale(float OldMin, float OldMax, float NewMin, float NewMax, float OldValue)
+    {
+
+        float OldRange = (OldMax - OldMin);
+        float NewRange = (NewMax - NewMin);
+        float NewValue = (((OldValue - OldMin) * NewRange) / OldRange) + NewMin;
+
+        return (NewValue);
+
     }
 }
