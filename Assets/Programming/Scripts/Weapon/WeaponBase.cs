@@ -146,8 +146,8 @@ public class WeaponBase : Weapon, ISaveable
 
     void OnShoot()
     {
-        Debug.Log("Current Ammo: " + m_currentAmmoCount);
-        Debug.Log("Overall Ammo: " + m_overallAmmoCount);
+        //Debug.Log("Current Ammo: " + m_currentAmmoCount);
+        //Debug.Log("Overall Ammo: " + m_overallAmmoCount);
 
         muzzleFlash.Play();
 
