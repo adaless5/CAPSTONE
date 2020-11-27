@@ -42,9 +42,11 @@ public class ALTPlayerController : MonoBehaviour
     Vector3 m_Velocity;
     float m_YVelocity;
     float m_MoveSpeed = 10.0f;
+
     float m_SprintSpeed = 15.0f;
-    public float m_Gravity = -60.0f;
-    public float m_JumpHeight = 30.0f;
+    public float m_Gravity = -50.0f;
+    public float m_JumpHeight = 20.0f;
+
     public Vector3 m_Momentum { get; private set; } = Vector3.zero;
 
     public Belt _equipmentBelt;
@@ -81,9 +83,12 @@ public class ALTPlayerController : MonoBehaviour
 
     float joyAngle;
 
+    const float POST_JUMP_FALL_MULTIPLIER = 60.0f;
+
     bool isSelected = false;
 
     bool bOnSlope = false;
+    Vector3 _ControllerCollisionPos = Vector3.zero;
 
    
 
@@ -134,8 +139,9 @@ public class ALTPlayerController : MonoBehaviour
 
     void Update()
     {
-        float dist = 10.0f;
-        Vector3 dir = new Vector3(0.0f, -1.0f, 0.0f);
+        float dist = 100.0f;
+        Vector3 dir = _ControllerCollisionPos - transform.position;
+        Vector3 downdir = new Vector3(0.0f, -1.0f, 0.0f);
         RaycastHit hit;
 
         ControllerCheck();
@@ -229,11 +235,13 @@ public class ALTPlayerController : MonoBehaviour
             }
         }
 
-        if (Physics.Raycast(transform.position,  dir, out hit, dist))
+        Debug.DrawRay(transform.position, dir);
+
+        if (Physics.Raycast(transform.position,  dir, out hit))
         {
             _hitNormal = hit.normal;
 
-            _slopeAngle = Vector3.Angle(dir * dist, hit.normal);
+            _slopeAngle = Vector3.Angle(downdir * dist, hit.normal);
 
             _slopeAcceleration = transform.TransformDirection(m_Velocity);
 
@@ -299,12 +307,18 @@ public class ALTPlayerController : MonoBehaviour
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        //_hitNormal = hit.normal;
+        print("Hit something.");
+        _ControllerCollisionPos = hit.point;
     }
 
     public bool CheckForJumpInput()
     {
         return Input.GetButtonDown("Jump");
+    }
+
+    public bool CheckForJumpInputReleased()
+    {
+        return Input.GetButtonUp("Jump");
     }
 
     public bool CheckForUseEquipmentInput()
@@ -434,7 +448,17 @@ public class ALTPlayerController : MonoBehaviour
                 {
                     m_YVelocity = -2.0f;
                 }
-
+                if(CheckForJumpInputReleased() && m_YVelocity > 0.0f)
+                {
+                   if (m_YVelocity > 0.01f)
+                    {
+                        m_YVelocity *= 0.5f;
+                    }
+                   else
+                    {
+                        m_YVelocity = 0.0f;
+                    }
+                }
             }
         }
     }

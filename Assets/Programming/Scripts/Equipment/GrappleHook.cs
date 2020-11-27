@@ -16,8 +16,12 @@ public class GrappleHook : Equipment, ISaveable
     public float m_GrappleDeploySpeed = 100.0f;
     public float m_GrappleMomentumMultiplier = 7.0f;
     public float m_GrappleJumpMultiplier = 60.0f;
+    const float MAX_GRAPPLE_DIST = 100.0f;
+    const float MIN_GRAPPLE_DIST = 5f;
 
     public ALTPlayerController m_PlayerController;
+    public GameObject m_GrappleMarker;
+    MeshRenderer m_SpriteRenderer;
 
     void Awake()
     {
@@ -25,6 +29,9 @@ public class GrappleHook : Equipment, ISaveable
         SaveSystem.SaveEvent += SaveDataOnSceneChange;
 
         gameObject.GetComponentInChildren<MeshRenderer>().enabled = false;
+        m_SpriteRenderer = m_GrappleMarker.GetComponentInChildren<MeshRenderer>();
+        m_GrappleMarker.SetActive(false);
+        print("Calling Awake.");
     }
 
     void OnDisable()
@@ -45,6 +52,7 @@ public class GrappleHook : Equipment, ISaveable
             {
                 case ALTPlayerController.PlayerState.Idle:
                     UseTool();
+                    HandleGrappleMarker();
                     break;
 
                 case ALTPlayerController.PlayerState.Grappling:
@@ -62,22 +70,28 @@ public class GrappleHook : Equipment, ISaveable
     {
         if (m_PlayerController.CheckForUseEquipmentInput())
         {
+            m_GrappleMarker.SetActive(false);
+
             Vector3 camPos = m_PlayerController._camera.transform.position;
             Vector3 camForwardVec = m_PlayerController._camera.transform.forward;
 
-            if (Physics.Raycast(camPos, camForwardVec, out RaycastHit raycastHit))
+            if (Physics.Raycast(camPos, camForwardVec, out RaycastHit raycastHit, MAX_GRAPPLE_DIST))
             {
-                m_GrappleTarget = raycastHit.point;
-                m_GrappleHookLength = 0.0f;
-                m_GrappleHookTransform.gameObject.SetActive(true);
-                m_GrappleHookTransform.localScale = Vector3.zero;
-                m_PlayerController.ChangePlayerState(ALTPlayerController.PlayerState.GrappleDeployed);
+                if (Vector3.Distance(raycastHit.point, camPos) >= MIN_GRAPPLE_DIST)
+                {
+                    m_GrappleTarget = raycastHit.point;
+                    m_GrappleHookLength = 0.0f;
+                    m_GrappleHookTransform.gameObject.SetActive(true);
+                    m_GrappleHookTransform.localScale = Vector3.zero;
+                    m_PlayerController.ChangePlayerState(ALTPlayerController.PlayerState.GrappleDeployed);
+                }
             }
         }
     }
 
     void HandleGrappleHookDeployed()
     {
+        m_GrappleMarker.SetActive(false);
         gameObject.GetComponentInChildren<MeshRenderer>().enabled = true;
 
         m_GrappleHookTransform.LookAt(m_GrappleTarget);
@@ -94,6 +108,7 @@ public class GrappleHook : Equipment, ISaveable
 
     void HandleGrappleHookMovement()
     {
+        m_GrappleMarker.SetActive(false);
         m_GrappleHookTransform.LookAt(m_GrappleTarget);
 
         float distFromGrappleTarget = Vector3.Distance(m_PlayerPosition.position, m_GrappleTarget);
@@ -121,12 +136,42 @@ public class GrappleHook : Equipment, ISaveable
         }
     }
 
+    void HandleGrappleMarker()
+    {
+        Vector3 camPos = m_PlayerController._camera.transform.position;
+        Vector3 camForwardVec = m_PlayerController._camera.transform.forward;
+        if (bIsActive && bIsObtained)
+        {
+            int layermask = 1 << 9;
+            if (Physics.Raycast(camPos, camForwardVec, out RaycastHit raycastHit, MAX_GRAPPLE_DIST, ~layermask))
+            {
+                if (Vector3.Distance(raycastHit.point, camPos) >= MIN_GRAPPLE_DIST)
+                {
+                    Transform tran = m_SpriteRenderer.gameObject.transform;
+                    tran.position = raycastHit.point;
+                    m_GrappleMarker.SetActive(true);
+                }
+                else
+                {
+                    m_SpriteRenderer.gameObject.transform.position = Vector3.zero;
+                    m_GrappleMarker.SetActive(false);
+                }
+            }
+            else
+            {
+                m_SpriteRenderer.gameObject.transform.position = Vector3.zero;
+                m_GrappleMarker.SetActive(false);
+            }
+        }
+    }
+
     void DeactivateGrappleHook()
     {
         m_PlayerController.ResetGravity();
         m_PlayerController.ChangePlayerState(ALTPlayerController.PlayerState.Idle);
         m_GrappleHookTransform.localScale = Vector3.zero;
         gameObject.GetComponentInChildren<MeshRenderer>().enabled = false;
+        m_GrappleMarker.SetActive(false);
     }
 
     public override void Deactivate()
