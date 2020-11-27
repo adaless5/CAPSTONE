@@ -174,7 +174,7 @@ public class AudioManager_Footsteps : AudioManager
         if (CheckHasLanded() && _isFalling == true) //Fall Finished
         {
             _isFalling = false;
-            Debug.Log(_maxFallVelocity);
+            
             //Trigger a landing sound
             TriggerJump(true,
                 QualityOfLifeFunctions.Scale
