@@ -7,8 +7,8 @@ public class AudioManager_Footsteps : AudioManager
 {
     const int NUM_CONCRETE_FOOTSTEPS = 10;
     const int NUM_DIRT_FOOTSTEPS = 32;
-    const int NUM_DIRT_JUMP_STARTS = 2;
-    const int NUM_CONCRETE_JUMP_STARTS = 3;
+    const int NUM_DIRT_JUMP_STARTS = 6;
+    const int NUM_CONCRETE_JUMP_STARTS = 6;
     const int NUM_DIRT_JUMP_LANDS = 6;
     const int NUM_CONCRETE_JUMP_LANDS = 6;
 
@@ -33,7 +33,9 @@ public class AudioManager_Footsteps : AudioManager
     float _distanceMoved = 0f;
 
     int _footToggle = 0;
-    int _lastFootstepIndex = 0;
+    int _lastFootstepIndex = -1;
+    int _lastJumpStartIndex = -1;
+    int _lastJumpLandIndex = -1;
 
     float _footSeperationWidthFromCenter = 0.2f;
     float _distanceTillFootstepTriggered = 3f;
@@ -258,7 +260,7 @@ public class AudioManager_Footsteps : AudioManager
     }
 
     const int DIRT_JUMP_START_INDEX_START = 42;
-    const int DIRT_JUMP_START_INDEX_END = 43;
+    const int DIRT_JUMP_START_INDEX_END = 47;
     //Picks a random Dirt Jump Start index, (never the same one in a row)
     int PickRandomDirtJumpStart()
     {
@@ -266,14 +268,14 @@ public class AudioManager_Footsteps : AudioManager
         do
         {
             i = Random.Range(DIRT_JUMP_START_INDEX_START, DIRT_JUMP_START_INDEX_END+1);
-        } while (i == _lastFootstepIndex);
-        _lastFootstepIndex = i;
+        } while (i == _lastJumpStartIndex);
+        _lastJumpStartIndex = i;
 
         return i;
     }
 
-    const int CONCRETE_JUMP_START_INDEX_START = 44;
-    const int CONCRETE_JUMP_START_INDEX_END = 46;
+    const int CONCRETE_JUMP_START_INDEX_START = 48;
+    const int CONCRETE_JUMP_START_INDEX_END = 53;
     //Picks a random Concrete Jump Start index, (never the same one in a row)
     int PickRandomConcreteJumpStart()
     {
@@ -281,14 +283,14 @@ public class AudioManager_Footsteps : AudioManager
         do
         {
             i = Random.Range(CONCRETE_JUMP_START_INDEX_START, CONCRETE_JUMP_START_INDEX_END+1);
-        } while (i == _lastFootstepIndex);
-        _lastFootstepIndex = i;
+        } while (i == _lastJumpStartIndex);
+        _lastJumpStartIndex = i;
 
         return i;
     }
 
-    const int DIRT_JUMP_LAND_INDEX_START = 47;
-    const int DIRT_JUMP_LAND_INDEX_END = 52;
+    const int DIRT_JUMP_LAND_INDEX_START = 54;
+    const int DIRT_JUMP_LAND_INDEX_END = 59;
     //Picks a random Dirt Jump Land index, (never the same one in a row)
     int PickRandomDirtJumpLand()
     {
@@ -296,14 +298,14 @@ public class AudioManager_Footsteps : AudioManager
         do
         {
             i = Random.Range(DIRT_JUMP_LAND_INDEX_START, DIRT_JUMP_LAND_INDEX_END+1);
-        } while (i == _lastFootstepIndex);
-        _lastFootstepIndex = i;
+        } while (i == _lastJumpLandIndex);
+        _lastJumpLandIndex = i;
 
         return i;
     }
 
-    const int CONCRETE_JUMP_LAND_INDEX_START = 53;
-    const int CONCRETE_JUMP_LAND_INDEX_END = 58;
+    const int CONCRETE_JUMP_LAND_INDEX_START = 60;
+    const int CONCRETE_JUMP_LAND_INDEX_END = 65;
     //Picks a random Concrete Jump Land index, (never the same one in a row)
     int PickRandomConcreteJumpLand()
     {
@@ -311,8 +313,8 @@ public class AudioManager_Footsteps : AudioManager
         do
         {
             i = Random.Range(CONCRETE_JUMP_LAND_INDEX_START, CONCRETE_JUMP_LAND_INDEX_END+1);
-        } while (i == _lastFootstepIndex);
-        _lastFootstepIndex = i;
+        } while (i == _lastJumpLandIndex);
+        _lastJumpLandIndex = i;
 
         return i;
     }
