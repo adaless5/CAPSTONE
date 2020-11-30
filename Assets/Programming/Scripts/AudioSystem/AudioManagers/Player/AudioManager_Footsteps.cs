@@ -141,6 +141,7 @@ public class AudioManager_Footsteps : AudioManager
         //
     }
 
+    //Runs before update
     void FixedUpdate()
     {
         //Raycast down to find terrain type
@@ -190,6 +191,7 @@ public class AudioManager_Footsteps : AudioManager
         //
     }
 
+    //runs after update
     void LateUpdate()
     {
         //Calculate distance moved
@@ -321,6 +323,10 @@ public class AudioManager_Footsteps : AudioManager
 
     void TriggerFootstep()
     {
+        //Stop Previous footstep
+        StopPreviousFootstep();
+        //
+
         //Get Footstep Index
         int i = 0;
         switch (_terrainType)
@@ -349,6 +355,12 @@ public class AudioManager_Footsteps : AudioManager
 
         //Swap foot for next trigger
         SwapFoot();
+    }
+
+    private void StopPreviousFootstep()
+    {
+        if (_footToggle == 0) _sources[1].Stop();
+        else if (_footToggle == 1) _sources[0].Stop();
     }
 
     public void TriggerJump(bool isLanding, float volumeScale = 1f)
