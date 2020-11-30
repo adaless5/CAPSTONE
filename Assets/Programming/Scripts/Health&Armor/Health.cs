@@ -69,6 +69,7 @@ public class Health : MonoBehaviour, ISaveable
 
         //Clamp values -LCC
         m_HP = Mathf.Clamp(m_HP, 0, m_MaxHealth);
+
     }
 
     public float GetMaxHealth()

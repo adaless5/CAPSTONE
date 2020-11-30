@@ -43,8 +43,11 @@ public class ALTPlayerController : MonoBehaviour
     Vector3 m_Velocity;
     float m_YVelocity;
     float m_MoveSpeed = 10.0f;
-    public float m_Gravity = -60.0f;
-    public float m_JumpHeight = 30.0f;
+
+    float m_SprintSpeed = 15.0f;
+    public float m_Gravity = -50.0f;
+    public float m_JumpHeight = 20.0f;
+
     public Vector3 m_Momentum { get; private set; } = Vector3.zero;
 
     public Belt _equipmentBelt;
@@ -52,7 +55,7 @@ public class ALTPlayerController : MonoBehaviour
 
     public Health m_health;
     public Armor m_armor;
-
+    public Stamina m_stamina;
 
     public Canvas EquipmentWheel;
     public Canvas WeaponWheel;
@@ -81,9 +84,14 @@ public class ALTPlayerController : MonoBehaviour
 
     float joyAngle;
 
+    const float POST_JUMP_FALL_MULTIPLIER = 60.0f;
+
     bool isSelected = false;
 
     bool bOnSlope = false;
+    Vector3 _ControllerCollisionPos = Vector3.zero;
+
+   
 
     //Death mechanic stuff
     bool isDead = false;
@@ -105,6 +113,7 @@ public class ALTPlayerController : MonoBehaviour
         //Initializing Members
         m_health = GetComponent<Health>();
         m_armor = GetComponent<Armor>();
+        m_stamina = GetComponent<Stamina>();
         _equipmentBelt = FindObjectOfType<Belt>();
         _weaponBelt = FindObjectOfType<WeaponBelt>();
 
@@ -138,8 +147,9 @@ public class ALTPlayerController : MonoBehaviour
 
     void Update()
     {
-        float dist = 10.0f;
-        Vector3 dir = new Vector3(0.0f, -1.0f, 0.0f);
+        float dist = 100.0f;
+        Vector3 dir = _ControllerCollisionPos - transform.position;
+        Vector3 downdir = new Vector3(0.0f, -1.0f, 0.0f);
         RaycastHit hit;
 
         ControllerCheck();
@@ -208,9 +218,6 @@ public class ALTPlayerController : MonoBehaviour
             joyY = 0;
 
             {
-
-
-
                 if (m_ControllerType == ControllerType.Controller)
                 {
                     joyX += Input.GetAxis("Mouse X") * m_LookSensitivity;
@@ -241,11 +248,13 @@ public class ALTPlayerController : MonoBehaviour
             }
         }
 
-        if (Physics.Raycast(transform.position, dir, out hit, dist))
+
+        Debug.DrawRay(transform.position, dir);
+        if (Physics.Raycast(transform.position,  dir, out hit))
         {
             _hitNormal = hit.normal;
 
-            _slopeAngle = Vector3.Angle(dir * dist, hit.normal);
+            _slopeAngle = Vector3.Angle(downdir * dist, hit.normal);
 
             _slopeAcceleration = transform.TransformDirection(m_Velocity);
 
@@ -263,7 +272,6 @@ public class ALTPlayerController : MonoBehaviour
             {
                 bOnSlope = false;
             }
-
         }
 
         //Stand in death animation -LCC
@@ -332,18 +340,24 @@ public class ALTPlayerController : MonoBehaviour
         else
         {
             m_health.TakeDamage(damage);
-
         }
     }
+  
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        //_hitNormal = hit.normal;
+        print("Hit something.");
+        _ControllerCollisionPos = hit.point;
     }
 
     public bool CheckForJumpInput()
     {
         return Input.GetButtonDown("Jump");
+    }
+
+    public bool CheckForJumpInputReleased()
+    {
+        return Input.GetButtonUp("Jump");
     }
 
     public bool CheckForUseEquipmentInput()
@@ -368,24 +382,50 @@ public class ALTPlayerController : MonoBehaviour
         return Input.GetButtonUp("Fire1") || rightTrigger;
     }
 
+    public bool CheckForSprintInput()
+    {
+        return Input.GetButton("Sprint");        
+    }
+
+    public bool CheckForSprintInputReleased()
+    {
+        return Input.GetButtonUp("Sprint");
+    }
+
+
+
     public void PlayerRotation()
     {
         float mouseX = Input.GetAxis("Mouse X") * m_LookSensitivity;
         float mouseY = Input.GetAxis("Mouse Y") * m_LookSensitivity;
-
-        m_XRotation += mouseY;
-        m_XRotation = Mathf.Clamp(m_XRotation, -90.0f, 90.0f);
-        _camera.transform.localRotation = Quaternion.Euler(-m_XRotation, 0f, 0f);
-        transform.Rotate(Vector3.up * mouseX);
-
+        if (m_ControllerState == ControllerState.Play)
+        {
+            m_XRotation += mouseY;
+            m_XRotation = Mathf.Clamp(m_XRotation, -90.0f, 90.0f);
+            _camera.transform.localRotation = Quaternion.Euler(-m_XRotation, 0f, 0f);
+            transform.Rotate(Vector3.up * mouseX);
+        }
     }
 
     public void PlayerMovement()
     {
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
-
-        m_Velocity = transform.right * x * m_MoveSpeed + transform.forward * z * m_MoveSpeed;
+        
+        //Sprinting logic & use of player's stamina - VR
+        if(CheckForSprintInput() && m_stamina.GetCurrentStamina() > 0)
+        {
+            m_Velocity = transform.right * x * m_SprintSpeed + transform.forward * z * m_SprintSpeed;
+            m_stamina.UseStamina();
+        }
+        else if(CheckForSprintInputReleased())
+        {
+            m_stamina.StartCoroutine(m_stamina.RegenerateStamina());
+        }
+        else
+        {
+            m_Velocity = transform.right * x * m_MoveSpeed + transform.forward * z * m_MoveSpeed;
+        }
 
         if (!bOnSlope)
         {
@@ -437,6 +477,7 @@ public class ALTPlayerController : MonoBehaviour
                 if (CheckForJumpInput())
                 {
                     m_YVelocity = m_JumpHeight;
+                    GetComponent<AudioManager_Footsteps>().TriggerJump(false);
                 }
             }
             else if (!_controller.isGrounded)
@@ -445,7 +486,17 @@ public class ALTPlayerController : MonoBehaviour
                 {
                     m_YVelocity = -2.0f;
                 }
-
+                if(CheckForJumpInputReleased() && m_YVelocity > 0.0f)
+                {
+                   if (m_YVelocity > 0.01f)
+                    {
+                        m_YVelocity *= 0.5f;
+                    }
+                   else
+                    {
+                        m_YVelocity = 0.0f;
+                    }
+                }
             }
         }
     }

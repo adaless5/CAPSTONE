@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: -6393086001432044041}
   - component: {fileID: -5497219566204380676}
   - component: {fileID: 6276013542980723982}
+  - component: {fileID: 7818323249915035984}
   m_Layer: 0
   m_Name: RoamingEnemy_TEMP
   m_TagString: Untagged
@@ -155,7 +156,7 @@ SphereCollider:
   m_GameObject: {fileID: 3520139637981983928}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.2
   m_Center: {x: 0, y: 0, z: 0}
@@ -184,8 +185,22 @@ MeshCollider:
   m_GameObject: {fileID: 3520139637981983928}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 6740538416072541049, guid: 15c1bbcbdd9991943831b4e75ac18924, type: 3}
+--- !u!136 &7818323249915035984
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3520139637981983928}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5428182
+  m_Height: 1.6244617
+  m_Direction: 1
+  m_Center: {x: 0.018806934, y: 0.8530079, z: 0.053272113}

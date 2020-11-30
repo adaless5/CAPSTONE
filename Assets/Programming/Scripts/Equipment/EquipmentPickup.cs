@@ -9,6 +9,8 @@ public class EquipmentPickup : MonoBehaviour, ISaveable
    
     bool isUsed = false;
 
+    float temprot = 0.0f;
+
     void Awake()
     {
         LoadDataOnSceneEnter();
@@ -16,6 +18,13 @@ public class EquipmentPickup : MonoBehaviour, ISaveable
         
         if (isUsed) GetComponent<MeshRenderer>().enabled = false;
         else GetComponent<MeshRenderer>().enabled = true;
+    }
+
+    void Update()
+    {
+        temprot += Time.deltaTime * 100.0f;
+
+        gameObject.transform.eulerAngles = new Vector3(temprot, 0.0f, 0.0f);
     }
 
     void OnDisable()

@@ -33,7 +33,18 @@ public abstract class Weapon : Tool
     protected float m_hitImpact = 50.0f;
     [SerializeField]
     protected float m_weaponRange = 50.0f;
+    [Header("Weapon Recoil")]
+    [SerializeField]
+    protected float m_recoilForce = 1.0f;
+    [SerializeField, Tooltip("How quickly the weapon recoils")]
+    protected float m_recoilInitialSpeed = 25f;
+    [SerializeField, Tooltip("How far the weapon can recoil")]
+    protected float m_maxRecoilDistance = 0.5f;
+    [SerializeField, Tooltip("How quickly the weapon adjusts back to normal position")]
+    protected float m_recoilReadjustSpeed = 10f;
     [Space]
+
+   
 
     protected ALTPlayerController _playerController;
     protected float m_fireStart = 0.0f;
@@ -47,7 +58,7 @@ public abstract class Weapon : Tool
     protected void InitializePlayer(GameObject player)
     {
         _playerController = player.GetComponent<ALTPlayerController>();
-        Debug.Log(_playerController);
+        //Debug.Log(_playerController);
     }
 
 }
