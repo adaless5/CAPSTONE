@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-8896362480523921568
+--- !u!114 &-8868495932333154196
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 030f85c3f73729f4f976f66ffb23b875, type: 3}
   m_Name: AnimationPlayableAsset
   m_EditorClassIdentifier: 
-  m_Clip: {fileID: 7400000, guid: 9ca8f0c2ef1d7364aa413bb902301c2d, type: 2}
+  m_Clip: {fileID: 7400000, guid: 52ae0d6e4acbe6d48ae9e95588e0badd, type: 2}
   m_Position: {x: 0, y: 0, z: 0}
   m_EulerAngles: {x: 0, y: 0, z: 0}
   m_UseTrackMatchFields: 1
@@ -46,8 +46,8 @@ MonoBehaviour:
   - m_Version: 1
     m_Start: 47.85
     m_ClipIn: 0
-    m_Asset: {fileID: -8896362480523921568}
-    m_Duration: 16.08333333333333
+    m_Asset: {fileID: 1386106695530306899}
+    m_Duration: 16
     m_TimeScale: 0.0625
     m_ParentTrack: {fileID: -6885583467607045676}
     m_EaseInDuration: 0
@@ -132,22 +132,6 @@ MonoBehaviour:
   m_OpenClipOffsetRotation: {x: 0, y: 0, z: 0, w: 1}
   m_Rotation: {x: 0, y: 0, z: 0, w: 1}
   m_ApplyOffsets: 0
---- !u!114 &-6542029092320316226
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90fb794a295e73545af71bcdb7375791, type: 3}
-  m_Name: CinemachineShot
-  m_EditorClassIdentifier: 
-  DisplayName: 
-  VirtualCamera:
-    exposedName: 61d32880f07b5ad4e9e28f9c32265f13
-    defaultValue: {fileID: 0}
 --- !u!114 &-5876617104503879001
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -172,7 +156,7 @@ MonoBehaviour:
   - m_Version: 1
     m_Start: 15.9
     m_ClipIn: 0
-    m_Asset: {fileID: 7408511570999313729}
+    m_Asset: {fileID: 4803708770432423589}
     m_Duration: 15.999999999999998
     m_TimeScale: 0.0625
     m_ParentTrack: {fileID: -5876617104503879001}
@@ -258,22 +242,6 @@ MonoBehaviour:
   m_OpenClipOffsetRotation: {x: 0, y: 0, z: 0, w: 1}
   m_Rotation: {x: 0, y: 0, z: 0, w: 1}
   m_ApplyOffsets: 0
---- !u!114 &-5161269211740488935
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90fb794a295e73545af71bcdb7375791, type: 3}
-  m_Name: CinemachineShot
-  m_EditorClassIdentifier: 
-  DisplayName: 
-  VirtualCamera:
-    exposedName: 14e1d95d308d24e42874c57584234d89
-    defaultValue: {fileID: 0}
 --- !u!114 &-4951661651087801229
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -298,8 +266,8 @@ MonoBehaviour:
   - m_Version: 1
     m_Start: 31.9
     m_ClipIn: 0
-    m_Asset: {fileID: 8315650584238144244}
-    m_Duration: 15.933333333333337
+    m_Asset: {fileID: 8851089598597774352}
+    m_Duration: 15.950000000000003
     m_TimeScale: 1
     m_ParentTrack: {fileID: -4951661651087801229}
     m_EaseInDuration: 0
@@ -363,7 +331,7 @@ MonoBehaviour:
     m_PreExtrapolationMode: 0
     m_PostExtrapolationTime: 0
     m_PreExtrapolationTime: 0
-    m_DisplayName: CM vcam3
+    m_DisplayName: CM vcam7
   m_Markers:
     m_Objects: []
 --- !u!114 &-597227604733391500
@@ -432,6 +400,28 @@ MonoBehaviour:
   m_Clips: []
   m_Markers:
     m_Objects: []
+--- !u!114 &1386106695530306899
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 030f85c3f73729f4f976f66ffb23b875, type: 3}
+  m_Name: AnimationPlayableAsset
+  m_EditorClassIdentifier: 
+  m_Clip: {fileID: 7400000, guid: 9ca8f0c2ef1d7364aa413bb902301c2d, type: 2}
+  m_Position: {x: 0, y: 0, z: 0}
+  m_EulerAngles: {x: 0, y: 0, z: 0}
+  m_UseTrackMatchFields: 1
+  m_MatchTargetFields: 63
+  m_RemoveStartOffset: 1
+  m_ApplyFootIK: 1
+  m_Loop: 0
+  m_Version: 1
+  m_Rotation: {x: 0, y: 0, z: 0, w: 1}
 --- !u!114 &1922392682874042231
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -528,7 +518,23 @@ MonoBehaviour:
   m_Loop: 0
   m_Version: 1
   m_Rotation: {x: 0, y: 0, z: 0, w: 1}
---- !u!114 &4912090284786103419
+--- !u!114 &4533640322627396692
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90fb794a295e73545af71bcdb7375791, type: 3}
+  m_Name: CinemachineShot
+  m_EditorClassIdentifier: 
+  DisplayName: 
+  VirtualCamera:
+    exposedName: 295786891f72fa241897c2944827b759
+    defaultValue: {fileID: 0}
+--- !u!114 &4803708770432423589
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -540,7 +546,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 030f85c3f73729f4f976f66ffb23b875, type: 3}
   m_Name: AnimationPlayableAsset
   m_EditorClassIdentifier: 
-  m_Clip: {fileID: 7400000, guid: 52ae0d6e4acbe6d48ae9e95588e0badd, type: 2}
+  m_Clip: {fileID: 7400000, guid: 91c80f4ec08f4414d9d8c84af6bf618b, type: 2}
   m_Position: {x: 0, y: 0, z: 0}
   m_EulerAngles: {x: 0, y: 0, z: 0}
   m_UseTrackMatchFields: 1
@@ -550,6 +556,22 @@ MonoBehaviour:
   m_Loop: 0
   m_Version: 1
   m_Rotation: {x: 0, y: 0, z: 0, w: 1}
+--- !u!114 &5648391886813111957
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90fb794a295e73545af71bcdb7375791, type: 3}
+  m_Name: CinemachineShot
+  m_EditorClassIdentifier: 
+  DisplayName: 
+  VirtualCamera:
+    exposedName: c4dbe702d61df1a46bac914224a5aac0
+    defaultValue: {fileID: 0}
 --- !u!114 &6269570407583405447
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -615,8 +637,8 @@ MonoBehaviour:
   - m_Version: 1
     m_Start: 47.85
     m_ClipIn: 0
-    m_Asset: {fileID: -5161269211740488935}
-    m_Duration: 16.08333333333333
+    m_Asset: {fileID: 5648391886813111957}
+    m_Duration: 16
     m_TimeScale: 1
     m_ParentTrack: {fileID: 7021142740413207572}
     m_EaseInDuration: 0
@@ -680,7 +702,7 @@ MonoBehaviour:
     m_PreExtrapolationMode: 0
     m_PostExtrapolationTime: 0
     m_PreExtrapolationTime: 0
-    m_DisplayName: CM vcam4
+    m_DisplayName: CM vcam6
   m_Markers:
     m_Objects: []
 --- !u!114 &7088134122205615655
@@ -817,7 +839,7 @@ MonoBehaviour:
   - m_Version: 1
     m_Start: 15.9
     m_ClipIn: 0
-    m_Asset: {fileID: -6542029092320316226}
+    m_Asset: {fileID: 4533640322627396692}
     m_Duration: 15.999999999999998
     m_TimeScale: 1
     m_ParentTrack: {fileID: 7141905898318268330}
@@ -873,8 +895,8 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    m_BlendInCurveMode: 1
-    m_BlendOutCurveMode: 1
+    m_BlendInCurveMode: 0
+    m_BlendOutCurveMode: 0
     m_ExposedParameterNames: []
     m_AnimationCurves: {fileID: 0}
     m_Recordable: 0
@@ -882,47 +904,9 @@ MonoBehaviour:
     m_PreExtrapolationMode: 0
     m_PostExtrapolationTime: 0
     m_PreExtrapolationTime: 0
-    m_DisplayName: CM vcam2
+    m_DisplayName: CM vcam5
   m_Markers:
     m_Objects: []
---- !u!114 &7408511570999313729
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 030f85c3f73729f4f976f66ffb23b875, type: 3}
-  m_Name: AnimationPlayableAsset
-  m_EditorClassIdentifier: 
-  m_Clip: {fileID: 7400000, guid: 91c80f4ec08f4414d9d8c84af6bf618b, type: 2}
-  m_Position: {x: 0, y: 0, z: 0}
-  m_EulerAngles: {x: 0, y: 0, z: 0}
-  m_UseTrackMatchFields: 1
-  m_MatchTargetFields: 63
-  m_RemoveStartOffset: 1
-  m_ApplyFootIK: 1
-  m_Loop: 0
-  m_Version: 1
-  m_Rotation: {x: 0, y: 0, z: 0, w: 1}
---- !u!114 &8315650584238144244
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90fb794a295e73545af71bcdb7375791, type: 3}
-  m_Name: CinemachineShot
-  m_EditorClassIdentifier: 
-  DisplayName: 
-  VirtualCamera:
-    exposedName: 35e34a5391bf7814d9d5ca5b57970a8c
-    defaultValue: {fileID: 0}
 --- !u!114 &8533341951554193347
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -947,8 +931,8 @@ MonoBehaviour:
   - m_Version: 1
     m_Start: 31.9
     m_ClipIn: 0
-    m_Asset: {fileID: 4912090284786103419}
-    m_Duration: 15.933333333333337
+    m_Asset: {fileID: -8868495932333154196}
+    m_Duration: 16
     m_TimeScale: 0.0625
     m_ParentTrack: {fileID: 8533341951554193347}
     m_EaseInDuration: 0
@@ -1033,3 +1017,19 @@ MonoBehaviour:
   m_OpenClipOffsetRotation: {x: 0, y: 0, z: 0, w: 1}
   m_Rotation: {x: 0, y: 0, z: 0, w: 1}
   m_ApplyOffsets: 0
+--- !u!114 &8851089598597774352
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90fb794a295e73545af71bcdb7375791, type: 3}
+  m_Name: CinemachineShot
+  m_EditorClassIdentifier: 
+  DisplayName: 
+  VirtualCamera:
+    exposedName: b8401a7f7b3d3144ab3c3a023789a5f7
+    defaultValue: {fileID: 0}

@@ -13,6 +13,7 @@ public class OptionsMenuUI : MonoBehaviour
     public AudioMixer audioMaster;
     public TMP_Dropdown resolutionMenu;
 
+
     Resolution[] resolutions;
     private void Start()
     {
@@ -69,4 +70,5 @@ public class OptionsMenuUI : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(firstOption);
     }
 
+    
 }
