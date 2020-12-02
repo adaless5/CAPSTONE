@@ -280,15 +280,6 @@ public class ALTPlayerController : MonoBehaviour
 
     private void CursorVisibility()
     {
-        //switch (m_ControllerType)
-        //{
-        //    case ControllerType.Controller:
-        //        Cursor.visible = false;
-        //        break;
-        //    case ControllerType.Mouse:
-        //        Cursor.visible = true;
-        //        break;
-        //}
         Cursor.visible = true;
     }
 
@@ -307,7 +298,6 @@ public class ALTPlayerController : MonoBehaviour
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        print("Hit something.");
         _ControllerCollisionPos = hit.point;
     }
 
