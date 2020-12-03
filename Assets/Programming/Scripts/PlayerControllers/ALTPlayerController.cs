@@ -180,7 +180,7 @@ public class ALTPlayerController : MonoBehaviour
 
 
                 joyAngle = Mathf.Atan2(joyX, joyY) * Mathf.Rad2Deg;
-                Debug.Log(joyAngle);
+                Debug.Log("Joy Angle: " + joyAngle);
                 if (joyAngle > -90.0f && joyAngle < -45.0f)
                 {
                     _equipIndex = 1;
@@ -317,6 +317,18 @@ public class ALTPlayerController : MonoBehaviour
     public bool CheckForUseEquipmentInputReleased()
     {
         return Input.GetButtonUp("Equipment");
+    }
+
+    public bool CheckForUseThermalInput()
+    {
+        //return Input.GetButtonDown("Equipment");
+        return Input.GetKeyDown(KeyCode.F);
+    }
+
+    public bool CheckForUseThermalInputReleased()
+    {
+        //return Input.GetButtonUp("Equipment");
+        return Input.GetKeyUp(KeyCode.F);
     }
 
     public bool CheckForUseWeaponInput()

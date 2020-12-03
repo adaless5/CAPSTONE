@@ -52,22 +52,17 @@ public class WeaponPickup : MonoBehaviour, ITippable
     {
         if (other.gameObject.tag == "Player")
         {
-            //GameObject g = GameObject.FindGameObjectWithTag("WeaponBelt");
-            //Belt b = g.GetComponent<Belt>();
             EventBroker.CallOnPickupWeapon(weaponNum);
-            //b.EquipToolAtIndex(weaponNum);
             isUsed = true;
             GetComponent<MeshRenderer>().enabled = false;
 
             CreateTip("Sprites/Messages/" + _tipName[weaponNum]);
-            //Destroy(gameObject);
         }
     }
 
     public void SaveDataOnSceneChange()
     {
         SaveSystem.Save(gameObject.name, "isEnabled", gameObject.scene.name, isUsed);
-        //Debug.Log(isUsed);
     }
 
     public void LoadDataOnSceneEnter()
@@ -95,11 +90,9 @@ public class WeaponPickup : MonoBehaviour, ITippable
                 trans.localScale = Vector3.one;
                 trans.anchoredPosition = new Vector2(0f, 0f); // setting position, will be on center
                 Texture2D tex = Resources.Load<Texture2D>(filename);
-                print(tex);
 
                 if (tex != null)
                 {
-                    //print("Found Texture");
                     trans.sizeDelta = new Vector2(tex.width, tex.height); // custom size
                 }
 
