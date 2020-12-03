@@ -90,7 +90,7 @@ public class ALTPlayerController : MonoBehaviour
     bool bOnSlope = false;
     Vector3 _ControllerCollisionPos = Vector3.zero;
 
-   
+    //bool bHasEnteredDarkness = false;
 
     private void Awake()
     {        
@@ -107,7 +107,7 @@ public class ALTPlayerController : MonoBehaviour
         m_health = GetComponent<Health>();
         m_armor = GetComponent<Armor>();
         m_stamina = GetComponent<Stamina>();
-        _equipmentBelt = FindObjectOfType<Belt>();
+        _equipmentBelt = FindObjectOfType<EquipmentBelt>();
         _weaponBelt = FindObjectOfType<WeaponBelt>();
 
 
@@ -166,7 +166,6 @@ public class ALTPlayerController : MonoBehaviour
         }
 
         HandleEquipmentWheels();
-
 
         if (EquipmentWheel.enabled == true)
         {
@@ -294,7 +293,6 @@ public class ALTPlayerController : MonoBehaviour
             m_health.TakeDamage(damage);             
         }
     }
-  
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {

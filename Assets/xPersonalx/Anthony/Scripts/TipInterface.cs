@@ -4,6 +4,6 @@ using UnityEngine;
 
 public interface ITippable
 {
-    void CreateTip();
+    void CreateTip(string filename);
     void DestroyTip();
 }

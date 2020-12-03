@@ -7,12 +7,11 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
 {
     [SerializeField] int _CorrespondingEquipmentBeltIndex = 0;
 
-   
     bool isUsed = false;
 
-    float temprot = 0.0f;
+    GameObject _imageObject = null;
 
-    //string[] resourceDirectory = { "Sprites/Messages/EQUIPMENT_GRAPPLE",  }
+    string[] _tipName = { "EQUIPMENT_GRAPPLE", "EQUIPMENT_BLADE", "EQUIPMENT_THERMAL" };
 
     void Awake()
     {
@@ -21,13 +20,15 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
         
         if (isUsed) GetComponent<MeshRenderer>().enabled = false;
         else GetComponent<MeshRenderer>().enabled = true;
+
     }
 
     void Update()
     {
-        temprot += Time.deltaTime * 100.0f;
-
-        gameObject.transform.eulerAngles = new Vector3(temprot, 0.0f, 0.0f);
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            DestroyTip();
+        }
     }
 
     void OnDisable()
@@ -45,7 +46,7 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
             GetComponent<MeshRenderer>().enabled = false;
             GetComponent<SphereCollider>().enabled = false;
 
-            CreateTip();
+            CreateTip("Sprites/Messages/" + _tipName[_CorrespondingEquipmentBeltIndex]);
         }
     }
 
@@ -59,40 +60,38 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
         isUsed = SaveSystem.LoadBool(gameObject.name, "isEnabled", gameObject.scene.name);
     }
 
-    public void CreateTip()
+    public void CreateTip(string filename)
     {
         GameObject hud = GameObject.Find("HUD");
 
         if (hud != null)
         {
-            //print("HUD found");
             Canvas canvas = hud.GetComponent<Canvas>();
 
             if (canvas != null)
             {
-                
-                
+                DestroyTip();
 
-                GameObject imgObject = new GameObject("testTip");
+                _imageObject = new GameObject("testTip");
+                _imageObject.tag = "Tip";
 
-                RectTransform trans = imgObject.AddComponent<RectTransform>();
+                RectTransform trans = _imageObject.AddComponent<RectTransform>();
                 trans.transform.SetParent(canvas.transform); // setting parent
                 trans.localScale = Vector3.one;
-                trans.anchoredPosition = new Vector2(0f, -190f); // setting position, will be on center
-                Texture2D tex = Resources.Load<Texture2D>("Sprites/Messages/EQUIPMENT_GRAPPLE");
+                trans.anchoredPosition = new Vector2(0f, 0f); // setting position, will be on center
+                Texture2D tex = Resources.Load<Texture2D>(filename);
                 if(tex != null)
                 {
                     trans.sizeDelta = new Vector2(tex.width, tex.height); // custom size
                 }
 
-                Image image = imgObject.AddComponent<Image>();
+                Image image = _imageObject.AddComponent<Image>();
                 if(image != null)
                 {
-                    
                     if (tex != null)
                     {
                         image.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
-                        imgObject.transform.SetParent(canvas.transform);
+                        _imageObject.transform.SetParent(canvas.transform);
                     }
                 }
             }
@@ -101,6 +100,14 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
 
     public void DestroyTip()
     {
-
+        GameObject[] array = FindObjectsOfType<GameObject>();
+        foreach(GameObject obj in array)
+        {
+            if (obj.tag == "Tip")
+            {
+                Destroy(obj);
+            }
+        }
+        _imageObject = null;
     }
 }

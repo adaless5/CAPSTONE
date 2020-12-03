@@ -31,7 +31,6 @@ public class GrappleHook : Equipment, ISaveable
         gameObject.GetComponentInChildren<MeshRenderer>().enabled = false;
         m_SpriteRenderer = m_GrappleMarker.GetComponentInChildren<MeshRenderer>();
         m_GrappleMarker.SetActive(false);
-        print("Calling Awake.");
     }
 
     void OnDisable()
