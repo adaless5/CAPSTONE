@@ -441,8 +441,9 @@ GameObject:
   - component: {fileID: 4375026476431281288}
   - component: {fileID: 6787818932139265989}
   - component: {fileID: 5656503893207593965}
+  - component: {fileID: 5898175380137284830}
   m_Layer: 9
-  m_Name: Other_Button
+  m_Name: GlandGun_Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -564,6 +565,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _CorrespondingToolIndex: 2
+--- !u!114 &5898175380137284830
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 18645230555648668}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cadb97a921bac94b936b9f5f3d29462, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _CorrespondingToolIndex: 2
 --- !u!1 &218123668166210896
 GameObject:
   m_ObjectHideFlags: 0
@@ -576,7 +590,7 @@ GameObject:
   - component: {fileID: 186383998042493493}
   - component: {fileID: 2256624526957599572}
   m_Layer: 9
-  m_Name: Text
+  m_Name: Grenade_Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -622,7 +636,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -943,7 +957,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -31.1}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2232610002236281968
@@ -967,7 +981,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -987,7 +1001,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 
+  m_Text: Archebus
 --- !u!1 &995415898866791583
 GameObject:
   m_ObjectHideFlags: 0
@@ -1037,7 +1051,7 @@ GameObject:
   - component: {fileID: 742887013452731159}
   - component: {fileID: 182575044663830712}
   m_Layer: 9
-  m_Name: Equipment_Wheel_Canvas
+  m_Name: Tool_Wheel_Canvas
   m_TagString: EquipmentWheel
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1286,7 +1300,6 @@ GameObject:
   - component: {fileID: 3687215811570835960}
   - component: {fileID: 1423622536397604638}
   - component: {fileID: 1695030527394577313}
-  - component: {fileID: 3088735549488875116}
   m_Layer: 9
   m_Name: Icon
   m_TagString: Untagged
@@ -1351,20 +1364,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &3088735549488875116
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1307860901258532399}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 02160a77f4284314c872e908933acd02, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _Icon: {fileID: 1695030527394577313}
-  _CorrespondingToolIndex: 0
 --- !u!1 &1573614814565981119
 GameObject:
   m_ObjectHideFlags: 0
@@ -1882,7 +1881,6 @@ GameObject:
   - component: {fileID: 2324546261994304791}
   - component: {fileID: 1294678359610851702}
   - component: {fileID: 8761802317193078688}
-  - component: {fileID: 3574740520164061487}
   m_Layer: 9
   m_Name: Icon
   m_TagString: Untagged
@@ -1947,20 +1945,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &3574740520164061487
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2016797944643661070}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 02160a77f4284314c872e908933acd02, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _Icon: {fileID: 8761802317193078688}
-  _CorrespondingToolIndex: 2
 --- !u!1 &2143247077340315741
 GameObject:
   m_ObjectHideFlags: 0
@@ -2070,7 +2054,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -28}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1102968036564756482
@@ -2094,7 +2078,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2114,7 +2098,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 
+  m_Text: Thermal Visor
 --- !u!1 &2487380072462105504
 GameObject:
   m_ObjectHideFlags: 0
@@ -2126,7 +2110,7 @@ GameObject:
   - component: {fileID: 568081014441193008}
   - component: {fileID: 3828408651908978736}
   m_Layer: 9
-  m_Name: Equipment_Belt
+  m_Name: Tool_Belt
   m_TagString: EquipmentBelt
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2175,7 +2159,7 @@ GameObject:
   - component: {fileID: 6289700209966592180}
   - component: {fileID: 4399674171908023782}
   m_Layer: 9
-  m_Name: ThermalEquipment
+  m_Name: ThermaVisor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2222,8 +2206,9 @@ GameObject:
   - component: {fileID: 355966444177140393}
   - component: {fileID: 6861405243949418180}
   - component: {fileID: 5784369088880454601}
+  - component: {fileID: 3829896846672122765}
   m_Layer: 9
-  m_Name: Mine_Button
+  m_Name: Grenade_Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2345,6 +2330,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _CorrespondingToolIndex: 1
+--- !u!114 &3829896846672122765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2913932990592433857}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cadb97a921bac94b936b9f5f3d29462, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _CorrespondingToolIndex: 1
 --- !u!1 &3153134617655374349
 GameObject:
   m_ObjectHideFlags: 0
@@ -2356,9 +2354,8 @@ GameObject:
   - component: {fileID: 1779729473867071935}
   - component: {fileID: 6062575992181280173}
   - component: {fileID: 8867142901152375706}
-  - component: {fileID: 5438075891401878096}
   m_Layer: 9
-  m_Name: Icon
+  m_Name: Grenade_Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2421,20 +2418,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &5438075891401878096
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3153134617655374349}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 02160a77f4284314c872e908933acd02, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _Icon: {fileID: 8867142901152375706}
-  _CorrespondingToolIndex: 1
 --- !u!1 &3363420541183667108
 GameObject:
   m_ObjectHideFlags: 0
@@ -2469,7 +2452,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -30.5}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4214371928822166544
@@ -2493,7 +2476,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2513,7 +2496,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 
+  m_Text: Grappling Hook
 --- !u!1 &3390205450737024223
 GameObject:
   m_ObjectHideFlags: 0
@@ -2527,6 +2510,7 @@ GameObject:
   - component: {fileID: 3566026018578774694}
   - component: {fileID: 302454792327827019}
   - component: {fileID: 7885080173731204760}
+  - component: {fileID: 3727708105613553797}
   m_Layer: 9
   m_Name: Thermal_Button
   m_TagString: Untagged
@@ -2647,6 +2631,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 324089b713efac4469225250028494a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _CorrespondingToolIndex: 2
+--- !u!114 &3727708105613553797
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3390205450737024223}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cadb97a921bac94b936b9f5f3d29462, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _CorrespondingToolIndex: 2
@@ -3275,7 +3272,6 @@ GameObject:
   - component: {fileID: 6927634687594196279}
   - component: {fileID: 5081737237499249205}
   - component: {fileID: 2044698969341209615}
-  - component: {fileID: 8499646902741429874}
   m_Layer: 9
   m_Name: Icon
   m_TagString: Untagged
@@ -3340,20 +3336,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &8499646902741429874
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4059498582191702841}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 02160a77f4284314c872e908933acd02, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _Icon: {fileID: 2044698969341209615}
-  _CorrespondingToolIndex: 1
 --- !u!1 &4141205591349442875
 GameObject:
   m_ObjectHideFlags: 0
@@ -3613,6 +3595,7 @@ GameObject:
   - component: {fileID: 1657124358525605867}
   - component: {fileID: 2698356428931894422}
   - component: {fileID: 5457773858144014715}
+  - component: {fileID: 4427383290090358981}
   m_Layer: 9
   m_Name: Blade_Button
   m_TagString: Untagged
@@ -3733,6 +3716,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 324089b713efac4469225250028494a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _CorrespondingToolIndex: 1
+--- !u!114 &4427383290090358981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4283695044211172489}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cadb97a921bac94b936b9f5f3d29462, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _CorrespondingToolIndex: 1
@@ -4263,8 +4259,9 @@ GameObject:
   - component: {fileID: 8381129777611647254}
   - component: {fileID: 3452601393578651416}
   - component: {fileID: 3822077317588977087}
+  - component: {fileID: 2659636750945389441}
   m_Layer: 9
-  m_Name: Gun_Button
+  m_Name: DefaultGun_Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4383,6 +4380,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 324089b713efac4469225250028494a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _CorrespondingToolIndex: 0
+--- !u!114 &2659636750945389441
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5219507221092818733}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cadb97a921bac94b936b9f5f3d29462, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _CorrespondingToolIndex: 0
@@ -5239,7 +5249,6 @@ GameObject:
   - component: {fileID: 2349178859101728711}
   - component: {fileID: 2748097926858822055}
   - component: {fileID: 5562891594177126808}
-  - component: {fileID: 1904930315606788183}
   m_Layer: 9
   m_Name: Icon
   m_TagString: Untagged
@@ -5304,20 +5313,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &1904930315606788183
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6166619617905692364}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 02160a77f4284314c872e908933acd02, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _Icon: {fileID: 5562891594177126808}
-  _CorrespondingToolIndex: 2
 --- !u!1 &6455676569307106599
 GameObject:
   m_ObjectHideFlags: 0
@@ -5501,6 +5496,7 @@ GameObject:
   - component: {fileID: 6194569503382570661}
   - component: {fileID: 4349551288299242058}
   - component: {fileID: 7400642528938482806}
+  - component: {fileID: 324476733216520005}
   m_Layer: 9
   m_Name: Grapple_Button
   m_TagString: Untagged
@@ -5621,6 +5617,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 324089b713efac4469225250028494a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _CorrespondingToolIndex: 0
+--- !u!114 &324476733216520005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6496608622249145894}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cadb97a921bac94b936b9f5f3d29462, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _CorrespondingToolIndex: 0
@@ -6221,7 +6230,6 @@ GameObject:
   - component: {fileID: 1355992867382539751}
   - component: {fileID: 6543387233448189767}
   - component: {fileID: 2660500892993164672}
-  - component: {fileID: 8599042996792062657}
   m_Layer: 9
   m_Name: Icon
   m_TagString: Untagged
@@ -6286,20 +6294,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &8599042996792062657
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8387537142939245631}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 02160a77f4284314c872e908933acd02, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _Icon: {fileID: 2660500892993164672}
-  _CorrespondingToolIndex: 0
 --- !u!1 &8539242258804599002
 GameObject:
   m_ObjectHideFlags: 0
@@ -6616,7 +6610,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -31.349998}
+  m_AnchoredPosition: {x: 0, y: -34.3}
   m_SizeDelta: {x: 0, y: 2.699997}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6287575770276370022
@@ -6640,7 +6634,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -6695,7 +6689,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -28.3}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1779882857435038185
@@ -6719,7 +6713,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -6739,7 +6733,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 
+  m_Text: Gland Gun
 --- !u!1 &9021597005439499591
 GameObject:
   m_ObjectHideFlags: 0

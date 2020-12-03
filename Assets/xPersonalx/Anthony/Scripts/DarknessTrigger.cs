@@ -184,11 +184,11 @@ public class DarknessTrigger : MonoBehaviour, ITippable
                 trans.transform.SetParent(canvas.transform); // setting parent
                 trans.localScale = Vector3.one;
                 trans.pivot = new Vector2(0.5f, -1f);
-                trans.anchoredPosition = new Vector2(0f, -450f); // setting position, will be on center
+                trans.anchoredPosition = new Vector2(0f, -600f);
                 Texture2D tex = Resources.Load<Texture2D>(filename);
                 if (tex != null)
                 {
-                    trans.sizeDelta = new Vector2(tex.width / 1.5f, tex.height / 1.5f); // custom size
+                    trans.sizeDelta = new Vector2(tex.width / 1f, tex.height / 1.5f); // custom size
                 }
 
                 Image image = _imageObject.AddComponent<Image>();
