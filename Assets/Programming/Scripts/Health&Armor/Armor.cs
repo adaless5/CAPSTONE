@@ -44,6 +44,7 @@ public class Armor : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
+        StopCoroutine(ReloadArmor());
         if (m_Armor > 0)
         {
 
@@ -72,8 +73,6 @@ public class Armor : MonoBehaviour
 
     public IEnumerator ReloadArmor()
     {
-
-
         while (m_Armor != m_MaxArmor)
         {
             Debug.Log("Regenerating...");
@@ -82,7 +81,6 @@ public class Armor : MonoBehaviour
             armorBar.SetArmor(m_Armor);
             yield return new WaitForSeconds(m_ArmorRefreshRate);
         }
-
 
         //Debug.Log("Shield Regenerated");
         yield return null;
