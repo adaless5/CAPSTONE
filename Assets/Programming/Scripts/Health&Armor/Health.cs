@@ -53,7 +53,7 @@ public class Health : MonoBehaviour, ISaveable
     {
         m_HP -= damage;
         if (healthBar != null)
-            healthBar.SetHealth(m_HP);
+            healthBar.LoseHealth(m_HP, damage, m_MaxHealth);
 
         if (m_HP <= 0.0f)
         {
@@ -117,7 +117,7 @@ public class Health : MonoBehaviour, ISaveable
             m_HP += healthToHeal;
 
             if (healthBar != null)
-                healthBar.SetHealth(m_HP);
+                healthBar.GainHealth(m_HP, healthToHeal, m_MaxHealth);
 
             m_HP = Mathf.Clamp(m_HP, 0, m_MaxHealth);
             Debug.Log("Healed" + healthToHeal + "amount");

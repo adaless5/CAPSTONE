@@ -167,6 +167,11 @@ public class ALTPlayerController : MonoBehaviour
 
         HandleEquipmentWheels();
 
+        //Debug
+        if(Input.GetKeyDown(KeyCode.L))
+        {
+            TakeDamage(20f);
+        }
 
         if (EquipmentWheel.enabled == true)
         {
