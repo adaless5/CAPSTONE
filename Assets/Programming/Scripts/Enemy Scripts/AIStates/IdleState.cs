@@ -19,6 +19,16 @@ public class Idle : State
     public override void Update()
     {
         base.Update();
+        if (CanSeePlayer())
+        {
+            _nextState = new Attack(_currentEnemy, _patrolPoints, _playerPos, _navMeshAgent);
+            _stage = EVENT.EXIT;
+        }
+        else
+        {
+            _nextState = new Patrol(_currentEnemy, _patrolPoints, _playerPos, _navMeshAgent);
+            _stage = EVENT.EXIT;
+        }
     }
 
     public override void Exit()

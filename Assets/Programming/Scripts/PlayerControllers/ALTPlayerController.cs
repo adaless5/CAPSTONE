@@ -336,7 +336,6 @@ public class ALTPlayerController : MonoBehaviour
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
-
         _ControllerCollisionPos = hit.point;
     }
 

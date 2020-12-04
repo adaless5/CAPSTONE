@@ -52,7 +52,7 @@ public class Health : MonoBehaviour, ISaveable
     public void TakeDamage(float damage)
     {
         m_HP -= damage;
-        if (healthBar != null)
+        if (healthBar != null && gameObject.tag == "Player")
             healthBar.SetHealth(m_HP);
 
         if (m_HP <= 0.0f)
