@@ -60,7 +60,7 @@ public class WeaponBase : Weapon, ISaveable
         m_overallAmmoCount = m_currentAmmoCount;
 
         if (m_ammoUI != null)
-            m_ammoUI.SetAmmoText(m_currentAmmoCount, m_overallAmmoCount);
+            m_ammoUI.SetAmmoText(m_currentAmmoCount, m_overallAmmoCount, m_weaponClipSize);
 
         gunCamera = GameObject.FindObjectOfType<Camera>();
 
@@ -95,16 +95,12 @@ public class WeaponBase : Weapon, ISaveable
             {
                 GetComponent<MeshRenderer>().enabled = false;
             }
-
         }
-
     }
 
     private void LateUpdate()
     {
         WeaponRecoilUpdate();
-
-
         gameObject.transform.localPosition = m_WeaponRecoilLocalPosition;
     }
 
@@ -167,7 +163,7 @@ public class WeaponBase : Weapon, ISaveable
             m_overallAmmoCount--;
         }
 
-        m_ammoUI.SetAmmoText(m_currentAmmoCount, m_overallAmmoCount);
+        m_ammoUI.SetAmmoText(m_currentAmmoCount, m_overallAmmoCount, m_weaponClipSize);
         bIsReloading = false;
 
         outOfAmmoAnimator.SetBool("bIsOut", false);
@@ -178,7 +174,7 @@ public class WeaponBase : Weapon, ISaveable
     public void AmmoPickup(WeaponType type, int numberOfClips)
     {
         m_overallAmmoCount += (m_weaponClipSize * numberOfClips);
-        m_ammoUI.SetAmmoText(m_currentAmmoCount, m_overallAmmoCount);
+        m_ammoUI.SetAmmoText(m_currentAmmoCount, m_overallAmmoCount, m_weaponClipSize);
     }
 
 
@@ -230,7 +226,7 @@ public class WeaponBase : Weapon, ISaveable
         //Using ammo
         m_currentAmmoCount--;
         if (m_ammoUI != null)
-            m_ammoUI.SetAmmoText(m_currentAmmoCount, m_overallAmmoCount);
+            m_ammoUI.SetAmmoText(m_currentAmmoCount, m_overallAmmoCount, m_weaponClipSize);
         if (m_currentAmmoCount == 0 && m_overallAmmoCount == 0)
         {
             outOfAmmoAnimator.SetBool("bIsOut", true);

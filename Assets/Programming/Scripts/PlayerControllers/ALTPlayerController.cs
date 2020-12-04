@@ -182,6 +182,7 @@ public class ALTPlayerController : MonoBehaviour
             EventBroker.CallOnPlayerDeath();
         }
 
+
         if (EquipmentWheel.enabled == true)
         {
             EventSystem.current.SetSelectedGameObject(null);
