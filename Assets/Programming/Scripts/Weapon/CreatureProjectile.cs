@@ -70,7 +70,7 @@ public class CreatureProjectile : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        //Debug.Log("Hit");
+        Debug.Log("Hit");
         _targetHealth = collision.gameObject.GetComponent<Health>();
         if (_targetHealth != null)
         {

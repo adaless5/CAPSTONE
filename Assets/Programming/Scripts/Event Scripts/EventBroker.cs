@@ -9,7 +9,6 @@ public class EventBroker
     public static event Action<GameObject> SpawnEnemy;
     public static event Action<GameObject> OnPlayerSpawned;
     public static event Action<int> OnPickupWeapon;
-    public static event Action OnPlayerDeath;
     public static event Action<WeaponType, int> OnAmmoPickup;
 
     public static void CallSpawnEnemy(GameObject enemyToSpawn)
@@ -29,11 +28,6 @@ public class EventBroker
     public static void CallOnAmmoPickup(WeaponType type, int clipAmount)
     {
         OnAmmoPickup?.Invoke(type, clipAmount);
-    }
-
-    public static void CallOnPlayerDeath()
-    {
-        OnPlayerDeath?.Invoke();
     }
 
 }
