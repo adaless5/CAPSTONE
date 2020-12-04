@@ -77,6 +77,11 @@ public class PauseMenuUI : MonoBehaviour
         //tigger save and exit
     }
 
+    public void ReloadScene()
+    {
+        Scene scene = SceneManager.GetActiveScene(); 
+        SceneManager.LoadScene(scene.name);
+    }
     public void ExitGame()
     {
         //

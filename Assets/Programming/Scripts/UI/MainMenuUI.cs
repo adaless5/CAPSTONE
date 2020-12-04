@@ -20,10 +20,10 @@ public class MainMenuUI : MonoBehaviour
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
-        else
-        {
-            SceneManager.LoadScene(data.sceneName, LoadSceneMode.Additive);
-        }
+        //else
+        //{
+        //    SceneManager.LoadScene(data.sceneName, LoadSceneMode.Additive);
+        //}
 
         //get info from save system and load accordnaly
     }

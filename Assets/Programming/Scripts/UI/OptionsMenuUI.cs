@@ -103,6 +103,11 @@ public class OptionsMenuUI : MonoBehaviour
         Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
     }
 
+    public void SetBrightness(float amt)
+    {
+        RenderSettings.ambientLight = new Color(amt, amt, amt, 1);
+        Debug.Log(RenderSettings.ambientLight);
+    }
     public void SetOptions()
     {
         Debug.Log("Options");
