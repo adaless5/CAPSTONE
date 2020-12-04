@@ -53,7 +53,7 @@ public class Health : MonoBehaviour, ISaveable
     {
         m_HP -= damage;
         if (healthBar != null && gameObject.tag == "Player")
-            healthBar.LoseHealth(m_HP);
+            healthBar.LoseHealth(m_HP, damage, m_MaxHealth);
 
         if (m_HP <= 0.0f)
         {
