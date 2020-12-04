@@ -91,7 +91,7 @@ public class ALTPlayerController : MonoBehaviour
     bool bOnSlope = false;
     Vector3 _ControllerCollisionPos = Vector3.zero;
 
-   
+    //bool bHasEnteredDarkness = false;
 
     //Death mechanic stuff
     bool isDead = false;
@@ -114,7 +114,7 @@ public class ALTPlayerController : MonoBehaviour
         m_health = GetComponent<Health>();
         m_armor = GetComponent<Armor>();
         m_stamina = GetComponent<Stamina>();
-        _equipmentBelt = FindObjectOfType<Belt>();
+        _equipmentBelt = FindObjectOfType<EquipmentBelt>();
         _weaponBelt = FindObjectOfType<WeaponBelt>();
 
 
@@ -194,7 +194,7 @@ public class ALTPlayerController : MonoBehaviour
 
 
                 joyAngle = Mathf.Atan2(joyX, joyY) * Mathf.Rad2Deg;
-                Debug.Log(joyAngle);
+                Debug.Log("Joy Angle: " + joyAngle);
                 if (joyAngle > -90.0f && joyAngle < -45.0f)
                 {
                     _equipIndex = 1;
@@ -319,15 +319,6 @@ public class ALTPlayerController : MonoBehaviour
 
     private void CursorVisibility()
     {
-        //switch (m_ControllerType)
-        //{
-        //    case ControllerType.Controller:
-        //        Cursor.visible = false;
-        //        break;
-        //    case ControllerType.Mouse:
-        //        Cursor.visible = true;
-        //        break;
-        //}
         Cursor.visible = true;
     }
 
@@ -342,11 +333,9 @@ public class ALTPlayerController : MonoBehaviour
             m_health.TakeDamage(damage);
         }
     }
-  
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        //print("Hit something.");
         _ControllerCollisionPos = hit.point;
     }
 
@@ -368,6 +357,18 @@ public class ALTPlayerController : MonoBehaviour
     public bool CheckForUseEquipmentInputReleased()
     {
         return Input.GetButtonUp("Equipment");
+    }
+
+    public bool CheckForUseThermalInput()
+    {
+        //return Input.GetButtonDown("Equipment");
+        return Input.GetKeyDown(KeyCode.F);
+    }
+
+    public bool CheckForUseThermalInputReleased()
+    {
+        //return Input.GetButtonUp("Equipment");
+        return Input.GetKeyUp(KeyCode.F);
     }
 
     public bool CheckForUseWeaponInput()
