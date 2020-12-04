@@ -95,16 +95,12 @@ public class WeaponBase : Weapon, ISaveable
             {
                 GetComponent<MeshRenderer>().enabled = false;
             }
-
         }
-
     }
 
     private void LateUpdate()
     {
         WeaponRecoilUpdate();
-
-
         gameObject.transform.localPosition = m_WeaponRecoilLocalPosition;
     }
 
