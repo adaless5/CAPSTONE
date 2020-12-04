@@ -40,12 +40,12 @@ public class PauseMenuUI : MonoBehaviour
 
     public void Unpause()
     {
-        PauseMenu.SetActive(false);
         Time.timeScale = 1f;
         GameIsPaused = false;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         Player.GetComponent<ALTPlayerController>().enabled = true;
+        PauseMenu.SetActive(false);
     }
 
     public void Pause()
@@ -69,8 +69,8 @@ public class PauseMenuUI : MonoBehaviour
         Cursor.visible = true;
         Player.GetComponent<ALTPlayerController>().enabled = true;
         SaveSystem.SaveRespawnInfo(Player.transform, Player.scene.name);
-        Destroy(Player);
         SceneManager.LoadScene(0);
+        //Destroy(Player);
         //SceneManager.LoadScene("MainMenu", LoadSceneMode.Additive);
         //tigger save and exit
     }

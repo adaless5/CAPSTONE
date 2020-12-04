@@ -47,6 +47,7 @@ public class Armor : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
+        StopCoroutine(ReloadArmor());
         if (m_Armor > 0)
         {
 

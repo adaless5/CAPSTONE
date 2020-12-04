@@ -29,7 +29,7 @@ public class ThermalEquipment : Equipment
     // Update is called once per frame
     public override void Update()
     {
-        if (bIsActive && bIsObtained)
+        if (bIsObtained)
         {
             UseTool(); 
         }
@@ -39,7 +39,7 @@ public class ThermalEquipment : Equipment
     {
         if (_playerController != null)
         {
-            if(_playerController.CheckForUseEquipmentInput())
+            if(_playerController.CheckForUseThermalInput())
             {
                 ThermalSkin[] ThermalObjs = FindObjectsOfType<ThermalSkin>();
 
