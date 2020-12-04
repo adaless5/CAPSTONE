@@ -13,6 +13,14 @@ public class OptionsMenuUI : MonoBehaviour
     public AudioMixer audioMaster;
     public TMP_Dropdown resolutionMenu;
 
+    public Button StereoButton;
+    public Button MonoButton;
+
+    public Button FullScreenButton;
+    public Button WindowedButton;
+
+    bool _isStereo;
+    bool _isFullScreen;
     Resolution[] resolutions;
     private void Start()
     {
@@ -39,7 +47,34 @@ public class OptionsMenuUI : MonoBehaviour
         resolutionMenu.AddOptions(data);
         resolutionMenu.value = index;
         resolutionMenu.RefreshShownValue();
+
+        _isFullScreen = Screen.fullScreen;
+        _isStereo = true;
+
+        Debug.Log(resolutions[index]);
     }
+
+    private void Update()
+    {
+        if(_isStereo)
+        {
+            StereoButton.Select();
+        }
+        else
+        {
+            MonoButton.Select();
+        }
+
+        if (_isFullScreen)
+        {
+            FullScreenButton.Select();
+        }
+        else
+        {
+            WindowedButton.Select();
+        }
+    }
+
     public void SetVolume(float vol)
     {
         audioMaster.SetFloat("volume", vol);
@@ -53,7 +88,13 @@ public class OptionsMenuUI : MonoBehaviour
 
     public void SetFullScreen(bool isfull)
     {
+        _isFullScreen = isfull;
         Screen.fullScreen = isfull;
+    }
+
+    public void SetAudioChannel(bool isStereo)
+    {
+        _isStereo = isStereo;
     }
 
     public void SetResolution(int index)
@@ -62,11 +103,17 @@ public class OptionsMenuUI : MonoBehaviour
         Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
     }
 
+    public void SetBrightness(float amt)
+    {
+        RenderSettings.ambientLight = new Color(amt, amt, amt, 1);
+        Debug.Log(RenderSettings.ambientLight);
+    }
     public void SetOptions()
     {
         Debug.Log("Options");
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(firstOption);
     }
+
 
 }
