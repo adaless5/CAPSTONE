@@ -83,7 +83,20 @@ public class GrappleHook : Equipment, ISaveable
                     m_GrappleHookLength = 0.0f;
                     m_GrappleHookTransform.gameObject.SetActive(true);
                     m_GrappleHookTransform.localScale = Vector3.zero;
+                    
+                    if(raycastHit.collider.gameObject.tag == "Enemy")
+                    {
+                        DroneAI AItemp = raycastHit.collider.gameObject.GetComponent<DroneAI>();
+
+                        if (AItemp != null)
+                        {
+                            AItemp.Stun();
+                        }
+                    }
+                    
                     m_PlayerController.ChangePlayerState(ALTPlayerController.PlayerState.GrappleDeployed);
+                    
+
                 }
             }
         }
@@ -192,4 +205,5 @@ public class GrappleHook : Equipment, ISaveable
         bIsActive = SaveSystem.LoadBool(gameObject.name, "bIsActive", gameObject.scene.name);
         bIsObtained = SaveSystem.LoadBool(gameObject.name, "bIsObtained", gameObject.scene.name);
     }
+
 }

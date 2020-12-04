@@ -346,7 +346,7 @@ public class ALTPlayerController : MonoBehaviour
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        print("Hit something.");
+        //print("Hit something.");
         _ControllerCollisionPos = hit.point;
     }
 
