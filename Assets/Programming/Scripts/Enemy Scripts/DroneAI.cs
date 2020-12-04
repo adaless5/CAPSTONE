@@ -8,12 +8,24 @@ public class DroneAI : MonoBehaviour
     private State _currentState;
     public Transform[] _patrolPoints;
     private NavMeshAgent _navMeshAgent;
+
+    private void Awake()
+    {
+        EventBroker.OnPlayerSpawned += EventStart;
+        _navMeshAgent = GetComponent<NavMeshAgent>();
+        RaycastHit hit;
+
+        if (Physics.Raycast(transform.position, Vector3.down, out hit))
+        {
+            _navMeshAgent.baseOffset += hit.distance;
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
 
-        EventBroker.OnPlayerSpawned += EventStart;
-        _navMeshAgent = GetComponent<NavMeshAgent>();
+
 
     }
 

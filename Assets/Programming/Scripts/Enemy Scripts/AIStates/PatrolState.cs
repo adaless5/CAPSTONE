@@ -20,7 +20,7 @@ public class Patrol : State
     public override void Update()
     {
         base.Update();
-        LookAt(_patrolPoints[_currentPatrolIndex]);
+        //LookAt(_patrolPoints[_currentPatrolIndex]);
         if (!_navMeshAgent.pathPending && _navMeshAgent.remainingDistance < 0.5f)
             MoveToNextPoint();
 
