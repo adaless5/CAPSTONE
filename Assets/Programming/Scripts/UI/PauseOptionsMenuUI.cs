@@ -9,12 +9,17 @@ public class PauseOptionsMenuUI : MonoBehaviour
     public GameObject firstSlider;
     public Slider slider;
     public AudioMixer audioMaster;
+    public Button FullScreenButton;
+    public Button WindowedButton;
+
     private PauseMenuUI _pauseMenu;
+    bool _isFullScreen;
     void Awake()
     {
         if (FindObjectOfType<ALTPlayerController>())
             FindObjectOfType<ALTPlayerController>().m_LookSensitivity = slider.value;
         _pauseMenu = FindObjectOfType<PauseMenuUI>();
+        _isFullScreen = Screen.fullScreen;
     }
 
     private void OnEnable()
@@ -30,6 +35,15 @@ public class PauseOptionsMenuUI : MonoBehaviour
         {
             _pauseMenu.Unpause();
             gameObject.SetActive(false);
+        }
+
+        if (_isFullScreen)
+        {
+            FullScreenButton.Select();
+        }
+        else
+        {
+            WindowedButton.Select();
         }
     }
 
@@ -48,4 +62,9 @@ public class PauseOptionsMenuUI : MonoBehaviour
         audioMaster.SetFloat("volume", vol);
     }
 
+    public void SetFullScreen(bool isfull)
+    {
+        _isFullScreen = isfull;
+        Screen.fullScreen = isfull;
+    }
 }

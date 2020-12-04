@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class TitleScreen : MonoBehaviour
 {
-    private void Update()
+        private void Update()
     {
         if(Input.anyKey)
         {

@@ -48,8 +48,10 @@ public class OptionsMenuUI : MonoBehaviour
         resolutionMenu.value = index;
         resolutionMenu.RefreshShownValue();
 
-        _isFullScreen = true;
+        _isFullScreen = Screen.fullScreen;
         _isStereo = true;
+
+        Debug.Log(resolutions[index]);
     }
 
     private void Update()
@@ -108,5 +110,5 @@ public class OptionsMenuUI : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(firstOption);
     }
 
-    
+
 }
