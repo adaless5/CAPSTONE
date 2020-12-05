@@ -31,7 +31,7 @@ public class Health : MonoBehaviour, ISaveable
         healthBar = FindObjectOfType<HealthBarUI>();
 
         if (healthBar != null)
-           healthBar.SetMaxHealth(m_MaxHealth);
+            healthBar.SetMaxHealth(m_MaxHealth);
     }
 
     void Awake()
@@ -52,12 +52,20 @@ public class Health : MonoBehaviour, ISaveable
     public void TakeDamage(float damage)
     {
         m_HP -= damage;
-        if (healthBar != null)
-            healthBar.SetHealth(m_HP);
+        if (healthBar != null && gameObject.tag == "Player")
+           healthBar.LoseHealth(m_HP, damage, m_MaxHealth); 
+
 
         if (m_HP <= 0.0f)
         {
-            Die();
+            if (gameObject.tag == "Player")
+            {
+                PlayerDeath();
+            }
+            else
+            {
+                Die();
+            }
         }
 
         //Clamp values -LCC
@@ -65,10 +73,12 @@ public class Health : MonoBehaviour, ISaveable
 
     }
 
-
+    public float GetMaxHealth()
+    {
+        return m_MaxHealth;
+    }
     void Die()
     {
-        CallOnDeath();
         //Temporary Spawning Stuff - Anthony
         Spawner spawner = GetComponent<Spawner>();
         if (spawner != null)
@@ -80,6 +90,16 @@ public class Health : MonoBehaviour, ISaveable
         //Destroy(gameObject);
         gameObject.SetActive(false);
         transform.DetachChildren();
+    }
+
+    void PlayerDeath()
+    {
+        if (gameObject.tag == "Player")
+        {
+            EventBroker.CallOnPlayerDeath();
+
+        }
+
     }
 
     public void CallOnTakeHealthDamage(float damageToTake)
@@ -99,7 +119,7 @@ public class Health : MonoBehaviour, ISaveable
 
     public bool IsAtFullHealth()
     {
-        if(m_HP < m_MaxHealth)
+        if (m_HP < m_MaxHealth)
         {
             return false;
         }
@@ -111,13 +131,13 @@ public class Health : MonoBehaviour, ISaveable
 
     public void Heal(float healthToHeal)
     {
-        if(m_HP < m_MaxHealth)
+        if (m_HP < m_MaxHealth)
         {
             CallOnHeal(healthToHeal);
             m_HP += healthToHeal;
 
             if (healthBar != null)
-                healthBar.SetHealth(m_HP);
+                healthBar.GainHealth(m_HP, healthToHeal, m_MaxHealth);
 
             m_HP = Mathf.Clamp(m_HP, 0, m_MaxHealth);
             Debug.Log("Healed" + healthToHeal + "amount");

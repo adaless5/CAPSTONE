@@ -43,7 +43,7 @@ public class CreatureWeapon : Weapon, ISaveable
     {
         if (_playerController != null)
         {
-            if (bIsActive)
+            if (bIsActive && _playerController.m_ControllerState == ALTPlayerController.ControllerState.Play)
             {
                 GetComponent<MeshRenderer>().enabled = true;
                 UseTool();
@@ -60,9 +60,6 @@ public class CreatureWeapon : Weapon, ISaveable
 
     void OnShoot()
     {
-
-
-
         for (int i = 0; i < _bulletClip; i++)
         {
             Vector3 bulletDeviation = UnityEngine.Random.insideUnitCircle * 300.0f;
@@ -86,11 +83,7 @@ public class CreatureWeapon : Weapon, ISaveable
             {
                 Debug.LogError("Object Pool not initialized! Create an Object Pool prefab");
             }
-
-
-
         }
-
     }
 
     private void OnTarget()

@@ -11,12 +11,14 @@ public class PauseMenuUI : MonoBehaviour
     public GameObject OptionsMenu;
     public GameObject Player;
     public GameObject pauseFirst;
+    public Animator OptionMenuAnimator;
 
     ControllerType _playerContType;
 
 
-    // Update is called once per frame
-    void Update()
+
+        // Update is called once per frame
+        void Update()
     {
         if (Input.GetButtonDown("Pause"))
         {
@@ -40,20 +42,20 @@ public class PauseMenuUI : MonoBehaviour
 
     public void Unpause()
     {
-        PauseMenu.SetActive(false);
         Time.timeScale = 1f;
         GameIsPaused = false;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         Player.GetComponent<ALTPlayerController>().enabled = true;
+        PauseMenu.SetActive(false);
     }
 
     public void Pause()
     {
         enabled = true;
         PauseMenu.SetActive(true);
-        EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(pauseFirst);
+        //EventSystem.current.SetSelectedGameObject(null);
+        //EventSystem.current.SetSelectedGameObject(pauseFirst);
         Time.timeScale = 0f;
         GameIsPaused = true;
         Cursor.lockState = CursorLockMode.None;
@@ -70,11 +72,16 @@ public class PauseMenuUI : MonoBehaviour
         Player.GetComponent<ALTPlayerController>().enabled = true;
         SaveSystem.SaveRespawnInfo(Player.transform, Player.scene.name);
         Destroy(Player);
-        SceneManager.LoadScene(0);
-        //SceneManager.LoadScene("MainMenu", LoadSceneMode.Additive);
+        //SceneManager.LoadScene(0);
+        SceneManager.LoadScene("MainMenu", LoadSceneMode.Additive);
         //tigger save and exit
     }
 
+    public void ReloadScene()
+    {
+        Scene scene = SceneManager.GetActiveScene(); 
+        SceneManager.LoadScene(scene.name);
+    }
     public void ExitGame()
     {
         //
@@ -88,5 +95,16 @@ public class PauseMenuUI : MonoBehaviour
         return GameIsPaused;
     }
 
+    public void ActivateOptionsMenu()
+    {
+        OptionMenuAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
+        Debug.Log("ActivateOptions");
+        OptionMenuAnimator.SetBool("PauseOptionsActive", true);
+    }
+    public void DeactivateOptionsMenu()
+    {
+        Debug.Log("DeactivateOptions");
+        OptionMenuAnimator.SetBool("PauseOptionsActive", false);
+    }
 
 }
