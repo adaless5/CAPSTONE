@@ -183,72 +183,72 @@ public class ALTPlayerController : MonoBehaviour
         }
 
 
-        if (EquipmentWheel.enabled == true)
-        {
-            EventSystem.current.SetSelectedGameObject(null);
-            joyX = 0;
-            joyY = 0;
-            if (m_ControllerType == ControllerType.Controller)
-            {
+        //if (EquipmentWheel.enabled == true)
+        //{
+        //    EventSystem.current.SetSelectedGameObject(null);
+        //    joyX = 0;
+        //    joyY = 0;
+        //    if (m_ControllerType == ControllerType.Controller)
+        //    {
 
-                joyX += Input.GetAxis("Mouse X") * m_LookSensitivity;
-                joyY += Input.GetAxis("Mouse Y") * m_LookSensitivity;
+        //        joyX += Input.GetAxis("Mouse X") * m_LookSensitivity;
+        //        joyY += Input.GetAxis("Mouse Y") * m_LookSensitivity;
 
 
-                joyAngle = Mathf.Atan2(joyX, joyY) * Mathf.Rad2Deg;
-                Debug.Log("Joy Angle: " + joyAngle);
-                if (joyAngle > -90.0f && joyAngle < -45.0f)
-                {
-                    _equipIndex = 1;
-                }
-                if (joyAngle > -45.0f && joyAngle < 0.0f)
-                {
-                    _equipIndex = 0;
-                }
-                if (joyAngle > 0.0f && joyAngle < 90.0f)
-                {
-                    _equipIndex = 2;
-                }
-                EventSystem.current.SetSelectedGameObject(_equipButtons[_equipIndex].gameObject);
-            }
-        }
+        //        joyAngle = Mathf.Atan2(joyX, joyY) * Mathf.Rad2Deg;
+        //        Debug.Log("Joy Angle: " + joyAngle);
+        //        if (joyAngle > -90.0f && joyAngle < -45.0f)
+        //        {
+        //            _equipIndex = 1;
+        //        }
+        //        if (joyAngle > -45.0f && joyAngle < 0.0f)
+        //        {
+        //            _equipIndex = 0;
+        //        }
+        //        if (joyAngle > 0.0f && joyAngle < 90.0f)
+        //        {
+        //            _equipIndex = 2;
+        //        }
+        //        EventSystem.current.SetSelectedGameObject(_equipButtons[_equipIndex].gameObject);
+        //    }
+        //}
 
-        if (WeaponWheel.enabled == true)
-        {
-            //EventSystem.current.SetSelectedGameObject(null);
-            joyX = 0;
-            joyY = 0;
+        //if (WeaponWheel.enabled == true)
+        //{
+        //    //EventSystem.current.SetSelectedGameObject(null);
+        //    joyX = 0;
+        //    joyY = 0;
 
-            {
-                if (m_ControllerType == ControllerType.Controller)
-                {
-                    joyX += Input.GetAxis("Mouse X") * m_LookSensitivity;
-                    joyY += Input.GetAxis("Mouse Y") * m_LookSensitivity;
-                    joyAngle = Mathf.Atan2(joyX, joyY) * Mathf.Rad2Deg;
-                    Debug.Log(joyAngle);
-                    if (joyAngle > -90.0f && joyAngle < -45.0f)
-                    {
-                        _wepIndex = 1;
+        //    {
+        //        if (m_ControllerType == ControllerType.Controller)
+        //        {
+        //            joyX += Input.GetAxis("Mouse X") * m_LookSensitivity;
+        //            joyY += Input.GetAxis("Mouse Y") * m_LookSensitivity;
+        //            joyAngle = Mathf.Atan2(joyX, joyY) * Mathf.Rad2Deg;
+        //            Debug.Log(joyAngle);
+        //            if (joyAngle > -90.0f && joyAngle < -45.0f)
+        //            {
+        //                _wepIndex = 1;
 
-                    }
-                    if (joyAngle > -45.0f && joyAngle < 0.0f)
-                    {
-                        _wepIndex = 0;
-                    }
-                    if (joyAngle > 0.0f && joyAngle < 90.0f)
-                    {
-                        _wepIndex = 2;
-                    }
-                    Debug.Log(_wepIndex);
-                    EventSystem.current.SetSelectedGameObject(_wepButtons[_wepIndex].gameObject);
-                    _weaponBelt.EquipToolAtIndex(_wepIndex);
-                }
-                else if (m_ControllerType == ControllerType.Mouse)
-                {
+        //            }
+        //            if (joyAngle > -45.0f && joyAngle < 0.0f)
+        //            {
+        //                _wepIndex = 0;
+        //            }
+        //            if (joyAngle > 0.0f && joyAngle < 90.0f)
+        //            {
+        //                _wepIndex = 2;
+        //            }
+        //            Debug.Log(_wepIndex);
+        //            EventSystem.current.SetSelectedGameObject(_wepButtons[_wepIndex].gameObject);
+        //            _weaponBelt.EquipToolAtIndex(_wepIndex);
+        //        }
+        //        else if (m_ControllerType == ControllerType.Mouse)
+        //        {
 
-                }
-            }
-        }
+        //        }
+        //    }
+        //}
 
 
         Debug.DrawRay(transform.position, dir);
