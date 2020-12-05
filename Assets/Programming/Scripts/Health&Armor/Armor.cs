@@ -31,7 +31,7 @@ public class Armor : MonoBehaviour
         m_RegenAmount = 20f;
         m_ArmorTimer = m_ArmorCooldown;
 
-        armorBar.SetMaxArmor(m_MaxArmor);
+        //armorBar.SetMaxArmor(m_MaxArmor);
     }
 
 
