@@ -8,6 +8,8 @@ public class ThermalEquipment : Equipment
     bool bIsInThermalView = false;
     Light _directionalLight;
 
+    public ParticleSystem _particleSystem; 
+
     // Start is called before the first frame update
     public override void Start()
     {
@@ -32,6 +34,11 @@ public class ThermalEquipment : Equipment
         if (bIsObtained)
         {
             UseTool(); 
+
+            if(bIsInThermalView)
+            {
+                _particleSystem.transform.position = _playerController.gameObject.transform.forward * 10.0f;
+            }
         }
     }
 

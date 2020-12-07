@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5827386591834178958
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3018920635719792768}
+  - component: {fileID: 5664597283986666634}
+  m_Layer: 9
+  m_Name: MineSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3018920635719792768
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5827386591834178958}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.22000003, z: 1.1599998}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5664597283986666634
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5827386591834178958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29e299a1dffb83c41b2c59b84a9fa56c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bIsActive: 0
+  bIsObtained: 0
+  _weapon: 0
+  m_damageAmount: 10
+  m_weaponClipSize: 6
+  m_reloadTime: 2
+  m_fireRate: 10
+  m_hitImpact: 50
+  m_weaponRange: 50
+  m_recoilForce: 1
+  m_recoilInitialSpeed: 25
+  m_maxRecoilDistance: 0.5
+  m_recoilReadjustSpeed: 10
+  Force: 750
+  CoolDown: 3
+  minePrefab: {fileID: 401094466865097797, guid: ffe82dd409ff7374db564cd1b25f0868,
+    type: 3}
+  m_playerController: {fileID: 0}
