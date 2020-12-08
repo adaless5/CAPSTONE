@@ -14,6 +14,7 @@ public class DeathMenuUI : MonoBehaviour
         _player = GetComponentInParent<ALTPlayerController>();
         EventBroker.OnPlayerDeath += DisplayDeathMenu;
         _deathMenuCanvas.interactable = false;
+        _deathMenuCanvas.blocksRaycasts = false;
         _deathMenuCanvas.alpha = 0;
     }
 
@@ -26,6 +27,7 @@ public class DeathMenuUI : MonoBehaviour
     void DisplayDeathMenu()
     {
         _deathMenuCanvas.interactable = true;
+        _deathMenuCanvas.blocksRaycasts = true;
         StartCoroutine(FadeTo(1.0f, 1.0f));
     }
     IEnumerator FadeTo(float aValue, float aTime)
@@ -51,6 +53,7 @@ public class DeathMenuUI : MonoBehaviour
         _player.PlayerRespawn();
         StartCoroutine(FadeTo(0.0f, 1.5f));
         _deathMenuCanvas.interactable = false;
+        _deathMenuCanvas.blocksRaycasts = false;
     }
 
     public void QuitToMainMenu()
@@ -58,5 +61,6 @@ public class DeathMenuUI : MonoBehaviour
         SceneManager.LoadScene(0);
         //_deathMenuCanvas.alpha = 0;
         _deathMenuCanvas.interactable = false;
+        _deathMenuCanvas.blocksRaycasts = false;
     }
 }
