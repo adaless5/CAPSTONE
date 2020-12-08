@@ -29,8 +29,8 @@ public class ThermalEquipment : Equipment
             }
         }
 
-        _particleSystemPrefab = Instantiate<GameObject>(_particleSystemPrefab, gameObject.transform);
-        _particleSystem = _particleSystemPrefab.GetComponentInChildren<ParticleSystem>();
+        //_particleSystemPrefab = Instantiate<GameObject>(_particleSystemPrefab, gameObject.transform);
+        //_particleSystem = _particleSystemPrefab.GetComponentInChildren<ParticleSystem>();
         //_particleSystemPrefab.transform.position = _playerController.gameObject.transform.forward * 10.0f;
         //_particleSystemPrefab.SetActive(false);
     }
