@@ -8,7 +8,9 @@ public class ThermalEquipment : Equipment
     bool bIsInThermalView = false;
     Light _directionalLight;
 
-    public ParticleSystem _particleSystem; 
+    public GameObject _particleSystemPrefab;
+    GameObject _particleSystemObject;
+    public ParticleSystem _particleSystem;
 
     // Start is called before the first frame update
     public override void Start()
@@ -26,6 +28,11 @@ public class ThermalEquipment : Equipment
                 break;
             }
         }
+
+        _particleSystemPrefab = Instantiate<GameObject>(_particleSystemPrefab, gameObject.transform);
+        _particleSystem = _particleSystemPrefab.GetComponentInChildren<ParticleSystem>();
+        //_particleSystemPrefab.transform.position = _playerController.gameObject.transform.forward * 10.0f;
+        //_particleSystemPrefab.SetActive(false);
     }
 
     // Update is called once per frame
@@ -37,7 +44,10 @@ public class ThermalEquipment : Equipment
 
             if(bIsInThermalView)
             {
-                _particleSystem.transform.position = _playerController.gameObject.transform.forward * 10.0f;
+                if(_particleSystemPrefab != null)
+                {
+                    _particleSystemPrefab.transform.position = _playerController.gameObject.transform.forward * 10.0f;
+                }
             }
         }
     }
@@ -69,7 +79,16 @@ public class ThermalEquipment : Equipment
                         }
                     }
 
+                    //if (_particleSystem != null)
+                    //{
+                    //    _particleSystem.Play();
+                    //}
+
+                    //_particleSystemPrefab.SetActive(true);
+
                     bIsInThermalView = true;
+                    
+                    
                 }
                 else if (bIsInThermalView)
                 {
@@ -89,6 +108,8 @@ public class ThermalEquipment : Equipment
                             _directionalLight.color = new Vector4(1.0f, 1.0f, 1.0f, 1.0f);
                         }
                     }
+
+                    //_particleSystemPrefab.SetActive(false);
 
                     bIsInThermalView = false;
                 }
