@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7191562193057307094}
   - component: {fileID: 7191562193057307095}
   - component: {fileID: 7191562193057307088}
+  - component: {fileID: 3165124334987378904}
   m_Layer: 10
   m_Name: GunTemp
   m_TagString: Player_Weapon
@@ -123,12 +124,36 @@ MonoBehaviour:
   m_fireRate: 10
   m_hitImpact: 200
   m_weaponRange: 50
+  m_recoilForce: 1
+  m_recoilInitialSpeed: 25
+  m_maxRecoilDistance: 0.5
+  m_recoilReadjustSpeed: 10
   muzzleFlash: {fileID: 7191562193600319789}
   impactFX: {fileID: 7133824047621825672, guid: a9bda7650ecc2b3498e2a7a21cf530e8,
     type: 3}
   reticuleAnimator: {fileID: 0}
+  outOfAmmoAnimator: {fileID: 0}
   gunCamera: {fileID: 0}
-  _playercontroller: {fileID: 0}
+  m_ammoUI: {fileID: 0}
+--- !u!95 &3165124334987378904
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7191562193057307090}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: dec68a2191ca3b64aae5d52fe3ad3bfa, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1001 &7690220253832872150
 PrefabInstance:
   m_ObjectHideFlags: 0
