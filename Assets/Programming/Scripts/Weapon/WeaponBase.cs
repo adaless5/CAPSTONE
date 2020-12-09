@@ -19,7 +19,7 @@ public class WeaponBase : Weapon, ISaveable
     public Animator reticuleAnimator;
     public Animator outOfAmmoAnimator;
     [SerializeField]
-    Animator reloadAnimator;
+    Animator gunAnimator;
 
     [Header("Camera Settings")]
     public Camera gunCamera;
@@ -41,7 +41,7 @@ public class WeaponBase : Weapon, ISaveable
         m_weaponRange = 50.0f;
         m_fireStart = 0.0f;       
         outOfAmmoAnimator = FindObjectOfType<AmmoUI>().GetComponent<Animator>();
-        reloadAnimator = GetComponent<Animator>();
+        gunAnimator = GetComponent<Animator>();
     }
 
     public override void Start()
@@ -97,7 +97,12 @@ public class WeaponBase : Weapon, ISaveable
         }
 
         //Reloads automatically at 0 or if player users reload input "R"
-        if (m_currentAmmoCount <= 0 && m_overallAmmoCount >= 6 || Input.GetButtonDown("Reload"))
+        if (m_currentAmmoCount <= 0 && m_overallAmmoCount >= 1)
+        {
+            StartCoroutine(OnReload());
+            return;
+        }
+        else if(Input.GetButtonDown("Reload") && m_overallAmmoCount >= 1)
         {
             StartCoroutine(OnReload());
             return;
@@ -113,8 +118,7 @@ public class WeaponBase : Weapon, ISaveable
             }
             else
             {
-                outOfAmmoAnimator.SetBool("bIsOut", true);
-                Debug.Log("Out of Ammo");
+                outOfAmmoAnimator.SetBool("bIsOut", true);               
             }
         }
     }
@@ -122,9 +126,7 @@ public class WeaponBase : Weapon, ISaveable
     IEnumerator OnReload()
     {
         bIsReloading = true;
-        reloadAnimator.SetBool("bIsReloading", true);        
-
-        Debug.Log("Reloading ammo");
+        gunAnimator.SetBool("bIsReloading", true);                
 
         yield return new WaitForSeconds(m_reloadTime);
 
@@ -139,8 +141,8 @@ public class WeaponBase : Weapon, ISaveable
 
         //Play reload and ammo animations
         outOfAmmoAnimator.SetBool("bIsOut", false);
-        reloadAnimator.SetBool("bIsReloading", false);       
-        Debug.Log("Reload Complete");
+        gunAnimator.SetBool("bIsReloading", false);   
+       
     }
 
     //Function for AmmoPickup class
@@ -154,14 +156,12 @@ public class WeaponBase : Weapon, ISaveable
     void OnShoot()
     {
         //Play Recoil animation
-        reloadAnimator.SetTrigger("OnRecoil");      
+        gunAnimator.SetTrigger("OnRecoil");      
         muzzleFlash.Play();
 
         RaycastHit hitInfo;
         if (Physics.Raycast(gunCamera.transform.position, gunCamera.transform.forward, out hitInfo, m_weaponRange))
         {
-            //Debug.Log(hitInfo.transform.name);
-
             //Only damages if asset has "Health" script
             Health target = hitInfo.transform.GetComponent<Health>();
             if (target != null && target.gameObject.tag != "Player")
