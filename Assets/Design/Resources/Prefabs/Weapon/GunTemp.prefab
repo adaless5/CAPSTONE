@@ -123,12 +123,17 @@ MonoBehaviour:
   m_fireRate: 10
   m_hitImpact: 200
   m_weaponRange: 50
+  m_recoilForce: 1
+  m_recoilInitialSpeed: 25
+  m_maxRecoilDistance: 0.5
+  m_recoilReadjustSpeed: 10
   muzzleFlash: {fileID: 7191562193600319789}
   impactFX: {fileID: 7133824047621825672, guid: a9bda7650ecc2b3498e2a7a21cf530e8,
     type: 3}
   reticuleAnimator: {fileID: 0}
+  outOfAmmoAnimator: {fileID: 0}
   gunCamera: {fileID: 0}
-  _playercontroller: {fileID: 0}
+  m_ammoUI: {fileID: 0}
 --- !u!1001 &7690220253832872150
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -190,6 +195,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: -118.636
+      objectReference: {fileID: 0}
+    - target: {fileID: 681355423836803579, guid: 4d9ee4fe5fcbb864c9e3fc2064394382,
+        type: 3}
+      propertyPath: LightsModule.rangeCurve.scalar
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 681355423836803579, guid: 4d9ee4fe5fcbb864c9e3fc2064394382,
+        type: 3}
+      propertyPath: LightsModule.intensityCurve.scalar
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 681355423836803579, guid: 4d9ee4fe5fcbb864c9e3fc2064394382,
+        type: 3}
+      propertyPath: LightsModule.maxLights
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 681355423836803582, guid: 4d9ee4fe5fcbb864c9e3fc2064394382,
         type: 3}
