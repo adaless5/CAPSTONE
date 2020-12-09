@@ -18,6 +18,8 @@ public class WeaponBase : Weapon, ISaveable
     public GameObject impactFX;
     public Animator reticuleAnimator;
     public Animator outOfAmmoAnimator;
+    [SerializeField]
+    Animator reloadAnimator;
 
     [Header("Camera Settings")]
     public Camera gunCamera;
@@ -47,6 +49,7 @@ public class WeaponBase : Weapon, ISaveable
         m_recoilInitialSpeed = 25f;
         m_recoilReadjustSpeed = 10f;
         outOfAmmoAnimator = FindObjectOfType<AmmoUI>().GetComponent<Animator>();
+        reloadAnimator = GetComponent<Animator>();
 
         m_OriginalGunPos = gameObject.transform.localPosition;
         m_WeaponRecoilLocalPosition = m_OriginalGunPos;
@@ -153,6 +156,8 @@ public class WeaponBase : Weapon, ISaveable
     IEnumerator OnReload()
     {
         bIsReloading = true;
+        reloadAnimator.SetBool("bIsReloading", true);
+
         Debug.Log("Reloading ammo");
 
         yield return new WaitForSeconds(m_reloadTime);
@@ -167,6 +172,7 @@ public class WeaponBase : Weapon, ISaveable
         bIsReloading = false;
 
         outOfAmmoAnimator.SetBool("bIsOut", false);
+        reloadAnimator.SetBool("bIsReloading", false);
         Debug.Log("Reload Complete");
     }
 
