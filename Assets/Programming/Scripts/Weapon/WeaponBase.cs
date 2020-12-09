@@ -156,7 +156,7 @@ public class WeaponBase : Weapon, ISaveable
     IEnumerator OnReload()
     {
         bIsReloading = true;
-        reloadAnimator.SetBool("bIsReloading", true);
+        reloadAnimator.SetBool("bIsReloading", true);        
 
         Debug.Log("Reloading ammo");
 
@@ -172,7 +172,7 @@ public class WeaponBase : Weapon, ISaveable
         bIsReloading = false;
 
         outOfAmmoAnimator.SetBool("bIsOut", false);
-        reloadAnimator.SetBool("bIsReloading", false);
+        reloadAnimator.SetBool("bIsReloading", false);       
         Debug.Log("Reload Complete");
     }
 

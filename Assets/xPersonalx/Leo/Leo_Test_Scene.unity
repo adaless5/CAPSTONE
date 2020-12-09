@@ -130,6 +130,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 387635505003507890, guid: 9e50808d1be468c46bd238eaa942e1ab,
+        type: 3}
+      propertyPath: reloadAnimator
+      value: 
+      objectReference: {fileID: 2125024389}
     - target: {fileID: 496014468107801626, guid: 9e50808d1be468c46bd238eaa942e1ab,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -188,8 +193,13 @@ PrefabInstance:
     - target: {fileID: 5079456467959872846, guid: 9e50808d1be468c46bd238eaa942e1ab,
         type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5079456467959872846, guid: 9e50808d1be468c46bd238eaa942e1ab,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: dec68a2191ca3b64aae5d52fe3ad3bfa, type: 2}
     - target: {fileID: 5341162584005937555, guid: 9e50808d1be468c46bd238eaa942e1ab,
         type: 3}
       propertyPath: m_Name
@@ -1404,3 +1414,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0de6057cc8b610b4babad0c8ed9cd736, type: 3}
+--- !u!95 &2125024389 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5079456467959872846, guid: 9e50808d1be468c46bd238eaa942e1ab,
+    type: 3}
+  m_PrefabInstance: {fileID: 129350546}
+  m_PrefabAsset: {fileID: 0}
