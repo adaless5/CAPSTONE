@@ -14,6 +14,8 @@ public class ThermalEquipment : Equipment
 
     Quaternion rotation;
 
+    Vector4 _baseDirLightColour;
+
     // Start is called before the first frame update
     public override void Start()
     {
@@ -26,7 +28,7 @@ public class ThermalEquipment : Equipment
             if (light.gameObject.tag == "Dir Light")
             {
                 _directionalLight = light;
-
+                _baseDirLightColour = _directionalLight.color;
                 break;
             }
         }
@@ -54,7 +56,6 @@ public class ThermalEquipment : Equipment
 
                     //Donut Particle System
                     _particleSystemPrefab.transform.TransformPoint(_playerController.gameObject.transform.up * 50.0f);
-                    //_particleSystemPrefab.transform.rotation.SetEulerAngles(0.0f, 0.0f, 0.0f);
                 }
             }
         }
@@ -113,7 +114,7 @@ public class ThermalEquipment : Equipment
                         }
                         else if (!_playerController.GetDarknessVolume())
                         {
-                            _directionalLight.color = new Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+                            _directionalLight.color = _baseDirLightColour;
                         }
                     }
 
