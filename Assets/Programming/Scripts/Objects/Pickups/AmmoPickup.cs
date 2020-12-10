@@ -46,8 +46,7 @@ public class AmmoPickup : MonoBehaviour
         {
             isPickedUp = true;
             EventBroker.CallOnAmmoPickup(ammoType, m_amountOfClipsInPickup);
-            //Destroy(gameObject); // EVAN COMMENTED THIS OUT AND ADDED THE LINE BELOW, IF THERE IS A PROBLEM YELL AT HIM
-            gameObject.SetActive(false);
+            Destroy(gameObject);
         }
     }
 }
