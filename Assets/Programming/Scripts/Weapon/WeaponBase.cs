@@ -18,15 +18,13 @@ public class WeaponBase : Weapon, ISaveable
     public GameObject impactFX;
     public Animator reticuleAnimator;
     public Animator outOfAmmoAnimator;
+    [SerializeField]
+    Animator gunAnimator;
 
     [Header("Camera Settings")]
     public Camera gunCamera;
     public AmmoUI m_ammoUI;
-
-    Vector3 m_WeaponRecoilLocalPosition;
-    Vector3 m_AccumlatedRecoil;
-    Vector3 m_OriginalGunPos;
-
+   
     float m_timeElapsed;
     float m_lerpDuration = 3f;
 
@@ -41,21 +39,15 @@ public class WeaponBase : Weapon, ISaveable
         m_fireRate = 0.8f; //Default Gun shoots every 1.25 seconds, can be adjusted in editor - VR
         m_hitImpact = 50.0f;
         m_weaponRange = 50.0f;
-        m_fireStart = 0.0f;
-        m_recoilForce = .50f;
-        m_maxRecoilDistance = 0.5f;
-        m_recoilInitialSpeed = 25f;
-        m_recoilReadjustSpeed = 10f;
+        m_fireStart = 0.0f;       
         outOfAmmoAnimator = FindObjectOfType<AmmoUI>().GetComponent<Animator>();
-
-        m_OriginalGunPos = gameObject.transform.localPosition;
-        m_WeaponRecoilLocalPosition = m_OriginalGunPos;
-        m_AccumlatedRecoil = m_OriginalGunPos;
 
         gameObject.GetComponentInChildren<MeshRenderer>().enabled = false;
         //gameObject.SetActive(false);
         bIsObtained = false;
         bIsActive = false;
+
+        gunAnimator = GetComponent<Animator>();
     }
 
     public override void Start()
@@ -107,29 +99,6 @@ public class WeaponBase : Weapon, ISaveable
         }
     }
 
-    private void LateUpdate()
-    {
-        WeaponRecoilUpdate();
-        gameObject.transform.localPosition = m_WeaponRecoilLocalPosition;
-    }
-
-    //Updates weapon recoil animation - VR
-    //TODO: Not currently using lerping speed for recoil to match fire rate as weapon won't return to original position
-    void WeaponRecoilUpdate()
-    {
-        //Going from local position to recoil
-        if (m_WeaponRecoilLocalPosition.z >= m_AccumlatedRecoil.z *0.99f)
-        {
-            m_WeaponRecoilLocalPosition.z = Mathf.Lerp(m_WeaponRecoilLocalPosition.z, m_AccumlatedRecoil.z, m_recoilInitialSpeed * Time.deltaTime);
-            //m_WeaponRecoilLocalPosition.z = m_AccumlatedRecoil.z;
-        }
-        else //Going from guns new position after recoil back to original
-        {             
-            m_WeaponRecoilLocalPosition.z = Mathf.Lerp(m_WeaponRecoilLocalPosition.z, m_OriginalGunPos.z, 1f);
-            m_AccumlatedRecoil.z = m_WeaponRecoilLocalPosition.z;           
-        }
-    }
-
     public override void UseTool()
     {
         if (bIsReloading)
@@ -138,7 +107,12 @@ public class WeaponBase : Weapon, ISaveable
         }
 
         //Reloads automatically at 0 or if player users reload input "R"
-        if (m_currentAmmoCount <= 0 && m_overallAmmoCount >= 6 || Input.GetButtonDown("Reload"))
+        if (m_currentAmmoCount <= 0 && m_overallAmmoCount >= 1)
+        {
+            StartCoroutine(OnReload());
+            return;
+        }
+        else if(Input.GetButtonDown("Reload") && m_overallAmmoCount >= 1)
         {
             StartCoroutine(OnReload());
             return;
@@ -150,11 +124,11 @@ public class WeaponBase : Weapon, ISaveable
             if (m_currentAmmoCount > 0)
             {
                 OnShoot();
+                
             }
             else
             {
-                outOfAmmoAnimator.SetBool("bIsOut", true);
-                Debug.Log("Out of Ammo");
+                outOfAmmoAnimator.SetBool("bIsOut", true);               
             }
         }
     }
@@ -162,7 +136,7 @@ public class WeaponBase : Weapon, ISaveable
     IEnumerator OnReload()
     {
         bIsReloading = true;
-        Debug.Log("Reloading ammo");
+        gunAnimator.SetBool("bIsReloading", true);                
 
         yield return new WaitForSeconds(m_reloadTime);
 
@@ -175,8 +149,10 @@ public class WeaponBase : Weapon, ISaveable
         m_ammoUI.SetAmmoText(m_currentAmmoCount, m_overallAmmoCount, m_weaponClipSize);
         bIsReloading = false;
 
+        //Play reload and ammo animations
         outOfAmmoAnimator.SetBool("bIsOut", false);
-        Debug.Log("Reload Complete");
+        gunAnimator.SetBool("bIsReloading", false);   
+       
     }
 
     //Function for AmmoPickup class
@@ -189,17 +165,14 @@ public class WeaponBase : Weapon, ISaveable
 
     void OnShoot()
     {
-        //Weapon Recoil amount 
-        m_AccumlatedRecoil.z += Vector3.back.z * m_recoilForce;       
-        m_AccumlatedRecoil = Vector3.ClampMagnitude(m_AccumlatedRecoil, m_maxRecoilDistance);
-
+        //Play Recoil animation
+        gunAnimator.SetTrigger("OnRecoil");      
+        
         muzzleFlash.Play();
 
         RaycastHit hitInfo;
         if (Physics.Raycast(gunCamera.transform.position, gunCamera.transform.forward, out hitInfo, m_weaponRange))
         {
-            //Debug.Log(hitInfo.transform.name);
-
             //Only damages if asset has "Health" script
             Health target = hitInfo.transform.GetComponent<Health>();
             if (target != null && target.gameObject.tag != "Player")
@@ -227,7 +200,7 @@ public class WeaponBase : Weapon, ISaveable
 
             //Particle effects on hit
             GameObject hitImpact = Instantiate(impactFX, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
-            Destroy(hitImpact, 2.0f);
+            Destroy(hitImpact, 2.0f);            
         }
 
         //Using ammo
@@ -237,7 +210,7 @@ public class WeaponBase : Weapon, ISaveable
         if (m_currentAmmoCount == 0 && m_overallAmmoCount == 0)
         {
             outOfAmmoAnimator.SetBool("bIsOut", true);
-        }
+        }        
     }
 
     //VR - Plays Animation to focus reticule on targeting
