@@ -51,6 +51,11 @@ public class WeaponBase : Weapon, ISaveable
         m_OriginalGunPos = gameObject.transform.localPosition;
         m_WeaponRecoilLocalPosition = m_OriginalGunPos;
         m_AccumlatedRecoil = m_OriginalGunPos;
+
+        gameObject.GetComponentInChildren<MeshRenderer>().enabled = false;
+        //gameObject.SetActive(false);
+        bIsObtained = false;
+        bIsActive = false;
     }
 
     public override void Start()
@@ -64,9 +69,10 @@ public class WeaponBase : Weapon, ISaveable
 
         gunCamera = GameObject.FindObjectOfType<Camera>();
 
-        GetComponent<MeshRenderer>().enabled = true;
-        bIsActive = true;
-        bIsObtained = true;
+        //GetComponent<MeshRenderer>().enabled = true;
+        bIsActive = false;
+        bIsObtained = false;
+        gameObject.GetComponentInChildren<MeshRenderer>().enabled = false;
     }
 
     void OnEnable()
@@ -85,15 +91,18 @@ public class WeaponBase : Weapon, ISaveable
     {
         if (_playerController != null)
         {
-            if (bIsActive && _playerController.m_ControllerState == ALTPlayerController.ControllerState.Play)
+            if(bIsObtained)
             {
-                GetComponent<MeshRenderer>().enabled = true;
-                UseTool();
-                OnTarget();
-            }
-            else if (!bIsActive)
-            {
-                GetComponent<MeshRenderer>().enabled = false;
+                if (bIsActive && _playerController.m_ControllerState == ALTPlayerController.ControllerState.Play)
+                {
+                    GetComponent<MeshRenderer>().enabled = true;
+                    UseTool();
+                    OnTarget();
+                }
+                else if (!bIsActive)
+                {
+                    GetComponent<MeshRenderer>().enabled = false;
+                }
             }
         }
     }
@@ -180,11 +189,9 @@ public class WeaponBase : Weapon, ISaveable
 
     void OnShoot()
     {
-
         //Weapon Recoil amount 
         m_AccumlatedRecoil.z += Vector3.back.z * m_recoilForce;       
         m_AccumlatedRecoil = Vector3.ClampMagnitude(m_AccumlatedRecoil, m_maxRecoilDistance);
-
 
         muzzleFlash.Play();
 
