@@ -55,6 +55,7 @@ public class WeaponPickup : MonoBehaviour, ITippable
             EventBroker.CallOnPickupWeapon(weaponNum);
             isUsed = true;
             GetComponent<MeshRenderer>().enabled = false;
+            GetComponent<Collider>().enabled = false;
 
             CreateTip("Sprites/Messages/" + _tipName[weaponNum]);
         }
@@ -117,8 +118,11 @@ public class WeaponPickup : MonoBehaviour, ITippable
             if (obj.tag == "Tip")
             {
                 Destroy(obj);
+                gameObject.SetActive(false);
             }
         }
+  
         _imageObject = null;
+
     }
 }
