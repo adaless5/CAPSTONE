@@ -172,6 +172,7 @@ public class ALTPlayerController : MonoBehaviour
 
         if (Input.GetButtonDown("Pause"))
         {
+            m_ControllerState = ControllerState.Menu;
             _pauseMenu.Pause();
         }
 
