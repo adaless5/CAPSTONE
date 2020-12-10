@@ -56,8 +56,6 @@ public class CreatureWeapon : Weapon, ISaveable
         }
     }
 
-
-
     void OnShoot()
     {
         for (int i = 0; i < _bulletClip; i++)

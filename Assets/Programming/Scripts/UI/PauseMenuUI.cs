@@ -25,6 +25,7 @@ public class PauseMenuUI : MonoBehaviour
             if (GameIsPaused)
             {
                     Unpause();
+
             }
             else
             {
@@ -46,7 +47,7 @@ public class PauseMenuUI : MonoBehaviour
         GameIsPaused = false;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        Player.GetComponent<ALTPlayerController>().enabled = true;
+        Player.GetComponent<ALTPlayerController>().enabled = true;       
         PauseMenu.SetActive(false);
     }
 
