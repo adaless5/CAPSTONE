@@ -65,8 +65,8 @@ public class WeaponBase : Weapon, ISaveable
         gunCamera = GameObject.FindObjectOfType<Camera>();
 
         GetComponent<MeshRenderer>().enabled = true;
-        bIsActive = true;
-        bIsObtained = true;
+        //  bIsActive = true;
+        //  bIsObtained = true;
     }
 
     void OnEnable()
@@ -85,16 +85,20 @@ public class WeaponBase : Weapon, ISaveable
     {
         if (_playerController != null)
         {
-            if (bIsActive && _playerController.m_ControllerState == ALTPlayerController.ControllerState.Play)
+            if (bIsObtained)
             {
-                GetComponent<MeshRenderer>().enabled = true;
-                UseTool();
-                OnTarget();
+                if (bIsActive && _playerController.m_ControllerState == ALTPlayerController.ControllerState.Play)
+                {
+                    GetComponent<MeshRenderer>().enabled = true;
+                    UseTool();
+                    OnTarget();
+                }
+                else if (!bIsActive)
+                {
+                    GetComponent<MeshRenderer>().enabled = false;
+                }
             }
-            else if (!bIsActive)
-            {
-                GetComponent<MeshRenderer>().enabled = false;
-            }
+
         }
     }
 
@@ -109,15 +113,15 @@ public class WeaponBase : Weapon, ISaveable
     void WeaponRecoilUpdate()
     {
         //Going from local position to recoil
-        if (m_WeaponRecoilLocalPosition.z >= m_AccumlatedRecoil.z *0.99f)
+        if (m_WeaponRecoilLocalPosition.z >= m_AccumlatedRecoil.z * 0.99f)
         {
             m_WeaponRecoilLocalPosition.z = Mathf.Lerp(m_WeaponRecoilLocalPosition.z, m_AccumlatedRecoil.z, m_recoilInitialSpeed * Time.deltaTime);
             //m_WeaponRecoilLocalPosition.z = m_AccumlatedRecoil.z;
         }
         else //Going from guns new position after recoil back to original
-        {             
+        {
             m_WeaponRecoilLocalPosition.z = Mathf.Lerp(m_WeaponRecoilLocalPosition.z, m_OriginalGunPos.z, 1f);
-            m_AccumlatedRecoil.z = m_WeaponRecoilLocalPosition.z;           
+            m_AccumlatedRecoil.z = m_WeaponRecoilLocalPosition.z;
         }
     }
 
@@ -182,7 +186,7 @@ public class WeaponBase : Weapon, ISaveable
     {
 
         //Weapon Recoil amount 
-        m_AccumlatedRecoil.z += Vector3.back.z * m_recoilForce;       
+        m_AccumlatedRecoil.z += Vector3.back.z * m_recoilForce;
         m_AccumlatedRecoil = Vector3.ClampMagnitude(m_AccumlatedRecoil, m_maxRecoilDistance);
 
 
