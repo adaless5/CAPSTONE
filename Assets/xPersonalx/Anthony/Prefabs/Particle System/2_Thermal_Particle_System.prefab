@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7343563388291739090}
   m_Layer: 0
-  m_Name: Thermal_Particle_System
+  m_Name: 2_Thermal_Particle_System
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46,7 +46,7 @@ PrefabInstance:
     - target: {fileID: 1511828143708493603, guid: b7ccd6f3df546ab42921f3db5504e35c,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.7
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 1511828143708493603, guid: b7ccd6f3df546ab42921f3db5504e35c,
         type: 3}
@@ -56,12 +56,12 @@ PrefabInstance:
     - target: {fileID: 1511828143708493603, guid: b7ccd6f3df546ab42921f3db5504e35c,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 21.5466
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 1511828143708493603, guid: b7ccd6f3df546ab42921f3db5504e35c,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.669176
+      value: 0.70921826
       objectReference: {fileID: 0}
     - target: {fileID: 1511828143708493603, guid: b7ccd6f3df546ab42921f3db5504e35c,
         type: 3}
@@ -76,7 +76,7 @@ PrefabInstance:
     - target: {fileID: 1511828143708493603, guid: b7ccd6f3df546ab42921f3db5504e35c,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.743104
+      value: 0.704989
       objectReference: {fileID: 0}
     - target: {fileID: 1511828143708493603, guid: b7ccd6f3df546ab42921f3db5504e35c,
         type: 3}
@@ -86,7 +86,7 @@ PrefabInstance:
     - target: {fileID: 1511828143708493603, guid: b7ccd6f3df546ab42921f3db5504e35c,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 84.007
+      value: 90.34201
       objectReference: {fileID: 0}
     - target: {fileID: 1511828143708493603, guid: b7ccd6f3df546ab42921f3db5504e35c,
         type: 3}
@@ -121,7 +121,7 @@ PrefabInstance:
     - target: {fileID: 6672505342730564519, guid: b7ccd6f3df546ab42921f3db5504e35c,
         type: 3}
       propertyPath: EmissionModule.rateOverTime.scalar
-      value: 10
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 6672505342730564519, guid: b7ccd6f3df546ab42921f3db5504e35c,
         type: 3}
@@ -141,7 +141,7 @@ PrefabInstance:
     - target: {fileID: 6672505342730564519, guid: b7ccd6f3df546ab42921f3db5504e35c,
         type: 3}
       propertyPath: VelocityModule.z.scalar
-      value: 5
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 6672505342730564519, guid: b7ccd6f3df546ab42921f3db5504e35c,
         type: 3}
@@ -161,17 +161,47 @@ PrefabInstance:
     - target: {fileID: 6672505342730564519, guid: b7ccd6f3df546ab42921f3db5504e35c,
         type: 3}
       propertyPath: VelocityModule.z.minScalar
-      value: 10
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 6672505342730564519, guid: b7ccd6f3df546ab42921f3db5504e35c,
         type: 3}
       propertyPath: lengthInSec
-      value: 10
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6672505342730564519, guid: b7ccd6f3df546ab42921f3db5504e35c,
         type: 3}
       propertyPath: InitialModule.startLifetime.scalar
-      value: 40
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6672505342730564519, guid: b7ccd6f3df546ab42921f3db5504e35c,
+        type: 3}
+      propertyPath: ShapeModule.type
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 6672505342730564519, guid: b7ccd6f3df546ab42921f3db5504e35c,
+        type: 3}
+      propertyPath: ShapeModule.m_Scale.x
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 6672505342730564519, guid: b7ccd6f3df546ab42921f3db5504e35c,
+        type: 3}
+      propertyPath: ShapeModule.m_Scale.z
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 6672505342730564519, guid: b7ccd6f3df546ab42921f3db5504e35c,
+        type: 3}
+      propertyPath: ShapeModule.m_Scale.y
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 6672505342730564519, guid: b7ccd6f3df546ab42921f3db5504e35c,
+        type: 3}
+      propertyPath: InitialModule.maxNumParticles
+      value: 50000
+      objectReference: {fileID: 0}
+    - target: {fileID: 6672505342730564519, guid: b7ccd6f3df546ab42921f3db5504e35c,
+        type: 3}
+      propertyPath: ShapeModule.radiusThickness
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b7ccd6f3df546ab42921f3db5504e35c, type: 3}

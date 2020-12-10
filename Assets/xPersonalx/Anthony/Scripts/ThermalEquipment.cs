@@ -12,6 +12,10 @@ public class ThermalEquipment : Equipment
     GameObject _particleSystemObject;
     public ParticleSystem _particleSystem;
 
+    Quaternion rotation;
+
+    Vector4 _baseDirLightColour;
+
     // Start is called before the first frame update
     public override void Start()
     {
@@ -24,15 +28,16 @@ public class ThermalEquipment : Equipment
             if (light.gameObject.tag == "Dir Light")
             {
                 _directionalLight = light;
-
+                _baseDirLightColour = _directionalLight.color;
                 break;
             }
         }
 
-        //_particleSystemPrefab = Instantiate<GameObject>(_particleSystemPrefab, gameObject.transform);
-        //_particleSystem = _particleSystemPrefab.GetComponentInChildren<ParticleSystem>();
-        //_particleSystemPrefab.transform.position = _playerController.gameObject.transform.forward * 10.0f;
-        //_particleSystemPrefab.SetActive(false);
+        _particleSystemPrefab = Instantiate<GameObject>(_particleSystemPrefab, gameObject.transform);
+        _particleSystem = _particleSystemPrefab.GetComponentInChildren<ParticleSystem>();
+        _particleSystemPrefab.SetActive(false);
+
+        rotation = _particleSystemPrefab.transform.rotation;
     }
 
     // Update is called once per frame
@@ -46,10 +51,19 @@ public class ThermalEquipment : Equipment
             {
                 if(_particleSystemPrefab != null)
                 {
-                    _particleSystemPrefab.transform.position = _playerController.gameObject.transform.forward * 10.0f;
+                    //Cube Particle System
+                    //_particleSystemPrefab.transform.TransformPoint(_playerController.gameObject.transform.forward * 10.0f);
+
+                    //Donut Particle System
+                    _particleSystemPrefab.transform.TransformPoint(_playerController.gameObject.transform.up * 50.0f);
                 }
             }
         }
+    }
+
+    void LateUpdate()
+    {
+        _particleSystemPrefab.transform.rotation = rotation;
     }
 
     public override void UseTool()
@@ -79,12 +93,7 @@ public class ThermalEquipment : Equipment
                         }
                     }
 
-                    //if (_particleSystem != null)
-                    //{
-                    //    _particleSystem.Play();
-                    //}
-
-                    //_particleSystemPrefab.SetActive(true);
+                    _particleSystemPrefab.SetActive(true);
 
                     bIsInThermalView = true;
                     
@@ -105,11 +114,11 @@ public class ThermalEquipment : Equipment
                         }
                         else if (!_playerController.GetDarknessVolume())
                         {
-                            _directionalLight.color = new Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+                            _directionalLight.color = _baseDirLightColour;
                         }
                     }
 
-                    //_particleSystemPrefab.SetActive(false);
+                    _particleSystemPrefab.SetActive(false);
 
                     bIsInThermalView = false;
                 }
