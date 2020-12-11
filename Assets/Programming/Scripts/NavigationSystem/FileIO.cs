@@ -6,7 +6,7 @@ using System;
 
 public static class FileIO
 {
-    static bool buildMode = true;
+    static bool buildMode = false;
 
     const string _testPath = "Assets/Design/Resources/Data/GameSave/";
     const string _path = "GameSave/";
