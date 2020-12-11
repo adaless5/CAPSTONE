@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6262383046558725838}
-  - component: {fileID: 6262383046558725833}
+  - component: {fileID: 1251360181752150304}
   m_Layer: 0
   m_Name: AutomaticDoor
   m_TagString: Untagged
@@ -34,7 +34,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6262383046558725833
+--- !u!114 &1251360181752150304
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -43,18 +43,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 6262383046558725832}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e9a1a2ff3dd333f43baf678f35245a1d, type: 3}
+  m_Script: {fileID: 11500000, guid: bc757b78ae70e3440855c09810888c41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bTask_Completed: 0
-  bHasShutTrigger: 0
-  _Door_Type: 2
+  _OpenType: 2
+  _CloseType: 0
+  _StartOpened: 0
   _Player: {fileID: 0}
   _OpenDoor: {fileID: 8572126167697469899}
   _ClosedDoor: {fileID: 8572126167842051103}
-  _Enemy_Array: []
-  _DoorSwitches: []
-  _ProximityTrigger: {fileID: 6262383047052172736}
+  _OpenObjects: []
+  _OpenSwitches: []
+  _OpenProximityTrigger: {fileID: 7541470953831906746}
+  _CloseObjects: []
+  _CloseSwitches: []
+  _CloseProximityTrigger: {fileID: 0}
 --- !u!1 &6262383047052172736
 GameObject:
   m_ObjectHideFlags: 0
@@ -67,7 +70,7 @@ GameObject:
   - component: {fileID: 6262383047052172743}
   - component: {fileID: 6262383047052172742}
   - component: {fileID: 6262383047052172737}
-  - component: {fileID: 6262383047052172741}
+  - component: {fileID: 7541470953831906746}
   m_Layer: 0
   m_Name: AutomaticDoorProximityTrigger
   m_TagString: Untagged
@@ -151,7 +154,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &6262383047052172741
+--- !u!114 &7541470953831906746
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -160,7 +163,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6262383047052172736}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e08702edfaaebdf45908fd829cb6a494, type: 3}
+  m_Script: {fileID: 11500000, guid: 430fc228a89f4cb4fa5b9d3ae5d4bfad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   bIsTriggered: 0

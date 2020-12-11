@@ -153,7 +153,7 @@ public class PuzzleSwitch : MonoBehaviour
 
     void PlayerInput()
     {
-        if (Input.GetButtonDown("Continue"))
+        if (Input.GetButtonDown("Interact"))
         {
             Interact();
         }

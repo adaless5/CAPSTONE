@@ -276,12 +276,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a9e63d38d9d8b04fb55cb9db671e7fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bIsActive: 0
-  _SwitchTimer: 0
-  _FullTimer: 0
+  _DoesSwitchReset: 0
+  _ActivationTimer: 0.5
+  _ResetTimer: 0
   _OffSwitch: {fileID: 1561472839716013570}
   _OnSwitch: {fileID: 1561472838596564624}
-  bPlayerNearby: 0
+  _AffectedSwitches: []
+  _PlayerInteractType: 0
+  _ActivationPolicy: 1
+  _ResponseType: 0
 --- !u!65 &1831309835907281879
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 374373511477996875}
-  - component: {fileID: 374373511477996872}
+  - component: {fileID: 7397201303284726005}
   m_Layer: 0
-  m_Name: Automatic_Door_Drill
+  m_Name: SwitchDoorDrill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -33,7 +33,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &374373511477996872
+--- !u!114 &7397201303284726005
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42,20 +42,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 374373511477996873}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e9a1a2ff3dd333f43baf678f35245a1d, type: 3}
+  m_Script: {fileID: 11500000, guid: bc757b78ae70e3440855c09810888c41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bTask_Completed: 0
-  bHasShutTrigger: 0
-  bHasShut: 0
-  _Door_Type: 0
+  _OpenType: 0
+  _CloseType: 0
+  _StartOpened: 0
   _Player: {fileID: 0}
   _OpenDoor: {fileID: 5457574025811440164}
   _ClosedDoor: {fileID: 5457574025618566612}
-  _Enemy_Array: []
-  _DoorSwitches:
-  - {fileID: 0}
-  _ProximityTrigger: {fileID: 0}
+  _OpenObjects: []
+  _OpenSwitches: []
+  _OpenProximityTrigger: {fileID: 0}
+  _CloseObjects: []
+  _CloseSwitches: []
+  _CloseProximityTrigger: {fileID: 0}
 --- !u!1001 &374373512658567184
 PrefabInstance:
   m_ObjectHideFlags: 0
