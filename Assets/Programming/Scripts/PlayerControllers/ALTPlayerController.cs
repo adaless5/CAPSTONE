@@ -174,6 +174,7 @@ public class ALTPlayerController : MonoBehaviour
                 break;
         }
 
+
         if (Input.GetButtonDown("Pause"))
         {
             try
@@ -186,6 +187,7 @@ public class ALTPlayerController : MonoBehaviour
             }
             
         }
+
 
         HandleEquipmentWheels();
 
