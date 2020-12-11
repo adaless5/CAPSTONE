@@ -48,18 +48,9 @@ public class WeaponBase : Weapon, ISaveable
         m_recoilReadjustSpeed = 10f;
         outOfAmmoAnimator = FindObjectOfType<AmmoUI>().GetComponent<Animator>();
 
-<<<<<<< HEAD
         m_OriginalGunPos = gameObject.transform.localPosition;
         m_WeaponRecoilLocalPosition = m_OriginalGunPos;
         m_AccumlatedRecoil = m_OriginalGunPos;
-=======
-        gameObject.GetComponentInChildren<MeshRenderer>().enabled = false;
-        //gameObject.SetActive(false);
-        bIsObtained = false;
-        bIsActive = false;
-
-        gunAnimator = GetComponent<Animator>();
->>>>>>> master
     }
 
     public override void Start()
@@ -73,16 +64,9 @@ public class WeaponBase : Weapon, ISaveable
 
         gunCamera = GameObject.FindObjectOfType<Camera>();
 
-<<<<<<< HEAD
         GetComponent<MeshRenderer>().enabled = true;
         //  bIsActive = true;
         //  bIsObtained = true;
-=======
-        //GetComponent<MeshRenderer>().enabled = true;
-        bIsActive = false;
-        bIsObtained = false;
-        gameObject.GetComponentInChildren<MeshRenderer>().enabled = false;
->>>>>>> master
     }
 
     void OnEnable()
@@ -101,11 +85,7 @@ public class WeaponBase : Weapon, ISaveable
     {
         if (_playerController != null)
         {
-<<<<<<< HEAD
             if (bIsObtained)
-=======
-            if(bIsObtained)
->>>>>>> master
             {
                 if (bIsActive && _playerController.m_ControllerState == ALTPlayerController.ControllerState.Play)
                 {
@@ -204,18 +184,12 @@ public class WeaponBase : Weapon, ISaveable
 
     void OnShoot()
     {
-<<<<<<< HEAD
 
         //Weapon Recoil amount 
         m_AccumlatedRecoil.z += Vector3.back.z * m_recoilForce;
         m_AccumlatedRecoil = Vector3.ClampMagnitude(m_AccumlatedRecoil, m_maxRecoilDistance);
 
 
-=======
-        //Play Recoil animation
-        gunAnimator.SetTrigger("OnRecoil");      
-        
->>>>>>> master
         muzzleFlash.Play();
 
         RaycastHit hitInfo;
