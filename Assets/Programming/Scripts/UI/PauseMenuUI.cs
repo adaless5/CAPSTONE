@@ -53,7 +53,9 @@ public class PauseMenuUI : MonoBehaviour
         GameIsPaused = false;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        Player.GetComponent<ALTPlayerController>().enabled = true;       
+        ALTPlayerController pc = Player.GetComponent<ALTPlayerController>();
+        //pc.enabled = true;
+        pc.m_ControllerState = ALTPlayerController.ControllerState.Play;
         PauseMenu.SetActive(false);
     }
 
@@ -68,7 +70,9 @@ public class PauseMenuUI : MonoBehaviour
         GameIsPaused = true;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        Player.GetComponent<ALTPlayerController>().enabled = false;
+        ALTPlayerController pc = Player.GetComponent<ALTPlayerController>();
+        //pc.enabled = false;
+        pc.m_ControllerState = ALTPlayerController.ControllerState.Menu;
     }
 
     public void LoadMenu()
