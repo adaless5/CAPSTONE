@@ -25,7 +25,7 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetButtonDown("Continue"))
         {
             DestroyTip();
         }
