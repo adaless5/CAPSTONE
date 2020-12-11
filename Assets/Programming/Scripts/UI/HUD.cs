@@ -48,12 +48,15 @@ public class HUD : MonoBehaviour
     void Start()
     {
         //Weapon Icon
-        weaponIcons = new Sprite[3];
-        weaponIcons[0] = Resources.Load<Sprite>("Sprites/Icons/Icon_Gun");
-        weaponIcons[1] = Resources.Load<Sprite>("Sprites/Icons/Icon_Grenade");
-        weaponIcons[2] = Resources.Load<Sprite>("Sprites/Icons/Icon_Creature");
+        weaponIcons = new Sprite[4];
+        weaponIcons[0] = Resources.Load<Sprite>("Sprites/Icons/Icon_Empty");
+        weaponIcons[1] = Resources.Load<Sprite>("Sprites/Icons/Icon_Gun");
+        weaponIcons[2] = Resources.Load<Sprite>("Sprites/Icons/Icon_Grenade");
+        weaponIcons[3] = Resources.Load<Sprite>("Sprites/Icons/Icon_Creature");
 
         //Ammo Icon
+        //ammoIcons = new Sprite[4];
+        //ammoIcons[0] = Resources.Load<Sprite>("Sprites/Icons/Icon_Empty");
         ammoIcons = new Sprite[3];
         ammoIcons[0] = Resources.Load<Sprite>("Sprites/Icons/Ammo/AMMO_DEFAULT");
         ammoIcons[1] = Resources.Load<Sprite>("Sprites/Icons/Ammo/AMMO_GRENADE");
@@ -61,7 +64,7 @@ public class HUD : MonoBehaviour
 
         //Tool Icon
         toolIcons = new Sprite[3];       
-        toolIcons[0] = Resources.Load<Sprite>("Sprites/Icons/EQUIPMENT ICON BG");
+        toolIcons[0] = Resources.Load<Sprite>("Sprites/Icons/Icon_Empty");
         toolIcons[1] = Resources.Load<Sprite>("Sprites/Icons/Icon_Grapple");
         toolIcons[2] = Resources.Load<Sprite>("Sprites/Icons/Icon_Sword_HUD");
     }
@@ -75,7 +78,15 @@ public class HUD : MonoBehaviour
 
     void CycleWeaponType(int index)
     {
-        m_weaponIcon.sprite = weaponIcons[index];
+        if (m_player._weaponBelt._items[index].GetComponentInChildren<Tool>().bIsActive)
+        {
+            m_weaponIcon.sprite = weaponIcons[index + 1];
+            //m_ammoIcon.sprite = ammoIcons[index + 1];
+        }
+        else
+        {
+            m_weaponIcon.sprite = weaponIcons[index];
+        }
         m_ammoIcon.sprite = ammoIcons[index];
     }
 
