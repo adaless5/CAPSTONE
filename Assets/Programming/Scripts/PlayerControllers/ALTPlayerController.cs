@@ -243,9 +243,10 @@ public class ALTPlayerController : MonoBehaviour
             }
         }
 
+        int slidemask = 1 << 17;
 
         Debug.DrawRay(transform.position, dir);
-        if (Physics.Raycast(transform.position,  dir, out hit))
+        if (Physics.Raycast(transform.position, dir, out hit, 100f, ~slidemask))
         {
             _hitNormal = hit.normal;
 
@@ -387,8 +388,6 @@ public class ALTPlayerController : MonoBehaviour
     {
         return Input.GetButtonUp("Sprint");
     }
-
-
 
     public void PlayerRotation()
     {

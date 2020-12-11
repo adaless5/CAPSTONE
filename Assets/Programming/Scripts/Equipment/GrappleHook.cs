@@ -175,14 +175,25 @@ public class GrappleHook : Equipment, ISaveable
             {
                 if (Vector3.Distance(raycastHit.point, camPos) >= MIN_GRAPPLE_DIST)
                 {
-                    Transform tran = m_SpriteRenderer.gameObject.transform;
-                    tran.position = raycastHit.point;
-                    m_GrappleMarker.SetActive(true);
+                    if (!m_GrappleMarker.activeInHierarchy)
+                    {
+                        m_GrappleMarker.SetActive(true);
+                        Transform tran = m_SpriteRenderer.gameObject.transform;
+                        tran.position = raycastHit.point;
+                    }
+                    else
+                    {
+                        Transform tran = m_SpriteRenderer.gameObject.transform;
+                        tran.position = Vector3.Lerp(tran.position, raycastHit.point, Time.deltaTime * 20.0f);
+                    }
+                    
+                    
                 }
                 else
                 {
                     m_SpriteRenderer.gameObject.transform.position = Vector3.zero;
                     m_GrappleMarker.SetActive(false);
+                    print(m_GrappleMarker.activeSelf);
                 }
             }
             else
