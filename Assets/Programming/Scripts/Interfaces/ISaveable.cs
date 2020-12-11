@@ -4,7 +4,5 @@ using UnityEngine;
 
 public interface ISaveable
 {
-    void SaveDataOnSceneChange();
-
     void LoadDataOnSceneEnter();
 }

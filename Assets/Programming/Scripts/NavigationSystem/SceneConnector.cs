@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using UnityEditor;
-using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -12,11 +8,12 @@ public class SceneConnector : MonoBehaviour
 {
     bool bDebug = false;
 
-    [SerializeField] public enum SceneConnectorType
+    [SerializeField]
+    public enum SceneConnectorType
     {
         Portal,
         NonEuclidian,
-        Seamless, 
+        Seamless,
     }
 
     public string _ID { get; set; } = "";
@@ -32,7 +29,7 @@ public class SceneConnector : MonoBehaviour
         GetComponent<BoxCollider>().enabled = false;
         StartCoroutine(delayActivationOnSceneEnter());
     }
-    
+
     //This prevents the trigger from being active for the first second of a new scene.
     IEnumerator delayActivationOnSceneEnter()
     {
@@ -40,19 +37,14 @@ public class SceneConnector : MonoBehaviour
         GetComponent<BoxCollider>().enabled = true;
     }
 
-    IEnumerator DispatchSave()
-    {
-        //SaveSystem.SaveEvent.Invoke();
-        yield return new WaitForSeconds(.5f);
-    }
-
     IEnumerator LoadNewScene_Portal(SceneConnectorData registryData, Transform playerTransform)
     {
-        yield return StartCoroutine(DispatchSave());
         SceneManager.LoadScene(registryData.sceneName, LoadSceneMode.Single);
 
         playerTransform.position = registryData.pos;
         playerTransform.rotation = registryData.rot;
+
+        yield return null;
     }
 
     void OnTriggerEnter(Collider other)
@@ -62,7 +54,9 @@ public class SceneConnector : MonoBehaviour
         {
             //Fetch connector data from permanent save
             _data = new SceneConnectorData(transform, "", "", "", _type, "", "");
-            _data.FromString(SaveSystem.LoadString(name + gameObject.scene.name, "", gameObject.scene.name));
+            _data.FromString(SaveSystem.LoadConnector(name, gameObject.scene.name));
+
+            Transform playerTransform = other.GetComponentInParent<Transform>();
 
             switch (_data.type)
             {
@@ -70,13 +64,15 @@ public class SceneConnector : MonoBehaviour
 
                     if (!SceneManager.GetSceneByName(_data.destinationSceneName).IsValid())
                         SceneManager.LoadSceneAsync(_data.destinationSceneName, LoadSceneMode.Additive);
-                    StartCoroutine(DispatchSave());
+
+                    StartCoroutine(UpdateRespawnInfo(playerTransform));
+
                     break;
 
                 case SceneConnectorType.Portal:
-                    
+
                     SceneConnectorData registryData = SceneConnectorRegistry.GetDataFromID(_data.destinationSceneID);
-                    Transform playerTransform = other.GetComponentInParent<Transform>();
+
 
                     //In Same Scene
                     if (_data.sceneName.Equals(_data.destinationSceneName))
@@ -86,21 +82,31 @@ public class SceneConnector : MonoBehaviour
                     }
 
                     //In Different Scene
-                    else StartCoroutine(LoadNewScene_Portal(registryData, playerTransform));
-                    
+                    else
+                    {
+                        StartCoroutine(LoadNewScene_Portal(registryData, playerTransform));
+                        StartCoroutine(UpdateRespawnInfo(playerTransform));
+                    }
+
                     break;
 
                 case SceneConnectorType.NonEuclidian:
                     //StartCoroutine(SaveThenLoadNewScene(LoadSceneMode.Single));
                     break;
             }
-        } 
+        }
+    }
+
+    IEnumerator UpdateRespawnInfo(Transform playerTransform)
+    {
+        yield return new WaitForSeconds(3f);
+        FileIO.ExportRespawnInfoToFile(playerTransform, SceneManager.GetActiveScene().name);
     }
 
     public void CreateUnloadTrigger()
     {
         if (_unloadTrigger == null)
-        _unloadTrigger = Instantiate(Resources.Load("Prefabs/NavigationSystem/UnloadTrigger"), transform);
+            _unloadTrigger = Instantiate(Resources.Load("Prefabs/NavigationSystem/UnloadTrigger"), transform);
     }
 
     public void DeleteUnloadTrigger()
@@ -111,8 +117,15 @@ public class SceneConnector : MonoBehaviour
 
     public void UnloadScene()
     {
-        if(bDebug)Debug.Log("Unloaded : " + _data.sceneName);
-        SceneManager.UnloadSceneAsync(_data.sceneName);
+        if (bDebug) Debug.Log("Unloaded : " + _data.sceneName);
+        try
+        {
+            SceneManager.UnloadSceneAsync(_data.sceneName);
+        }
+        catch (Exception e)
+        {
+            Debug.Log("can't unload scene");
+        }
     }
 
     //Container class holding necessary persistent date required by other connectors cross scene.
@@ -147,8 +160,8 @@ public class SceneConnector : MonoBehaviour
         //Empty Constructor
         public SceneConnectorData()
         {
-            pos = new Vector3(0.0f,0.0f,0.0f);
-            rot = new Quaternion(0.0f,0.0f,0.0f,0.0f);
+            pos = new Vector3(0.0f, 0.0f, 0.0f);
+            rot = new Quaternion(0.0f, 0.0f, 0.0f, 0.0f);
             ID = "";
             sceneName = "";
             name = "";
@@ -232,124 +245,4 @@ public class SceneConnector : MonoBehaviour
             return SceneConnectorType.Portal; //Use portal as default if none is found.
         }
     }
-
-
-    ///
-    /// IMPORT/EXPORT Scene Connector Data to TEXT
-    ///
-    public static void ImportConnectorDataFromText()
-    {
-        try
-        {
-            using (StreamReader sr = new StreamReader("Assets/Design/Resources/Data/Connector_Data.txt"))
-            {
-                //Read each line
-                string line;
-                int count = 0;
-                while ((line = sr.ReadLine()) != null)
-                {
-                    SceneConnectorData data = new SceneConnectorData();
-                    data.FromString(line);
-
-                    if (!SceneConnectorRegistry.Contains(data.ID)) 
-                    { 
-                        SceneConnectorRegistry.Add(data);
-                        SaveSystem.Save(data.name + data.sceneName, "", data.sceneName, data.ToString(), SaveSystem.SaveType.CONNECTOR);
-                        count++; 
-                    } 
-                }
-                Debug.Log("Import Connector Data : Found " + count + " new Scene Connectors");
-            }
-        }
-        catch (Exception e)
-        {
-            Debug.Log("The file could not be read: " + e.Message);
-        }
-    }
-
-    public static void ExportConnectorDataFromText()
-    {
-
-        //Clear the file contents
-        FileStream fileStream = File.Open("Assets/Design/Resources/Data/Connector_Data.txt", FileMode.Open);
-        fileStream.SetLength(0);
-        fileStream.Close();
-        //
-
-        //Export Data
-        List<SceneConnectorData> data = SceneConnectorRegistry.GetRegistry();
-
-        using (StreamWriter sw = new StreamWriter("Assets/Design/Resources/Data/Connector_Data.txt"))
-        {
-            foreach (SceneConnectorData connector in data)
-            {
-                sw.WriteLine(connector.ToString());
-            }
-
-            Debug.Log("Export Connector Data : " + data.Count + " Connectors Successfully Exported to Text");
-        }
-    }
-
-    ///
-    /// IMPORT/EXPORT Scene Connector Data to TEXT End
-    ///
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//Debug.Log(_ID);
-
-// If its a portal we must reposition the player.
-// if (_sceneTriggerType == SceneTriggerType.Portal)
-// {
-//     Reset Player Position and orient Rotation.
-//     if (_ID != "")// If id is not default, look in new scene for portal with same ID    
-//     {
-//         GameObject[] sceneTriggers = GameObject.FindGameObjectsWithTag("SceneTrigger");
-
-//         foreach (GameObject trigger in sceneTriggers)
-//         {
-//             if (trigger.scene.name ==  SceneManager.GetActiveScene().name)
-//             {
-//                 Debug.Log(trigger.scene.name);
-
-//                 found portal with same ID
-//                 if(_GoToID == trigger.GetComponent<SceneTrigger>()._ID)
-//                 {
-//                     Debug.Log(trigger.GetComponentInChildren<PlayerStart>().GetComponent<Transform>().transform.position);
-
-//                     Reposition Player
-//                     GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>().transform.position = 
-//                         trigger.GetComponentInChildren<PlayerStart>().GetComponent<Transform>().transform.position;
-
-//                     GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>().transform.rotation = 
-//                         trigger.GetComponentInChildren<PlayerStart>().GetComponent<Transform>().transform.rotation;
-
-//                     break;
-//                 }
-//             }
-
-//         }
-//     } 
-// }

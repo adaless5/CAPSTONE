@@ -86,12 +86,6 @@ public class CreatureWeapon : Weapon, ISaveable
     {
 
     }
-
-    public void SaveDataOnSceneChange()
-    {
-
-    }
-
     public void LoadDataOnSceneEnter()
     {
 

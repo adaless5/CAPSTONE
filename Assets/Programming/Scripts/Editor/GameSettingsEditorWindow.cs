@@ -40,7 +40,7 @@ public class GameSettingsEditorWindow : EditorWindow
 
             if (GUILayout.Button("Import"))
             {
-                SceneConnector.ImportConnectorDataFromText();
+                //FileIO.ImportConnectorDataFromFile();
             }
 
             _exportConnector = EditorGUILayout.Foldout(_exportConnector, "Export Connectors ( Import first! )");
@@ -48,7 +48,7 @@ public class GameSettingsEditorWindow : EditorWindow
             {
                 if (GUILayout.Button("Export"))
                 {
-                    SceneConnector.ExportConnectorDataFromText();
+                    //FileIO.ExportConnectorDataFromFile();
                 }
             }
 

@@ -33,6 +33,7 @@ public class PlayerStart : MonoBehaviour
             //Creates a player at the start of the game.
             if (GameObject.FindWithTag("Player") == null)
             {
+                
                 _playerPrefab = Instantiate(_playerPrefab, _startPosition + _halfCharacterControllerHeight, Quaternion.Euler(_startRotation));
 
                 GameObject player = GameObject.FindWithTag("Player");
@@ -62,7 +63,7 @@ public class PlayerStart : MonoBehaviour
         if (spawnPoint != null)
         {
             _startPosition = spawnPoint.transform.position;
-            _startRotation = spawnPoint.transform.localEulerAngles;
+            _startRotation = spawnPoint.transform.rotation.eulerAngles;
 
         }
         

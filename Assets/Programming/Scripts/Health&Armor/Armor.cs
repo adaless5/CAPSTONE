@@ -5,6 +5,8 @@ using UnityEngine.PlayerLoop;
 
 public class Armor : MonoBehaviour
 {
+    bool bDebug = false;
+
     //[Header("Shield Settings")]
     [SerializeField]
     private float m_Armor;
@@ -54,7 +56,7 @@ public class Armor : MonoBehaviour
             m_Armor -= damage;
             armorBar.LoseArmor(m_Armor, damage, m_MaxArmor);
 
-            Debug.Log("Damage to Armor, Current Armor at " + m_Armor);
+            if (bDebug) Debug.Log("Damage to Armor, Current Armor at " + m_Armor);
         }
 
         m_Armor = Mathf.Clamp(m_Armor, 0, m_MaxArmor);
@@ -78,7 +80,7 @@ public class Armor : MonoBehaviour
     {
         while (m_Armor != m_MaxArmor)
         {
-            Debug.Log("Regenerating...");
+            if (bDebug) Debug.Log("Regenerating...");
 
             m_Armor += m_RegenAmount;
             armorBar.GainArmor(m_Armor, m_RegenAmount, m_MaxArmor);

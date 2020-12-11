@@ -10,7 +10,7 @@ using System;
 [CustomEditor(typeof(SceneConnector))]
 public class SceneConnectorEditor : Editor
 {
-    bool bDebug = false;
+    bool bDebug = true;
     bool bConnectorMatchesSavedData = false;
     bool bFinalized = false;
 
@@ -32,7 +32,7 @@ public class SceneConnectorEditor : Editor
         _data = new SceneConnector.SceneConnectorData(_base.transform, "", _sceneName, target.name, _type, "", "");
 
         //LOAD DATA
-        _data.FromString(SaveSystem.LoadString(target.name + _sceneName, "",_sceneName));
+        _data.FromString(SaveSystem.LoadConnector(target.name, _sceneName));
         if (bDebug) Debug.Log("LOADED : " + target.name + _data.ToString());
 
         //Synchronize members with _data
@@ -322,7 +322,7 @@ public class SceneConnectorEditor : Editor
         //Save Connector to persistant data
         _data = new SceneConnector.SceneConnectorData(_base.GetComponentInChildren<PlayerStart>().transform, _ID, _sceneName, target.name, _type, _goesToID, _goesToScene);
         _data.destinationConnectorName = goToConnectorName;
-        SaveSystem.Save(target.name + _sceneName,"",_sceneName, _data.ToString(),SaveSystem.SaveType.CONNECTOR);
+        SaveSystem.SaveConnector(target.name,_sceneName, _data.ToString());
         if(bDebug)Debug.Log("SAVED : " + target.name + _data.ToString() );
 
         //Save Connector data to SceneConnectorRegistry
