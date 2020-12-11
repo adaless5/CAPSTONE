@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.011439704, g: 0.0038693668, b: 0.004544224, a: 1}
+  m_IndirectSpecularColor: {r: 0.042305753, g: 0.020026471, b: 0.032343693, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -630,7 +630,7 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 0.5566038, g: 0.45816243, b: 0.33343717, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
@@ -920,7 +920,7 @@ PrefabInstance:
     - target: {fileID: 8852009753185485356, guid: bb03cdaa771dee144aefa4a93317e23e,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -132
+      value: -132.89194
       objectReference: {fileID: 0}
     - target: {fileID: 8852009753185485356, guid: bb03cdaa771dee144aefa4a93317e23e,
         type: 3}
@@ -1619,7 +1619,7 @@ GameObject:
   - component: {fileID: 1033537846}
   - component: {fileID: 1033537847}
   - component: {fileID: 1033537848}
-  m_Layer: 11
+  m_Layer: 0
   m_Name: Darkness_Trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3146,7 +3146,7 @@ GameObject:
   - component: {fileID: 2025242049}
   - component: {fileID: 2025242048}
   - component: {fileID: 2025242047}
-  m_Layer: 16
+  m_Layer: 0
   m_Name: Terrain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3583,80 +3583,6 @@ PrefabInstance:
       objectReference: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: faa7c5c7de8c1494684ebb67cd84a05d, type: 3}
---- !u!1001 &5278382725562778640
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 2822169980710634363, guid: 95f06a9f3b374de449a1698362008ac0,
-        type: 3}
-      propertyPath: m_Name
-      value: Default_Gun_Pickup
-      objectReference: {fileID: 0}
-    - target: {fileID: 4871618538729658333, guid: 95f06a9f3b374de449a1698362008ac0,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 15.37
-      objectReference: {fileID: 0}
-    - target: {fileID: 4871618538729658333, guid: 95f06a9f3b374de449a1698362008ac0,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -49.33
-      objectReference: {fileID: 0}
-    - target: {fileID: 4871618538729658333, guid: 95f06a9f3b374de449a1698362008ac0,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -126.89
-      objectReference: {fileID: 0}
-    - target: {fileID: 4871618538729658333, guid: 95f06a9f3b374de449a1698362008ac0,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4871618538729658333, guid: 95f06a9f3b374de449a1698362008ac0,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4871618538729658333, guid: 95f06a9f3b374de449a1698362008ac0,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4871618538729658333, guid: 95f06a9f3b374de449a1698362008ac0,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4871618538729658333, guid: 95f06a9f3b374de449a1698362008ac0,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 4871618538729658333, guid: 95f06a9f3b374de449a1698362008ac0,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4871618538729658333, guid: 95f06a9f3b374de449a1698362008ac0,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4871618538729658333, guid: 95f06a9f3b374de449a1698362008ac0,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7624397149249693200, guid: 95f06a9f3b374de449a1698362008ac0,
-        type: 3}
-      propertyPath: m_IsTrigger
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 95f06a9f3b374de449a1698362008ac0, type: 3}
 --- !u!1001 &7212646505044437313
 PrefabInstance:
   m_ObjectHideFlags: 0

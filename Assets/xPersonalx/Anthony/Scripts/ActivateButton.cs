@@ -9,7 +9,6 @@ public class ActivateButton : MonoBehaviour, IPointerEnterHandler
     Button _button;
     Belt _Belt;
     public int _CorrespondingToolIndex;
-    CanvasGroup _canvasGroup;
 
     // Start is called before the first frame update
     void Start()
@@ -18,32 +17,24 @@ public class ActivateButton : MonoBehaviour, IPointerEnterHandler
 
         _button = GetComponent<Button>();
         //_button.onClick.AddListener(EquipToolAtCorrespondingToolIndex); 
-
+        
         _button.interactable = false;
 
         if (IsToolActive())
             _button.Select();
-
-        _canvasGroup = GetComponentInParent<CanvasGroup>();
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (_canvasGroup != null)
+        if (IsToolObtained() && !IsToolActive())
         {
-            if (_canvasGroup.interactable == true)
-            {
-                if (IsToolObtained() && !IsToolActive())
-                {
-                    _button.interactable = true;
-                }
-                else if (IsToolActive())
-                {
-                    _button.Select();
-                }
-            }
+            _button.interactable = true;
+        }
+        else if (IsToolActive())
+        {
+            _button.Select();
         }
     }
 
@@ -56,12 +47,10 @@ public class ActivateButton : MonoBehaviour, IPointerEnterHandler
 
     bool IsToolObtained()
     {
-        try
-        {
+        try{
             return _Belt._items[_CorrespondingToolIndex].GetComponentInChildren<Tool>().bIsObtained;
         }
-        catch
-        {
+        catch{
             return false;
         }
     }
@@ -72,7 +61,7 @@ public class ActivateButton : MonoBehaviour, IPointerEnterHandler
         {
             return _Belt._items[_CorrespondingToolIndex].GetComponentInChildren<Tool>().bIsActive;
         }
-        catch { return false; }
+        catch{return false;}
     }
 
     void EquipToolAtCorrespondingToolIndex()
@@ -82,6 +71,6 @@ public class ActivateButton : MonoBehaviour, IPointerEnterHandler
 
     public void SetCorrespondingToolIndex(int index)
     {
-        _CorrespondingToolIndex = index;
+        _CorrespondingToolIndex = index; 
     }
 }

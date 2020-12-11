@@ -14,7 +14,6 @@ public class DarknessTrigger : MonoBehaviour, ITippable
 
     DirectionalLightState _directionalLightState;
     Light _directionalLight;
-    Vector4 _baseDirLightColour;
 
     Vector4 _lightVals;
     Vector4 _targetLightVals = new Vector4(1.0f, 1.0f, 1.0f, 1.0f);
@@ -39,8 +38,7 @@ public class DarknessTrigger : MonoBehaviour, ITippable
             if (light.gameObject.tag == "Dir Light")
             {
                 _directionalLight = light;
-                _targetLightVals = _directionalLight.color;
-                _baseDirLightColour = _directionalLight.color;
+
                 break;
             }
         }
@@ -77,7 +75,7 @@ public class DarknessTrigger : MonoBehaviour, ITippable
             }
             else if (_playerController.GetThermalView() == false)
             {
-                _targetLightVals = _baseDirLightColour;
+                _targetLightVals = new Vector4(1.0f, 1.0f, 1.0f, 1.0f);
             }
         }
     }
@@ -145,23 +143,18 @@ public class DarknessTrigger : MonoBehaviour, ITippable
     {
         _lightVals = _directionalLight.color;
 
-
-        if(_lightVals.x <= _targetLightVals.x)
+        if (_lightVals.x <= _targetLightVals.x && _lightVals.y <= _targetLightVals.y && _lightVals.z <= _targetLightVals.z)
         {
             _lightVals.x += Time.deltaTime;
             _lightVals.x = Mathf.Clamp(_lightVals.x, 0.0f, _targetLightVals.x);
-        }
 
-        if(_lightVals.y <= _targetLightVals.y)
-        {
             _lightVals.y += Time.deltaTime;
             _lightVals.y = Mathf.Clamp(_lightVals.y, 0.0f, _targetLightVals.y);
-        }
 
-        if(_lightVals.z <= _targetLightVals.z)
-        {
             _lightVals.z += Time.deltaTime;
             _lightVals.z = Mathf.Clamp(_lightVals.z, 0.0f, _targetLightVals.z);
+
+            _directionalLight.color = new Vector4(_lightVals.x, _lightVals.y, _lightVals.z, 1.0f);
         }
         else
         {
@@ -169,9 +162,7 @@ public class DarknessTrigger : MonoBehaviour, ITippable
             _lightVals.y = _targetLightVals.y;
             _lightVals.z = _targetLightVals.z;
             _directionalLightState = DirectionalLightState.Set;
-            return;
         }
-        _directionalLight.color = new Vector4(_lightVals.x, _lightVals.y, _lightVals.z, 1.0f);
     }
 
     public void CreateTip(string filename)

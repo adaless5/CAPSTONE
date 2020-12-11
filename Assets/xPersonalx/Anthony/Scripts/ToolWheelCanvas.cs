@@ -5,15 +5,6 @@ using UnityEngine.UI;
 
 public class ToolWheelCanvas : MonoBehaviour
 {
-    CanvasGroup _toolGroup;
-
-    void Awake()
-    {
-        _toolGroup = GetComponent<CanvasGroup>();
-        _toolGroup.interactable = false;
-        _toolGroup.blocksRaycasts = false;
-    }
-
     // Start is called before the first frame update
     void Start()
     {
@@ -31,10 +22,5 @@ public class ToolWheelCanvas : MonoBehaviour
     void Update()
     {
         
-    }
-
-    public CanvasGroup GetCanvasGroup()
-    {
-        return _toolGroup;
     }
 }
