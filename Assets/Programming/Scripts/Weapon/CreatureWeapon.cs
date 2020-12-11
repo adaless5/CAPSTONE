@@ -16,11 +16,13 @@ public class CreatureWeapon : Weapon, ISaveable
     {
         base.Awake();
         _creatureProjectile = (GameObject)Resources.Load("Prefabs/Weapon/Creature Projectile");
+
     }
 
     // Start is called before the first frame update
     public override void Start()
     {
+
         _camera = FindObjectOfType<Camera>();
         GetComponent<MeshRenderer>().enabled = false;
         bIsActive = false;
@@ -53,6 +55,8 @@ public class CreatureWeapon : Weapon, ISaveable
             }
         }
     }
+
+
 
     void OnShoot()
     {
