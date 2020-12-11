@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &8853458843558730672
+--- !u!1 &7194056008015820205
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,47 +8,46 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8184761557153710346}
-  - component: {fileID: 5060294256328216239}
-  - component: {fileID: 7051847125494430309}
-  - component: {fileID: 1595741568190995847}
-  - component: {fileID: 816409653392378279}
+  - component: {fileID: 7538387502449323799}
+  - component: {fileID: 6859651745018241202}
+  - component: {fileID: 8707313655410300024}
+  - component: {fileID: 7550000685708844306}
   m_Layer: 0
-  m_Name: VeinTree_2
+  m_Name: Dtower4 textured
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &8184761557153710346
+--- !u!4 &7538387502449323799
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8853458843558730672}
-  m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 110.359085, y: -0.0000038146973, z: 279.13}
-  m_LocalScale: {x: 3.6557, y: 3.6557, z: 3.6557}
+  m_GameObject: {fileID: 7194056008015820205}
+  m_LocalRotation: {x: -0.48981535, y: -0.5099813, z: -0.5099813, w: 0.48981535}
+  m_LocalPosition: {x: -148.2, y: -0.000015258789, z: -83.6}
+  m_LocalScale: {x: 35.09746, y: 35.09746, z: 35.09746}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &5060294256328216239
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: -92.311}
+--- !u!33 &6859651745018241202
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8853458843558730672}
-  m_Mesh: {fileID: 4434004635621333159, guid: 2b9f6df6e541a6a4cb64062499263119, type: 3}
---- !u!23 &7051847125494430309
+  m_GameObject: {fileID: 7194056008015820205}
+  m_Mesh: {fileID: -5613867604693661769, guid: 05eba5e986e02b54388b77c959549b41, type: 3}
+--- !u!23 &8707313655410300024
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8853458843558730672}
+  m_GameObject: {fileID: 7194056008015820205}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -61,7 +60,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 707e9572178388b44b4e92fa54c6df1c, type: 2}
+  - {fileID: 2100000, guid: 084ac64f4e6328e4284090e16455f507, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -83,30 +82,17 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &1595741568190995847
-MonoBehaviour:
+--- !u!64 &7550000685708844306
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8853458843558730672}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 12204abbb49e55040bf3191c4490c9d8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ThermalViewMaterial: {fileID: 2100000, guid: 211f1b39820a1824a831e6ee1b1b6e32,
-    type: 2}
---- !u!65 &816409653392378279
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8853458843558730672}
+  m_GameObject: {fileID: 7194056008015820205}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.4, y: 0.4, z: 11.789274}
-  m_Center: {x: 0, y: 0, z: 5.3819675}
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -5613867604693661769, guid: 05eba5e986e02b54388b77c959549b41, type: 3}
