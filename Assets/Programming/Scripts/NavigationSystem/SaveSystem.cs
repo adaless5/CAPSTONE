@@ -206,6 +206,20 @@ public class SaveSystem : MonoBehaviour
         }
     }
 
+    public static void SaveRespawnInfo(Transform playerTransform, string sceneName)
+    {
+        RespawnInfo_Data data = new RespawnInfo_Data(playerTransform, sceneName);
+        StaticSaveString(RESPAWN_INFO_REGISTRY_ID, data.ToString(), SaveType.RESPAWNINFO);
+    }
+
+
+    public static RespawnInfo_Data FetchRespawnInfo()
+    {
+        RespawnInfo_Data data = new RespawnInfo_Data();
+        data.FromString(StaticLoadString(RESPAWN_INFO_REGISTRY_ID));
+        return data;
+    }
+
 
 
     /// 
