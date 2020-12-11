@@ -68,7 +68,11 @@ public class GrappleHook : Equipment, ISaveable
             Vector3 camPos = m_PlayerController._camera.transform.position;
             Vector3 camForwardVec = m_PlayerController._camera.transform.forward;
 
-            if (Physics.Raycast(camPos, camForwardVec, out RaycastHit raycastHit, MAX_GRAPPLE_DIST))
+            int playermask = 1 << 9;
+            int triggermask = 1 << 11;
+            int terrainmask = 1 << 16;
+
+            if (Physics.Raycast(camPos, camForwardVec, out RaycastHit raycastHit, MAX_GRAPPLE_DIST, ~(playermask | triggermask | terrainmask)))
             {
                 if (Vector3.Distance(raycastHit.point, camPos) >= MIN_GRAPPLE_DIST)
                 {
@@ -156,8 +160,11 @@ public class GrappleHook : Equipment, ISaveable
         Vector3 camForwardVec = m_PlayerController._camera.transform.forward;
         if (bIsActive && bIsObtained)
         {
-            int layermask = 1 << 9;
-            if (Physics.Raycast(camPos, camForwardVec, out RaycastHit raycastHit, MAX_GRAPPLE_DIST, ~layermask))
+            int playermask = 1 << 9;
+            int triggermask = 1 << 11;
+            int terrainmask = 1 << 16;
+
+            if (Physics.Raycast(camPos, camForwardVec, out RaycastHit raycastHit, MAX_GRAPPLE_DIST, ~(playermask | triggermask | terrainmask)))
             {
                 if (Vector3.Distance(raycastHit.point, camPos) >= MIN_GRAPPLE_DIST)
                 {

@@ -19,11 +19,13 @@ public class PauseOptionsMenuUI : MonoBehaviour
 
     //Volume m_Volume;
     //Exposure m_Exposure;
-    //Light _light;
+    Light _light;
 
     private PauseMenuUI _pauseMenu;
-   // private 
+    // private 
     bool _isFullScreen;
+
+    CanvasGroup _canvasGroup;
     void Awake()
     {
         if (FindObjectOfType<ALTPlayerController>())
@@ -32,9 +34,11 @@ public class PauseOptionsMenuUI : MonoBehaviour
         _pauseMenu = FindObjectOfType<PauseMenuUI>();
         _isFullScreen = Screen.fullScreen;
 
-        //_light = FindObjectOfType<Light>();
+        _light = FindObjectOfType<Light>();
         //m_Volume = FindObjectOfType<Volume>();
-
+        _canvasGroup = GetComponentInParent<CanvasGroup>();
+        _canvasGroup.interactable = false;
+        _canvasGroup.blocksRaycasts = false;
 
         //VolumeProfile profile = m_Volume.sharedProfile;
 
@@ -58,21 +62,32 @@ public class PauseOptionsMenuUI : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(firstSlider);
     }
 
+    public void SetFirstOption()
+    {
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(firstSlider);
+    }
+
     private void Update()
     {
-        if (Input.GetButtonDown("Pause"))
+        if (_canvasGroup.interactable == true)
         {
-            _pauseMenu.Unpause();
-            gameObject.SetActive(false);
-        }
+            if (Input.GetButtonDown("Pause"))
+            {
+                _pauseMenu.Unpause();
+                gameObject.SetActive(false);
+            }
 
-        if (_isFullScreen)
-        {
-            FullScreenButton.Select();
-        }
-        else
-        {
-            WindowedButton.Select();
+            //Commenting this out because it causes some weird issues with Controller stuff, sorry Nick :( -LCC
+            //if (_isFullScreen)
+            //{
+            //    FullScreenButton.Select();
+            //}
+            //else
+            //{
+            //    WindowedButton.Select();
+            //}
+
         }
 
     }
@@ -89,7 +104,7 @@ public class PauseOptionsMenuUI : MonoBehaviour
     public void SetBrightness(float amt)
     {
         //m_Exposure.compensation = new FloatParameter(amt);
-        //_light.intensity = amt;
+        _light.intensity = amt;
         //RenderSettings.skybox.SetFloat("_Exposure", amt);
         //RenderSettings.ambientIntensity = amt;
         //RenderSettings.ambientLight = new Color(amt, amt, amt, 1);
