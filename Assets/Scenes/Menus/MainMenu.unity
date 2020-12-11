@@ -1010,7 +1010,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.5804845, g: 1, b: 0.29622638, a: 0.58431375}
     m_PressedColor: {r: 0.95382845, g: 1, b: 0.39999998, a: 0.78039217}
     m_SelectedColor: {r: 0.72156864, g: 0.8431373, b: 0.67058825, a: 0.34117648}
-    m_DisabledColor: {r: 0.30588236, g: 0.30588236, b: 0.30588236, a: 0}
+    m_DisabledColor: {r: 0.4811321, g: 0.4811321, b: 0.4811321, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -1031,7 +1031,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 118821557}
         m_TargetAssemblyTypeName: MainMenuUI, Assembly-CSharp
-        m_MethodName: StartGame
+        m_MethodName: Continue
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3577,7 +3577,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 651273228}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 118821557}
+        m_TargetAssemblyTypeName: MainMenuUI, Assembly-CSharp
+        m_MethodName: NewGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &651273228
 MonoBehaviour:
   m_ObjectHideFlags: 0

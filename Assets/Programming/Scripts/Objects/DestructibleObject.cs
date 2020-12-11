@@ -19,8 +19,6 @@ public class DestructibleObject : MonoBehaviour, ISaveable
     [Tooltip("This variable should contain the amount of time that the last state lingers before disappearing")]
     [SerializeField] float deathtimer = 0;
 
-    [SerializeField] bool IsSaved = false;
-
     int _index = 0;
     bool _bisDead = false;
     GameObject _currentstate;
@@ -36,8 +34,6 @@ public class DestructibleObject : MonoBehaviour, ISaveable
     private void Awake()
     {
         LoadDataOnSceneEnter();
-        SaveSystem.SaveEvent += SaveDataOnSceneChange;
-
 
         if(bDebug)Debug.Log(_bisDead);
 
@@ -57,19 +53,9 @@ public class DestructibleObject : MonoBehaviour, ISaveable
         }
     }
 
-    public void SaveDataOnSceneChange()
-    {
-        SaveSystem.Save(gameObject.name, "isBroken", gameObject.scene.name, _bisDead);
-    }
-
     public void LoadDataOnSceneEnter()
     {
-        _bisDead = SaveSystem.LoadBool(gameObject.name, "isBroken", gameObject.scene.name);
-    }
-
-    public void OnDisable()
-    {
-        SaveSystem.SaveEvent -= SaveDataOnSceneChange;
+        _bisDead = SaveSystem.LoadBool(gameObject.name, "_bisDead", gameObject.scene.name);
     }
 
     public void Break(string tag)
@@ -128,7 +114,8 @@ public class DestructibleObject : MonoBehaviour, ISaveable
     {
         yield return new WaitForSeconds(deathtimer);
 
-        if(IsSaved)_bisDead = true;
+        _bisDead = true;
+        SaveSystem.Save(gameObject.name, "_bisDead", gameObject.scene.name, _bisDead);
 
         Collider[] col = _currentstate.GetComponentsInChildren<Collider>();
         MeshRenderer[] mesh = _currentstate.GetComponentsInChildren<MeshRenderer>();

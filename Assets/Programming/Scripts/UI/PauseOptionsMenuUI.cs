@@ -9,6 +9,8 @@ using UnityEngine.Rendering.HighDefinition;
 
 public class PauseOptionsMenuUI : MonoBehaviour
 {
+    bool bDebug = false;
+
     public GameObject firstSlider;
     public Slider slider;
     public AudioMixer audioMaster;
@@ -51,7 +53,7 @@ public class PauseOptionsMenuUI : MonoBehaviour
 
     private void OnEnable()
     {
-        Debug.Log("Options Menu");
+        if (bDebug) Debug.Log("Options Menu");
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(firstSlider);
     }
@@ -95,7 +97,7 @@ public class PauseOptionsMenuUI : MonoBehaviour
     }
     public void SetVolume(float vol)
     {
-        audioMaster.SetFloat("volume", vol);
+        //audioMaster.SetFloat("volume", vol);
     }
 
     public void SetFullScreen(bool isfull)
