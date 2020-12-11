@@ -170,11 +170,11 @@ public class ALTPlayerController : MonoBehaviour
                 break;
         }
 
-        if (Input.GetButtonDown("Pause"))
-        {
-            m_ControllerState = ControllerState.Menu;
-            _pauseMenu.Pause();
-        }
+        //if (Input.GetButtonDown("Pause"))
+        //{
+        //    m_ControllerState = ControllerState.Menu;
+        //    _pauseMenu.Pause();
+        //}
 
         HandleEquipmentWheels();
 
