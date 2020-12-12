@@ -8,28 +8,39 @@ public class MainMenuUI : MonoBehaviour
 {
     public GameObject firstOption;
     public Animator OptionMenuAnimator;
+    
     public CanvasGroup _canvasGroup;
 
-    public void StartGame()
+    public void Continue()
     {
         Time.timeScale = 1f;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-        SaveSystem.RespawnInfo_Data data = SaveSystem.FetchRespawnInfo();
+        SaveSystem.RespawnInfo_Data data = new SaveSystem.RespawnInfo_Data();
+        data.FromString(FileIO.FetchRespawnInfo());
 
 
+        if (data.sceneName == "" || data.sceneName == null)
 
-        if (data.sceneName == null)
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
-        //else
-        //{
-        //    SceneManager.LoadScene(data.sceneName, LoadSceneMode.Additive);
-        //}
+        else
+        {
+            SceneManager.LoadScene(data.sceneName);
+        }
 
         //get info from save system and load accordnaly
+    }
+    public void NewGame()
+    {
+        Time.timeScale = 1f;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
+        FileIO.ClearAllSavedData();
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
     void Start()
@@ -37,6 +48,7 @@ public class MainMenuUI : MonoBehaviour
         InitializeMenu();
         _canvasGroup = GetComponent<CanvasGroup>();
     }
+
 
     public void InitializeMenu()
     {

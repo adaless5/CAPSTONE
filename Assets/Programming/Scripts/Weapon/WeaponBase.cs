@@ -31,9 +31,9 @@ public class WeaponBase : Weapon, ISaveable
     void Awake()
     {
         base.Awake();
-        EventBroker.OnAmmoPickup += AmmoPickup;
         LoadDataOnSceneEnter();
-        SaveSystem.SaveEvent += SaveDataOnSceneChange;
+        EventBroker.OnAmmoPickup += AmmoPickup;
+        
         m_weaponClipSize = 6;
         m_reloadTime = 2.0f;
         m_fireRate = 0.8f; //Default Gun shoots every 1.25 seconds, can be adjusted in editor - VR
@@ -71,13 +71,7 @@ public class WeaponBase : Weapon, ISaveable
     {
         bIsReloading = false;
     }
-
-
-    void OnDisable()
-    {
-        SaveSystem.SaveEvent -= SaveDataOnSceneChange;
-    }
-
+    
     // Update is called once per frame
     public override void Update()
     {
@@ -232,16 +226,8 @@ public class WeaponBase : Weapon, ISaveable
             }
         }
     }
-
-    public void SaveDataOnSceneChange()
-    {
-        SaveSystem.Save(gameObject.name, "bIsActive", gameObject.scene.name, bIsActive);
-        SaveSystem.Save(gameObject.name, "bIsObtained", gameObject.scene.name, bIsObtained);
-    }
-
     public void LoadDataOnSceneEnter()
     {
-        bIsActive = SaveSystem.LoadBool(gameObject.name, "bIsActive", gameObject.scene.name);
-        bIsObtained = SaveSystem.LoadBool(gameObject.name, "bIsObtained", gameObject.scene.name);
+        bIsObtained = SaveSystem.LoadBool(gameObject.name, "bIsObtained", "Equipment");
     }
 }

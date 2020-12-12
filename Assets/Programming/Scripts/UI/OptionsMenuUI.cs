@@ -9,6 +9,8 @@ using UnityEngine.EventSystems;
 
 public class OptionsMenuUI : MonoBehaviour
 {
+    bool bDebug = false;
+
     public GameObject firstOption;
     public AudioMixer audioMaster;
     public TMP_Dropdown resolutionMenu;
@@ -55,7 +57,7 @@ public class OptionsMenuUI : MonoBehaviour
         _isFullScreen = Screen.fullScreen;
         _isStereo = true;
 
-        Debug.Log(resolutions[index]);
+        if (bDebug)Debug.Log(resolutions[index]);
     }
 
     private void Update()

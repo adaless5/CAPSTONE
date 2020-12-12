@@ -26,17 +26,10 @@ public class GrappleHook : Equipment, ISaveable
     void Awake()
     {
         LoadDataOnSceneEnter();
-        SaveSystem.SaveEvent += SaveDataOnSceneChange;
 
         gameObject.GetComponentInChildren<MeshRenderer>().enabled = false;
         m_SpriteRenderer = m_GrappleMarker.GetComponentInChildren<MeshRenderer>();
         m_GrappleMarker.SetActive(false);
-
-    }
-
-    void OnDisable()
-    {
-        SaveSystem.SaveEvent -= SaveDataOnSceneChange;
     }
 
     public override void Start()
@@ -222,19 +215,11 @@ public class GrappleHook : Equipment, ISaveable
     {
         base.Deactivate();
         DeactivateGrappleHook();
-    }
-
-    public void SaveDataOnSceneChange()
-    {
-        SaveSystem.Save(gameObject.name, "bIsActive", gameObject.scene.name, bIsActive);
-        SaveSystem.Save(gameObject.name, "bIsObtained", gameObject.scene.name, bIsObtained);
-
-    }   
+    }  
 
     public void LoadDataOnSceneEnter()
     {
-        bIsActive = SaveSystem.LoadBool(gameObject.name, "bIsActive", gameObject.scene.name);
-        bIsObtained = SaveSystem.LoadBool(gameObject.name, "bIsObtained", gameObject.scene.name);
+        bIsObtained = SaveSystem.LoadBool(gameObject.name, "bIsObtained", "Equipment");
     }
 
 }

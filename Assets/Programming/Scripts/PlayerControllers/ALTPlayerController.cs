@@ -103,6 +103,8 @@ public class ALTPlayerController : MonoBehaviour
         OnTakeDamage += TakeDamage;
         _respawnPosition = gameObject.transform.position;
         m_ControllerState = ControllerState.Play;
+
+        _controller = GetComponent<CharacterController>();
     }
 
     void Start()
@@ -110,6 +112,8 @@ public class ALTPlayerController : MonoBehaviour
         DontDestroyOnLoad(this);
         Application.targetFrameRate = 60;
         Cursor.lockState = CursorLockMode.Locked;
+
+        _controller = GetComponent<CharacterController>();
 
         //Initializing Members
         m_health = GetComponent<Health>();
@@ -170,11 +174,20 @@ public class ALTPlayerController : MonoBehaviour
                 break;
         }
 
+
         if (Input.GetButtonDown("Pause"))
         {
-            m_ControllerState = ControllerState.Menu;
-            _pauseMenu.Pause();
+            try
+            {
+                m_ControllerState = ControllerState.Menu;
+                _pauseMenu.Pause();
+            }catch (Exception e)
+            {
+                Debug.Log(e.Message);
+            }
+            
         }
+
 
         HandleEquipmentWheels();
 
@@ -290,11 +303,14 @@ public class ALTPlayerController : MonoBehaviour
 
     void PlayerDeath()
     {
-        _controller.enabled = false;
-        m_ControllerState = ControllerState.Menu;
-        isDead = true;
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
+        if (_controller != null)
+        {
+            _controller.enabled = false;
+            m_ControllerState = ControllerState.Menu;
+            isDead = true;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
     }
 
     private void ControllerCheck()

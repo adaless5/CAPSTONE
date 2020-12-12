@@ -30,5 +30,6 @@ public abstract class Tool : MonoBehaviour
     public void ObtainEquipment()
     {
         bIsObtained = true;
+        SaveSystem.Save(gameObject.name, "bIsObtained", "Equipment", bIsObtained, SaveSystem.SaveType.EQUIPMENT);
     }
 }

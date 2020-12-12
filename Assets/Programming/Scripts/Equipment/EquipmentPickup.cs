@@ -16,8 +16,7 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
     void Awake()
     {
         LoadDataOnSceneEnter();
-        SaveSystem.SaveEvent += SaveDataOnSceneChange;
-        
+
         if (isUsed) GetComponent<MeshRenderer>().enabled = false;
         else GetComponent<MeshRenderer>().enabled = true;
 
@@ -31,29 +30,26 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
         }
     }
 
-    void OnDisable()
-    {
-        SaveSystem.SaveEvent -= SaveDataOnSceneChange;
-    }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player")
+        if (!isUsed)
         {
-            Belt belt = other.gameObject.GetComponentInChildren<Belt>();
-            belt.ObtainEquipmentAtIndex(_CorrespondingEquipmentBeltIndex);
-            isUsed = true;
-            GetComponent<MeshRenderer>().enabled = false;
-            GetComponent<SphereCollider>().enabled = false;
+            if (other.gameObject.tag == "Player")
+            {
+                Belt belt = other.gameObject.GetComponentInChildren<Belt>();
+                belt.ObtainEquipmentAtIndex(_CorrespondingEquipmentBeltIndex);
 
-            CreateTip("Sprites/Messages/" + _tipName[_CorrespondingEquipmentBeltIndex]);
+                isUsed = true;
+                SaveSystem.Save(gameObject.name, "isEnabled", gameObject.scene.name, isUsed);
+
+                GetComponent<MeshRenderer>().enabled = false;
+                GetComponent<SphereCollider>().enabled = false;
+
+                CreateTip("Sprites/Messages/" + _tipName[_CorrespondingEquipmentBeltIndex]);
+            }
         }
     }
-
-    public void SaveDataOnSceneChange()
-    {
-        SaveSystem.Save(gameObject.name, "isEnabled",gameObject.scene.name, isUsed);
-    }   
 
     public void LoadDataOnSceneEnter()
     {
