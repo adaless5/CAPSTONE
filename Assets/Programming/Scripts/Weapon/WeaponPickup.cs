@@ -16,7 +16,6 @@ public class WeaponPickup : MonoBehaviour, ITippable
     void Awake()
     {
         LoadDataOnSceneEnter();
-        SaveSystem.SaveEvent += SaveDataOnSceneChange;
 
         switch (_pickUpWeapon)
         {
@@ -41,11 +40,6 @@ public class WeaponPickup : MonoBehaviour, ITippable
         {
             DestroyTip();
         }
-    }
-
-    void OnDisable()
-    {
-        SaveSystem.SaveEvent -= SaveDataOnSceneChange;
     }
 
     private void OnTriggerEnter(Collider other)

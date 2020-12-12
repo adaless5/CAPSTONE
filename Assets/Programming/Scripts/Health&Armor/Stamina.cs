@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Stamina : MonoBehaviour
 {
+    bool bDebug = false;
+
     //[Header("Stamina Settings")]
     [SerializeField]
     private float m_stamina;    
@@ -63,7 +65,7 @@ public class Stamina : MonoBehaviour
 
                 if (staminaBar != null)
                     staminaBar.SetStamina(m_stamina);
-                Debug.Log("Losing Stamina. Stamina at " + m_stamina);
+                if (bDebug) Debug.Log("Losing Stamina. Stamina at " + m_stamina);
             }        
 
         }
@@ -75,10 +77,10 @@ public class Stamina : MonoBehaviour
         bIsRegenerating = true;
         while (m_stamina < m_maxStamina && bIsRegenerating == true)
         {
-            Debug.Log("Regenerating...");
+            if (bDebug) Debug.Log("Regenerating...");
 
             m_stamina += m_energyAmount;
-            Debug.Log("Stamina amount: " + m_stamina);
+            if (bDebug) Debug.Log("Stamina amount: " + m_stamina);
             yield return new WaitForSeconds(m_regenRate);
 
             if (staminaBar != null)
@@ -88,7 +90,7 @@ public class Stamina : MonoBehaviour
         }
 
         bIsRegenerating = false;
-        Debug.Log("Stamina Regenerated");
+        if (bDebug) Debug.Log("Stamina Regenerated");
         yield return null;
     }
 }

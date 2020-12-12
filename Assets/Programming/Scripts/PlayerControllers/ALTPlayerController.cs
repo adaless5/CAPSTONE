@@ -103,6 +103,8 @@ public class ALTPlayerController : MonoBehaviour
         OnTakeDamage += TakeDamage;
         _respawnPosition = gameObject.transform.position;
         m_ControllerState = ControllerState.Play;
+
+        _controller = GetComponent<CharacterController>();
     }
 
     void Start()
@@ -111,13 +113,15 @@ public class ALTPlayerController : MonoBehaviour
         Application.targetFrameRate = 60;
         Cursor.lockState = CursorLockMode.Locked;
 
+        _controller = GetComponent<CharacterController>();
+
         //Initializing Members
         m_health = GetComponent<Health>();
         m_armor = GetComponent<Armor>();
         m_stamina = GetComponent<Stamina>();
         _equipmentBelt = FindObjectOfType<EquipmentBelt>();
         _weaponBelt = FindObjectOfType<WeaponBelt>();
-
+        _pauseMenu = FindObjectOfType<PauseMenuUI>();
 
         Canvas[] wheelsInScene;
         wheelsInScene = FindObjectsOfType<Canvas>();
@@ -170,10 +174,20 @@ public class ALTPlayerController : MonoBehaviour
                 break;
         }
 
+
         if (Input.GetButtonDown("Pause"))
         {
-            _pauseMenu.Pause();
+            try
+            {
+                m_ControllerState = ControllerState.Menu;
+                _pauseMenu.Pause();
+            }catch (Exception e)
+            {
+                Debug.Log(e.Message);
+            }
+            
         }
+
 
         HandleEquipmentWheels();
 
@@ -183,72 +197,64 @@ public class ALTPlayerController : MonoBehaviour
         }
 
 
-        //if (EquipmentWheel.enabled == true)
-        //{
-        //    EventSystem.current.SetSelectedGameObject(null);
-        //    joyX = 0;
-        //    joyY = 0;
-        //    if (m_ControllerType == ControllerType.Controller)
-        //    {
+        if (EquipmentWheel.enabled == true)
+        {
+            joyX = 0;
+            joyY = 0;
+            if (m_ControllerType == ControllerType.Controller)
+            {
 
-        //        joyX += Input.GetAxis("Mouse X") * m_LookSensitivity;
-        //        joyY += Input.GetAxis("Mouse Y") * m_LookSensitivity;
+                joyX += Input.GetAxis("Mouse X") * m_LookSensitivity;
+                joyY += Input.GetAxis("Mouse Y") * m_LookSensitivity;
 
 
-        //        joyAngle = Mathf.Atan2(joyX, joyY) * Mathf.Rad2Deg;
-        //        Debug.Log("Joy Angle: " + joyAngle);
-        //        if (joyAngle > -90.0f && joyAngle < -45.0f)
-        //        {
-        //            _equipIndex = 1;
-        //        }
-        //        if (joyAngle > -45.0f && joyAngle < 0.0f)
-        //        {
-        //            _equipIndex = 0;
-        //        }
-        //        if (joyAngle > 0.0f && joyAngle < 90.0f)
-        //        {
-        //            _equipIndex = 2;
-        //        }
-        //        EventSystem.current.SetSelectedGameObject(_equipButtons[_equipIndex].gameObject);
-        //    }
-        //}
+                joyAngle = Mathf.Atan2(joyX, joyY) * Mathf.Rad2Deg;
+                Debug.Log("Joy Angle: " + joyAngle);
+                if (joyAngle > -45.0f && joyAngle < 0.0f)
+                {
+                    _equipIndex = 0;
+                }
+                if (joyAngle > 0.0f && joyAngle < 90.0f)
+                {
+                    _equipIndex = 1;
+                }
+                EventSystem.current.SetSelectedGameObject(_equipButtons[_equipIndex].gameObject);
+                _equipmentBelt.EquipToolAtIndex(_equipIndex);
+            }
+        }
 
-        //if (WeaponWheel.enabled == true)
-        //{
-        //    //EventSystem.current.SetSelectedGameObject(null);
-        //    joyX = 0;
-        //    joyY = 0;
+        if (WeaponWheel.enabled == true)
+        {
+            //EventSystem.current.SetSelectedGameObject(null);
+            joyX = 0;
+            joyY = 0;
 
-        //    {
-        //        if (m_ControllerType == ControllerType.Controller)
-        //        {
-        //            joyX += Input.GetAxis("Mouse X") * m_LookSensitivity;
-        //            joyY += Input.GetAxis("Mouse Y") * m_LookSensitivity;
-        //            joyAngle = Mathf.Atan2(joyX, joyY) * Mathf.Rad2Deg;
-        //            Debug.Log(joyAngle);
-        //            if (joyAngle > -90.0f && joyAngle < -45.0f)
-        //            {
-        //                _wepIndex = 1;
+            {
+                if (m_ControllerType == ControllerType.Controller)
+                {
+                    joyX += Input.GetAxis("Mouse X") * m_LookSensitivity;
+                    joyY += Input.GetAxis("Mouse Y") * m_LookSensitivity;
+                    joyAngle = Mathf.Atan2(joyX, joyY) * Mathf.Rad2Deg;
+                    Debug.Log(joyAngle);
+                    if (joyAngle > -90.0f && joyAngle < -45.0f)
+                    {
+                        _wepIndex = 1;
 
-        //            }
-        //            if (joyAngle > -45.0f && joyAngle < 0.0f)
-        //            {
-        //                _wepIndex = 0;
-        //            }
-        //            if (joyAngle > 0.0f && joyAngle < 90.0f)
-        //            {
-        //                _wepIndex = 2;
-        //            }
-        //            Debug.Log(_wepIndex);
-        //            EventSystem.current.SetSelectedGameObject(_wepButtons[_wepIndex].gameObject);
-        //            _weaponBelt.EquipToolAtIndex(_wepIndex);
-        //        }
-        //        else if (m_ControllerType == ControllerType.Mouse)
-        //        {
-
-        //        }
-        //    }
-        //}
+                    }
+                    if (joyAngle > -45.0f && joyAngle < 0.0f)
+                    {
+                        _wepIndex = 0;
+                    }
+                    if (joyAngle > 0.0f && joyAngle < 90.0f)
+                    {
+                        _wepIndex = 2;
+                    }
+                    Debug.Log(_wepIndex);
+                    EventSystem.current.SetSelectedGameObject(_wepButtons[_wepIndex].gameObject);
+                    _weaponBelt.EquipToolAtIndex(_wepIndex);
+                }
+            }
+        }
 
 
         Debug.DrawRay(transform.position, dir);
@@ -296,11 +302,14 @@ public class ALTPlayerController : MonoBehaviour
 
     void PlayerDeath()
     {
-        _controller.enabled = false;
-        m_ControllerState = ControllerState.Menu;
-        isDead = true;
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
+        if (_controller != null)
+        {
+            _controller.enabled = false;
+            m_ControllerState = ControllerState.Menu;
+            isDead = true;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
     }
 
     private void ControllerCheck()
@@ -510,6 +519,8 @@ public class ALTPlayerController : MonoBehaviour
         {
             EquipmentWheel.enabled = true;
             Time.timeScale = 0.3f;
+            EquipmentWheel.GetComponent<CanvasGroup>().interactable = true;
+            EquipmentWheel.GetComponent<CanvasGroup>().blocksRaycasts = true;
             Cursor.lockState = CursorLockMode.None;
             m_ControllerState = ControllerState.Wheel;
         }
@@ -518,6 +529,8 @@ public class ALTPlayerController : MonoBehaviour
         {
             EquipmentWheel.enabled = false;
             Time.timeScale = 1;
+            EquipmentWheel.GetComponent<CanvasGroup>().interactable = false;
+            EquipmentWheel.GetComponent<CanvasGroup>().blocksRaycasts = false;
             Cursor.lockState = CursorLockMode.Locked;
             m_ControllerState = ControllerState.Play;
         }
@@ -527,6 +540,8 @@ public class ALTPlayerController : MonoBehaviour
         {
             WeaponWheel.enabled = true;
             Time.timeScale = 0.3f;
+            WeaponWheel.GetComponent<CanvasGroup>().interactable = true;
+            WeaponWheel.GetComponent<CanvasGroup>().blocksRaycasts = true;
             Cursor.lockState = CursorLockMode.None;
             m_ControllerState = ControllerState.Wheel;
 
@@ -536,6 +551,8 @@ public class ALTPlayerController : MonoBehaviour
         {
             WeaponWheel.enabled = false;
             Time.timeScale = 1;
+            WeaponWheel.GetComponent<CanvasGroup>().interactable = false;
+            WeaponWheel.GetComponent<CanvasGroup>().blocksRaycasts = false;
             Cursor.lockState = CursorLockMode.Locked;
             m_ControllerState = ControllerState.Play;
         }
