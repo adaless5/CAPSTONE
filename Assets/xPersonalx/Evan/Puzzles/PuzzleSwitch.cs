@@ -5,6 +5,7 @@ using UnityEngine;
 public class PuzzleSwitch : MonoBehaviour
 {
     public bool _DoesSwitchReset;
+    public bool _DoesStartTurnedOn;
     public float _ActivationTimer;// the length of time the player has to wait to interact with the switch again
     public float _ResetTimer;    // the length of time before the switch interacts with itself after the player uses it if _DoesSwitchReset is true
     public GameObject _OffSwitch;// The object that represents the switch being off
@@ -56,7 +57,14 @@ public class PuzzleSwitch : MonoBehaviour
     {
         fSwitchTimer = _ActivationTimer;
         fResetTimer = 0.0f;
-        SetSwitchModel(bIsActive);
+        if (_DoesStartTurnedOn)
+        {
+            SetSwitchModel(_DoesStartTurnedOn);
+        }
+        else
+        {
+            SetSwitchModel(bIsActive);
+        }
     }
     public void Interact()
     {
