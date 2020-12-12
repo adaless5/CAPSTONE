@@ -37,23 +37,18 @@ public class Health : MonoBehaviour, ISaveable
     void Awake()
     {
         LoadDataOnSceneEnter();
-        SaveSystem.SaveEvent += SaveDataOnSceneChange;
 
         OnTakeHealthDamage += TakeDamage;
         //if (isDead) GetComponent<MeshRenderer>().enabled = false;
         //else GetComponent<MeshRenderer>().enabled = true;
     }
 
-    void OnDisable()
-    {
-        SaveSystem.SaveEvent -= SaveDataOnSceneChange;
-    }
-
     public void TakeDamage(float damage)
     {
         m_HP -= damage;
-        if (healthBar != null)
-            healthBar.SetHealth(m_HP);
+        if (healthBar != null && gameObject.tag == "Player")
+           healthBar.LoseHealth(m_HP, damage, m_MaxHealth); 
+
 
         if (m_HP <= 0.0f)
         {
@@ -136,41 +131,27 @@ public class Health : MonoBehaviour, ISaveable
             m_HP += healthToHeal;
 
             if (healthBar != null)
-                healthBar.SetHealth(m_HP);
+                healthBar.GainHealth(m_HP, healthToHeal, m_MaxHealth);
 
             m_HP = Mathf.Clamp(m_HP, 0, m_MaxHealth);
             Debug.Log("Healed" + healthToHeal + "amount");
         }
     }
 
-    public void SaveDataOnSceneChange()
-    {
-        SaveSystem.Save(gameObject.name, "isDead", gameObject.scene.name, isDead);
-
-        SaveSystem.Save(gameObject.name, "posX", gameObject.scene.name, transform.position.x);
-        SaveSystem.Save(gameObject.name, "posY", gameObject.scene.name, transform.position.y);
-        SaveSystem.Save(gameObject.name, "posZ", gameObject.scene.name, transform.position.z);
-
-        SaveSystem.Save(gameObject.name, "rotX", gameObject.scene.name, transform.rotation.x);
-        SaveSystem.Save(gameObject.name, "rotY", gameObject.scene.name, transform.rotation.y);
-        SaveSystem.Save(gameObject.name, "rotZ", gameObject.scene.name, transform.rotation.z);
-        SaveSystem.Save(gameObject.name, "rotW", gameObject.scene.name, transform.rotation.w);
-    }
-
     public void LoadDataOnSceneEnter()
     {
-        isDead = SaveSystem.LoadBool(gameObject.name, "isDead", gameObject.scene.name);
+        //isDead = SaveSystem.LoadBool(gameObject.name, "isDead", gameObject.scene.name);
 
-        if (SaveSystem.LoadFloat(gameObject.name, "posX", gameObject.scene.name) != 0)
-        {
-            transform.position = new Vector3(SaveSystem.LoadFloat(gameObject.name, "posX", gameObject.scene.name), SaveSystem.LoadFloat(gameObject.name, "posY", gameObject.scene.name), SaveSystem.LoadFloat(gameObject.name, "posZ", gameObject.scene.name));
-        }
+        //if (SaveSystem.LoadFloat(gameObject.name, "posX", gameObject.scene.name) != 0)
+        //{
+        //    transform.position = new Vector3(SaveSystem.LoadFloat(gameObject.name, "posX", gameObject.scene.name), SaveSystem.LoadFloat(gameObject.name, "posY", gameObject.scene.name), SaveSystem.LoadFloat(gameObject.name, "posZ", gameObject.scene.name));
+        //}
 
-        transform.rotation = new Quaternion(
-            SaveSystem.LoadFloat(gameObject.name, "rotX", gameObject.scene.name),
-            SaveSystem.LoadFloat(gameObject.name, "rotY", gameObject.scene.name),
-            SaveSystem.LoadFloat(gameObject.name, "rotZ", gameObject.scene.name),
-            SaveSystem.LoadFloat(gameObject.name, "rotW", gameObject.scene.name));
+        //transform.rotation = new Quaternion(
+        //    SaveSystem.LoadFloat(gameObject.name, "rotX", gameObject.scene.name),
+        //    SaveSystem.LoadFloat(gameObject.name, "rotY", gameObject.scene.name),
+        //    SaveSystem.LoadFloat(gameObject.name, "rotZ", gameObject.scene.name),
+        //    SaveSystem.LoadFloat(gameObject.name, "rotW", gameObject.scene.name));
     }
 
 }

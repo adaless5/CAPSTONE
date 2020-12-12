@@ -16,13 +16,11 @@ public class CreatureWeapon : Weapon, ISaveable
     {
         base.Awake();
         _creatureProjectile = (GameObject)Resources.Load("Prefabs/Weapon/Creature Projectile");
-
     }
 
     // Start is called before the first frame update
     public override void Start()
     {
-
         _camera = FindObjectOfType<Camera>();
         GetComponent<MeshRenderer>().enabled = false;
         bIsActive = false;
@@ -43,7 +41,7 @@ public class CreatureWeapon : Weapon, ISaveable
     {
         if (_playerController != null)
         {
-            if (bIsActive)
+            if (bIsActive && _playerController.m_ControllerState == ALTPlayerController.ControllerState.Play)
             {
                 GetComponent<MeshRenderer>().enabled = true;
                 UseTool();
@@ -56,13 +54,8 @@ public class CreatureWeapon : Weapon, ISaveable
         }
     }
 
-
-
     void OnShoot()
     {
-
-
-
         for (int i = 0; i < _bulletClip; i++)
         {
             Vector3 bulletDeviation = UnityEngine.Random.insideUnitCircle * 300.0f;
@@ -86,23 +79,13 @@ public class CreatureWeapon : Weapon, ISaveable
             {
                 Debug.LogError("Object Pool not initialized! Create an Object Pool prefab");
             }
-
-
-
         }
-
     }
 
     private void OnTarget()
     {
 
     }
-
-    public void SaveDataOnSceneChange()
-    {
-
-    }
-
     public void LoadDataOnSceneEnter()
     {
 

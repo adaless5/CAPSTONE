@@ -13,7 +13,7 @@ public class GrappleHook : Equipment, ISaveable
     public float m_MaxGrappleSpeed = 40.0f;
     private Vector3 m_GrappleTarget;
     public Vector3 m_Momentum = Vector3.zero;
-    public float m_GrappleDeploySpeed = 100.0f;
+    public float m_GrappleDeploySpeed = 70.0f;
     public float m_GrappleMomentumMultiplier = 7.0f;
     public float m_GrappleJumpMultiplier = 60.0f;
     const float MAX_GRAPPLE_DIST = 100.0f;
@@ -26,17 +26,10 @@ public class GrappleHook : Equipment, ISaveable
     void Awake()
     {
         LoadDataOnSceneEnter();
-        SaveSystem.SaveEvent += SaveDataOnSceneChange;
 
         gameObject.GetComponentInChildren<MeshRenderer>().enabled = false;
         m_SpriteRenderer = m_GrappleMarker.GetComponentInChildren<MeshRenderer>();
         m_GrappleMarker.SetActive(false);
-        print("Calling Awake.");
-    }
-
-    void OnDisable()
-    {
-        SaveSystem.SaveEvent -= SaveDataOnSceneChange;
     }
 
     public override void Start()
@@ -75,7 +68,11 @@ public class GrappleHook : Equipment, ISaveable
             Vector3 camPos = m_PlayerController._camera.transform.position;
             Vector3 camForwardVec = m_PlayerController._camera.transform.forward;
 
-            if (Physics.Raycast(camPos, camForwardVec, out RaycastHit raycastHit, MAX_GRAPPLE_DIST))
+            int playermask = 1 << 9;
+            int triggermask = 1 << 11;
+            int terrainmask = 1 << 16;
+
+            if (Physics.Raycast(camPos, camForwardVec, out RaycastHit raycastHit, MAX_GRAPPLE_DIST, ~(playermask | triggermask | terrainmask)))
             {
                 if (Vector3.Distance(raycastHit.point, camPos) >= MIN_GRAPPLE_DIST)
                 {
@@ -83,7 +80,22 @@ public class GrappleHook : Equipment, ISaveable
                     m_GrappleHookLength = 0.0f;
                     m_GrappleHookTransform.gameObject.SetActive(true);
                     m_GrappleHookTransform.localScale = Vector3.zero;
+                    
+                    if(raycastHit.collider.gameObject.tag == "Enemy")
+                    {
+                        DroneAI AItemp = raycastHit.collider.gameObject.GetComponent<DroneAI>();
+
+                        if (AItemp != null)
+                        {
+                            AItemp.Stun();
+                        }
+                    }
+                    
                     m_PlayerController.ChangePlayerState(ALTPlayerController.PlayerState.GrappleDeployed);
+                    //Grapple Deployed Audio Triggers
+                    GetComponent<AudioManager_Grapple>().SetGrappleHookPointAndHitType
+                        (raycastHit.transform, raycastHit.collider.gameObject.layer);
+                    GetComponent<AudioManager_Grapple>().TriggerShot();
                 }
             }
         }
@@ -103,6 +115,12 @@ public class GrappleHook : Equipment, ISaveable
         if (m_GrappleHookLength >= Vector3.Distance(m_PlayerPosition.position, m_GrappleTarget))
         {
             m_PlayerController.ChangePlayerState(ALTPlayerController.PlayerState.Grappling);
+
+            //Grapple Impact Audio Triggers
+            GetComponent<AudioManager_Grapple>().TriggerHit();
+            //GetComponent<AudioManager_Grapple>().StopShot();
+            GetComponent<AudioManager_Grapple>().TriggerRetract();
+            //
         }
     }
 
@@ -115,7 +133,7 @@ public class GrappleHook : Equipment, ISaveable
         Vector3 grappleDirection = m_GrappleTarget - m_PlayerPosition.position;
         grappleDirection.Normalize();
 
-        float speed = 50.0f;
+        float speed = 30.0f;
 
         m_PlayerController._controller.Move(grappleDirection * m_GrappleHookSpeedMultiplier * speed * Time.deltaTime);
 
@@ -142,8 +160,11 @@ public class GrappleHook : Equipment, ISaveable
         Vector3 camForwardVec = m_PlayerController._camera.transform.forward;
         if (bIsActive && bIsObtained)
         {
-            int layermask = 1 << 9;
-            if (Physics.Raycast(camPos, camForwardVec, out RaycastHit raycastHit, MAX_GRAPPLE_DIST, ~layermask))
+            int playermask = 1 << 9;
+            int triggermask = 1 << 11;
+            int terrainmask = 1 << 16;
+
+            if (Physics.Raycast(camPos, camForwardVec, out RaycastHit raycastHit, MAX_GRAPPLE_DIST, ~(playermask | triggermask | terrainmask)))
             {
                 if (Vector3.Distance(raycastHit.point, camPos) >= MIN_GRAPPLE_DIST)
                 {
@@ -167,6 +188,11 @@ public class GrappleHook : Equipment, ISaveable
 
     void DeactivateGrappleHook()
     {
+        //Grapple Done Audio Triggers
+        GetComponent<AudioManager_Grapple>().StopRetract();
+        GetComponent<AudioManager_Grapple>().TriggerClick();
+        //
+
         m_PlayerController.ResetGravity();
         m_PlayerController.ChangePlayerState(ALTPlayerController.PlayerState.Idle);
         m_GrappleHookTransform.localScale = Vector3.zero;
@@ -178,18 +204,11 @@ public class GrappleHook : Equipment, ISaveable
     {
         base.Deactivate();
         DeactivateGrappleHook();
-    }
-
-    public void SaveDataOnSceneChange()
-    {
-        SaveSystem.Save(gameObject.name, "bIsActive", gameObject.scene.name, bIsActive);
-        SaveSystem.Save(gameObject.name, "bIsObtained", gameObject.scene.name, bIsObtained);
-
-    }   
+    }  
 
     public void LoadDataOnSceneEnter()
     {
-        bIsActive = SaveSystem.LoadBool(gameObject.name, "bIsActive", gameObject.scene.name);
-        bIsObtained = SaveSystem.LoadBool(gameObject.name, "bIsObtained", gameObject.scene.name);
+        bIsObtained = SaveSystem.LoadBool(gameObject.name, "bIsObtained", "Equipment");
     }
+
 }

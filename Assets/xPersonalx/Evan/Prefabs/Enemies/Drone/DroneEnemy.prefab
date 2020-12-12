@@ -15,9 +15,9 @@ GameObject:
   - component: {fileID: 6382371568620080289}
   - component: {fileID: 5516209686443219185}
   - component: {fileID: 7378119326008071357}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: DroneEnemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -101,11 +101,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!195 &6382371568620080289
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -138,8 +133,8 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.63093114
-  m_Height: 0.9115045
+  m_Radius: 0.90156424
+  m_Height: 1.8031286
   m_Direction: 1
   m_Center: {x: 0.0061739683, y: -0.18865983, z: 0.503419}
 --- !u!114 &7378119326008071357
@@ -154,6 +149,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01dfb7d86835dc749b42ade1c715bbec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_HP: 50
+  m_HP: 20
   m_IsLoadingShield: 0
   healthBar: {fileID: 0}

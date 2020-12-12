@@ -124,12 +124,17 @@ MonoBehaviour:
   m_fireRate: 10
   m_hitImpact: 200
   m_weaponRange: 50
+  m_recoilForce: 1
+  m_recoilInitialSpeed: 25
+  m_maxRecoilDistance: 0.5
+  m_recoilReadjustSpeed: 10
   muzzleFlash: {fileID: 8272006249173514952}
   impactFX: {fileID: 7133824047621825672, guid: a9bda7650ecc2b3498e2a7a21cf530e8,
     type: 3}
   reticuleAnimator: {fileID: 0}
+  outOfAmmoAnimator: {fileID: 0}
+  reloadAnimator: {fileID: 0}
   gunCamera: {fileID: 0}
-  _playercontroller: {fileID: 0}
   m_ammoUI: {fileID: 0}
 --- !u!95 &3819901122162054977
 Animator:
@@ -141,7 +146,7 @@ Animator:
   m_GameObject: {fileID: 3843353458027199320}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 5109e0c410e8b7e4ab42b048def82e6b, type: 2}
+  m_Controller: {fileID: 0}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

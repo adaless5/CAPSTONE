@@ -22,17 +22,11 @@ public class MineSpawner : Weapon, ISaveable
     void Awake()
     {
         LoadDataOnSceneEnter();
-        SaveSystem.SaveEvent += SaveDataOnSceneChange;
 
         if(m_playerController == null)
         {
             m_playerController = FindObjectOfType<ALTPlayerController>();
         }
-    }
-
-    void OnDisable()
-    {
-        SaveSystem.SaveEvent -= SaveDataOnSceneChange;
     }
 
     // Update is called once per frame
@@ -79,18 +73,10 @@ public class MineSpawner : Weapon, ISaveable
             mine.GetComponent<Rigidbody>().AddForce(transform.forward * Force);
             mine.GetComponent<Rigidbody>().AddTorque(new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), -90f));
         }
-    }
-
-    public void SaveDataOnSceneChange()
-    {
-        SaveSystem.Save(gameObject.name, "bIsActive", gameObject.scene.name, bIsActive);
-        SaveSystem.Save(gameObject.name, "bIsObtained", gameObject.scene.name, bIsObtained);
-
-    }   
+    } 
 
     public void LoadDataOnSceneEnter()
     {
-        bIsActive = SaveSystem.LoadBool(gameObject.name, "bIsActive", gameObject.scene.name);
-        bIsObtained = SaveSystem.LoadBool(gameObject.name, "bIsObtained", gameObject.scene.name);
+        bIsObtained = SaveSystem.LoadBool(gameObject.name, "bIsObtained", "Equipment");
     }
 }

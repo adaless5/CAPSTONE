@@ -37,12 +37,6 @@ public class Blade : Equipment, ISaveable
     void Awake()
     {
         LoadDataOnSceneEnter();
-        SaveSystem.SaveEvent += SaveDataOnSceneChange;
-    }
-
-    void OnDisable()
-    {
-        SaveSystem.SaveEvent -= SaveDataOnSceneChange;
     }
 
     // Update is called once per frame
@@ -109,16 +103,8 @@ public class Blade : Equipment, ISaveable
         _hitbox.enabled = false;
     }
 
-    public void SaveDataOnSceneChange()
-    {
-        SaveSystem.Save(gameObject.name, "bIsActive", gameObject.scene.name, bIsActive);
-        SaveSystem.Save(gameObject.name, "bIsObtained", gameObject.scene.name, bIsObtained);
-
-    }   
-
     public void LoadDataOnSceneEnter()
     {
-        bIsActive = SaveSystem.LoadBool(gameObject.name, "bIsActive", gameObject.scene.name);
-        bIsObtained = SaveSystem.LoadBool(gameObject.name, "bIsObtained", gameObject.scene.name);
+        bIsObtained = SaveSystem.LoadBool(gameObject.name, "bIsObtained", "Equipment");
     }
 }

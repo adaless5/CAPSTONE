@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
-using UnityEditor.PackageManager;
+//using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -9,14 +8,14 @@ using UnityEngine.SceneManagement;
 //allows for objects with the same name in different scenes to be saved without overwritting accidently.
 public class SaveSystem : MonoBehaviour
 {
-    public delegate void SaveEventDelegate();
-    public static SaveEventDelegate SaveEvent;
+    static bool bDebug = true;
 
     public enum SaveType
     {
         DEFAULT,
         CONNECTOR,
         RESPAWNINFO,
+        EQUIPMENT,
     }
 
     public static void Save(string gameObjectName, string variableName,string sceneName, int val, SaveType saveType = SaveType.DEFAULT)
@@ -24,7 +23,9 @@ public class SaveSystem : MonoBehaviour
         string id = GetSaveID(gameObjectName, variableName, sceneName);
         PlayerPrefs.SetInt(id, val);
 
-        if (saveType == SaveType.DEFAULT) DefaultIDRegistry.Add(id);
+        FileIO.SaveToFile(sceneName, gameObjectName + "_" + variableName, val);
+
+        if (saveType == SaveType.DEFAULT || saveType == SaveType.EQUIPMENT) DefaultIDRegistry.Add(id);
     }
 
     public static void Save(string gameObjectName, string variableName, string sceneName, string val, SaveType saveType = SaveType.DEFAULT)
@@ -32,7 +33,12 @@ public class SaveSystem : MonoBehaviour
         string id = GetSaveID(gameObjectName, variableName, sceneName);
         PlayerPrefs.SetString(id, val);
 
-        if (saveType == SaveType.DEFAULT) DefaultIDRegistry.Add(id);
+        FileIO.SaveToFile(sceneName, gameObjectName + "_" + variableName, val);
+
+
+        if (saveType == SaveType.DEFAULT || saveType == SaveType.EQUIPMENT) DefaultIDRegistry.Add(id);
+
+        if (bDebug) Debug.Log(val);
     }
 
     public static void Save(string gameObjectName, string variableName, string sceneName, float val, SaveType saveType = SaveType.DEFAULT)
@@ -40,7 +46,11 @@ public class SaveSystem : MonoBehaviour
         string id = GetSaveID(gameObjectName, variableName, sceneName);
         PlayerPrefs.SetFloat(id, val);
 
-        if (saveType == SaveType.DEFAULT) DefaultIDRegistry.Add(id);
+        FileIO.SaveToFile(sceneName, gameObjectName + "_" + variableName, val);
+
+        if (saveType == SaveType.DEFAULT || saveType == SaveType.EQUIPMENT) DefaultIDRegistry.Add(id);
+
+        if (bDebug) Debug.Log(val);
     }
 
     public static void Save(string gameObjectName, string variableName, string sceneName, bool val, SaveType saveType = SaveType.DEFAULT)
@@ -51,8 +61,9 @@ public class SaveSystem : MonoBehaviour
             case false: PlayerPrefs.SetInt(id, 0); break;
             case true: PlayerPrefs.SetInt(id, 1); break;
         }
+        FileIO.SaveToFile(sceneName, gameObjectName + "_" + variableName, val);
 
-        if (saveType == SaveType.DEFAULT) DefaultIDRegistry.Add(id);
+        if (saveType == SaveType.DEFAULT || saveType == SaveType.EQUIPMENT) DefaultIDRegistry.Add(id);
     }
 
     public static void StaticSaveString(string key, string val, SaveType saveType = SaveType.DEFAULT)
@@ -60,25 +71,51 @@ public class SaveSystem : MonoBehaviour
         PlayerPrefs.SetString(key, val);
     }
 
+    public static void SaveConnector(string connectorName, string sceneName, string data)
+    {
+        Debug.Log("TEST"+data);
+        FileIO.SaveConnectorToFile(sceneName, connectorName, data);
+    }
+
     public static int LoadInt(string gameObjectName, string variableName, string sceneName)
     {
-        return PlayerPrefs.GetInt(GetSaveID(gameObjectName, variableName, sceneName));
+        //return PlayerPrefs.GetInt(GetSaveID(gameObjectName, variableName, sceneName));
+        string s = FileIO.LoadFromFile(sceneName, gameObjectName + "_" + variableName);
+        if (s == null) return 0;
+
+        return int.Parse(s);
     }
 
     public static bool LoadBool(string gameObjectName, string variableName, string sceneName)
     {
-        int val = PlayerPrefs.GetInt(GetSaveID(gameObjectName, variableName, sceneName));
-        switch (val)
-        {
-            case 0: return false;
-            case 1: return true;
-            default: return false; //A little dangerous, but good until i find a workaround.
-        }
+        //int val = PlayerPrefs.GetInt(GetSaveID(gameObjectName, variableName, sceneName));
+        //switch (val)
+        //{
+        //    case 0: return false;
+        //    case 1: return true;
+        //    default: return false; //A little dangerous, but good until i find a workaround.
+        //}
+        string s = FileIO.LoadFromFile(sceneName, gameObjectName + "_" + variableName);
+        if (s == null) return false;
+
+        return bool.Parse(s);
     }
 
     public static string LoadString(string gameObjectName, string variableName, string sceneName)
     {
-        return PlayerPrefs.GetString(GetSaveID(gameObjectName, variableName, sceneName));
+        //return PlayerPrefs.GetString(GetSaveID(gameObjectName, variableName, sceneName));
+        string s = FileIO.LoadFromFile(sceneName, gameObjectName + "_" + variableName);
+        if (s == null) return "";
+
+        return s;
+    }
+
+    public static string LoadConnector(string connectorName, string sceneName)
+    {
+        string s = FileIO.LoadConnectorFromFile(sceneName, connectorName);
+        if (s == null) return "";
+
+        return FileIO.LoadConnectorFromFile(sceneName, connectorName);
     }
 
     public static string StaticLoadString(string key)
@@ -88,21 +125,15 @@ public class SaveSystem : MonoBehaviour
 
     public static float LoadFloat(string gameObjectName, string variableName, string sceneName)
     {
-        return PlayerPrefs.GetFloat(GetSaveID(gameObjectName, variableName,sceneName));
+        string s = FileIO.LoadFromFile(sceneName, gameObjectName + "_" + variableName);
+        if (s == null) return 0;
+
+        return float.Parse(s);
     }
 
     public static void RemoveAtKey(string gameObjectName, string variableName, string sceneName)
     {
         PlayerPrefs.DeleteKey(GetSaveID(gameObjectName, variableName, sceneName));
-    }
-
-    public static void ResetSaveEventDelegateList()
-    {
-        //Remove all delegates subscribed to SaveEvent.
-        foreach (System.Delegate d in SaveEvent.GetInvocationList())
-        {
-            SaveEvent -= (SaveEventDelegate)d;
-        }
     }
 
     public static string GetSaveID(string gameObjectName, string variableName, string sceneName)
@@ -181,12 +212,15 @@ public class SaveSystem : MonoBehaviour
         StaticSaveString(RESPAWN_INFO_REGISTRY_ID, data.ToString(), SaveType.RESPAWNINFO);
     }
 
+
     public static RespawnInfo_Data FetchRespawnInfo()
     {
         RespawnInfo_Data data = new RespawnInfo_Data();
         data.FromString(StaticLoadString(RESPAWN_INFO_REGISTRY_ID));
         return data;
     }
+
+
 
     /// 
     /// RespawnInfo Registry END

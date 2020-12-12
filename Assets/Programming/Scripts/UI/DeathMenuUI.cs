@@ -5,22 +5,25 @@ using UnityEngine.SceneManagement;
 public class DeathMenuUI : MonoBehaviour
 {
 
-    public ALTPlayerController _player;
+    public ALTPlayerController _playerController;
+    public GameObject _player;
     CanvasGroup _deathMenuCanvas;
 
     private void Awake()
     {
         _deathMenuCanvas = transform.GetChild(0).GetComponent<CanvasGroup>();
-        _player = GetComponentInParent<ALTPlayerController>();
+        _playerController = GetComponentInParent<ALTPlayerController>();
+        _player = GetComponentInParent<Transform>().gameObject;
         EventBroker.OnPlayerDeath += DisplayDeathMenu;
         _deathMenuCanvas.interactable = false;
+        _deathMenuCanvas.blocksRaycasts = false;
         _deathMenuCanvas.alpha = 0;
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     void DisplayDeathMenu()
@@ -60,6 +63,26 @@ public class DeathMenuUI : MonoBehaviour
         //_playerController.PlayerRespawn();
         StartCoroutine(FadeTo(0.0f, 1.5f));
         _deathMenuCanvas.interactable = false;
+        _deathMenuCanvas.blocksRaycasts = false;
+
+        //MainMenuUI..Continue()
+        DestroyImmediate(GameObject.FindGameObjectWithTag("Player"));
+        Time.timeScale = 1f;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        SaveSystem.RespawnInfo_Data data = new SaveSystem.RespawnInfo_Data();
+        data.FromString(FileIO.FetchRespawnInfo());
+
+        if (data.sceneName == null || data.sceneName == "")
+        {
+            SceneManager.LoadScene(2);
+        }
+        else
+        {
+            SceneManager.LoadScene(data.sceneName);
+            _player.transform.position = data.pos;
+            _player.transform.rotation = data.rot;
+        }
     }
 
     public void QuitToMainMenu()

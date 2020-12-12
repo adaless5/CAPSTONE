@@ -5,6 +5,8 @@ using UnityEngine.PlayerLoop;
 
 public class Armor : MonoBehaviour
 {
+    bool bDebug = false;
+
     //[Header("Shield Settings")]
     [SerializeField]
     private float m_Armor;
@@ -16,6 +18,8 @@ public class Armor : MonoBehaviour
     private float m_MaxArmor;
     [SerializeField]
     private float m_ArmorTimer;
+    [SerializeField]
+    private float m_RegenAmount;
 
     public ArmorBarUI armorBar;
 
@@ -26,9 +30,10 @@ public class Armor : MonoBehaviour
         m_ArmorRefreshRate = 0.3f;
         m_MaxArmor = 100f;
         m_ArmorCooldown = 6f;
+        m_RegenAmount = 20f;
         m_ArmorTimer = m_ArmorCooldown;
 
-        armorBar.SetMaxArmor(m_MaxArmor);
+        //armorBar.SetMaxArmor(m_MaxArmor);
     }
 
 
@@ -49,9 +54,9 @@ public class Armor : MonoBehaviour
         {
 
             m_Armor -= damage;
-            armorBar.SetArmor(m_Armor);
+            armorBar.LoseArmor(m_Armor, damage, m_MaxArmor);
 
-            Debug.Log("Damage to Armor, Current Armor at " + m_Armor);
+            if (bDebug) Debug.Log("Damage to Armor, Current Armor at " + m_Armor);
         }
 
         m_Armor = Mathf.Clamp(m_Armor, 0, m_MaxArmor);
@@ -75,10 +80,10 @@ public class Armor : MonoBehaviour
     {
         while (m_Armor != m_MaxArmor)
         {
-            Debug.Log("Regenerating...");
+            if (bDebug) Debug.Log("Regenerating...");
 
-            m_Armor += 20f;
-            armorBar.SetArmor(m_Armor);
+            m_Armor += m_RegenAmount;
+            armorBar.GainArmor(m_Armor, m_RegenAmount, m_MaxArmor);
             yield return new WaitForSeconds(m_ArmorRefreshRate);
         }
 

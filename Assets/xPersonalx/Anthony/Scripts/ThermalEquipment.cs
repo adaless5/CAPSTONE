@@ -8,6 +8,14 @@ public class ThermalEquipment : Equipment
     bool bIsInThermalView = false;
     Light _directionalLight;
 
+    public GameObject _particleSystemPrefab;
+    GameObject _particleSystemObject;
+    public ParticleSystem _particleSystem;
+
+    Quaternion rotation;
+
+    Vector4 _baseDirLightColour;
+
     // Start is called before the first frame update
     public override void Start()
     {
@@ -20,26 +28,49 @@ public class ThermalEquipment : Equipment
             if (light.gameObject.tag == "Dir Light")
             {
                 _directionalLight = light;
-
+                _baseDirLightColour = _directionalLight.color;
                 break;
             }
         }
+
+        _particleSystemPrefab = Instantiate<GameObject>(_particleSystemPrefab, gameObject.transform);
+        _particleSystem = _particleSystemPrefab.GetComponentInChildren<ParticleSystem>();
+        _particleSystemPrefab.SetActive(false);
+
+        rotation = _particleSystemPrefab.transform.rotation;
     }
 
     // Update is called once per frame
     public override void Update()
     {
-        if (bIsActive && bIsObtained)
+        if (bIsObtained)
         {
             UseTool(); 
+
+            if(bIsInThermalView)
+            {
+                if(_particleSystemPrefab != null)
+                {
+                    //Cube Particle System
+                    //_particleSystemPrefab.transform.TransformPoint(_playerController.gameObject.transform.forward * 10.0f);
+
+                    //Donut Particle System
+                    _particleSystemPrefab.transform.TransformPoint(_playerController.gameObject.transform.up * 50.0f);
+                }
+            }
         }
+    }
+
+    void LateUpdate()
+    {
+        _particleSystemPrefab.transform.rotation = rotation;
     }
 
     public override void UseTool()
     {
         if (_playerController != null)
         {
-            if(_playerController.CheckForUseEquipmentInput())
+            if(_playerController.CheckForUseThermalInput())
             {
                 ThermalSkin[] ThermalObjs = FindObjectsOfType<ThermalSkin>();
 
@@ -62,7 +93,11 @@ public class ThermalEquipment : Equipment
                         }
                     }
 
+                    _particleSystemPrefab.SetActive(true);
+
                     bIsInThermalView = true;
+                    
+                    
                 }
                 else if (bIsInThermalView)
                 {
@@ -79,9 +114,11 @@ public class ThermalEquipment : Equipment
                         }
                         else if (!_playerController.GetDarknessVolume())
                         {
-                            _directionalLight.color = new Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+                            _directionalLight.color = _baseDirLightColour;
                         }
                     }
+
+                    _particleSystemPrefab.SetActive(false);
 
                     bIsInThermalView = false;
                 }
