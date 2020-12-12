@@ -25,8 +25,16 @@ public class DeathMenuUI : MonoBehaviour
 
     void DisplayDeathMenu()
     {
-        _deathMenuCanvas.interactable = true;
-        StartCoroutine(FadeTo(1.0f, 1.0f));
+        _playerController.m_ControllerState = ALTPlayerController.ControllerState.Menu;
+        try
+        {
+            _deathMenuCanvas.interactable = true;
+            _deathMenuCanvas.blocksRaycasts = true;
+            StartCoroutine(FadeTo(1.0f, 1.0f));
+        }
+        catch
+        {
+        }
     }
     IEnumerator FadeTo(float aValue, float aTime)
     {
@@ -48,15 +56,22 @@ public class DeathMenuUI : MonoBehaviour
 
     public void LoadSave()
     {
-        _player.PlayerRespawn();
+        _playerController.m_ControllerState = ALTPlayerController.ControllerState.Play;
+        //_playerController.PlayerRespawn();
         StartCoroutine(FadeTo(0.0f, 1.5f));
         _deathMenuCanvas.interactable = false;
     }
 
     public void QuitToMainMenu()
     {
-        SceneManager.LoadScene(0);
-        //_deathMenuCanvas.alpha = 0;
+        _playerController.m_ControllerState = ALTPlayerController.ControllerState.Play;
         _deathMenuCanvas.interactable = false;
+        _deathMenuCanvas.blocksRaycasts = false;
+        _deathMenuCanvas.alpha = 0;
+        _deathMenuCanvas.interactable = false;
+
+        DestroyImmediate(GameObject.FindGameObjectWithTag("Player"));
+        SceneManager.LoadScene(1);
+
     }
 }

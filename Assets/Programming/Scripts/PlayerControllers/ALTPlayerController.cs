@@ -503,7 +503,7 @@ public class ALTPlayerController : MonoBehaviour
 
     void HandleEquipmentWheels()
     {
-        if (Input.GetButtonDown("EquipmentBelt"))
+        if (Input.GetButtonDown("EquipmentBelt") && m_ControllerState == ControllerState.Play)
         {
             EquipmentWheel.enabled = true;
             Time.timeScale = 0.3f;
@@ -511,7 +511,7 @@ public class ALTPlayerController : MonoBehaviour
             m_ControllerState = ControllerState.Wheel;
         }
 
-        if (Input.GetButtonUp("EquipmentBelt"))
+        if (Input.GetButtonUp("EquipmentBelt")  && m_ControllerState == ControllerState.Wheel)
         {
             EquipmentWheel.enabled = false;
             Time.timeScale = 1;
@@ -520,7 +520,7 @@ public class ALTPlayerController : MonoBehaviour
         }
 
 
-        if (Input.GetButtonDown("WeaponBelt"))
+        if (Input.GetButtonDown("WeaponBelt") && m_ControllerState == ControllerState.Play)
         {
             WeaponWheel.enabled = true;
             Time.timeScale = 0.3f;
@@ -529,7 +529,7 @@ public class ALTPlayerController : MonoBehaviour
 
         }
 
-        if (Input.GetButtonUp("WeaponBelt"))
+        if (Input.GetButtonUp("WeaponBelt") && m_ControllerState == ControllerState.Wheel)
         {
             WeaponWheel.enabled = false;
             Time.timeScale = 1;
