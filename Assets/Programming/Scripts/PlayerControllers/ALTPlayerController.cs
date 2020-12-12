@@ -177,14 +177,14 @@ public class ALTPlayerController : MonoBehaviour
 
         if (Input.GetButtonDown("Pause"))
         {
-            try
-            {
-                m_ControllerState = ControllerState.Menu;
-                _pauseMenu.Pause();
-            }catch (Exception e)
-            {
-                Debug.Log(e.Message);
-            }
+            //try
+            //{
+            //    m_ControllerState = ControllerState.Menu;
+            //    _pauseMenu.Pause();
+            //}catch (Exception e)
+            //{
+            //    Debug.Log(e.Message);
+            //}
             
         }
 
@@ -257,8 +257,10 @@ public class ALTPlayerController : MonoBehaviour
         }
 
 
+        int slidemask = 1 << 17;
+
         Debug.DrawRay(transform.position, dir);
-        if (Physics.Raycast(transform.position,  dir, out hit))
+        if (Physics.Raycast(transform.position,  dir, out hit, 100f, ~slidemask))
         {
             _hitNormal = hit.normal;
 

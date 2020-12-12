@@ -53,9 +53,13 @@ public class PauseOptionsMenuUI : MonoBehaviour
 
     private void OnEnable()
     {
-        if (bDebug) Debug.Log("Options Menu");
-        EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(firstSlider);
+        try
+        {
+            if (bDebug) Debug.Log("Options Menu");
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(firstSlider);
+        }catch { }
+        
     }
 
     private void Update()

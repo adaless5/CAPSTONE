@@ -44,14 +44,17 @@ public class WeaponPickup : MonoBehaviour, ITippable
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player")
+        if (!isUsed)
         {
-            EventBroker.CallOnPickupWeapon(weaponNum);
-            isUsed = true;
-            GetComponent<MeshRenderer>().enabled = false;
-            GetComponent<Collider>().enabled = false;
+            if (other.gameObject.tag == "Player")
+            {
+                EventBroker.CallOnPickupWeapon(weaponNum);
+                isUsed = true;
+                GetComponent<MeshRenderer>().enabled = false;
+                GetComponent<Collider>().enabled = false;
 
-            CreateTip("Sprites/Messages/" + _tipName[weaponNum]);
+                CreateTip("Sprites/Messages/" + _tipName[weaponNum]);
+            }
         }
     }
 
