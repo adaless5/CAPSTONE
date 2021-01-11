@@ -66,7 +66,8 @@ public class PuzzleSwitch : MonoBehaviour
             SetSwitchModel(bIsActive);
         }
     }
-    public void Interact()
+
+    void SwitchInteract()
     {
         if (bCanSwitch)
         {
@@ -89,20 +90,28 @@ public class PuzzleSwitch : MonoBehaviour
                 Activate(!bIsActive);
             }
 
+        }
+    }
+
+    public void Interact()
+    {
+        SwitchInteract();
+        if (bCanSwitch)
+        {
             if (_ResponseType == Switch_Response_Type.InteractSwitches)
             {
                 for (int i = 0; i < _AffectedSwitches.Length; i++)
                 {
                     if (_AffectedSwitches[i] != null)
                     {
-                        _AffectedSwitches[i].Interact();
+                        _AffectedSwitches[i].SwitchInteract();
                     }
                 }
             }
         }
 
     }
-    public void Activate(bool onOff)
+    void Activate(bool onOff)
     {
         if (bCanSwitch)
         {
@@ -193,7 +202,7 @@ public class PuzzleSwitch : MonoBehaviour
 
     }
 
-    public void SetSwitchModel(bool OnOff)
+    void SetSwitchModel(bool OnOff)
     {
         if (_OffSwitch != null && _OnSwitch != null)
         {
