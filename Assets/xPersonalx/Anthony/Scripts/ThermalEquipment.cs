@@ -4,17 +4,15 @@ using UnityEngine;
 
 public class ThermalEquipment : Equipment
 {
-    ALTPlayerController _playerController; 
+    ALTPlayerController _playerController;
     bool bIsInThermalView = false;
     Light _directionalLight;
+
+    Vector4 _originalLightValues; ///evan added this
 
     public GameObject _particleSystemPrefab;
     GameObject _particleSystemObject;
     public ParticleSystem _particleSystem;
-
-    Quaternion rotation;
-
-    Vector4 _baseDirLightColour;
 
     // Start is called before the first frame update
     public override void Start()
@@ -28,16 +26,16 @@ public class ThermalEquipment : Equipment
             if (light.gameObject.tag == "Dir Light")
             {
                 _directionalLight = light;
-                _baseDirLightColour = _directionalLight.color;
+                _originalLightValues = light.color; ///evan added this
+
                 break;
             }
         }
 
-        _particleSystemPrefab = Instantiate<GameObject>(_particleSystemPrefab, gameObject.transform);
-        _particleSystem = _particleSystemPrefab.GetComponentInChildren<ParticleSystem>();
-        _particleSystemPrefab.SetActive(false);
-
-        rotation = _particleSystemPrefab.transform.rotation;
+        //_particleSystemPrefab = Instantiate<GameObject>(_particleSystemPrefab, gameObject.transform);
+        //_particleSystem = _particleSystemPrefab.GetComponentInChildren<ParticleSystem>();
+        //_particleSystemPrefab.transform.position = _playerController.gameObject.transform.forward * 10.0f;
+        //_particleSystemPrefab.SetActive(false);
     }
 
     // Update is called once per frame
@@ -45,32 +43,29 @@ public class ThermalEquipment : Equipment
     {
         if (bIsObtained)
         {
-            UseTool(); 
+            UseTool();
 
-            if(bIsInThermalView)
+            if (bIsInThermalView)
             {
-                if(_particleSystemPrefab != null)
+                _directionalLight.color = new Vector4(0.0f, 0.0f, 1.0f, 1.0f);
+                if (_particleSystemPrefab != null)
                 {
-                    //Cube Particle System
-                    //_particleSystemPrefab.transform.TransformPoint(_playerController.gameObject.transform.forward * 10.0f);
-
-                    //Donut Particle System
-                    _particleSystemPrefab.transform.TransformPoint(_playerController.gameObject.transform.up * 50.0f);
+                    _particleSystemPrefab.transform.position = _playerController.gameObject.transform.forward * 10.0f;
                 }
             }
         }
     }
 
-    void LateUpdate()
+    public bool GetIsInView()
     {
-        _particleSystemPrefab.transform.rotation = rotation;
+        return bIsInThermalView;
     }
 
     public override void UseTool()
     {
         if (_playerController != null)
         {
-            if(_playerController.CheckForUseThermalInput())
+            if (_playerController.CheckForUseThermalInput())
             {
                 ThermalSkin[] ThermalObjs = FindObjectsOfType<ThermalSkin>();
 
@@ -83,21 +78,11 @@ public class ThermalEquipment : Equipment
 
                     if (_directionalLight != null)
                     {
-                        if (_playerController.GetDarknessVolume())
-                        {
-                            _directionalLight.color = new Vector4(0.0f, 0.0f, 0.0f, 1.0f);
-                        }
-                        else if(!_playerController.GetDarknessVolume())
-                        {
-                            _directionalLight.color = new Vector4(0.0f, 0.0f, 1.0f, 1.0f);
-                        }
+                        _directionalLight.color = new Vector4(0.0f, 0.0f, 1.0f, 1.0f);
                     }
 
-                    _particleSystemPrefab.SetActive(true);
-
                     bIsInThermalView = true;
-                    
-                    
+
                 }
                 else if (bIsInThermalView)
                 {
@@ -114,17 +99,85 @@ public class ThermalEquipment : Equipment
                         }
                         else if (!_playerController.GetDarknessVolume())
                         {
-                            _directionalLight.color = _baseDirLightColour;
+                            _directionalLight.color = _originalLightValues;
                         }
                     }
 
-                    _particleSystemPrefab.SetActive(false);
-
+                    //_particleSystemPrefab.SetActive(false);
                     bIsInThermalView = false;
                 }
             }
 
             _playerController.SetThermalView(bIsInThermalView);
         }
+        /// EVAN ADDED ^^^
+
+
+        /// OG CODE VVVV
+
+
+        //if (_playerController != null)
+        //{
+        //    if(_playerController.CheckForUseThermalInput())
+        //    {
+        //        ThermalSkin[] ThermalObjs = FindObjectsOfType<ThermalSkin>();
+
+        //        if (!bIsInThermalView)
+        //        {
+        //            foreach (ThermalSkin obj in ThermalObjs)
+        //            {
+        //                obj.ChangeToThermalSkin();
+        //            }
+
+        //            if (_directionalLight != null)
+        //            {
+        //                if (_playerController.GetDarknessVolume())
+        //                {
+        //                    _directionalLight.color = new Vector4(0.0f, 0.0f, 0.0f, 1.0f);
+        //                }
+        //                else if(!_playerController.GetDarknessVolume())
+        //                {
+        //                    _directionalLight.color = new Vector4(0.0f, 0.0f, 1.0f, 1.0f);
+        //                }
+        //            }
+
+        //            //if (_particleSystem != null)
+        //            //{
+        //            //    _particleSystem.Play();
+        //            //}
+
+        //            //_particleSystemPrefab.SetActive(true);
+
+        //            bIsInThermalView = true;
+
+
+        //        }
+        //        else if (bIsInThermalView)
+        //        {
+        //            foreach (ThermalSkin obj in ThermalObjs)
+        //            {
+        //                obj.ChangeToNormalSkin();
+        //            }
+
+        //            if (_directionalLight != null)
+        //            {
+        //                if (_playerController.GetDarknessVolume())
+        //                {
+        //                    _directionalLight.color = new Vector4(0.0f, 0.0f, 0.0f, 1.0f);
+        //                }
+        //                else if (!_playerController.GetDarknessVolume())
+        //                {
+        //                    _directionalLight.color = new Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+        //                }
+        //            }
+
+        //            //_particleSystemPrefab.SetActive(false);
+
+        //            bIsInThermalView = false;
+        //        }
+        //    }
+
+        //    _playerController.SetThermalView(bIsInThermalView);
+        //}
     }
 }

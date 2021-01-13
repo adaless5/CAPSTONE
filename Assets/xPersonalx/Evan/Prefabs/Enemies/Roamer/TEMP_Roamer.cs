@@ -94,7 +94,7 @@ public class TEMP_Roamer : MonoBehaviour
         }
 
         
-            transform.localEulerAngles = new Vector3(0.0f, transform.localEulerAngles.y, 0.0f);
+            transform.eulerAngles = new Vector3(0.0f, transform.localEulerAngles.y, 0.0f);
         
     }
 

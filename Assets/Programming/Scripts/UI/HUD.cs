@@ -27,7 +27,7 @@ public class HUD : MonoBehaviour
     //Tool Icon
     public Image m_toolIcon;
     public Sprite[] toolIcons;
-    
+
 
     private void Awake()
     {
@@ -40,7 +40,7 @@ public class HUD : MonoBehaviour
         //Icons
         m_weaponIcon = gameObject.transform.GetChild(1).Find("Weapon_Icon").GetComponent<Image>();
         m_ammoIcon = gameObject.transform.GetChild(1).Find("Ammo_Icon").GetComponent<Image>();
-        m_toolIcon = gameObject.transform.GetChild(1).Find("Tool_Icon").GetComponent<Image>();     
+        m_toolIcon = gameObject.transform.GetChild(1).Find("Tool_Icon").GetComponent<Image>();
 
     }
 
@@ -63,7 +63,7 @@ public class HUD : MonoBehaviour
         ammoIcons[2] = Resources.Load<Sprite>("Sprites/Icons/Ammo/AMMO_CREATURE");
 
         //Tool Icon
-        toolIcons = new Sprite[3];       
+        toolIcons = new Sprite[3];
         toolIcons[0] = Resources.Load<Sprite>("Sprites/Icons/Icon_Empty");
         toolIcons[1] = Resources.Load<Sprite>("Sprites/Icons/Icon_Grapple");
         toolIcons[2] = Resources.Load<Sprite>("Sprites/Icons/Icon_Sword_HUD");
@@ -94,12 +94,12 @@ public class HUD : MonoBehaviour
     {
         //Displays nothing until equipment is equipped
         if (m_player._equipmentBelt._items[index].GetComponentInChildren<Tool>().bIsActive)
-        {           
+        {
             m_toolIcon.sprite = toolIcons[index + 1];
         }
         else
         {
             m_toolIcon.sprite = toolIcons[index];
         }
-    }    
+    }
 }

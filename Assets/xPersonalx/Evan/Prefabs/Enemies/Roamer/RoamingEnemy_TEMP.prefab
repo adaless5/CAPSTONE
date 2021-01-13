@@ -16,7 +16,6 @@ GameObject:
   - component: {fileID: 2047202487550082251}
   - component: {fileID: -6393086001432044041}
   - component: {fileID: -5497219566204380676}
-  - component: {fileID: 6276013542980723982}
   - component: {fileID: 7818323249915035984}
   m_Layer: 0
   m_Name: RoamingEnemy_TEMP
@@ -110,11 +109,11 @@ MonoBehaviour:
   _AcceptableDistanceFromTarget: 1
   _PatrolPoints: []
   _CurrentPatrolIndex: 0
-  _FollowRange: 10
+  _FollowRange: 20
   _FollowEscapeRange: 5
-  _FollowSpeed: 2
-  _AttackRange: 2
-  _AttackEscapeRange: 0.5
+  _FollowSpeed: 3
+  _AttackRange: 3
+  _AttackEscapeRange: 1
   _AttackTime: 1
   _HitRange: 10
   _HitDamage: 10
@@ -144,7 +143,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01dfb7d86835dc749b42ade1c715bbec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_HP: 10
+  m_HP: 20
   m_IsLoadingShield: 0
   healthBar: {fileID: 0}
 --- !u!135 &-6393086001432044041
@@ -176,20 +175,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 48
   m_CollisionDetection: 0
---- !u!64 &6276013542980723982
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3520139637981983928}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 6740538416072541049, guid: 15c1bbcbdd9991943831b4e75ac18924, type: 3}
 --- !u!136 &7818323249915035984
 CapsuleCollider:
   m_ObjectHideFlags: 0

@@ -16,11 +16,13 @@ public class CreatureWeapon : Weapon, ISaveable
     {
         base.Awake();
         _creatureProjectile = (GameObject)Resources.Load("Prefabs/Weapon/Creature Projectile");
+
     }
 
     // Start is called before the first frame update
     public override void Start()
     {
+
         _camera = FindObjectOfType<Camera>();
         GetComponent<MeshRenderer>().enabled = false;
         bIsActive = false;
@@ -54,6 +56,8 @@ public class CreatureWeapon : Weapon, ISaveable
         }
     }
 
+
+
     void OnShoot()
     {
         for (int i = 0; i < _bulletClip; i++)
@@ -66,13 +70,18 @@ public class CreatureWeapon : Weapon, ISaveable
             //GameObject creatureProjectile = Instantiate(_creatureProjectile, finalFowardVector, Quaternion.identity);
             if (ObjectPool.Instance != null)
             {
-                if (ObjectPool.Instance._poolDictionary.ContainsKey("Creature"))
+              //  if (ObjectPool.Instance._poolDictionary.ContainsKey("Creature"))
                 {
                     GameObject creatureProjectile = ObjectPool.Instance.SpawnFromPool("Creature", finalFowardVector, Quaternion.identity);
                     float randomfloat = UnityEngine.Random.Range(0.1f, 0.5f);
                     Vector3 randomSize = new Vector3(randomfloat, randomfloat, randomfloat);
                     creatureProjectile.transform.localScale = randomSize;
                     creatureProjectile.GetComponent<Rigidbody>().AddForce(transform.forward * m_hitImpact, ForceMode.Impulse);
+                }
+              //  else
+                {
+
+                //    Debug.LogError("doesnt contain creature key");
                 }
             }
             else

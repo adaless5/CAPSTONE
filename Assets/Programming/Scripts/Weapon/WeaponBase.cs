@@ -31,8 +31,11 @@ public class WeaponBase : Weapon, ISaveable
     void Awake()
     {
         base.Awake();
-        LoadDataOnSceneEnter();
         EventBroker.OnAmmoPickup += AmmoPickup;
+        LoadDataOnSceneEnter();
+        
+        //TODO: Readd Save implementation
+        //SaveSystem.SaveEvent += SaveDataOnSceneChange;
         
         m_weaponClipSize = 6;
         m_reloadTime = 2.0f;
@@ -41,12 +44,6 @@ public class WeaponBase : Weapon, ISaveable
         m_weaponRange = 50.0f;
         m_fireStart = 0.0f;       
         outOfAmmoAnimator = FindObjectOfType<AmmoUI>().GetComponent<Animator>();
-
-        gameObject.GetComponentInChildren<MeshRenderer>().enabled = false;
-        //gameObject.SetActive(false);
-        bIsObtained = false;
-        bIsActive = false;
-
         gunAnimator = GetComponent<Animator>();
     }
 
@@ -61,34 +58,37 @@ public class WeaponBase : Weapon, ISaveable
 
         gunCamera = GameObject.FindObjectOfType<Camera>();
 
-        //GetComponent<MeshRenderer>().enabled = true;
-        bIsActive = false;
-        bIsObtained = false;
-        gameObject.GetComponentInChildren<MeshRenderer>().enabled = false;
+        GetComponent<MeshRenderer>().enabled = true;
+        bIsActive = true;
+        bIsObtained = true;
     }
 
     void OnEnable()
     {
         bIsReloading = false;
     }
-    
+
+
+    void OnDisable()
+    {
+        //TODO: Readd save implementation
+        //SaveSystem.SaveEvent -= SaveDataOnSceneChange;
+    }
+
     // Update is called once per frame
     public override void Update()
     {
         if (_playerController != null)
         {
-            if(bIsObtained)
+            if (bIsActive && _playerController.m_ControllerState == ALTPlayerController.ControllerState.Play)
             {
-                if (bIsActive && _playerController.m_ControllerState == ALTPlayerController.ControllerState.Play)
-                {
-                    GetComponent<MeshRenderer>().enabled = true;
-                    UseTool();
-                    OnTarget();
-                }
-                else if (!bIsActive)
-                {
-                    GetComponent<MeshRenderer>().enabled = false;
-                }
+                GetComponent<MeshRenderer>().enabled = true;
+                UseTool();
+                OnTarget();
+            }
+            else if (!bIsActive)
+            {
+                GetComponent<MeshRenderer>().enabled = false;
             }
         }
     }
@@ -161,7 +161,6 @@ public class WeaponBase : Weapon, ISaveable
     {
         //Play Recoil animation
         gunAnimator.SetTrigger("OnRecoil");      
-        
         muzzleFlash.Play();
 
         RaycastHit hitInfo;
@@ -226,8 +225,16 @@ public class WeaponBase : Weapon, ISaveable
             }
         }
     }
+
+    public void SaveDataOnSceneChange()
+    {
+        SaveSystem.Save(gameObject.name, "bIsActive", gameObject.scene.name, bIsActive);
+        SaveSystem.Save(gameObject.name, "bIsObtained", gameObject.scene.name, bIsObtained);
+    }
+
     public void LoadDataOnSceneEnter()
     {
-        bIsObtained = SaveSystem.LoadBool(gameObject.name, "bIsObtained", "Equipment");
+        bIsActive = SaveSystem.LoadBool(gameObject.name, "bIsActive", gameObject.scene.name);
+        bIsObtained = SaveSystem.LoadBool(gameObject.name, "bIsObtained", gameObject.scene.name);
     }
 }

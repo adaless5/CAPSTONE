@@ -24,8 +24,6 @@ public class OptionsMenuUI : MonoBehaviour
     bool _isStereo;
     bool _isFullScreen;
     Resolution[] resolutions;
-
-    CanvasGroup _canvasGroup;
     private void Start()
     {
         resolutions = Screen.resolutions;
@@ -48,8 +46,6 @@ public class OptionsMenuUI : MonoBehaviour
             }
         }
 
-        _canvasGroup = GetComponent<CanvasGroup>();
-
         resolutionMenu.AddOptions(data);
         resolutionMenu.value = index;
         resolutionMenu.RefreshShownValue();
@@ -62,23 +58,23 @@ public class OptionsMenuUI : MonoBehaviour
 
     private void Update()
     {
-        //if(_isStereo)
-        //{
-        //    StereoButton.Select();
-        //}
-        //else
-        //{
-        //    MonoButton.Select();
-        //}
+        if(_isStereo)
+        {
+            StereoButton.Select();
+        }
+        else
+        {
+            MonoButton.Select();
+        }
 
-        //if (_isFullScreen)
-        //{
-        //    FullScreenButton.Select();
-        //}
-        //else
-        //{
-        //    WindowedButton.Select();
-        //}
+        if (_isFullScreen)
+        {
+            FullScreenButton.Select();
+        }
+        else
+        {
+            WindowedButton.Select();
+        }
     }
 
     public void SetVolume(float vol)
@@ -121,10 +117,5 @@ public class OptionsMenuUI : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(firstOption);
     }
 
-    public void ChangeCanvas(bool active)
-    {
-        _canvasGroup.interactable = active;
-        _canvasGroup.blocksRaycasts = active;
-    }
 
 }

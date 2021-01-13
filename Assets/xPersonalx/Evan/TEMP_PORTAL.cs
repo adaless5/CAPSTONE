@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TEMP_PORTAL : MonoBehaviour
 {
-
+    public GameObject Target;
     // Start is called before the first frame update
     void Start()
     {
@@ -13,15 +13,14 @@ public class TEMP_PORTAL : MonoBehaviour
 
     void OnTriggerEnter(Collider Other)
     {
-        if(Other.tag == "Player")
+        if(Other.tag == "Player" && Target != null)
         {
             Transform playerTransform = Other.GetComponentInParent<Transform>();
 
             //In Same Scene
-            Vector3 newpos = new Vector3(166.3426f, 8.002193f, 515.1062f);
-            Quaternion newrot =  Quaternion.Euler(0.0f,0.0f, 68.143f);
+            Vector3 newpos = Target.transform.position;
+            Vector3 newrot = Target.transform.eulerAngles;
                 playerTransform.position = newpos;
-               // playerTransform.rotation = newrot;
         }
     }
     // Update is called once per frame

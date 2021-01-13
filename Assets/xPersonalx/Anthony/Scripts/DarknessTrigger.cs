@@ -14,11 +14,10 @@ public class DarknessTrigger : MonoBehaviour, ITippable
 
     DirectionalLightState _directionalLightState;
     Light _directionalLight;
-    Vector4 _baseDirLightColour;
 
     Vector4 _lightVals;
     Vector4 _targetLightVals = new Vector4(1.0f, 1.0f, 1.0f, 1.0f);
-
+    Vector4 _originalLightValues; ///evan added this
     ALTPlayerController _playerController;
 
     GameObject _imageObject = null;
@@ -39,8 +38,7 @@ public class DarknessTrigger : MonoBehaviour, ITippable
             if (light.gameObject.tag == "Dir Light")
             {
                 _directionalLight = light;
-                _targetLightVals = _directionalLight.color;
-                _baseDirLightColour = _directionalLight.color;
+                _originalLightValues = light.color; ///evan added this
                 break;
             }
         }
@@ -77,7 +75,7 @@ public class DarknessTrigger : MonoBehaviour, ITippable
             }
             else if (_playerController.GetThermalView() == false)
             {
-                _targetLightVals = _baseDirLightColour;
+                _targetLightVals = new Vector4(1.0f, 1.0f, 1.0f, 1.0f);
             }
         }
     }
@@ -115,63 +113,99 @@ public class DarknessTrigger : MonoBehaviour, ITippable
 
     void DecrementLight()
     {
-        _lightVals = _directionalLight.color;
-
-        if(_lightVals.x >= 0f && _lightVals.y >= 0f && _lightVals.z >= 0f)
+        if (_directionalLight != null)///evan added this
         {
-            _lightVals.x -= Time.deltaTime;
-            _lightVals.x = Mathf.Clamp(_lightVals.x, 0.0f, 1.0f);
+            _lightVals = _directionalLight.color;
+         
+                if (_lightVals.x >= 0f && _lightVals.y >= 0f && _lightVals.z >= 0f)
+                {
+                    _lightVals.x -= Time.deltaTime;
+                    _lightVals.x = Mathf.Clamp(_lightVals.x, 0.0f, 1.0f);
 
-            _lightVals.y -= Time.deltaTime;
-            _lightVals.y = Mathf.Clamp(_lightVals.y, 0.0f, 1.0f);
+                    _lightVals.y -= Time.deltaTime;
+                    _lightVals.y = Mathf.Clamp(_lightVals.y, 0.0f, 1.0f);
 
-            _lightVals.z -= Time.deltaTime;
-            _lightVals.z = Mathf.Clamp(_lightVals.z, 0.0f, 1.0f);
+                    _lightVals.z -= Time.deltaTime;
+                    _lightVals.z = Mathf.Clamp(_lightVals.z, 0.0f, 1.0f);
 
-            _directionalLight.color = new Vector4(_lightVals.x, _lightVals.y, _lightVals.z, 1);
+                    _directionalLight.color = new Vector4(_lightVals.x, _lightVals.y, _lightVals.z, 1);
 
 
+                }
+                else
+                {
+                    _lightVals.x = 0.0f;
+                    _lightVals.y = 0.0f;
+                    _lightVals.z = 0.0f;
+                    _directionalLightState = DirectionalLightState.Set;
+                }
         }
-        else
+        else ///evan added this
         {
-            _lightVals.x = 0.0f;
-            _lightVals.y = 0.0f;
-            _lightVals.z = 0.0f;
-            _directionalLightState = DirectionalLightState.Set;
+            Start(); ///evan added this
         }
     }
 
     void IncrementLight()
     {
+
+        /// THE EVAN VERSION  VVVV
         _lightVals = _directionalLight.color;
 
-
-        if(_lightVals.x <= _targetLightVals.x)
+            if (_lightVals.x <= _originalLightValues.x && _lightVals.y <= _originalLightValues.y && _lightVals.z <= _originalLightValues.z)
         {
             _lightVals.x += Time.deltaTime;
-            _lightVals.x = Mathf.Clamp(_lightVals.x, 0.0f, _targetLightVals.x);
-        }
+            _lightVals.x = Mathf.Clamp(_lightVals.x, 0.0f, _originalLightValues.x);
 
-        if(_lightVals.y <= _targetLightVals.y)
-        {
             _lightVals.y += Time.deltaTime;
-            _lightVals.y = Mathf.Clamp(_lightVals.y, 0.0f, _targetLightVals.y);
-        }
+            _lightVals.y = Mathf.Clamp(_lightVals.y, 0.0f, _originalLightValues.y);
 
-        if(_lightVals.z <= _targetLightVals.z)
-        {
             _lightVals.z += Time.deltaTime;
-            _lightVals.z = Mathf.Clamp(_lightVals.z, 0.0f, _targetLightVals.z);
+            _lightVals.z = Mathf.Clamp(_lightVals.z, 0.0f, _originalLightValues.z);
+
+            _directionalLight.color = new Vector4(_lightVals.x, _lightVals.y, _lightVals.z, 1.0f);
         }
         else
         {
-            _lightVals.x = _targetLightVals.x;
-            _lightVals.y = _targetLightVals.y;
-            _lightVals.z = _targetLightVals.z;
+            _lightVals.x = _originalLightValues.x;
+            _lightVals.y = _originalLightValues.y;
+            _lightVals.z = _originalLightValues.z;
             _directionalLightState = DirectionalLightState.Set;
-            return;
         }
-        _directionalLight.color = new Vector4(_lightVals.x, _lightVals.y, _lightVals.z, 1.0f);
+        ThermalEquipment playerThermalVisor = _playerController.gameObject.GetComponent<ThermalEquipment>();
+        if(playerThermalVisor!=null && playerThermalVisor.GetIsInView())
+        {
+            _directionalLight.color = new Vector4(0.0f, 0.0f, 1.0f, 1.0f);
+        }
+        /// THE EVAN VERSION  ^^^^
+
+
+
+        //THE OG VERSION   vvv
+
+
+        //_lightVals = _directionalLight.color;
+
+        //if (_lightVals.x <= _targetLightVals.x && _lightVals.y <= _targetLightVals.y && _lightVals.z <= _targetLightVals.z)
+        //{
+        //    _lightVals.x += Time.deltaTime;
+        //    _lightVals.x = Mathf.Clamp(_lightVals.x, 0.0f, _targetLightVals.x);
+
+        //    _lightVals.y += Time.deltaTime;
+        //    _lightVals.y = Mathf.Clamp(_lightVals.y, 0.0f, _targetLightVals.y);
+
+        //    _lightVals.z += Time.deltaTime;
+        //    _lightVals.z = Mathf.Clamp(_lightVals.z, 0.0f, _targetLightVals.z);
+
+        //    _directionalLight.color = new Vector4(_lightVals.x, _lightVals.y, _lightVals.z, 1.0f);
+        //}
+        //else
+        //{
+        //    _lightVals.x = _targetLightVals.x;
+        //    _lightVals.y = _targetLightVals.y;
+        //    _lightVals.z = _targetLightVals.z;
+        //    _directionalLightState = DirectionalLightState.Set;
+        //}
     }
 
     public void CreateTip(string filename)
