@@ -28,6 +28,11 @@ public class HUD : MonoBehaviour
     public Image m_toolIcon;
     public Sprite[] toolIcons;
 
+    //Ammo Info
+    public static int m_currentAmmo;
+    public static int m_overallAmmo;
+    public static int m_clipSize;
+
 
     private void Awake()
     {

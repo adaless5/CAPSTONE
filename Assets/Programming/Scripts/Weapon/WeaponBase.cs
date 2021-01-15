@@ -45,6 +45,8 @@ public class WeaponBase : Weapon, ISaveable
         m_fireStart = 0.0f;       
         outOfAmmoAnimator = FindObjectOfType<AmmoUI>().GetComponent<Animator>();
         gunAnimator = GetComponent<Animator>();
+
+                   
     }
 
     public override void Start()

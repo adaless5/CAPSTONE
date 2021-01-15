@@ -9,11 +9,15 @@ public enum WeaponType
     CreatureWeapon,
     NumberOfWeapons
 }
+
+
 public abstract class Weapon : Tool
 {
+
+
     [Header("Weapon Selected")]
     [SerializeField]
-    private WeaponType _weapon;
+    protected WeaponType _weapon;
 
     [Header("Damage Settings")]
     [SerializeField]
@@ -34,7 +38,6 @@ public abstract class Weapon : Tool
     [SerializeField]
     protected float m_weaponRange = 50.0f;   
     [Space]
-
    
 
     protected ALTPlayerController _playerController;
