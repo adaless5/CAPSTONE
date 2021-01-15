@@ -179,8 +179,6 @@ public class GrappleHook : Equipment, ISaveable
                         Transform tran = m_SpriteRenderer.gameObject.transform;
                         tran.position = Vector3.Lerp(tran.position, raycastHit.point, Time.deltaTime * 20.0f);
                     }
-
-
                 }
                 else
                 {
