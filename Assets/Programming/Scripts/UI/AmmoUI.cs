@@ -6,8 +6,8 @@ using UnityEngine.UI;
 
 public class AmmoUI : MonoBehaviour
 {    
-    public static int m_overallAmmo;
-    public static int m_currentAmmo;
+    public int m_overallAmmo;
+    public int m_currentAmmo;
     Text m_text;
 
     // Start is called before the first frame update
