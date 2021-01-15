@@ -22,6 +22,19 @@ public class Mine : MonoBehaviour
         StartCoroutine(Explode());
     }
 
+    public void InitMine(float fuzetime, float blastradius, float explosionforce, int damage)
+    {
+        //FuzeTimer = fuzetime;
+        //BlastRadius = blastradius;
+        //ExplosionForce = explosionforce;
+        //Damage = damage;
+
+
+        //m_Timer = FuzeTimer;
+        //m_bIsBlownUp = false;
+
+        //StartCoroutine(Explode());
+    }
     IEnumerator Explode()
     {
         yield return new WaitForSeconds(m_Timer);

@@ -70,6 +70,7 @@ public class MineSpawner : Weapon, ISaveable
         GameObject mine = Instantiate(minePrefab, transform.position, transform.rotation);
         if(mine)
         {
+           // mine.GetComponent<Mine>().InitMine(
             mine.GetComponent<Rigidbody>().AddForce(transform.forward * Force);
             mine.GetComponent<Rigidbody>().AddTorque(new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), -90f));
         }

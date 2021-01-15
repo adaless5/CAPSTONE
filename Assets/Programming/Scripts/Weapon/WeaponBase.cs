@@ -33,15 +33,15 @@ public class WeaponBase : Weapon, ISaveable
         base.Awake();
         EventBroker.OnAmmoPickup += AmmoPickup;
         LoadDataOnSceneEnter();
-        
+
         //TODO: Readd Save implementation
         //SaveSystem.SaveEvent += SaveDataOnSceneChange;
-        
-        m_weaponClipSize = 6;
-        m_reloadTime = 2.0f;
-        m_fireRate = 0.8f; //Default Gun shoots every 1.25 seconds, can be adjusted in editor - VR
-        m_hitImpact = 50.0f;
-        m_weaponRange = 50.0f;
+        Debug.Log(m_scalars.Damage);
+        m_weaponClipSize = 6 * m_scalars.ClipSize;
+        m_reloadTime = 2.0f * m_scalars.ReloadTime;
+        m_fireRate = 0.8f * m_scalars.FireRate; //Default Gun shoots every 1.25 seconds, can be adjusted in editor - VR
+        m_hitImpact = 50.0f * m_scalars.ImpactForce;
+        m_weaponRange = 50.0f * m_scalars.Range;
         m_fireStart = 0.0f;       
         outOfAmmoAnimator = FindObjectOfType<AmmoUI>().GetComponent<Animator>();
         gunAnimator = GetComponent<Animator>();
@@ -225,6 +225,31 @@ public class WeaponBase : Weapon, ISaveable
             }
         }
     }
+
+    public void AddUpgrade(WeaponScalars scalars)
+    {
+        m_scalars += scalars;
+        m_damageAmount *= m_scalars.Damage;
+        m_weaponClipSize *= m_scalars.ClipSize;
+        m_reloadTime *= m_scalars.ReloadTime;
+        m_fireRate *= m_scalars.FireRate;
+        m_hitImpact *= m_scalars.ImpactForce;
+        m_weaponRange *= m_scalars.Range;
+
+        Debug.Log(m_scalars.Damage);
+    }
+
+    //todo: get this figured out
+    //public void RemoveUpgrade(WeaponScalars scalars)
+    //{
+    //    m_scalars -= scalars;
+    //    m_weaponClipSize = 6 * m_scalars.ClipSize;
+    //    m_reloadTime = 2.0f * m_scalars.ReloadTime;
+    //    m_fireRate = 0.8f * m_scalars.FireRate;
+    //    m_hitImpact = 50.0f * m_scalars.ImpactForce;
+    //    m_weaponRange = 50.0f * m_scalars.Range;
+    //}
+
 
     public void SaveDataOnSceneChange()
     {
