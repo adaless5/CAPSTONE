@@ -23,7 +23,7 @@ public class WeaponBase : Weapon, ISaveable
 
     [Header("Camera Settings")]
     public Camera gunCamera;
-    public AmmoUI m_ammoUI;
+    //public AmmoUI m_ammoUI;
    
     float m_timeElapsed;
     float m_lerpDuration = 3f;
@@ -46,17 +46,18 @@ public class WeaponBase : Weapon, ISaveable
         outOfAmmoAnimator = FindObjectOfType<AmmoUI>().GetComponent<Animator>();
         gunAnimator = GetComponent<Animator>();
 
-                   
-    }
-
-    public override void Start()
-    {
         //Initializing AmmoCount and UI
         m_currentAmmoCount = m_weaponClipSize;
         m_overallAmmoCount = m_currentAmmoCount;
 
-        if (m_ammoUI != null)
-            m_ammoUI.SetAmmoText(m_currentAmmoCount, m_overallAmmoCount, m_weaponClipSize);
+    }
+
+    public override void Start()
+    {
+       
+
+        //if (m_ammoUI != null)
+        //    m_ammoUI.SetAmmoText(m_currentAmmoCount, m_overallAmmoCount, m_weaponClipSize);
 
         gunCamera = GameObject.FindObjectOfType<Camera>();
 
@@ -142,7 +143,7 @@ public class WeaponBase : Weapon, ISaveable
             m_overallAmmoCount--;
         }
 
-        m_ammoUI.SetAmmoText(m_currentAmmoCount, m_overallAmmoCount, m_weaponClipSize);
+       // m_ammoUI.SetAmmoText(m_currentAmmoCount, m_overallAmmoCount, m_weaponClipSize);
         bIsReloading = false;
 
         //Play reload and ammo animations
@@ -155,7 +156,7 @@ public class WeaponBase : Weapon, ISaveable
     public void AmmoPickup(WeaponType type, int numberOfClips)
     {
         m_overallAmmoCount += (m_weaponClipSize * numberOfClips);
-        m_ammoUI.SetAmmoText(m_currentAmmoCount, m_overallAmmoCount, m_weaponClipSize);
+        //m_ammoUI.SetAmmoText(m_currentAmmoCount, m_overallAmmoCount, m_weaponClipSize);
     }
 
 
@@ -200,8 +201,8 @@ public class WeaponBase : Weapon, ISaveable
 
         //Using ammo
         m_currentAmmoCount--;
-        if (m_ammoUI != null)
-            m_ammoUI.SetAmmoText(m_currentAmmoCount, m_overallAmmoCount, m_weaponClipSize);
+        //if (m_ammoUI != null)
+        //    m_ammoUI.SetAmmoText(m_currentAmmoCount, m_overallAmmoCount, m_weaponClipSize);
         if (m_currentAmmoCount == 0 && m_overallAmmoCount == 0)
         {
             outOfAmmoAnimator.SetBool("bIsOut", true);

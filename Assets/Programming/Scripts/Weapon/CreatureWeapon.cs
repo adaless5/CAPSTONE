@@ -9,7 +9,7 @@ public class CreatureWeapon : Weapon, ISaveable
     public Camera _camera;
     public ParticleSystem _spreadEffect;
     GameObject _creatureProjectile;
-    public AmmoUI m_ammoUI;
+    //public AmmoUI m_ammoUI;
 
    // private int _bulletClip = 8;
 
@@ -28,8 +28,8 @@ public class CreatureWeapon : Weapon, ISaveable
         m_currentAmmoCount = m_weaponClipSize;
         m_overallAmmoCount = m_currentAmmoCount;
 
-        if (m_ammoUI != null)
-            m_ammoUI.SetAmmoText(m_currentAmmoCount, m_overallAmmoCount, m_weaponClipSize);
+        //if (m_ammoUI != null)
+        //    m_ammoUI.SetAmmoText(m_currentAmmoCount, m_overallAmmoCount, m_weaponClipSize);
 
 
         _camera = FindObjectOfType<Camera>();
@@ -126,8 +126,8 @@ public class CreatureWeapon : Weapon, ISaveable
 
         //Using ammo
         m_currentAmmoCount--;
-        if (m_ammoUI != null)
-            m_ammoUI.SetAmmoText(m_currentAmmoCount, m_overallAmmoCount, m_weaponClipSize);
+        //if (m_ammoUI != null)
+        //    m_ammoUI.SetAmmoText(m_currentAmmoCount, m_overallAmmoCount, m_weaponClipSize);
         //if (m_currentAmmoCount == 0 && m_overallAmmoCount == 0)
         //{
         //   // outOfAmmoAnimator.SetBool("bIsOut", true);
@@ -147,7 +147,7 @@ public class CreatureWeapon : Weapon, ISaveable
             m_overallAmmoCount--;
         }
 
-        m_ammoUI.SetAmmoText(m_currentAmmoCount, m_overallAmmoCount, m_weaponClipSize);
+        //m_ammoUI.SetAmmoText(m_currentAmmoCount, m_overallAmmoCount, m_weaponClipSize);
         bIsReloading = false;
 
         //Play reload and ammo animations
@@ -160,7 +160,7 @@ public class CreatureWeapon : Weapon, ISaveable
     public void AmmoPickup(WeaponType type, int numberOfClips)
     {
         m_overallAmmoCount += (m_weaponClipSize * numberOfClips);
-        m_ammoUI.SetAmmoText(m_currentAmmoCount, m_overallAmmoCount, m_weaponClipSize);
+        //m_ammoUI.SetAmmoText(m_currentAmmoCount, m_overallAmmoCount, m_weaponClipSize);
     }
 
     private void OnTarget()

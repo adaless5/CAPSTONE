@@ -55,5 +55,21 @@ public abstract class Weapon : Tool
         //Debug.Log(_playerController);
     }
 
+    public int GetCurrentAmmo()
+    {
+        return m_currentAmmoCount;
+    }
+
+    public int GetOverallAmmo()
+    {
+        return m_overallAmmoCount;
+    }
+
+    public int GetClipSize()
+    {
+        return m_weaponClipSize;
+    }
+  
+
 }
 
