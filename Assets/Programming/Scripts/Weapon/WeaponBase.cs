@@ -33,7 +33,7 @@ public class WeaponBase : Weapon, ISaveable
         base.Awake();
         EventBroker.OnAmmoPickup += AmmoPickup;
         LoadDataOnSceneEnter();
-        
+
         //TODO: Readd Save implementation
         //SaveSystem.SaveEvent += SaveDataOnSceneChange;
         
