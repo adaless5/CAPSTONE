@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Idle : State
+public class DroneIdle : DroneState
 {
-    public Idle(GameObject enemy, Transform[] pp, Transform playerposition, NavMeshAgent nav) : base(enemy, pp, playerposition, nav)
+    public DroneIdle(GameObject enemy, Transform[] pp, Transform playerposition, NavMeshAgent nav) : base(enemy, pp, playerposition, nav)
     {
+        
         _stateName = STATENAME.IDLE;
 
     }
@@ -21,12 +22,12 @@ public class Idle : State
         base.Update();
         if (CanSeePlayer())
         {
-            _nextState = new Attack(_currentEnemy, _patrolPoints, _playerPos, _navMeshAgent);
+            _nextState = new DroneAttack(_currentEnemy, _patrolPoints, _playerPos, _navMeshAgent);
             _stage = EVENT.EXIT;
         }
         else
         {
-            _nextState = new Patrol(_currentEnemy, _patrolPoints, _playerPos, _navMeshAgent);
+            _nextState = new DronePatrol(_currentEnemy, _patrolPoints, _playerPos, _navMeshAgent);
             _stage = EVENT.EXIT;
         }
     }

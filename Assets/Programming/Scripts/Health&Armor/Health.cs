@@ -47,7 +47,7 @@ public class Health : MonoBehaviour, ISaveable
     {
         m_HP -= damage;
         if (healthBar != null && gameObject.tag == "Player")
-           healthBar.LoseHealth(m_HP, damage, m_MaxHealth); 
+            healthBar.LoseHealth(m_HP, damage, m_MaxHealth);
 
 
         if (m_HP <= 0.0f)
@@ -83,6 +83,10 @@ public class Health : MonoBehaviour, ISaveable
         isDead = true;
         //Destroy(gameObject);
         gameObject.SetActive(false);
+        for (int i = 0; i < transform.childCount; ++i)
+        {
+            transform.GetChild(i).gameObject.SetActive(false);
+        }
         transform.DetachChildren();
     }
 
