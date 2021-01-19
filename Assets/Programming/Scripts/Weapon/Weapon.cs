@@ -34,6 +34,7 @@ public abstract class Weapon : Tool
     protected float m_hitImpact = 50.0f;
     [SerializeField]
     protected float m_weaponRange = 50.0f;
+    [Header("Explosive Weapon Specific")]
     [SerializeField]
     protected float m_projectileLifeTime = 3.0f;
     [SerializeField]
@@ -42,6 +43,7 @@ public abstract class Weapon : Tool
     protected float m_blastforce = 2000.0f; //might not be needed, can use hit impact
     [SerializeField]
     protected float m_projectileforce = 800.0f; //force of a lauched projectile
+    [Header("Creture Weapon Specific")]
     [SerializeField]
     protected float m_maxDamageTime;
     [Space]
@@ -52,6 +54,8 @@ public abstract class Weapon : Tool
     protected ALTPlayerController _playerController;
     protected float m_fireStart = 0.0f;
     protected bool bIsReloading = false;
+
+    protected bool m_bHasActionUpgrade = false;
 
     protected void Awake()
     {
@@ -67,6 +71,7 @@ public abstract class Weapon : Tool
 
     public abstract void AddUpgrade(WeaponScalars scalars);
     //public abstract void RemoveUpgrade(WeaponScalars scalars);
+    public abstract void SetHasAction(bool hasaction);
 }
 
 [System.Serializable]
@@ -82,6 +87,7 @@ public struct WeaponScalars
     public float FuzeTime;
     public float BlastRadius;
     public float ProjectileForce;
+    public float DamageTime;
 
     public void SetToDefault()
     {
@@ -95,6 +101,7 @@ public struct WeaponScalars
         FuzeTime = 1;
         BlastRadius = 1;
         ProjectileForce = 1;
+        DamageTime = 1;
     }
 
     public void SetToZero()
@@ -109,6 +116,7 @@ public struct WeaponScalars
         FuzeTime = 0;
         BlastRadius = 0;
         ProjectileForce = 0;
+        DamageTime = 0;
     }
 
     public static WeaponScalars operator +(WeaponScalars a, WeaponScalars b)
@@ -123,6 +131,7 @@ public struct WeaponScalars
         a.FuzeTime += b.FuzeTime;
         a.BlastRadius += b.BlastRadius;
         a.ProjectileForce += b.ProjectileForce;
+        a.DamageTime += b.DamageTime;
 
         return a;
     }
@@ -139,6 +148,8 @@ public struct WeaponScalars
         a.FuzeTime -= b.FuzeTime;
         a.BlastRadius -= b.BlastRadius;
         a.ProjectileForce -= b.ProjectileForce;
+        a.DamageTime -= b.DamageTime;
+
 
         return a;
     }

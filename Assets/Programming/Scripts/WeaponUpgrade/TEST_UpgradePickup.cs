@@ -6,6 +6,7 @@ public class TEST_UpgradePickup : MonoBehaviour
 {
     public WeaponScalars Upgrade;
     public int item_index = 0;
+    public bool HasAction = false;
     private void OnTriggerEnter(Collider other)
     {
         ALTPlayerController player = other.GetComponent<ALTPlayerController>();
@@ -17,6 +18,7 @@ public class TEST_UpgradePickup : MonoBehaviour
             {
                 Weapon weapon = item.GetComponent<Weapon>();
                 weapon.AddUpgrade(Upgrade);
+                weapon.SetHasAction(HasAction);
                 Destroy(gameObject);
             }
         }

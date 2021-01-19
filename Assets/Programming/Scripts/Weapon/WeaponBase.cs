@@ -91,6 +91,7 @@ public class WeaponBase : Weapon, ISaveable
                 GetComponent<MeshRenderer>().enabled = false;
             }
         }
+
     }
 
     public override void UseTool()
@@ -163,37 +164,44 @@ public class WeaponBase : Weapon, ISaveable
         gunAnimator.SetTrigger("OnRecoil");      
         muzzleFlash.Play();
 
-        RaycastHit hitInfo;
-        if (Physics.Raycast(gunCamera.transform.position, gunCamera.transform.forward, out hitInfo, m_weaponRange))
+        if (!m_bHasActionUpgrade)
         {
-            //Only damages if asset has "Health" script
-            Health target = hitInfo.transform.GetComponent<Health>();
-            if (target != null && target.gameObject.tag != "Player")
+            RaycastHit hitInfo;
+            if (Physics.Raycast(gunCamera.transform.position, gunCamera.transform.forward, out hitInfo, m_weaponRange))
             {
-                target.TakeDamage(m_damageAmount);
-                reticuleAnimator.SetTrigger("isTargetted");
-            }
-            else
-            {
-                reticuleAnimator.SetTrigger("isTargetted");
-            }
+                //Only damages if asset has "Health" script
+                Health target = hitInfo.transform.GetComponent<Health>();
+                if (target != null && target.gameObject.tag != "Player")
+                {
+                    target.TakeDamage(m_damageAmount);
+                    reticuleAnimator.SetTrigger("isTargetted");
+                }
+                else
+                {
+                    reticuleAnimator.SetTrigger("isTargetted");
+                }
 
-            //checks if breakable wall
-            DestructibleObject wall = hitInfo.transform.GetComponentInParent<DestructibleObject>();
-            if (wall)
-            {
-                wall.Break(gameObject.tag);
-            }
+                //checks if breakable wall
+                DestructibleObject wall = hitInfo.transform.GetComponentInParent<DestructibleObject>();
+                if (wall)
+                {
+                    wall.Break(gameObject.tag);
+                }
 
-            //Force of impact on hit
-            if (hitInfo.rigidbody != null)
-            {
-                hitInfo.rigidbody.AddForce(-hitInfo.normal * m_hitImpact);
-            }
+                //Force of impact on hit
+                if (hitInfo.rigidbody != null)
+                {
+                    hitInfo.rigidbody.AddForce(-hitInfo.normal * m_hitImpact);
+                }
 
-            //Particle effects on hit
-            GameObject hitImpact = Instantiate(impactFX, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
-            Destroy(hitImpact, 2.0f);            
+                //Particle effects on hit
+                GameObject hitImpact = Instantiate(impactFX, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
+                Destroy(hitImpact, 2.0f);
+            }
+        }
+        else
+        {
+            UpgradedFire();
         }
 
         //Using ammo
@@ -235,8 +243,6 @@ public class WeaponBase : Weapon, ISaveable
         m_fireRate *= m_scalars.FireRate;
         m_hitImpact *= m_scalars.ImpactForce;
         m_weaponRange *= m_scalars.Range;
-
-        //Debug.Log(m_scalars.Damage);
     }
 
     //todo: get this figured out
@@ -250,6 +256,51 @@ public class WeaponBase : Weapon, ISaveable
     //    m_weaponRange = 50.0f * m_scalars.Range;
     //}
 
+    public override void SetHasAction(bool hasaction)
+    {
+        m_bHasActionUpgrade = hasaction;
+    }
+
+    void UpgradedFire()
+    {
+        Debug.Log("Upgraded fire");
+        for (int i = -1; i < 2; i++)
+        {
+            Debug.Log(i.ToString());
+            RaycastHit hitInfo;
+            if (Physics.Raycast(gunCamera.transform.position, Quaternion.Euler(0, 15f * i, 0) * gunCamera.transform.forward, out hitInfo, m_weaponRange))
+            {
+                //Only damages if asset has "Health" script
+                Health target = hitInfo.transform.GetComponent<Health>();
+                if (target != null && target.gameObject.tag != "Player")
+                {
+                    target.TakeDamage(m_damageAmount);
+                    reticuleAnimator.SetTrigger("isTargetted");
+                }
+                else
+                {
+                    reticuleAnimator.SetTrigger("isTargetted");
+                }
+
+                //checks if breakable wall
+                DestructibleObject wall = hitInfo.transform.GetComponentInParent<DestructibleObject>();
+                if (wall)
+                {
+                    wall.Break(gameObject.tag);
+                }
+
+                //Force of impact on hit
+                if (hitInfo.rigidbody != null)
+                {
+                    hitInfo.rigidbody.AddForce(-hitInfo.normal * m_hitImpact);
+                }
+
+                //Particle effects on hit
+                GameObject hitImpact = Instantiate(impactFX, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
+                //Destroy(hitImpact, 2.0f);
+            }
+        }
+    }
 
     public void SaveDataOnSceneChange()
     {

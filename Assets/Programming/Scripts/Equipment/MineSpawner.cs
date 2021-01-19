@@ -89,7 +89,7 @@ public class MineSpawner : Weapon, ISaveable
            // mine.GetComponent<Mine>().InitMine(
             mine.GetComponent<Rigidbody>().AddForce(transform.forward * m_projectileforce);
             mine.GetComponent<Rigidbody>().AddTorque(new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), -90f));
-            mine.GetComponent<Mine>().InitMine(m_projectileLifeTime, m_blastradius, m_blastforce, m_damageAmount);
+            mine.GetComponent<Mine>().InitMine(m_projectileLifeTime, m_blastradius, m_blastforce, m_damageAmount, m_bHasActionUpgrade);
         }
     }
 
@@ -103,6 +103,11 @@ public class MineSpawner : Weapon, ISaveable
         m_blastforce *= m_scalars.ImpactForce;
         m_damageAmount *= m_scalars.Damage;
 
+    }
+
+    public override void SetHasAction(bool hasaction)
+    {
+        m_bHasActionUpgrade = hasaction;
     }
 
     public void LoadDataOnSceneEnter()

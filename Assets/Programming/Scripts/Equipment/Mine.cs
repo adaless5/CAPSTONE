@@ -8,19 +8,20 @@ public class Mine : MonoBehaviour
     float m_BlastRadius = 10f;
     float m_ExplosionForce = 2000f;
     float m_Damage = 50;
+    bool m_bHasAction = false;
 
     public GameObject explosionParticleEffect;
 
     float m_Timer;
     bool m_bIsBlownUp;
 
-    public void InitMine(float fuzetime, float blastradius, float explosionforce, float damage)
+    public void InitMine(float fuzetime, float blastradius, float explosionforce, float damage, bool hasaction)
     {
         m_FuzeTimer = fuzetime;
         m_BlastRadius = blastradius;
         m_ExplosionForce = explosionforce;
         m_Damage = damage;
-
+        m_bHasAction = hasaction;
 
         m_Timer = m_FuzeTimer;
         m_bIsBlownUp = false;
@@ -73,6 +74,34 @@ public class Mine : MonoBehaviour
             if (obj.GetComponent<Rigidbody>())
             {
                 obj.GetComponent<Rigidbody>().AddExplosionForce(m_ExplosionForce, transform.position, m_BlastRadius);
+            }
+        }
+
+        if(m_bHasAction)
+        {
+            for(int i = 0; i < 4; i++)
+            {
+                GameObject mine = Instantiate(gameObject, transform.position, transform.rotation);
+                if(mine)
+                {
+                    mine.transform.localScale -= new Vector3(0.5f, 0.5f, 0.5f);
+                    switch (i)
+                    {
+                        case 0:
+                            mine.GetComponent<Rigidbody>().AddForce(new Vector3(0, 200f, 500f));
+                            break;
+                        case 1:
+                            mine.GetComponent<Rigidbody>().AddForce(new Vector3(0, 200f, -500f));
+                            break;
+                        case 2:
+                            mine.GetComponent<Rigidbody>().AddForce(new Vector3(500f, 200f, 0));
+                            break;
+                        case 3:
+                            mine.GetComponent<Rigidbody>().AddForce(new Vector3(-500f, 200f, 0));
+                            break;
+                    }
+                    mine.GetComponent<Mine>().InitMine(m_FuzeTimer, m_BlastRadius * 0.5f, m_ExplosionForce * 0.5f, m_Damage * 0.5f, false);
+                }
             }
         }
 

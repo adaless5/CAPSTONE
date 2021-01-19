@@ -101,15 +101,15 @@ public class CreatureWeapon : Weapon, ISaveable
     {
         m_scalars += scalars;
         m_damageAmount *= m_scalars.Damage;
-        m_weaponClipSize *= m_scalars.ClipSize;
-        m_reloadTime *= m_scalars.ReloadTime;
         m_fireRate *= m_scalars.FireRate;
         m_hitImpact *= m_scalars.ImpactForce;
-        m_weaponRange *= m_scalars.Range;
-
-        Debug.Log(m_scalars.Damage);
+        m_projectileLifeTime *= m_scalars.FuzeTime;
+        m_maxDamageTime *= m_scalars.DamageTime;
     }
-
+    public override void SetHasAction(bool hasaction)
+    {
+        m_bHasActionUpgrade = hasaction;
+    }
     private void OnTarget()
     {
 
