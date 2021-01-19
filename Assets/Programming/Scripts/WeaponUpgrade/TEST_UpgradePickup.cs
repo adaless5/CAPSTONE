@@ -5,16 +5,17 @@ using UnityEngine;
 public class TEST_UpgradePickup : MonoBehaviour
 {
     public WeaponScalars Upgrade;
-
+    public int item_index = 0;
     private void OnTriggerEnter(Collider other)
     {
         ALTPlayerController player = other.GetComponent<ALTPlayerController>();
         if(player)
         {
-            Tool item = player._weaponBelt._items[0];
-            if(item.GetComponent<WeaponBase>())
+            Tool item = player._weaponBelt._items[item_index];
+            Debug.Log(item);
+            if(item.GetComponent<Weapon>())
             {
-                WeaponBase weapon = item.GetComponent<WeaponBase>();
+                Weapon weapon = item.GetComponent<Weapon>();
                 weapon.AddUpgrade(Upgrade);
                 Destroy(gameObject);
             }

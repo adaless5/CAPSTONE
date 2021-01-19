@@ -34,14 +34,16 @@ public abstract class Weapon : Tool
     protected float m_hitImpact = 50.0f;
     [SerializeField]
     protected float m_weaponRange = 50.0f;
-    //[SerializeField]
-    //protected float m_fuzetime = 3.0f;
-    //[SerializeField]
-    //protected float m_blastradius = 10.0f;
-    //[SerializeField]
-    //protected float m_blastforce = 2000.0f; //might not be needed, can use hit impact
-    //[SerializeField]
-    //protected float m_projectileforce = 800.0f; //force of a lauched projectile
+    [SerializeField]
+    protected float m_projectileLifeTime = 3.0f;
+    [SerializeField]
+    protected float m_blastradius = 10.0f;
+    [SerializeField]
+    protected float m_blastforce = 2000.0f; //might not be needed, can use hit impact
+    [SerializeField]
+    protected float m_projectileforce = 800.0f; //force of a lauched projectile
+    [SerializeField]
+    protected float m_maxDamageTime;
     [Space]
 
     protected WeaponScalars m_scalars;
@@ -63,7 +65,7 @@ public abstract class Weapon : Tool
         //Debug.Log(_playerController);
     }
 
-    //public abstract void AddUpgrade(WeaponScalars scalars);
+    public abstract void AddUpgrade(WeaponScalars scalars);
     //public abstract void RemoveUpgrade(WeaponScalars scalars);
 }
 

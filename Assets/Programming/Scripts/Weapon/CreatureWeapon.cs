@@ -30,7 +30,12 @@ public class CreatureWeapon : Weapon, ISaveable
 
         m_fireRate = 0.5f;
         m_hitImpact = 10.0f;
+        m_damageAmount = 5.0f;
+        m_maxDamageTime = 1f;
+        m_projectileLifeTime = 6.0f;
     }
+
+    
     public override void UseTool()
     {
         if (_playerController.CheckForUseWeaponInput() && Time.time >= m_fireStart)
@@ -77,6 +82,7 @@ public class CreatureWeapon : Weapon, ISaveable
                     Vector3 randomSize = new Vector3(randomfloat, randomfloat, randomfloat);
                     creatureProjectile.transform.localScale = randomSize;
                     creatureProjectile.GetComponent<Rigidbody>().AddForce(transform.forward * m_hitImpact, ForceMode.Impulse);
+                    creatureProjectile.GetComponent<CreatureProjectile>().InitCreatureProjectile(m_maxDamageTime, m_projectileLifeTime, m_damageAmount);
                 }
               //  else
                 {
@@ -91,10 +97,24 @@ public class CreatureWeapon : Weapon, ISaveable
         }
     }
 
+    public override void AddUpgrade(WeaponScalars scalars)
+    {
+        m_scalars += scalars;
+        m_damageAmount *= m_scalars.Damage;
+        m_weaponClipSize *= m_scalars.ClipSize;
+        m_reloadTime *= m_scalars.ReloadTime;
+        m_fireRate *= m_scalars.FireRate;
+        m_hitImpact *= m_scalars.ImpactForce;
+        m_weaponRange *= m_scalars.Range;
+
+        Debug.Log(m_scalars.Damage);
+    }
+
     private void OnTarget()
     {
 
     }
+
     public void LoadDataOnSceneEnter()
     {
 

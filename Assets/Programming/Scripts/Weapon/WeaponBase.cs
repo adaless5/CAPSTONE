@@ -36,7 +36,7 @@ public class WeaponBase : Weapon, ISaveable
 
         //TODO: Readd Save implementation
         //SaveSystem.SaveEvent += SaveDataOnSceneChange;
-        Debug.Log(m_scalars.Damage);
+        //Debug.Log(m_scalars.Damage);
         m_weaponClipSize = 6 * m_scalars.ClipSize;
         m_reloadTime = 2.0f * m_scalars.ReloadTime;
         m_fireRate = 0.8f * m_scalars.FireRate; //Default Gun shoots every 1.25 seconds, can be adjusted in editor - VR
@@ -226,7 +226,7 @@ public class WeaponBase : Weapon, ISaveable
         }
     }
 
-    public void AddUpgrade(WeaponScalars scalars)
+    public override void AddUpgrade(WeaponScalars scalars)
     {
         m_scalars += scalars;
         m_damageAmount *= m_scalars.Damage;
@@ -236,7 +236,7 @@ public class WeaponBase : Weapon, ISaveable
         m_hitImpact *= m_scalars.ImpactForce;
         m_weaponRange *= m_scalars.Range;
 
-        Debug.Log(m_scalars.Damage);
+        //Debug.Log(m_scalars.Damage);
     }
 
     //todo: get this figured out

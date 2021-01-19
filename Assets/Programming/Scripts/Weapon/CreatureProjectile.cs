@@ -10,6 +10,8 @@ public class CreatureProjectile : MonoBehaviour
     public float _maxDamageTime;
     public float _lifeTime;
     Transform _transformOrigin;
+
+    float _damage;
     // Start is called before the first frame update
 
     private void Awake()
@@ -21,7 +23,14 @@ public class CreatureProjectile : MonoBehaviour
     {
         _transformOrigin = ObjectPool.Instance.transform;
         _damageTimer = 0;
-        _lifeTime = 6.0f;
+        //_lifeTime = 6.0f;
+    }
+
+    public void InitCreatureProjectile(float maxdamagetime, float lifetime, float damage)
+    {
+        //_maxDamageTime = maxdamagetime;
+        _lifeTime = lifetime;
+        _damage = damage;
     }
 
     // Update is called once per frame
@@ -37,7 +46,7 @@ public class CreatureProjectile : MonoBehaviour
                 if (_damageTimer <= 0)
                 {
                     _damageTimer = _maxDamageTime;
-                    _targetHealth.TakeDamage(5.0f);
+                    _targetHealth.TakeDamage(_damage);
                 }
             }
         }

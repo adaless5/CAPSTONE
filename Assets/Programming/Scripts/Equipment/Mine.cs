@@ -4,36 +4,28 @@ using UnityEngine;
 
 public class Mine : MonoBehaviour
 {
-    public float FuzeTimer = 3f;
-    public float BlastRadius = 10f;
-    public float ExplosionForce = 2000f;
-    public int Damage = 50;
+    float m_FuzeTimer = 3f;
+    float m_BlastRadius = 10f;
+    float m_ExplosionForce = 2000f;
+    float m_Damage = 50;
 
     public GameObject explosionParticleEffect;
 
     float m_Timer;
     bool m_bIsBlownUp;
-    // Start is called before the first frame update
-    void Start()
+
+    public void InitMine(float fuzetime, float blastradius, float explosionforce, float damage)
     {
-        m_Timer = FuzeTimer;
+        m_FuzeTimer = fuzetime;
+        m_BlastRadius = blastradius;
+        m_ExplosionForce = explosionforce;
+        m_Damage = damage;
+
+
+        m_Timer = m_FuzeTimer;
         m_bIsBlownUp = false;
 
         StartCoroutine(Explode());
-    }
-
-    public void InitMine(float fuzetime, float blastradius, float explosionforce, int damage)
-    {
-        //FuzeTimer = fuzetime;
-        //BlastRadius = blastradius;
-        //ExplosionForce = explosionforce;
-        //Damage = damage;
-
-
-        //m_Timer = FuzeTimer;
-        //m_bIsBlownUp = false;
-
-        //StartCoroutine(Explode());
     }
     IEnumerator Explode()
     {
@@ -48,7 +40,7 @@ public class Mine : MonoBehaviour
 
 
         //checks if its a breakable wall and breaks it
-        Collider[] hits = Physics.OverlapSphere(transform.position, BlastRadius);
+        Collider[] hits = Physics.OverlapSphere(transform.position, m_BlastRadius);
 
         foreach (Collider obj in hits)
         {
@@ -66,21 +58,21 @@ public class Mine : MonoBehaviour
             //applies damage
             if (obj.transform.GetComponent<ALTPlayerController>())
             {
-                obj.transform.GetComponent<ALTPlayerController>().CallOnTakeDamage(Damage);
+                obj.transform.GetComponent<ALTPlayerController>().CallOnTakeDamage(m_Damage);
             }
             else
             {
                 Health target = obj.transform.GetComponent<Health>();
                 if (target != null)
                 {
-                    target.TakeDamage(Damage);
+                    target.TakeDamage(m_Damage);
 
                 }
             }
 
             if (obj.GetComponent<Rigidbody>())
             {
-                obj.GetComponent<Rigidbody>().AddExplosionForce(ExplosionForce, transform.position, BlastRadius);
+                obj.GetComponent<Rigidbody>().AddExplosionForce(m_ExplosionForce, transform.position, m_BlastRadius);
             }
         }
 
