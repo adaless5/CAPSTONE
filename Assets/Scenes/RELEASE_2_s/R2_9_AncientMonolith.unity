@@ -354,6 +354,11 @@ MonoBehaviour:
   dithering: 0
   stopNaNs: 0
   taaSharpenStrength: 0.6
+  TAAQuality: 1
+  taaHistorySharpening: 0.35
+  taaAntiFlicker: 0.5
+  taaMotionVectorRejection: 0
+  taaAntiHistoryRinging: 0
   physicalParameters:
     m_Iso: 200
     m_ShutterSpeed: 0.005
@@ -372,6 +377,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   hasPersistentHistory: 0
+  exposureTarget: {fileID: 0}
   m_RenderingPathCustomFrameSettings:
     bitDatas:
       data1: 70300024700749
@@ -382,6 +388,9 @@ MonoBehaviour:
     maximumLODLevel: 0
     maximumLODLevelMode: 0
     maximumLODLevelQualityLevel: 0
+    sssQualityMode: 0
+    sssQualityLevel: 0
+    sssCustomSampleBudget: 20
     materialQuality: 0
   renderingPathCustomFrameSettingsOverrideMask:
     mask:
@@ -395,6 +404,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3573446628596405102, guid: 6c940ab6cab09c7439115d8d123c71be,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 3573446628596405102, guid: 6c940ab6cab09c7439115d8d123c71be,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -412,6 +426,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3573446628596405102, guid: 6c940ab6cab09c7439115d8d123c71be,
         type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3573446628596405102, guid: 6c940ab6cab09c7439115d8d123c71be,
+        type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
@@ -424,16 +443,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalRotation.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3573446628596405102, guid: 6c940ab6cab09c7439115d8d123c71be,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3573446628596405102, guid: 6c940ab6cab09c7439115d8d123c71be,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3573446628596405102, guid: 6c940ab6cab09c7439115d8d123c71be,
         type: 3}
@@ -462,12 +471,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
         type: 3}
-      propertyPath: _pools.Array.data[0].prefab
-      value: 
-      objectReference: {fileID: 3048736743275991916, guid: a981a996314737c4bbcef25b6b3b0315,
-        type: 3}
-    - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
-        type: 3}
       propertyPath: _pools.Array.data[0].tag
       value: Creature
       objectReference: {fileID: 0}
@@ -478,15 +481,106 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
         type: 3}
-      propertyPath: _pools.Array.data[1].prefab
+      propertyPath: _pools.Array.data[2].tag
+      value: Creature
+      objectReference: {fileID: 0}
+    - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
+        type: 3}
+      propertyPath: _pools.Array.data[3].tag
+      value: Creature
+      objectReference: {fileID: 0}
+    - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
+        type: 3}
+      propertyPath: _pools.Array.data[4].tag
+      value: Creature
+      objectReference: {fileID: 0}
+    - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
+        type: 3}
+      propertyPath: _pools.Array.data[5].tag
+      value: Creature
+      objectReference: {fileID: 0}
+    - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
+        type: 3}
+      propertyPath: _pools.Array.data[6].tag
+      value: Creature
+      objectReference: {fileID: 0}
+    - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
+        type: 3}
+      propertyPath: _pools.Array.data[7].tag
+      value: Creature
+      objectReference: {fileID: 0}
+    - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
+        type: 3}
+      propertyPath: _pools.Array.data[8].tag
+      value: Creature
+      objectReference: {fileID: 0}
+    - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
+        type: 3}
+      propertyPath: _pools.Array.data[9].tag
+      value: Creature
+      objectReference: {fileID: 0}
+    - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
+        type: 3}
+      propertyPath: _pools.Array.data[10].tag
+      value: Creature
+      objectReference: {fileID: 0}
+    - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
+        type: 3}
+      propertyPath: _pools.Array.data[11].tag
+      value: Creature
+      objectReference: {fileID: 0}
+    - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
+        type: 3}
+      propertyPath: _pools.Array.data[12].tag
+      value: Creature
+      objectReference: {fileID: 0}
+    - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
+        type: 3}
+      propertyPath: _pools.Array.data[13].tag
+      value: Creature
+      objectReference: {fileID: 0}
+    - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
+        type: 3}
+      propertyPath: _pools.Array.data[14].tag
+      value: Creature
+      objectReference: {fileID: 0}
+    - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
+        type: 3}
+      propertyPath: _pools.Array.data[15].tag
+      value: Creature
+      objectReference: {fileID: 0}
+    - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
+        type: 3}
+      propertyPath: _pools.Array.data[16].tag
+      value: Creature
+      objectReference: {fileID: 0}
+    - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
+        type: 3}
+      propertyPath: _pools.Array.data[17].tag
+      value: Creature
+      objectReference: {fileID: 0}
+    - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
+        type: 3}
+      propertyPath: _pools.Array.data[18].tag
+      value: Creature
+      objectReference: {fileID: 0}
+    - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
+        type: 3}
+      propertyPath: _pools.Array.data[19].tag
+      value: Creature
+      objectReference: {fileID: 0}
+    - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
+        type: 3}
+      propertyPath: _pools.Array.data[0].prefab
       value: 
       objectReference: {fileID: 3048736743275991916, guid: a981a996314737c4bbcef25b6b3b0315,
         type: 3}
     - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
         type: 3}
-      propertyPath: _pools.Array.data[2].tag
-      value: Creature
-      objectReference: {fileID: 0}
+      propertyPath: _pools.Array.data[1].prefab
+      value: 
+      objectReference: {fileID: 3048736743275991916, guid: a981a996314737c4bbcef25b6b3b0315,
+        type: 3}
     - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
         type: 3}
       propertyPath: _pools.Array.data[2].prefab
@@ -495,20 +589,10 @@ PrefabInstance:
         type: 3}
     - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
         type: 3}
-      propertyPath: _pools.Array.data[3].tag
-      value: Creature
-      objectReference: {fileID: 0}
-    - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
-        type: 3}
       propertyPath: _pools.Array.data[3].prefab
       value: 
       objectReference: {fileID: 3048736743275991916, guid: a981a996314737c4bbcef25b6b3b0315,
         type: 3}
-    - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
-        type: 3}
-      propertyPath: _pools.Array.data[4].tag
-      value: Creature
-      objectReference: {fileID: 0}
     - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
         type: 3}
       propertyPath: _pools.Array.data[4].prefab
@@ -517,20 +601,10 @@ PrefabInstance:
         type: 3}
     - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
         type: 3}
-      propertyPath: _pools.Array.data[5].tag
-      value: Creature
-      objectReference: {fileID: 0}
-    - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
-        type: 3}
       propertyPath: _pools.Array.data[5].prefab
       value: 
       objectReference: {fileID: 3048736743275991916, guid: a981a996314737c4bbcef25b6b3b0315,
         type: 3}
-    - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
-        type: 3}
-      propertyPath: _pools.Array.data[6].tag
-      value: Creature
-      objectReference: {fileID: 0}
     - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
         type: 3}
       propertyPath: _pools.Array.data[6].prefab
@@ -539,20 +613,10 @@ PrefabInstance:
         type: 3}
     - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
         type: 3}
-      propertyPath: _pools.Array.data[7].tag
-      value: Creature
-      objectReference: {fileID: 0}
-    - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
-        type: 3}
       propertyPath: _pools.Array.data[7].prefab
       value: 
       objectReference: {fileID: 3048736743275991916, guid: a981a996314737c4bbcef25b6b3b0315,
         type: 3}
-    - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
-        type: 3}
-      propertyPath: _pools.Array.data[8].tag
-      value: Creature
-      objectReference: {fileID: 0}
     - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
         type: 3}
       propertyPath: _pools.Array.data[8].prefab
@@ -561,20 +625,10 @@ PrefabInstance:
         type: 3}
     - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
         type: 3}
-      propertyPath: _pools.Array.data[9].tag
-      value: Creature
-      objectReference: {fileID: 0}
-    - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
-        type: 3}
       propertyPath: _pools.Array.data[9].prefab
       value: 
       objectReference: {fileID: 3048736743275991916, guid: a981a996314737c4bbcef25b6b3b0315,
         type: 3}
-    - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
-        type: 3}
-      propertyPath: _pools.Array.data[10].tag
-      value: Creature
-      objectReference: {fileID: 0}
     - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
         type: 3}
       propertyPath: _pools.Array.data[10].prefab
@@ -583,20 +637,10 @@ PrefabInstance:
         type: 3}
     - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
         type: 3}
-      propertyPath: _pools.Array.data[11].tag
-      value: Creature
-      objectReference: {fileID: 0}
-    - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
-        type: 3}
       propertyPath: _pools.Array.data[11].prefab
       value: 
       objectReference: {fileID: 3048736743275991916, guid: a981a996314737c4bbcef25b6b3b0315,
         type: 3}
-    - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
-        type: 3}
-      propertyPath: _pools.Array.data[12].tag
-      value: Creature
-      objectReference: {fileID: 0}
     - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
         type: 3}
       propertyPath: _pools.Array.data[12].prefab
@@ -605,20 +649,10 @@ PrefabInstance:
         type: 3}
     - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
         type: 3}
-      propertyPath: _pools.Array.data[13].tag
-      value: Creature
-      objectReference: {fileID: 0}
-    - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
-        type: 3}
       propertyPath: _pools.Array.data[13].prefab
       value: 
       objectReference: {fileID: 3048736743275991916, guid: a981a996314737c4bbcef25b6b3b0315,
         type: 3}
-    - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
-        type: 3}
-      propertyPath: _pools.Array.data[14].tag
-      value: Creature
-      objectReference: {fileID: 0}
     - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
         type: 3}
       propertyPath: _pools.Array.data[14].prefab
@@ -627,20 +661,10 @@ PrefabInstance:
         type: 3}
     - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
         type: 3}
-      propertyPath: _pools.Array.data[15].tag
-      value: Creature
-      objectReference: {fileID: 0}
-    - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
-        type: 3}
       propertyPath: _pools.Array.data[15].prefab
       value: 
       objectReference: {fileID: 3048736743275991916, guid: a981a996314737c4bbcef25b6b3b0315,
         type: 3}
-    - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
-        type: 3}
-      propertyPath: _pools.Array.data[16].tag
-      value: Creature
-      objectReference: {fileID: 0}
     - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
         type: 3}
       propertyPath: _pools.Array.data[16].prefab
@@ -649,31 +673,16 @@ PrefabInstance:
         type: 3}
     - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
         type: 3}
-      propertyPath: _pools.Array.data[17].tag
-      value: Creature
-      objectReference: {fileID: 0}
-    - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
-        type: 3}
       propertyPath: _pools.Array.data[17].prefab
       value: 
       objectReference: {fileID: 3048736743275991916, guid: a981a996314737c4bbcef25b6b3b0315,
         type: 3}
     - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
         type: 3}
-      propertyPath: _pools.Array.data[18].tag
-      value: Creature
-      objectReference: {fileID: 0}
-    - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
-        type: 3}
       propertyPath: _pools.Array.data[18].prefab
       value: 
       objectReference: {fileID: 3048736743275991916, guid: a981a996314737c4bbcef25b6b3b0315,
         type: 3}
-    - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
-        type: 3}
-      propertyPath: _pools.Array.data[19].tag
-      value: Creature
-      objectReference: {fileID: 0}
     - target: {fileID: 8831533070144095691, guid: 6c940ab6cab09c7439115d8d123c71be,
         type: 3}
       propertyPath: _pools.Array.data[19].prefab

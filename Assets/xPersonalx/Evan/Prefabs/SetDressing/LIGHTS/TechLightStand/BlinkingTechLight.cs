@@ -6,22 +6,58 @@ public class BlinkingTechLight : MonoBehaviour
 {
     // Start is called before the first frame update
 
-    public Light Light1;
-    public Light Light2;
-    public Light Light3;
+    public Light[] Lights;
 
     public float FlickerLength;
     public float FlickerTimer;
     public bool Flickering;
 
+    float[] glowModifier;
+    bool[] bGlowModifier;
 
 
     public float OriginalIntensity;
     void Start()
     {
-
+        glowModifier = new float[Lights.Length];
+        bGlowModifier = new bool[Lights.Length];
+        for (int i = 0; i < Lights.Length; i++)
+        {
+            glowModifier[i] = (1.0f / Lights.Length) * i;
+        }
+        OriginalIntensity = Lights[0].intensity;
         FlickerLength = Random.Range(0.5f, 2.0f);
-        FlickerTimer = Random.Range(2.0f, 20.0f);
+        FlickerTimer = Random.Range(2.0f, 30.0f);
+    }
+    void Glow()
+    {
+        for (int i = 0; i < Lights.Length; i++)
+        {
+            Lights[i].intensity = OriginalIntensity * glowModifier[i];
+        }
+        GlowModifierOscilate();
+    }
+    void GlowModifierOscilate()
+    {
+        for (int i = 0; i < Lights.Length; i++)
+        {
+            if (bGlowModifier[i])
+            {
+                glowModifier[i] += Time.deltaTime * 0.5f;
+                if (glowModifier[i] > 1.0f)
+                {
+                    bGlowModifier[i] = false;
+                }
+            }
+            else
+            {
+                glowModifier[i] -= Time.deltaTime * 0.2f;
+                if (glowModifier[i] < 0.5f)
+                {
+                    bGlowModifier[i] = true;
+                }
+            }
+        }
     }
     void Flicker()
     {
@@ -29,24 +65,25 @@ public class BlinkingTechLight : MonoBehaviour
         {
             FlickerLength -= Time.deltaTime;
             float randomIntensity = Random.Range(0.0f, OriginalIntensity);
-            Light1.intensity = randomIntensity;
-            Light2.intensity = randomIntensity;
-            Light3.intensity = randomIntensity;
+            for (int i = 0; i < Lights.Length; i++)
+            {
+                Lights[i].intensity = randomIntensity;
+            }
         }
         else
         {
             FlickerLength = Random.Range(0.5f, 2.0f);
-            FlickerTimer = Random.Range(5.0f, 40.0f);
+            FlickerTimer = Random.Range(2.0f, 30.0f);
             Flickering = false;
+            for (int i = 0; i < Lights.Length; i++)
+            {
+                Lights[i].intensity = OriginalIntensity;
+            }
         }
     }
     // Update is called once per frame
     void Update()
     {
-        if (OriginalIntensity < 0.001)
-        {
-            OriginalIntensity = Light1.intensity;
-        }
 
         if (Flickering)
         {
@@ -54,19 +91,14 @@ public class BlinkingTechLight : MonoBehaviour
         }
         else
         {
+            Glow();
             FlickerTimer -= Time.deltaTime;
-            if (Light1.intensity < OriginalIntensity)
-            {
-                Light1.intensity = OriginalIntensity;
-                Light2.intensity = OriginalIntensity;
-                Light3.intensity = OriginalIntensity;
-            }
             if (FlickerTimer < 0.0f)
             {
                 Flickering = true;
             }
         }
-
+        
 
 
     }

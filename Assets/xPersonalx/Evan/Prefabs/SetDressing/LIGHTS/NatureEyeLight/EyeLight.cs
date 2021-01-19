@@ -31,6 +31,8 @@ public class EyeLight : MonoBehaviour
 
     GameObject Player;
 
+    Vector3 StartLidAngle;
+
     void Start()
     {
         if (WatchDistance < 0.01f)
@@ -39,14 +41,13 @@ public class EyeLight : MonoBehaviour
         }
         Player = GameObject.FindWithTag("Player");
 
-        LookAtSpotTime = Random.Range(0.5f, 4.0f);
+        LookAtSpotTime = Random.Range(0.5f, 3.0f);
 
         LookAroundTime = Random.Range(3.0f, 10.0f);
         LookAtPlayerTime = Random.Range(2.0f, 7.0f);
         LidClosing = true;
         BlinkTimer = 0.01f;
-        Eyelid_1.transform.eulerAngles = new Vector3(Eyelid_1.transform.eulerAngles.x + 180 + LidAngle, Eyelid_2.transform.eulerAngles.y, Eyelid_2.transform.eulerAngles.z);
-        Eyelid_2.transform.eulerAngles = new Vector3(Eyelid_2.transform.eulerAngles.x + 90 - LidAngle, Eyelid_2.transform.eulerAngles.y, Eyelid_2.transform.eulerAngles.z);
+
 
     }
     void WatchPlayer()
@@ -56,7 +57,7 @@ public class EyeLight : MonoBehaviour
             LookTowards(Player.transform.position, LookSpeed);
             LookAtPlayerTime -= Time.deltaTime;
         }
-        else 
+        else
         {
             bIsWatching = false;
             LookAtPlayerTime = Random.Range(2.0f, 7.0f);
@@ -77,7 +78,7 @@ public class EyeLight : MonoBehaviour
             else
             {
                 LookPoint = transform.position + (transform.up * 5) + Random.insideUnitSphere * 5;
-                LookAtSpotTime = Random.Range(0.5f, 4.0f);
+                LookAtSpotTime = Random.Range(0.5f, 3.0f);
             }
 
         }
@@ -90,30 +91,42 @@ public class EyeLight : MonoBehaviour
 
     void Blink()
     {
-        if (LidClosing)
+
+
+        if (Blinking)
         {
-            LidAngle += LidClosingSpeed * Time.deltaTime;
-            if(LidAngle > 89.9f)
+            if (LidClosing)
             {
-                LidClosing = false;
-                LidAngle = 90.0f;
+                LidAngle += LidClosingSpeed * Time.deltaTime;
+                if (LidAngle > 89.9f)
+                {
+                    LidClosing = false;
+                    LidAngle = 90.0f;
+                }
             }
+            else
+            {
+                LidAngle -= LidClosingSpeed * Time.deltaTime;
+                if (LidAngle <= 0.0f)
+                {
+                    LidClosing = true;
+                    Blinking = false;
+                    BlinkTimer = Random.Range(0.5f, 9.0f);
+                    LidAngle = 0.0f;
+                }
+            }
+
+        Eyelid_1.transform.localEulerAngles = new Vector3(LidAngle - 180, 0.0f, 0.0f);
+        Eyelid_2.transform.localEulerAngles = new Vector3(-LidAngle + 90, 0.0f, 0.0f);
         }
         else
         {
-            LidAngle -= LidClosingSpeed * Time.deltaTime;
-            if (LidAngle <= 0.0f)
+            if (BlinkTimer > 0.0f)
             {
-                LidClosing = true;
-                Blinking = false; 
-                BlinkTimer = Random.Range(0.5f, 9.0f);
-                LidAngle = 0.0f;
+                BlinkTimer -= Time.deltaTime;
             }
+            else Blinking = true;
         }
-
-        Eyelid_1.transform.eulerAngles = new Vector3(180 + LidAngle + transform.eulerAngles.x, Eyelid_2.transform.eulerAngles.y * transform.up.y, Eyelid_2.transform.eulerAngles.z * transform.up.z);
-        Eyelid_2.transform.eulerAngles = new Vector3(90 - LidAngle + transform.eulerAngles.x, Eyelid_2.transform.eulerAngles.y * transform.up.y, Eyelid_2.transform.eulerAngles.z * transform.up.z);
-
 
     }
 
@@ -147,18 +160,9 @@ public class EyeLight : MonoBehaviour
             {
                 LookAround();
             }
-            if (!Blinking)
-            {
-                if (BlinkTimer > 0.0f)
-                {
-                    BlinkTimer -= Time.deltaTime;
-                }
-                else Blinking = true;
-            }
-            if (Blinking)
-            {
-                Blink();
-            }
+
+            Blink();
+
         }
     }
 }

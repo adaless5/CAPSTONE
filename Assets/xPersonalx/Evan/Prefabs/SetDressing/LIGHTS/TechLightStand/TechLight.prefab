@@ -43,7 +43,7 @@ Light:
   serializedVersion: 10
   m_Type: 2
   m_Shape: 0
-  m_Color: {r: 0.47448647, g: 0.735849, b: 0.05900677, a: 1}
+  m_Color: {r: 0.7933209, g: 1, b: 0, a: 1}
   m_Intensity: 112.77802
   m_Range: 35
   m_SpotAngle: 30
@@ -259,7 +259,7 @@ Light:
   serializedVersion: 10
   m_Type: 2
   m_Shape: 0
-  m_Color: {r: 0.47448647, g: 0.735849, b: 0.05900677, a: 1}
+  m_Color: {r: 0.6127168, g: 1, b: 0, a: 1}
   m_Intensity: 112.77802
   m_Range: 35
   m_SpotAngle: 30
@@ -547,9 +547,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebebe78af89451244a0848bdb3d9d688, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Light1: {fileID: 8165851807225285051}
-  Light2: {fileID: 6331678972701435123}
-  Light3: {fileID: 7043711769490323455}
+  Lights:
+  - {fileID: 8165851807225285051}
+  - {fileID: 6331678972701435123}
+  - {fileID: 7043711769490323455}
+  FlickerLength: 0
+  FlickerTimer: 0
+  Flickering: 0
+  OriginalIntensity: 0
 --- !u!1 &8739007862270323075
 GameObject:
   m_ObjectHideFlags: 0
@@ -593,7 +598,7 @@ Light:
   serializedVersion: 10
   m_Type: 2
   m_Shape: 0
-  m_Color: {r: 0.47448647, g: 0.735849, b: 0.05900677, a: 1}
+  m_Color: {r: 0.4263562, g: 1, b: 0, a: 1}
   m_Intensity: 112.77802
   m_Range: 35
   m_SpotAngle: 30
