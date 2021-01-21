@@ -37,7 +37,7 @@ public class WeaponBase : Weapon, ISaveable
         //TODO: Readd Save implementation
         //SaveSystem.SaveEvent += SaveDataOnSceneChange;
         //Debug.Log(m_scalars.Damage);
-        m_weaponClipSize = 6 * m_scalars.ClipSize;
+        m_weaponClipSize = 6 * (int)m_scalars.ClipSize;
         m_reloadTime = 2.0f * m_scalars.ReloadTime;
         m_fireRate = 0.8f * m_scalars.FireRate; //Default Gun shoots every 1.25 seconds, can be adjusted in editor - VR
         m_hitImpact = 50.0f * m_scalars.ImpactForce;
@@ -131,8 +131,8 @@ public class WeaponBase : Weapon, ISaveable
     IEnumerator OnReload()
     {
         bIsReloading = true;
-        gunAnimator.SetBool("bIsReloading", true);                
-
+        gunAnimator.speed = 1 / m_scalars.ReloadTime; // adjusts for reload time upgrades
+        gunAnimator.SetBool("bIsReloading", true);
         yield return new WaitForSeconds(m_reloadTime);
 
         while (m_currentAmmoCount < m_weaponClipSize && m_overallAmmoCount > 0)
@@ -238,7 +238,7 @@ public class WeaponBase : Weapon, ISaveable
     {
         m_scalars += scalars;
         m_damageAmount *= m_scalars.Damage;
-        m_weaponClipSize *= m_scalars.ClipSize;
+        m_weaponClipSize *= (int)m_scalars.ClipSize;
         m_reloadTime *= m_scalars.ReloadTime;
         m_fireRate *= m_scalars.FireRate;
         m_hitImpact *= m_scalars.ImpactForce;
@@ -297,7 +297,7 @@ public class WeaponBase : Weapon, ISaveable
 
                 //Particle effects on hit
                 GameObject hitImpact = Instantiate(impactFX, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
-                //Destroy(hitImpact, 2.0f);
+                Destroy(hitImpact, 2.0f);
             }
         }
     }

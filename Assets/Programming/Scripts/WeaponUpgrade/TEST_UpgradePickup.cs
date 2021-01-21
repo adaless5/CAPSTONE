@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class TEST_UpgradePickup : MonoBehaviour
 {
-    public WeaponScalars Upgrade;
+    public WeaponScalars[] Upgrades;
+
     public int item_index = 0;
     public bool HasAction = false;
     private void OnTriggerEnter(Collider other)
@@ -17,7 +18,10 @@ public class TEST_UpgradePickup : MonoBehaviour
             if(item.GetComponent<Weapon>())
             {
                 Weapon weapon = item.GetComponent<Weapon>();
-                weapon.AddUpgrade(Upgrade);
+                foreach(WeaponScalars up in Upgrades)
+                {
+                    weapon.AddUpgrade(up);
+                }
                 weapon.SetHasAction(HasAction);
                 Destroy(gameObject);
             }

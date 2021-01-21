@@ -78,7 +78,7 @@ public abstract class Weapon : Tool
 public struct WeaponScalars
 {
     public float Damage;
-    public int ClipSize;
+    public float ClipSize;
     public float AmmoReserveSize;
     public float ReloadTime;
     public float FireRate;

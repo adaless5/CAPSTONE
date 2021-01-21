@@ -82,7 +82,7 @@ public class CreatureWeapon : Weapon, ISaveable
                     Vector3 randomSize = new Vector3(randomfloat, randomfloat, randomfloat);
                     creatureProjectile.transform.localScale = randomSize;
                     creatureProjectile.GetComponent<Rigidbody>().AddForce(transform.forward * m_hitImpact, ForceMode.Impulse);
-                    creatureProjectile.GetComponent<CreatureProjectile>().InitCreatureProjectile(m_maxDamageTime, m_projectileLifeTime, m_damageAmount);
+                    creatureProjectile.GetComponent<CreatureProjectile>().InitCreatureProjectile(m_maxDamageTime, m_projectileLifeTime, m_damageAmount, m_bHasActionUpgrade);
                 }
               //  else
                 {
