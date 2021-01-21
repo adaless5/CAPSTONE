@@ -18,7 +18,7 @@ public class PuzzleSwitch : MonoBehaviour
     {
         UseButton,//------------------------------------------------ Player presses the use button to activate the switch
 
- //TODO       Damage,//--------------------------------------------------- Player uses a weapon on the switch to activate it  /
+        //TODO       Damage,//--------------------------------------------------- Player uses a weapon on the switch to activate it  /
 
         Proximity//------------------------------------------------- Player gets within proximity of the switch to activate it
     };
@@ -164,7 +164,7 @@ public class PuzzleSwitch : MonoBehaviour
         {
             PlayerInput();
         }
-      
+
     }
 
 

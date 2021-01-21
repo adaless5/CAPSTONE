@@ -15,7 +15,6 @@ public class PuzzleDoor : MonoBehaviour
     public bool _StartOpened;
 
 
-    public GameObject _Player;
     public GameObject _OpenDoor;
     public GameObject _ClosedDoor;
 
