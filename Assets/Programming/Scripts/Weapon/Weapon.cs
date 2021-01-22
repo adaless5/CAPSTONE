@@ -12,9 +12,11 @@ public enum WeaponType
 
 public abstract class Weapon : Tool
 {
+
+
     [Header("Weapon Selected")]
     [SerializeField]
-    private WeaponType _weapon;
+    protected WeaponType _weapon;
 
     [Header("Damage Settings")]
     [SerializeField]
@@ -50,7 +52,6 @@ public abstract class Weapon : Tool
 
     protected WeaponScalars m_scalars;
 
-
     protected ALTPlayerController _playerController;
     protected float m_fireStart = 0.0f;
     protected bool bIsReloading = false;
@@ -68,6 +69,22 @@ public abstract class Weapon : Tool
         _playerController = player.GetComponent<ALTPlayerController>();
         //Debug.Log(_playerController);
     }
+
+    public int GetCurrentAmmo()
+    {
+        return m_currentAmmoCount;
+    }
+
+    public int GetOverallAmmo()
+    {
+        return m_overallAmmoCount;
+    }
+
+    public int GetClipSize()
+    {
+        return m_weaponClipSize;
+    }
+
 
     public abstract void AddUpgrade(WeaponScalars scalars);
     //public abstract void RemoveUpgrade(WeaponScalars scalars);
