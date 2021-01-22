@@ -22,8 +22,7 @@ public class WeaponBase : Weapon, ISaveable
     Animator gunAnimator;
 
     [Header("Camera Settings")]
-    public Camera gunCamera;
-    //public AmmoUI m_ammoUI;
+    public Camera gunCamera;    
    
     float m_timeElapsed;
     float m_lerpDuration = 3f;
@@ -49,16 +48,10 @@ public class WeaponBase : Weapon, ISaveable
         //Initializing AmmoCount and UI
         m_currentAmmoCount = m_weaponClipSize;
         m_overallAmmoCount = m_currentAmmoCount;
-
     }
 
     public override void Start()
-    {
-       
-
-        //if (m_ammoUI != null)
-        //    m_ammoUI.SetAmmoText(m_currentAmmoCount, m_overallAmmoCount, m_weaponClipSize);
-
+    { 
         gunCamera = GameObject.FindObjectOfType<Camera>();
 
         GetComponent<MeshRenderer>().enabled = true;
@@ -68,7 +61,7 @@ public class WeaponBase : Weapon, ISaveable
 
     void OnEnable()
     {
-        bIsReloading = false;
+        bIsReloading = false;       
     }
 
 
@@ -91,6 +84,7 @@ public class WeaponBase : Weapon, ISaveable
             }
             else if (!bIsActive)
             {
+                outOfAmmoAnimator.SetBool("bIsOut", false);
                 GetComponent<MeshRenderer>().enabled = false;
             }
         }
@@ -142,21 +136,20 @@ public class WeaponBase : Weapon, ISaveable
             m_currentAmmoCount++;
             m_overallAmmoCount--;
         }
-
-       // m_ammoUI.SetAmmoText(m_currentAmmoCount, m_overallAmmoCount, m_weaponClipSize);
+      
         bIsReloading = false;
 
         //Play reload and ammo animations
         outOfAmmoAnimator.SetBool("bIsOut", false);
-        gunAnimator.SetBool("bIsReloading", false);   
-       
+        gunAnimator.SetBool("bIsReloading", false);          
     }
 
-    //Function for AmmoPickup class
+    //Function for AmmoPickup class, currently adding ammo to whatever weapon is active
     public void AmmoPickup(WeaponType type, int numberOfClips)
     {
-        m_overallAmmoCount += (m_weaponClipSize * numberOfClips);
-        //m_ammoUI.SetAmmoText(m_currentAmmoCount, m_overallAmmoCount, m_weaponClipSize);
+        //if (type == WeaponType.BaseWeapon)
+        if(bIsActive)
+            m_overallAmmoCount += (m_weaponClipSize * numberOfClips);        
     }
 
 
@@ -200,9 +193,7 @@ public class WeaponBase : Weapon, ISaveable
         }
 
         //Using ammo
-        m_currentAmmoCount--;
-        //if (m_ammoUI != null)
-        //    m_ammoUI.SetAmmoText(m_currentAmmoCount, m_overallAmmoCount, m_weaponClipSize);
+        m_currentAmmoCount--;      
         if (m_currentAmmoCount == 0 && m_overallAmmoCount == 0)
         {
             outOfAmmoAnimator.SetBool("bIsOut", true);
@@ -215,8 +206,6 @@ public class WeaponBase : Weapon, ISaveable
         RaycastHit targetInfo;
         if (Physics.Raycast(gunCamera.transform.position, gunCamera.transform.forward, out targetInfo, m_weaponRange))
         {
-            //Debug.Log(targetInfo.transform.name);
-
             Health target = targetInfo.transform.GetComponent<Health>();
             if (target != null && target.gameObject.tag != "Player")
             {

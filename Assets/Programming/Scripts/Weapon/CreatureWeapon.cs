@@ -8,16 +8,16 @@ public class CreatureWeapon : Weapon, ISaveable
 {
     public Camera _camera;
     public ParticleSystem _spreadEffect;
+    public Animator reticuleAnimator;
+    public Animator outOfAmmoAnimator;
     GameObject _creatureProjectile;
-    //public AmmoUI m_ammoUI;
-
-   // private int _bulletClip = 8;
-
+   
     private void Awake()
     {
         base.Awake();
+        EventBroker.OnAmmoPickup += AmmoPickup;
         _creatureProjectile = (GameObject)Resources.Load("Prefabs/Weapon/Creature Projectile");
-
+        outOfAmmoAnimator = FindObjectOfType<AmmoUI>().GetComponent<Animator>();
         m_weaponClipSize = 8;
     }
 
@@ -27,11 +27,7 @@ public class CreatureWeapon : Weapon, ISaveable
         //Initializing AmmoCount and UI
         m_currentAmmoCount = m_weaponClipSize;
         m_overallAmmoCount = m_currentAmmoCount;
-
-        //if (m_ammoUI != null)
-        //    m_ammoUI.SetAmmoText(m_currentAmmoCount, m_overallAmmoCount, m_weaponClipSize);
-
-
+     
         _camera = FindObjectOfType<Camera>();
         GetComponent<MeshRenderer>().enabled = false;
         bIsActive = false;
@@ -69,10 +65,11 @@ public class CreatureWeapon : Weapon, ISaveable
             }
             else
             {
-                //outOfAmmoAnimator.SetBool("bIsOut", true);
+                outOfAmmoAnimator.SetBool("bIsOut", true);
             }
         }
     }
+
     public override void Update()
     {
         if (_playerController != null)
@@ -85,12 +82,11 @@ public class CreatureWeapon : Weapon, ISaveable
             }
             else if (!bIsActive)
             {
+                outOfAmmoAnimator.SetBool("bIsOut", false);
                 GetComponent<MeshRenderer>().enabled = false;
             }
         }
     }
-
-
 
     void OnShoot()
     {
@@ -104,7 +100,7 @@ public class CreatureWeapon : Weapon, ISaveable
             //GameObject creatureProjectile = Instantiate(_creatureProjectile, finalFowardVector, Quaternion.identity);
             if (ObjectPool.Instance != null)
             {
-              //  if (ObjectPool.Instance._poolDictionary.ContainsKey("Creature"))
+                //  if (ObjectPool.Instance._poolDictionary.ContainsKey("Creature"))
                 {
                     GameObject creatureProjectile = ObjectPool.Instance.SpawnFromPool("Creature", finalFowardVector, Quaternion.identity);
                     float randomfloat = UnityEngine.Random.Range(0.1f, 0.5f);
@@ -112,10 +108,9 @@ public class CreatureWeapon : Weapon, ISaveable
                     creatureProjectile.transform.localScale = randomSize;
                     creatureProjectile.GetComponent<Rigidbody>().AddForce(transform.forward * m_hitImpact, ForceMode.Impulse);
                 }
-              //  else
+                //  else
                 {
-
-                //    Debug.LogError("doesnt contain creature key");
+                    //    Debug.LogError("doesnt contain creature key");
                 }
             }
             else
@@ -126,64 +121,59 @@ public class CreatureWeapon : Weapon, ISaveable
 
         //Using ammo
         m_currentAmmoCount--;
-        //if (m_ammoUI != null)
-        //    m_ammoUI.SetAmmoText(m_currentAmmoCount, m_overallAmmoCount, m_weaponClipSize);
-        //if (m_currentAmmoCount == 0 && m_overallAmmoCount == 0)
-        //{
-        //   // outOfAmmoAnimator.SetBool("bIsOut", true);
-        //}
-    }
-
-    IEnumerator OnReload()
-    {
-        bIsReloading = true;
-       // gunAnimator.SetBool("bIsReloading", true);
-
-        yield return new WaitForSeconds(m_reloadTime);
-
-        while (m_currentAmmoCount < m_weaponClipSize && m_overallAmmoCount > 0)
+        if (m_currentAmmoCount == 0 && m_overallAmmoCount == 0)
         {
-            m_currentAmmoCount++;
-            m_overallAmmoCount--;
+            outOfAmmoAnimator.SetBool("bIsOut", true);
         }
 
-        //m_ammoUI.SetAmmoText(m_currentAmmoCount, m_overallAmmoCount, m_weaponClipSize);
-        bIsReloading = false;
-
-        //Play reload and ammo animations
-        //outOfAmmoAnimator.SetBool("bIsOut", false);
-        //gunAnimator.SetBool("bIsReloading", false);
-
     }
+        IEnumerator OnReload()
+        {
+            bIsReloading = true;
+            // gunAnimator.SetBool("bIsReloading", true);
 
-    //Function for AmmoPickup class
-    public void AmmoPickup(WeaponType type, int numberOfClips)
-    {
-        m_overallAmmoCount += (m_weaponClipSize * numberOfClips);
-        //m_ammoUI.SetAmmoText(m_currentAmmoCount, m_overallAmmoCount, m_weaponClipSize);
-    }
+            yield return new WaitForSeconds(m_reloadTime);
 
-    private void OnTarget()
-    {
-        //RaycastHit targetInfo;
-        //if (Physics.Raycast(gunCamera.transform.position, gunCamera.transform.forward, out targetInfo, m_weaponRange))
-        //{
-        //    //Debug.Log(targetInfo.transform.name);
+            while (m_currentAmmoCount < m_weaponClipSize && m_overallAmmoCount > 0)
+            {
+                m_currentAmmoCount++;
+                m_overallAmmoCount--;
+            }
 
-        //    Health target = targetInfo.transform.GetComponent<Health>();
-        //    if (target != null && target.gameObject.tag != "Player")
-        //    {
-        //        reticuleAnimator.SetBool("isTargetted", true);
-        //    }
-        //    else
-        //    {
-        //        reticuleAnimator.SetBool("isTargetted", false);
-        //    }
-        //}
-    }
+            bIsReloading = false;
 
-    public void LoadDataOnSceneEnter()
-    {
+            //Play reload and ammo animations
+            outOfAmmoAnimator.SetBool("bIsOut", false);
+            //gunAnimator.SetBool("bIsReloading", false);
+        }
 
-    }
+        //Function for AmmoPickup class
+        public void AmmoPickup(WeaponType type, int numberOfClips)
+        {
+            //if (type == WeaponType.CreatureWeapon)
+            if(bIsActive)
+                m_overallAmmoCount += (m_weaponClipSize * numberOfClips);
+        }
+
+        private void OnTarget()
+        {
+            RaycastHit targetInfo;
+            if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out targetInfo, m_weaponRange))
+            {
+                Health target = targetInfo.transform.GetComponent<Health>();
+                if (target != null && target.gameObject.tag != "Player")
+                {
+                    reticuleAnimator.SetBool("isTargetted", true);
+                }
+                else
+                {
+                    reticuleAnimator.SetBool("isTargetted", false);
+                }
+            }
+        }
+
+        public void LoadDataOnSceneEnter()
+        {
+
+        }
 }
