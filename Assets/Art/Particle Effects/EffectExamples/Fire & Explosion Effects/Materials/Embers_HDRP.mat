@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da692e001514ec24dbc4cca1949ff7e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  version: 2
+  version: 11
 --- !u!21 &2100000
 Material:
   serializedVersion: 6
@@ -23,7 +23,7 @@ Material:
   m_Name: Embers_HDRP
   m_Shader: {fileID: -6465566751694194690, guid: f9c6e64739386a24f8e7c79e0c6cc182,
     type: 3}
-  m_ShaderKeywords: _BLENDMODE_ADD _ENABLE_FOG_ON_TRANSPARENT _SURFACE_TYPE_TRANSPARENT
+  m_ShaderKeywords: _ENABLE_FOG_ON_TRANSPARENT _SURFACE_TYPE_TRANSPARENT
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -83,10 +83,25 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Floats:
+    - _AddPrecomputedVelocity: 0
     - _AlphaCutoffEnable: 0
     - _AlphaDstBlend: 1
     - _AlphaSrcBlend: 1
+    - _AlphaToMask: 0
+    - _AlphaToMaskInspectorValue: 0
     - _BlendMode: 1
     - _BlendOp: 0
     - _BumpScale: 1
@@ -98,6 +113,7 @@ Material:
     - _CullMode: 2
     - _CullModeForward: 2
     - _Cutoff: 0.5
+    - _DepthOffsetEnable: 0
     - _DetailNormalMapScale: 1
     - _DistortionBlend: 0.5
     - _DistortionEnabled: 0
@@ -107,6 +123,7 @@ Material:
     - _DoubleSidedNormalMode: 2
     - _DstBlend: 1
     - _EmissionEnabled: 0
+    - _EnableBlendModePreserveSpecularLighting: 0
     - _EnableFogOnTransparent: 1
     - _FlipbookMode: 0
     - _GlossMapScale: 1
@@ -117,9 +134,10 @@ Material:
     - _Metallic: 0
     - _Mode: 4
     - _OcclusionStrength: 1
+    - _OpaqueCullMode: 2
     - _Parallax: 0.02
     - _ReceivesSSR: 0
-    - _RenderQueueType: 5
+    - _RenderQueueType: 4
     - _RequireSplitLighting: 0
     - _SmoothnessTextureChannel: 0
     - _SoftParticlesEnabled: 0
@@ -143,6 +161,7 @@ Material:
     - _TransparentDepthPostpassEnable: 0
     - _TransparentDepthPrepassEnable: 0
     - _TransparentSortPriority: 0
+    - _TransparentWritingMotionVec: 0
     - _TransparentZWrite: 0
     - _UVSec: 0
     - _UseShadowThreshold: 0
