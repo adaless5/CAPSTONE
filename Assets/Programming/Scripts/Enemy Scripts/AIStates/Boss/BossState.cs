@@ -6,7 +6,7 @@ public class BossState : State
 {
     public BossState()
     {
-        
+        _stage = EVENT.ENTER;
     }
 
     public override void Enter()
