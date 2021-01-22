@@ -49,7 +49,7 @@ public class TEMP_Roamer : MonoBehaviour
     {
         _StartPosition = transform.position;
         _WanderPoint = _StartPosition;
-
+        _FollowSpeed = 0.5f;
         _MeshRenderComponent = GetComponent<MeshRenderer>();
 
         _AttackTime = 0.5f;
@@ -166,7 +166,7 @@ public class TEMP_Roamer : MonoBehaviour
         Vector3 direction = Vector3.Normalize(_Player.transform.position - transform.position);
         transform.position += (transform.forward
                             * Time.fixedDeltaTime)
-                            * (Vector3.Distance(transform.position, _Player.transform.position) * 0.5f);
+                            * (Vector3.Distance(transform.position, _Player.transform.position) * _FollowSpeed);
         LookTowards(_Player.transform.position, _LookSpeed);
     }
     void StateChange()
