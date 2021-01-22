@@ -22,8 +22,7 @@ public class WeaponBase : Weapon, ISaveable
     Animator gunAnimator;
 
     [Header("Camera Settings")]
-    public Camera gunCamera;
-    public AmmoUI m_ammoUI;
+    public Camera gunCamera;    
    
     float m_timeElapsed;
     float m_lerpDuration = 3f;
@@ -36,26 +35,23 @@ public class WeaponBase : Weapon, ISaveable
 
         //TODO: Readd Save implementation
         //SaveSystem.SaveEvent += SaveDataOnSceneChange;
-        
-        m_weaponClipSize = 6;
-        m_reloadTime = 2.0f;
-        m_fireRate = 0.8f; //Default Gun shoots every 1.25 seconds, can be adjusted in editor - VR
-        m_hitImpact = 50.0f;
-        m_weaponRange = 50.0f;
+        //Debug.Log(m_scalars.Damage);
+        m_weaponClipSize = 6 * (int)m_scalars.ClipSize;
+        m_reloadTime = 2.0f * m_scalars.ReloadTime;
+        m_fireRate = 0.8f * m_scalars.FireRate; //Default Gun shoots every 1.25 seconds, can be adjusted in editor - VR
+        m_hitImpact = 50.0f * m_scalars.ImpactForce;
+        m_weaponRange = 50.0f * m_scalars.Range;
         m_fireStart = 0.0f;       
         outOfAmmoAnimator = FindObjectOfType<AmmoUI>().GetComponent<Animator>();
         gunAnimator = GetComponent<Animator>();
-    }
 
-    public override void Start()
-    {
         //Initializing AmmoCount and UI
         m_currentAmmoCount = m_weaponClipSize;
         m_overallAmmoCount = m_currentAmmoCount;
+    }
 
-        if (m_ammoUI != null)
-            m_ammoUI.SetAmmoText(m_currentAmmoCount, m_overallAmmoCount, m_weaponClipSize);
-
+    public override void Start()
+    { 
         gunCamera = GameObject.FindObjectOfType<Camera>();
 
         GetComponent<MeshRenderer>().enabled = true;
@@ -65,7 +61,7 @@ public class WeaponBase : Weapon, ISaveable
 
     void OnEnable()
     {
-        bIsReloading = false;
+        bIsReloading = false;       
     }
 
 
@@ -88,9 +84,11 @@ public class WeaponBase : Weapon, ISaveable
             }
             else if (!bIsActive)
             {
+                outOfAmmoAnimator.SetBool("bIsOut", false);
                 GetComponent<MeshRenderer>().enabled = false;
             }
         }
+
     }
 
     public override void UseTool()
@@ -130,8 +128,8 @@ public class WeaponBase : Weapon, ISaveable
     IEnumerator OnReload()
     {
         bIsReloading = true;
-        gunAnimator.SetBool("bIsReloading", true);                
-
+        gunAnimator.speed = 1 / m_scalars.ReloadTime; // adjusts for reload time upgrades
+        gunAnimator.SetBool("bIsReloading", true);
         yield return new WaitForSeconds(m_reloadTime);
 
         while (m_currentAmmoCount < m_weaponClipSize && m_overallAmmoCount > 0)
@@ -139,21 +137,20 @@ public class WeaponBase : Weapon, ISaveable
             m_currentAmmoCount++;
             m_overallAmmoCount--;
         }
-
-        m_ammoUI.SetAmmoText(m_currentAmmoCount, m_overallAmmoCount, m_weaponClipSize);
+      
         bIsReloading = false;
 
         //Play reload and ammo animations
         outOfAmmoAnimator.SetBool("bIsOut", false);
-        gunAnimator.SetBool("bIsReloading", false);   
-       
+        gunAnimator.SetBool("bIsReloading", false);          
     }
 
-    //Function for AmmoPickup class
+    //Function for AmmoPickup class, currently adding ammo to whatever weapon is active
     public void AmmoPickup(WeaponType type, int numberOfClips)
     {
-        m_overallAmmoCount += (m_weaponClipSize * numberOfClips);
-        m_ammoUI.SetAmmoText(m_currentAmmoCount, m_overallAmmoCount, m_weaponClipSize);
+        //if (type == WeaponType.BaseWeapon)
+        if(bIsActive)
+            m_overallAmmoCount += (m_weaponClipSize * numberOfClips);        
     }
 
 
@@ -163,43 +160,48 @@ public class WeaponBase : Weapon, ISaveable
         gunAnimator.SetTrigger("OnRecoil");      
         muzzleFlash.Play();
 
-        RaycastHit hitInfo;
-        if (Physics.Raycast(gunCamera.transform.position, gunCamera.transform.forward, out hitInfo, m_weaponRange))
+        if (!m_bHasActionUpgrade)
         {
-            //Only damages if asset has "Health" script
-            Health target = hitInfo.transform.GetComponent<Health>();
-            if (target != null && target.gameObject.tag != "Player")
+            RaycastHit hitInfo;
+            if (Physics.Raycast(gunCamera.transform.position, gunCamera.transform.forward, out hitInfo, m_weaponRange))
             {
-                target.TakeDamage(m_damageAmount);
-                reticuleAnimator.SetTrigger("isTargetted");
-            }
-            else
-            {
-                reticuleAnimator.SetTrigger("isTargetted");
-            }
+                //Only damages if asset has "Health" script
+                Health target = hitInfo.transform.GetComponent<Health>();
+                if (target != null && target.gameObject.tag != "Player")
+                {
+                    target.TakeDamage(m_damageAmount);
+                    reticuleAnimator.SetTrigger("isTargetted");
+                }
+                else
+                {
+                    reticuleAnimator.SetTrigger("isTargetted");
+                }
 
-            //checks if breakable wall
-            DestructibleObject wall = hitInfo.transform.GetComponentInParent<DestructibleObject>();
-            if (wall)
-            {
-                wall.Break(gameObject.tag);
-            }
+                //checks if breakable wall
+                DestructibleObject wall = hitInfo.transform.GetComponentInParent<DestructibleObject>();
+                if (wall)
+                {
+                    wall.Break(gameObject.tag);
+                }
 
-            //Force of impact on hit
-            if (hitInfo.rigidbody != null)
-            {
-                hitInfo.rigidbody.AddForce(-hitInfo.normal * m_hitImpact);
-            }
+                //Force of impact on hit
+                if (hitInfo.rigidbody != null)
+                {
+                    hitInfo.rigidbody.AddForce(-hitInfo.normal * m_hitImpact);
+                }
 
-            //Particle effects on hit
-            GameObject hitImpact = Instantiate(impactFX, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
-            Destroy(hitImpact, 2.0f);            
+                //Particle effects on hit
+                GameObject hitImpact = Instantiate(impactFX, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
+                Destroy(hitImpact, 2.0f);
+            }
+        }
+        else
+        {
+            UpgradedFire();
         }
 
         //Using ammo
-        m_currentAmmoCount--;
-        if (m_ammoUI != null)
-            m_ammoUI.SetAmmoText(m_currentAmmoCount, m_overallAmmoCount, m_weaponClipSize);
+        m_currentAmmoCount--;      
         if (m_currentAmmoCount == 0 && m_overallAmmoCount == 0)
         {
             outOfAmmoAnimator.SetBool("bIsOut", true);
@@ -212,8 +214,6 @@ public class WeaponBase : Weapon, ISaveable
         RaycastHit targetInfo;
         if (Physics.Raycast(gunCamera.transform.position, gunCamera.transform.forward, out targetInfo, m_weaponRange))
         {
-            //Debug.Log(targetInfo.transform.name);
-
             Health target = targetInfo.transform.GetComponent<Health>();
             if (target != null && target.gameObject.tag != "Player")
             {
@@ -222,6 +222,74 @@ public class WeaponBase : Weapon, ISaveable
             else
             {
                 reticuleAnimator.SetBool("isTargetted", false);
+            }
+        }
+    }
+
+    public override void AddUpgrade(WeaponScalars scalars)
+    {
+        m_scalars += scalars;
+        m_damageAmount *= m_scalars.Damage;
+        m_weaponClipSize *= (int)m_scalars.ClipSize;
+        m_reloadTime *= m_scalars.ReloadTime;
+        m_fireRate *= m_scalars.FireRate;
+        m_hitImpact *= m_scalars.ImpactForce;
+        m_weaponRange *= m_scalars.Range;
+    }
+
+    //todo: get this figured out
+    //public void RemoveUpgrade(WeaponScalars scalars)
+    //{
+    //    m_scalars -= scalars;
+    //    m_weaponClipSize = 6 * m_scalars.ClipSize;
+    //    m_reloadTime = 2.0f * m_scalars.ReloadTime;
+    //    m_fireRate = 0.8f * m_scalars.FireRate;
+    //    m_hitImpact = 50.0f * m_scalars.ImpactForce;
+    //    m_weaponRange = 50.0f * m_scalars.Range;
+    //}
+
+    public override void SetHasAction(bool hasaction)
+    {
+        m_bHasActionUpgrade = hasaction;
+    }
+
+    void UpgradedFire()
+    {
+        Debug.Log("Upgraded fire");
+        for (int i = -1; i < 2; i++)
+        {
+            Debug.Log(i.ToString());
+            RaycastHit hitInfo;
+            if (Physics.Raycast(gunCamera.transform.position, Quaternion.Euler(0, 15f * i, 0) * gunCamera.transform.forward, out hitInfo, m_weaponRange))
+            {
+                //Only damages if asset has "Health" script
+                Health target = hitInfo.transform.GetComponent<Health>();
+                if (target != null && target.gameObject.tag != "Player")
+                {
+                    target.TakeDamage(m_damageAmount);
+                    reticuleAnimator.SetTrigger("isTargetted");
+                }
+                else
+                {
+                    reticuleAnimator.SetTrigger("isTargetted");
+                }
+
+                //checks if breakable wall
+                DestructibleObject wall = hitInfo.transform.GetComponentInParent<DestructibleObject>();
+                if (wall)
+                {
+                    wall.Break(gameObject.tag);
+                }
+
+                //Force of impact on hit
+                if (hitInfo.rigidbody != null)
+                {
+                    hitInfo.rigidbody.AddForce(-hitInfo.normal * m_hitImpact);
+                }
+
+                //Particle effects on hit
+                GameObject hitImpact = Instantiate(impactFX, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
+                Destroy(hitImpact, 2.0f);
             }
         }
     }

@@ -123,15 +123,17 @@ MonoBehaviour:
   m_fireRate: 10
   m_hitImpact: 200
   m_weaponRange: 50
-  m_recoilForce: 1
-  m_recoilInitialSpeed: 25
-  m_maxRecoilDistance: 0.5
-  m_recoilReadjustSpeed: 10
+  m_projectileLifeTime: 3
+  m_blastradius: 10
+  m_blastforce: 2000
+  m_projectileforce: 800
+  m_maxDamageTime: 0
   muzzleFlash: {fileID: 7191562193600319789}
   impactFX: {fileID: 7133824047621825672, guid: a9bda7650ecc2b3498e2a7a21cf530e8,
     type: 3}
   reticuleAnimator: {fileID: 0}
   outOfAmmoAnimator: {fileID: 0}
+  gunAnimator: {fileID: 0}
   gunCamera: {fileID: 0}
   m_ammoUI: {fileID: 0}
 --- !u!1001 &7690220253832872150
@@ -141,6 +143,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7191562193057307089}
     m_Modifications:
+    - target: {fileID: 681355423836803577, guid: 4d9ee4fe5fcbb864c9e3fc2064394382,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 681355423836803577, guid: 4d9ee4fe5fcbb864c9e3fc2064394382,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -155,6 +162,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.z
       value: -0.07
+      objectReference: {fileID: 0}
+    - target: {fileID: 681355423836803577, guid: 4d9ee4fe5fcbb864c9e3fc2064394382,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.22778705
       objectReference: {fileID: 0}
     - target: {fileID: 681355423836803577, guid: 4d9ee4fe5fcbb864c9e3fc2064394382,
         type: 3}
@@ -173,16 +185,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 681355423836803577, guid: 4d9ee4fe5fcbb864c9e3fc2064394382,
         type: 3}
-      propertyPath: m_LocalRotation.w
-      value: -0.22778705
-      objectReference: {fileID: 0}
-    - target: {fileID: 681355423836803577, guid: 4d9ee4fe5fcbb864c9e3fc2064394382,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 681355423836803577, guid: 4d9ee4fe5fcbb864c9e3fc2064394382,
-        type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: -421.548
       objectReference: {fileID: 0}
@@ -198,18 +200,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 681355423836803579, guid: 4d9ee4fe5fcbb864c9e3fc2064394382,
         type: 3}
-      propertyPath: LightsModule.rangeCurve.scalar
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 681355423836803579, guid: 4d9ee4fe5fcbb864c9e3fc2064394382,
-        type: 3}
-      propertyPath: LightsModule.intensityCurve.scalar
-      value: 2
+      propertyPath: LightsModule.enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 681355423836803579, guid: 4d9ee4fe5fcbb864c9e3fc2064394382,
         type: 3}
       propertyPath: LightsModule.maxLights
-      value: 5
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 681355423836803579, guid: 4d9ee4fe5fcbb864c9e3fc2064394382,
+        type: 3}
+      propertyPath: LightsModule.rangeCurve.scalar
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 681355423836803579, guid: 4d9ee4fe5fcbb864c9e3fc2064394382,
+        type: 3}
+      propertyPath: LightsModule.intensityCurve.scalar
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 681355423836803582, guid: 4d9ee4fe5fcbb864c9e3fc2064394382,
         type: 3}

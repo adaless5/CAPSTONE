@@ -6,10 +6,15 @@ public class CreatureProjectile : MonoBehaviour
 {
     Rigidbody _rigidBody;
     Health _targetHealth;
+    GameObject _target;
     private float _damageTimer;
     public float _maxDamageTime;
     public float _lifeTime;
     Transform _transformOrigin;
+
+    bool m_bHasAction = false;
+    float _damage;
+    float _targetDefaultSpeed;
     // Start is called before the first frame update
 
     private void Awake()
@@ -21,7 +26,15 @@ public class CreatureProjectile : MonoBehaviour
     {
         _transformOrigin = ObjectPool.Instance.transform;
         _damageTimer = 0;
-        _lifeTime = 6.0f;
+        //_lifeTime = 6.0f;
+    }
+
+    public void InitCreatureProjectile(float maxdamagetime, float lifetime, float damage, bool hasaction)
+    {
+        //_maxDamageTime = maxdamagetime;
+        _lifeTime = lifetime;
+        _damage = damage;
+        m_bHasAction = hasaction;
     }
 
     // Update is called once per frame
@@ -37,7 +50,7 @@ public class CreatureProjectile : MonoBehaviour
                 if (_damageTimer <= 0)
                 {
                     _damageTimer = _maxDamageTime;
-                    _targetHealth.TakeDamage(5.0f);
+                    _targetHealth.TakeDamage(_damage);
                 }
             }
         }
@@ -65,12 +78,30 @@ public class CreatureProjectile : MonoBehaviour
     {
         _lifeTime = 3.0f;
         //transform.parent = _transformOrigin;
+        if (m_bHasAction)
+        {
+            if (_target.GetComponent<TEMP_Roamer>())
+            {
+                _target.GetComponent<TEMP_Roamer>()._FollowSpeed = _targetDefaultSpeed;
+            }
+        }
+
         DeStick();
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         //Debug.Log("Hit");
+        if (m_bHasAction)
+        {
+            _target = collision.gameObject;
+            if (_target.GetComponent<TEMP_Roamer>())
+            {
+                _targetDefaultSpeed = _target.GetComponent<TEMP_Roamer>()._FollowSpeed;
+                _target.GetComponent<TEMP_Roamer>()._FollowSpeed *= 0.8f;
+            }
+        }
+
         _targetHealth = collision.gameObject.GetComponent<Health>();
         if (_targetHealth != null)
         {

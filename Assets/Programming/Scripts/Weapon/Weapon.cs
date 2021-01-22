@@ -9,11 +9,14 @@ public enum WeaponType
     CreatureWeapon,
     NumberOfWeapons
 }
+
 public abstract class Weapon : Tool
 {
+
+
     [Header("Weapon Selected")]
     [SerializeField]
-    private WeaponType _weapon;
+    protected WeaponType _weapon;
 
     [Header("Damage Settings")]
     [SerializeField]
@@ -32,18 +35,33 @@ public abstract class Weapon : Tool
     [SerializeField]
     protected float m_hitImpact = 50.0f;
     [SerializeField]
-    protected float m_weaponRange = 50.0f;   
+    protected float m_weaponRange = 50.0f;
+    [Header("Explosive Weapon Specific")]
+    [SerializeField]
+    protected float m_projectileLifeTime = 3.0f;
+    [SerializeField]
+    protected float m_blastradius = 10.0f;
+    [SerializeField]
+    protected float m_blastforce = 2000.0f; //might not be needed, can use hit impact
+    [SerializeField]
+    protected float m_projectileforce = 800.0f; //force of a lauched projectile
+    [Header("Creture Weapon Specific")]
+    [SerializeField]
+    protected float m_maxDamageTime;
     [Space]
 
-   
+    protected WeaponScalars m_scalars;
 
     protected ALTPlayerController _playerController;
     protected float m_fireStart = 0.0f;
     protected bool bIsReloading = false;
 
+    protected bool m_bHasActionUpgrade = false;
+
     protected void Awake()
     {
         EventBroker.OnPlayerSpawned += InitializePlayer;
+        m_scalars.SetToDefault();
     }
 
     protected void InitializePlayer(GameObject player)
@@ -52,5 +70,105 @@ public abstract class Weapon : Tool
         //Debug.Log(_playerController);
     }
 
+    public int GetCurrentAmmo()
+    {
+        return m_currentAmmoCount;
+    }
+
+    public int GetOverallAmmo()
+    {
+        return m_overallAmmoCount;
+    }
+
+    public int GetClipSize()
+    {
+        return m_weaponClipSize;
+    }
+
+
+    public abstract void AddUpgrade(WeaponScalars scalars);
+    //public abstract void RemoveUpgrade(WeaponScalars scalars);
+    public abstract void SetHasAction(bool hasaction);
+}
+
+[System.Serializable]
+public struct WeaponScalars
+{
+    public float Damage;
+    public float ClipSize;
+    public float AmmoReserveSize;
+    public float ReloadTime;
+    public float FireRate;
+    public float ImpactForce;
+    public float Range;
+    public float FuzeTime;
+    public float BlastRadius;
+    public float ProjectileForce;
+    public float DamageTime;
+
+    public void SetToDefault()
+    {
+        Damage = 1;
+        ClipSize = 1;
+        AmmoReserveSize = 1;
+        ReloadTime = 1;
+        FireRate = 1;
+        ImpactForce = 1;
+        Range = 1;
+        FuzeTime = 1;
+        BlastRadius = 1;
+        ProjectileForce = 1;
+        DamageTime = 1;
+    }
+
+    public void SetToZero()
+    {
+        Damage = 0;
+        ClipSize = 0;
+        AmmoReserveSize = 0;
+        ReloadTime = 0;
+        FireRate = 0;
+        ImpactForce = 0;
+        Range = 0;
+        FuzeTime = 0;
+        BlastRadius = 0;
+        ProjectileForce = 0;
+        DamageTime = 0;
+    }
+
+    public static WeaponScalars operator +(WeaponScalars a, WeaponScalars b)
+    {
+        a.Damage += b.Damage;
+        a.ClipSize += b.ClipSize;
+        a.AmmoReserveSize += b.AmmoReserveSize;
+        a.ReloadTime += b.ReloadTime;
+        a.FireRate += b.FireRate;
+        a.ImpactForce += b.ImpactForce;
+        a.Range += b.Range;
+        a.FuzeTime += b.FuzeTime;
+        a.BlastRadius += b.BlastRadius;
+        a.ProjectileForce += b.ProjectileForce;
+        a.DamageTime += b.DamageTime;
+
+        return a;
+    }
+
+    public static WeaponScalars operator -(WeaponScalars a, WeaponScalars b)
+    {
+        a.Damage -= b.Damage;
+        a.ClipSize -= b.ClipSize;
+        a.AmmoReserveSize -= b.AmmoReserveSize;
+        a.ReloadTime -= b.ReloadTime;
+        a.FireRate -= b.FireRate;
+        a.ImpactForce -= b.ImpactForce;
+        a.Range -= b.Range;
+        a.FuzeTime -= b.FuzeTime;
+        a.BlastRadius -= b.BlastRadius;
+        a.ProjectileForce -= b.ProjectileForce;
+        a.DamageTime -= b.DamageTime;
+
+
+        return a;
+    }
 }
 

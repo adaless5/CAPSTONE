@@ -6,7 +6,7 @@ public class AmmoPickup : MonoBehaviour
 {
     public WeaponType ammoType;
     private int weaponIndex;
-
+   
     public int m_amountOfClipsInPickup = 2;
     public int m_clipSize = 6;
     Pickup m_ammoPickup;
@@ -16,7 +16,7 @@ public class AmmoPickup : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        m_ammoPickup = GetComponent<Pickup>();
+        m_ammoPickup = GetComponent<Pickup>();        
         isPickedUp = false;
     }
 
@@ -40,14 +40,14 @@ public class AmmoPickup : MonoBehaviour
 
     // Update is called once per frame
     private void OnTriggerEnter(Collider other)
-    {       
+    {
         // WeaponBase playerAmmo = (WeaponBase)other.gameObject.GetComponent<WeaponBelt>().GetToolAtIndex(weaponIndex);
-        if(isPickedUp == false)
-        {
+        if (isPickedUp == false)
+        {                  
             isPickedUp = true;
             EventBroker.CallOnAmmoPickup(ammoType, m_amountOfClipsInPickup);
             //Destroy(gameObject); // EVAN COMMENTED THIS OUT AND ADDED THE LINE BELOW, IF THERE IS A PROBLEM YELL AT HIM
-            gameObject.SetActive(false);
+            gameObject.SetActive(false);            
         }
     }
 }
