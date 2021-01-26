@@ -196,7 +196,6 @@ public class ALTPlayerController : MonoBehaviour
             EventBroker.CallOnPlayerDeath();
         }
 
-
         if (EquipmentWheel.enabled == true)
         {
             joyX = 0;
@@ -256,10 +255,9 @@ public class ALTPlayerController : MonoBehaviour
             }
         }
 
+        //Below I am calculating a vector perpendincular to the surface the player is on to determine what direction to move while sliding.
+        //Sliding activates when the angle between the surface normal and the down vector are <= 140 deg. -AD
         int slidemask = 1 << 17;
-
-
-        Debug.DrawRay(transform.position, dir);
         if (Physics.Raycast(transform.position, dir, out hit, 100f, ~slidemask))
         {
             _hitNormal = hit.normal;
@@ -277,12 +275,15 @@ public class ALTPlayerController : MonoBehaviour
             if (_controller.isGrounded && _slopeAngle <= 140.0f)
             {
                 bOnSlope = true;
+
             }
             else
             {
                 bOnSlope = false;
             }
         }
+
+        m_Velocity.y = Mathf.Clamp(m_Velocity.y, -15.0f, 1000.0f);  //Clamping the minimum y velocity to prevent rapidly falling after sliding. -AD
 
         //Stand in death animation -LCC
         if(isDead)
@@ -515,46 +516,51 @@ public class ALTPlayerController : MonoBehaviour
 
     void HandleEquipmentWheels()
     {
-        if (Input.GetButtonDown("EquipmentBelt"))
+        if(WeaponWheel.enabled == false)
         {
-            EquipmentWheel.enabled = true;
-            Time.timeScale = 0.3f;
-            EquipmentWheel.GetComponent<CanvasGroup>().interactable = true;
-            EquipmentWheel.GetComponent<CanvasGroup>().blocksRaycasts = true;
-            Cursor.lockState = CursorLockMode.None;
-            m_ControllerState = ControllerState.Wheel;
+            if (Input.GetButtonDown("EquipmentBelt"))
+            {
+                EquipmentWheel.enabled = true;
+                Time.timeScale = 0.3f;
+                EquipmentWheel.GetComponent<CanvasGroup>().interactable = true;
+                EquipmentWheel.GetComponent<CanvasGroup>().blocksRaycasts = true;
+                Cursor.lockState = CursorLockMode.None;
+                m_ControllerState = ControllerState.Wheel;
+            }
+
+            if (Input.GetButtonUp("EquipmentBelt"))
+            {
+                EquipmentWheel.enabled = false;
+                Time.timeScale = 1;
+                EquipmentWheel.GetComponent<CanvasGroup>().interactable = false;
+                EquipmentWheel.GetComponent<CanvasGroup>().blocksRaycasts = false;
+                Cursor.lockState = CursorLockMode.Locked;
+                m_ControllerState = ControllerState.Play;
+            }
         }
 
-        if (Input.GetButtonUp("EquipmentBelt"))
+        if(EquipmentWheel.enabled == false)
         {
-            EquipmentWheel.enabled = false;
-            Time.timeScale = 1;
-            EquipmentWheel.GetComponent<CanvasGroup>().interactable = false;
-            EquipmentWheel.GetComponent<CanvasGroup>().blocksRaycasts = false;
-            Cursor.lockState = CursorLockMode.Locked;
-            m_ControllerState = ControllerState.Play;
-        }
+            if (Input.GetButtonDown("WeaponBelt"))
+            {
+                WeaponWheel.enabled = true;
+                Time.timeScale = 0.3f;
+                WeaponWheel.GetComponent<CanvasGroup>().interactable = true;
+                WeaponWheel.GetComponent<CanvasGroup>().blocksRaycasts = true;
+                Cursor.lockState = CursorLockMode.None;
+                m_ControllerState = ControllerState.Wheel;
 
+            }
 
-        if (Input.GetButtonDown("WeaponBelt"))
-        {
-            WeaponWheel.enabled = true;
-            Time.timeScale = 0.3f;
-            WeaponWheel.GetComponent<CanvasGroup>().interactable = true;
-            WeaponWheel.GetComponent<CanvasGroup>().blocksRaycasts = true;
-            Cursor.lockState = CursorLockMode.None;
-            m_ControllerState = ControllerState.Wheel;
-
-        }
-
-        if (Input.GetButtonUp("WeaponBelt"))
-        {
-            WeaponWheel.enabled = false;
-            Time.timeScale = 1;
-            WeaponWheel.GetComponent<CanvasGroup>().interactable = false;
-            WeaponWheel.GetComponent<CanvasGroup>().blocksRaycasts = false;
-            Cursor.lockState = CursorLockMode.Locked;
-            m_ControllerState = ControllerState.Play;
+            if (Input.GetButtonUp("WeaponBelt"))
+            {
+                WeaponWheel.enabled = false;
+                Time.timeScale = 1;
+                WeaponWheel.GetComponent<CanvasGroup>().interactable = false;
+                WeaponWheel.GetComponent<CanvasGroup>().blocksRaycasts = false;
+                Cursor.lockState = CursorLockMode.Locked;
+                m_ControllerState = ControllerState.Play;
+            }
         }
     }
 
