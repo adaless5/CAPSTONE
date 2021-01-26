@@ -43,7 +43,7 @@ public class GrenadeExplosion : MonoBehaviour
     {
         if (ImplosionWaveObject.transform.localScale.x > 0.0f)
         {
-            ImplosionWaveObject.transform.localScale -= new Vector3(1.0f, 1.0f, 1.0f);
+            ImplosionWaveObject.transform.localScale -= new Vector3(1.0f, 1.0f, 1.0f) * 0.5f;
         }
         else 
         {
