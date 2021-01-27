@@ -22,6 +22,12 @@ public class MineSpawner : Weapon, ISaveable
     float m_timer;
     public override void Start()
     {
+        m_weaponClipSize = 1;
+        m_startingOverstockAmmo = 12;        
+        m_reloadTime = 0.5f;
+        _ammoController = FindObjectOfType<AmmoUI>().GetComponent<AmmoController>();
+        _ammoController.InitializeAmmo(AmmoController.AmmoTypes.Explosive, m_weaponClipSize, m_startingOverstockAmmo);
+
         m_timer = m_fireRate;
         bIsActive = false;
         bIsObtained = false;
@@ -56,9 +62,19 @@ public class MineSpawner : Weapon, ISaveable
 
     public override void UseTool()
     {
+        if (bIsReloading)
+        {
+            return;
+        }
+        if (_ammoController.NeedsReload())
+        {
+            StartCoroutine(OnReload());
+            return;
+        }
+
         if (m_playerController.CheckForUseWeaponInput())
         {
-            if (m_bCanThrow)
+            if (m_bCanThrow && _ammoController.CanUseAmmo())
             {
                 ThrowMine();
                 m_bCanThrow = false;
@@ -66,7 +82,6 @@ public class MineSpawner : Weapon, ISaveable
                 //Debug.Log("THROWN");
             }
         }
-
 
         if (!m_bCanThrow)
         {
@@ -91,6 +106,15 @@ public class MineSpawner : Weapon, ISaveable
             mine.GetComponent<Rigidbody>().AddTorque(new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), -90f));
             mine.GetComponent<Mine>().InitMine(m_projectileLifeTime, m_blastradius, m_blastforce, m_damageAmount, m_bHasActionUpgrade);
         }
+        _ammoController.UseAmmo();
+    }
+
+    IEnumerator OnReload()
+    {
+        bIsReloading = true;    
+        yield return new WaitForSeconds(m_reloadTime);      
+        _ammoController.Reload();
+        bIsReloading = false;      
     }
 
     public override void AddUpgrade(WeaponScalars scalars)
@@ -104,6 +128,7 @@ public class MineSpawner : Weapon, ISaveable
         m_damageAmount *= m_scalars.Damage;
 
     }
+
 
     public override void SetHasAction(bool hasaction)
     {
