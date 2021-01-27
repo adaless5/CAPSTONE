@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PuzzleDoor : MonoBehaviour
+public class PuzzleDoor : MonoBehaviour, ISaveable
 {
 
 
@@ -173,5 +173,22 @@ public class PuzzleDoor : MonoBehaviour
             if (_OpenDoor != null)
             { _OpenDoor.SetActive(false); }
         }
+    }
+
+
+    public void SaveDataOnSceneChange()
+    {
+        SaveSystem.Save(gameObject.name, "bIsOpen", gameObject.scene.name, bIsOpen);
+        SaveSystem.Save(gameObject.name, "bHasBeenClosed", gameObject.scene.name, bHasBeenClosed);
+        SaveSystem.Save(gameObject.name, "bHasBeenOpened", gameObject.scene.name, bHasBeenOpened);
+
+    }
+
+    public void LoadDataOnSceneEnter()
+    {
+        bIsOpen = SaveSystem.LoadBool(gameObject.name, "bIsOpen", gameObject.scene.name);
+        bHasBeenClosed = SaveSystem.LoadBool(gameObject.name, "bHasBeenClosed", gameObject.scene.name);
+        bHasBeenOpened = SaveSystem.LoadBool(gameObject.name, "bHasBeenOpened", gameObject.scene.name);
+
     }
 }
