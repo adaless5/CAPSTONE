@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Patrol : State
+public class DronePatrol : DroneState
 {
     int _currentPatrolIndex = 0;
-    public Patrol(GameObject enemy, Transform[] pp, Transform playerposition, NavMeshAgent nav) : base(enemy, pp, playerposition, nav)
+    public DronePatrol(GameObject enemy, Transform[] pp, Transform playerposition, NavMeshAgent nav) : base(enemy, pp, playerposition, nav)
     {
         _stateName = STATENAME.PATROL;
 
@@ -27,7 +27,7 @@ public class Patrol : State
         if (CanSeePlayer())
         {
             _navMeshAgent.ResetPath();
-            _nextState = new Attack(_currentEnemy, _patrolPoints, _playerPos, _navMeshAgent);
+            _nextState = new DroneAttack(_currentEnemy, _patrolPoints, _playerPos, _navMeshAgent);
             _stage = EVENT.EXIT;
         }
 
