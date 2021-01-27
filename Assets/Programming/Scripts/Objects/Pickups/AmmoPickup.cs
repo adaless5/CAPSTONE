@@ -11,6 +11,10 @@ public class AmmoPickup : MonoBehaviour
     public int m_clipSize = 6;
     Pickup m_ammoPickup;
 
+    Weapon m_baseWeapon;
+    Weapon m_creatureWeapon;
+    Weapon m_grenadeWeapon;
+
     bool isPickedUp;
 
     // Start is called before the first frame update
@@ -43,7 +47,7 @@ public class AmmoPickup : MonoBehaviour
     {
         // WeaponBase playerAmmo = (WeaponBase)other.gameObject.GetComponent<WeaponBelt>().GetToolAtIndex(weaponIndex);
         if (isPickedUp == false)
-        {                  
+        {   
             isPickedUp = true;
             EventBroker.CallOnAmmoPickup(ammoType, m_amountOfClipsInPickup);
             //Destroy(gameObject); // EVAN COMMENTED THIS OUT AND ADDED THE LINE BELOW, IF THERE IS A PROBLEM YELL AT HIM

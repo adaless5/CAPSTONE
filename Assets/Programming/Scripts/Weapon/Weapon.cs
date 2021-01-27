@@ -25,8 +25,7 @@ public abstract class Weapon : Tool
     [Header("Weapon Settings")]
     [SerializeField]
     protected int m_weaponClipSize = 6;
-    protected int m_currentAmmoCount;
-    protected int m_overallAmmoCount;
+    protected int m_startingOverstockAmmo = 0;
 
     [SerializeField]
     protected float m_reloadTime = 2.0f;
@@ -53,6 +52,7 @@ public abstract class Weapon : Tool
     protected WeaponScalars m_scalars;
 
     protected ALTPlayerController _playerController;
+    protected AmmoController _ammoController;
     protected float m_fireStart = 0.0f;
     protected bool bIsReloading = false;
 
@@ -66,25 +66,13 @@ public abstract class Weapon : Tool
 
     protected void InitializePlayer(GameObject player)
     {
-        _playerController = player.GetComponent<ALTPlayerController>();
+        _playerController = player.GetComponent<ALTPlayerController>();        
         //Debug.Log(_playerController);
     }
 
-    public int GetCurrentAmmo()
-    {
-        return m_currentAmmoCount;
-    }
 
-    public int GetOverallAmmo()
-    {
-        return m_overallAmmoCount;
-    }
 
-    public int GetClipSize()
-    {
-        return m_weaponClipSize;
-    }
-
+ 
 
     public abstract void AddUpgrade(WeaponScalars scalars);
     //public abstract void RemoveUpgrade(WeaponScalars scalars);
