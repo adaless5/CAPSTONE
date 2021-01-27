@@ -34,7 +34,7 @@ public class DroneAI : MonoBehaviour
     {
         if (this != null)
         {
-            _currentState = new Patrol(gameObject, _patrolPoints, player.transform, _navMeshAgent);
+            _currentState = new DronePatrol(gameObject, _patrolPoints, player.transform, _navMeshAgent);
             _playerReference = player;
         }
 
@@ -52,6 +52,7 @@ public class DroneAI : MonoBehaviour
 
     public void Stun()
     {
-        _currentState = new Stun(gameObject, _patrolPoints, _playerReference.transform, _navMeshAgent, 3.0f);
+        State savedState = _currentState;
+        _currentState = new Stun(3.0f, savedState);
     }
 }

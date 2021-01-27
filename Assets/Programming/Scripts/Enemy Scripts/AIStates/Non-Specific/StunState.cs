@@ -7,10 +7,13 @@ public class Stun : State
 {
     float _stunTime = 3.0f;
     Vector3 _spinningVector = new Vector3(0, 180.0f, 0);
-    public Stun(GameObject enemy, Transform[] pp, Transform playerposition, NavMeshAgent nav, float stuntime) : base(enemy, pp, playerposition, nav)
+    State _resumeState;
+    public Stun(float stuntime, State resumestate) 
     {
+        _currentEnemy = resumestate.GetCurrentEnemy();
         _stateName = STATENAME.IDLE;
         _stunTime = stuntime;
+        _resumeState = resumestate;
         Debug.Log("Stunned");
     }
 
@@ -26,7 +29,7 @@ public class Stun : State
         _currentEnemy.transform.Rotate(_spinningVector * Time.deltaTime);
         if (_stunTime <= 0)
         {
-            _nextState = new Idle(_currentEnemy, _patrolPoints, _playerPos, _navMeshAgent);
+            _nextState = _resumeState;
             _stage = EVENT.EXIT;
         }
     }

@@ -20,11 +20,11 @@ public class State
     public STATENAME _stateName;
     protected State _nextState;
     protected EVENT _stage;
-    protected float _enemySpeed = 2f;
-    protected Transform[] _patrolPoints;
     protected GameObject _currentEnemy;
     protected Transform _playerPos;
-    protected NavMeshAgent _navMeshAgent;
+    //protected float _enemySpeed = 2f;
+    //protected Transform[] _patrolPoints;
+    //protected NavMeshAgent _navMeshAgent;
 
     protected float _visualDistance = 30.0f;
     protected float _visualAngle = 90.0f;
@@ -35,12 +35,8 @@ public class State
 
     private Quaternion _desiredRot;
 
-    public State(GameObject enemy, Transform[] pp, Transform playerposition, NavMeshAgent nav)
+    public State()
     {
-        _currentEnemy = enemy;
-        _patrolPoints = pp;
-        _playerPos = playerposition;
-        _navMeshAgent = nav;
         _stage = EVENT.ENTER;
     }
 
@@ -70,8 +66,8 @@ public class State
         float angle = Vector3.Angle(direction, _currentEnemy.transform.forward);
 
 
-        NavMeshHit hit;
-        if (!_navMeshAgent.Raycast(_playerPos.position, out hit))
+        RaycastHit hit;
+        if (Physics.Raycast(_playerPos.position, direction, out hit))
         {
             if (direction.magnitude < _visualDistance && angle < _visualAngle)
             {
@@ -89,6 +85,11 @@ public class State
     {
         _desiredRot = Quaternion.LookRotation(thingToLookAt.position - _currentEnemy.transform.position);
         _currentEnemy.transform.rotation = Quaternion.Slerp(_currentEnemy.transform.rotation, _desiredRot, Time.deltaTime * _rotDamp);
+    }
+
+    public GameObject GetCurrentEnemy()
+    {
+        return _currentEnemy;
     }
 
 }
