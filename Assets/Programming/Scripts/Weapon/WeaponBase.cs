@@ -22,15 +22,15 @@ public class WeaponBase : Weapon, ISaveable
     Animator gunAnimator;
 
     [Header("Camera Settings")]
-    public Camera gunCamera;    
-   
+    public Camera gunCamera;
+    
     float m_timeElapsed;
     float m_lerpDuration = 3f;
 
     void Awake()
     {
         base.Awake();
-        EventBroker.OnAmmoPickup += AmmoPickup;
+        //EventBroker.OnAmmoPickup += AmmoPickup;
         LoadDataOnSceneEnter();
 
         //TODO: Readd Save implementation
@@ -46,13 +46,16 @@ public class WeaponBase : Weapon, ISaveable
         gunAnimator = GetComponent<Animator>();
 
         //Initializing AmmoCount and UI
-        m_currentAmmoCount = m_weaponClipSize;
-        m_overallAmmoCount = m_currentAmmoCount;
+        //m_currentAmmoCount = m_weaponClipSize;
+        //m_overallAmmoCount = m_currentAmmoCount;
     }
 
     public override void Start()
     { 
         gunCamera = GameObject.FindObjectOfType<Camera>();
+
+        _ammoController = FindObjectOfType<AmmoUI>().GetComponent<AmmoController>();
+        _ammoController.InitializeAmmo(AmmoController.AmmoTypes.Default, m_weaponClipSize, m_weaponClipSize);
 
         GetComponent<MeshRenderer>().enabled = true;
         bIsActive = true;
@@ -80,7 +83,7 @@ public class WeaponBase : Weapon, ISaveable
             {
                 GetComponent<MeshRenderer>().enabled = true;
                 UseTool();
-                OnTarget();
+                OnTarget();                
             }
             else if (!bIsActive)
             {
@@ -88,7 +91,6 @@ public class WeaponBase : Weapon, ISaveable
                 GetComponent<MeshRenderer>().enabled = false;
             }
         }
-
     }
 
     public override void UseTool()
@@ -99,24 +101,20 @@ public class WeaponBase : Weapon, ISaveable
         }
 
         //Reloads automatically at 0 or if player users reload input "R"
-        if (m_currentAmmoCount <= 0 && m_overallAmmoCount >= 1)
+        //if (m_currentAmmoCount <= 0 && m_overallAmmoCount >= 1)
+        if(_ammoController.NeedsReload() || (Input.GetButtonDown("Reload") && _ammoController.CanReload()))
         {
             StartCoroutine(OnReload());
             return;
-        }
-        else if(Input.GetButtonDown("Reload") && m_overallAmmoCount >= 1)
-        {
-            StartCoroutine(OnReload());
-            return;
-        }
+        }       
 
         if (_playerController.CheckForUseWeaponInput() && Time.time >= m_fireStart)
         {
             m_fireStart = Time.time + 1.0f / m_fireRate;
-            if (m_currentAmmoCount > 0)
+           // if (m_currentAmmoCount > 0)
+           if(_ammoController.CanUseAmmo())
             {
-                OnShoot();
-                
+                OnShoot();                
             }
             else
             {
@@ -132,11 +130,12 @@ public class WeaponBase : Weapon, ISaveable
         gunAnimator.SetBool("bIsReloading", true);
         yield return new WaitForSeconds(m_reloadTime);
 
-        while (m_currentAmmoCount < m_weaponClipSize && m_overallAmmoCount > 0)
-        {
-            m_currentAmmoCount++;
-            m_overallAmmoCount--;
-        }
+        //while (m_currentAmmoCount < m_weaponClipSize && m_overallAmmoCount > 0)
+        //{
+        //    m_currentAmmoCount++;
+        //    m_overallAmmoCount--;
+        //}
+        _ammoController.Reload();
       
         bIsReloading = false;
 
@@ -146,12 +145,12 @@ public class WeaponBase : Weapon, ISaveable
     }
 
     //Function for AmmoPickup class, currently adding ammo to whatever weapon is active
-    public void AmmoPickup(WeaponType type, int numberOfClips)
-    {
-        //if (type == WeaponType.BaseWeapon)
-        if(bIsActive)
-            m_overallAmmoCount += (m_weaponClipSize * numberOfClips);        
-    }
+    //public void AmmoPickup(WeaponType type, int numberOfClips)
+    //{
+    //    //if (type == WeaponType.BaseWeapon)
+    //    if(bIsActive)
+    //        m_overallAmmoCount += (m_weaponClipSize * numberOfClips);        
+    //}
 
 
     void OnShoot()
@@ -201,8 +200,10 @@ public class WeaponBase : Weapon, ISaveable
         }
 
         //Using ammo
-        m_currentAmmoCount--;      
-        if (m_currentAmmoCount == 0 && m_overallAmmoCount == 0)
+        //m_currentAmmoCount--;      
+        _ammoController.UseAmmo();
+        //if (m_currentAmmoCount == 0 && m_overallAmmoCount == 0)
+        if(_ammoController.OutOfAmmo())
         {
             outOfAmmoAnimator.SetBool("bIsOut", true);
         }        
