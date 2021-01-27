@@ -8,16 +8,13 @@ public class CreatureWeapon : Weapon, ISaveable
 {
     public Camera _camera;
     public ParticleSystem _spreadEffect;
-    public Animator reticuleAnimator;
-    public Animator outOfAmmoAnimator;
+    public Animator reticuleAnimator;   
     GameObject _creatureProjectile;
    
     private void Awake()
     {
-        base.Awake();
-        //EventBroker.OnAmmoPickup += AmmoPickup;
-        _creatureProjectile = (GameObject)Resources.Load("Prefabs/Weapon/Creature Projectile");
-        outOfAmmoAnimator = FindObjectOfType<AmmoUI>().GetComponent<Animator>();
+        base.Awake();      
+        _creatureProjectile = (GameObject)Resources.Load("Prefabs/Weapon/Creature Projectile");     
         m_weaponClipSize = 8;
         m_reloadTime = 0.5f;
     }
@@ -25,11 +22,9 @@ public class CreatureWeapon : Weapon, ISaveable
     // Start is called before the first frame update
     public override void Start()
     {
+        //Initializing Ammo Controller
         _ammoController = FindObjectOfType<AmmoUI>().GetComponent<AmmoController>();
-        _ammoController.InitializeAmmo(AmmoController.AmmoTypes.Creature, m_weaponClipSize, m_weaponClipSize);
-        //Initializing AmmoCount and UI
-        //m_currentAmmoCount = m_weaponClipSize;
-        //m_overallAmmoCount = m_currentAmmoCount;
+        _ammoController.InitializeAmmo(AmmoController.AmmoTypes.Creature, m_weaponClipSize, m_weaponClipSize);       
      
         _camera = FindObjectOfType<Camera>();
         GetComponent<MeshRenderer>().enabled = false;
@@ -51,8 +46,7 @@ public class CreatureWeapon : Weapon, ISaveable
             return;
         }
 
-        //Reloads automatically at 0 or if player users reload input "R"
-        //if (m_currentAmmoCount <= 0 && m_overallAmmoCount >= 1)
+        //Reloads automatically at 0 or if player users reload input "R"       
         if(_ammoController.NeedsReload() || (Input.GetButtonDown("Reload") && _ammoController.CanReload()))
         {
             StartCoroutine(OnReload());
@@ -61,17 +55,11 @@ public class CreatureWeapon : Weapon, ISaveable
        
         if (_playerController.CheckForUseWeaponInput() && Time.time >= m_fireStart)
         {
-            m_fireStart = Time.time + 1.0f / m_fireRate;
-            //if (m_currentAmmoCount > 0)
+            m_fireStart = Time.time + 1.0f / m_fireRate;         
             if(_ammoController.CanUseAmmo())
             {
                 OnShoot();
-
-            }
-            else
-            {
-                outOfAmmoAnimator.SetBool("bIsOut", true);
-            }
+            }           
         }
     }
 
@@ -86,8 +74,7 @@ public class CreatureWeapon : Weapon, ISaveable
                 OnTarget();                
             }
             else if (!bIsActive)
-            {
-                outOfAmmoAnimator.SetBool("bIsOut", false);
+            {               
                 GetComponent<MeshRenderer>().enabled = false;
             }
         }
@@ -125,34 +112,20 @@ public class CreatureWeapon : Weapon, ISaveable
             }
         }
 
-        //Using ammo
-        //m_currentAmmoCount--;
-        _ammoController.UseAmmo();
-        //if (m_currentAmmoCount == 0 && m_overallAmmoCount == 0)
-        if(_ammoController.OutOfAmmo())
-        {
-            outOfAmmoAnimator.SetBool("bIsOut", true);
-        }
-
+        //Using ammo      
+        _ammoController.UseAmmo();    
     }
+
         IEnumerator OnReload()
         {
             bIsReloading = true;
             // gunAnimator.SetBool("bIsReloading", true);
 
-            yield return new WaitForSeconds(m_reloadTime);
-
-        //while (m_currentAmmoCount < m_weaponClipSize && m_overallAmmoCount > 0)
-        //{
-        //    m_currentAmmoCount++;
-        //    m_overallAmmoCount--;
-        //}
+            yield return new WaitForSeconds(m_reloadTime);       
             _ammoController.Reload();
-
             bIsReloading = false;
 
-            //Play reload and ammo animations
-            outOfAmmoAnimator.SetBool("bIsOut", false);
+            //Play reload animations once set up         
             //gunAnimator.SetBool("bIsReloading", false);
         }
         
@@ -170,14 +143,6 @@ public class CreatureWeapon : Weapon, ISaveable
     {
         m_bHasActionUpgrade = hasaction;
     }
-
-        //Function for AmmoPickup class
-        //public void AmmoPickup(WeaponType type, int numberOfClips)
-        //{
-        //    //if (type == WeaponType.CreatureWeapon)
-        //    if(bIsActive)
-        //        m_overallAmmoCount += (m_weaponClipSize * numberOfClips);
-        //}
 
         private void OnTarget()
         {

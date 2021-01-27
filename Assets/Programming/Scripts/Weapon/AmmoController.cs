@@ -1,13 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 
-
-public class AmmoController : MonoBehaviour
-{
-    Weapon weaponType;
-
+public class AmmoController : MonoBehaviour, ISaveable
+{    
     public enum AmmoTypes : int
     {
         Default,
@@ -17,26 +15,30 @@ public class AmmoController : MonoBehaviour
     };
 
     int m_ammoType; 
-
+    public Animator outOfAmmoAnimator;
     protected List<int> currentAmmoList = new List<int>();
     protected List<int> overstockAmmoList = new List<int>();
     protected List<int> weaponClipList = new List<int>();
 
     private void Awake()
     {
+        outOfAmmoAnimator = FindObjectOfType<AmmoUI>().GetComponent<Animator>();
+        SceneManager.sceneUnloaded += ctx => SaveAmmo();        
+
+        LoadDataOnSceneEnter();
         EventBroker.OnAmmoPickup += AmmoPickup;      
         for (int i = 0; i < (int)AmmoTypes.MaxAmmoTypes; i++)
         {
             currentAmmoList.Add(0);
             overstockAmmoList.Add(0);
             weaponClipList.Add(0);
-        }
-        weaponType = FindObjectOfType<Weapon>();         
+        }        
     }
 
     // Start is called before the first frame update
     void Start()
     {
+
     }
        
 
@@ -77,11 +79,12 @@ public class AmmoController : MonoBehaviour
 
     public void Reload()
     {
+        outOfAmmoAnimator.SetBool("bIsOut", false);
         while (currentAmmoList[m_ammoType] < weaponClipList[m_ammoType] && overstockAmmoList[m_ammoType] > 0)
         {
             currentAmmoList[m_ammoType]++;
             overstockAmmoList[m_ammoType]--;
-        }
+        }        
     }
 
     public void AmmoPickup(WeaponType type, int numberOfClips)
@@ -92,7 +95,16 @@ public class AmmoController : MonoBehaviour
 
     public void UseAmmo()
     {
-        currentAmmoList[m_ammoType]--;
+        if(CanUseAmmo())
+        {
+            currentAmmoList[m_ammoType]--;
+            if(OutOfAmmo())
+            outOfAmmoAnimator.SetBool("bIsOut", true);
+        }
+        else
+        {
+            outOfAmmoAnimator.SetBool("bIsOut", true);
+        }
     }
 
     public bool OutOfAmmo()
@@ -102,6 +114,7 @@ public class AmmoController : MonoBehaviour
             return true;
         }
         else
+            outOfAmmoAnimator.SetBool("bIsOut", false);
             return false;
     }
 
@@ -123,6 +136,36 @@ public class AmmoController : MonoBehaviour
     public void SetAmmoType(int type)
     {
         m_ammoType = type;
+        if(OutOfAmmo())
+        {
+            outOfAmmoAnimator.SetBool("bIsOut", true);
+        }
+        else
+        {
+            outOfAmmoAnimator.SetBool("bIsOut", false);
+        }
     }
 
+    public void SaveAmmo()
+    {
+        for(int i = 0; i < (int)AmmoTypes.MaxAmmoTypes; i++)
+        {
+            SaveSystem.Save(gameObject.name, currentAmmoList[i].ToString(), gameObject.scene.name, currentAmmoList[i]);
+            SaveSystem.Save(gameObject.name, weaponClipList[i].ToString(), gameObject.scene.name, weaponClipList[i]);
+            SaveSystem.Save(gameObject.name, overstockAmmoList[i].ToString(), gameObject.scene.name, overstockAmmoList[i]);
+        }
+    }
+    
+    public void LoadDataOnSceneEnter()
+    {
+        for (int i = 0; i < (int)AmmoTypes.MaxAmmoTypes; i++)
+        {
+            if(currentAmmoList.Count > 0)
+            currentAmmoList[i] = SaveSystem.LoadInt(gameObject.name, currentAmmoList[i].ToString(), gameObject.scene.name);
+            if(weaponClipList.Count > 0)
+            weaponClipList[i] = SaveSystem.LoadInt(gameObject.name, weaponClipList[i].ToString(), gameObject.scene.name);  
+            if(overstockAmmoList.Count > 0)
+            overstockAmmoList[i] = SaveSystem.LoadInt(gameObject.name, overstockAmmoList[i].ToString(), gameObject.scene.name);
+        }
+    }    
 }

@@ -23,8 +23,7 @@ public class MineSpawner : Weapon, ISaveable
     public override void Start()
     {
         m_weaponClipSize = 1;
-        m_startingOverstockAmmo = 12;
-        
+        m_startingOverstockAmmo = 12;        
         m_reloadTime = 0.5f;
         _ammoController = FindObjectOfType<AmmoUI>().GetComponent<AmmoController>();
         _ammoController.InitializeAmmo(AmmoController.AmmoTypes.Explosive, m_weaponClipSize, m_startingOverstockAmmo);
