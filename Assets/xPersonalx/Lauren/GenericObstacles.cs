@@ -1,11 +1,11 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
-public class MovingObstaclesBase : MonoBehaviour
+public class GenericObstacles : MonoBehaviour
 {
-    public GameObject[] patrolPoints;
-    public int currentPatrolIndex;
+    //public GenericObstacles baseClass;
 
     // Start is called before the first frame update
     void Start()
@@ -16,6 +16,6 @@ public class MovingObstaclesBase : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }
