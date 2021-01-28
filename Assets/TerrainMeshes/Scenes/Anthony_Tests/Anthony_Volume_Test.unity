@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.1571297, g: 0.05273647, b: 0.051666826, a: 1}
+  m_IndirectSpecularColor: {r: 0.15712935, g: 0.052736737, b: 0.051667303, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -340,6 +340,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 200ebad971ebaad42aaf657e5a4d09ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  NumberOfPermittedUpgrades: 99
   DeafaultUpgrade1:
     Damage: 0
     ClipSize: 0
@@ -352,9 +353,12 @@ MonoBehaviour:
     BlastRadius: 0
     ProjectileForce: 0
     DamageTime: 0
+    HasAction: 0
     Type: 0
+    Title: -ReloadTime
+    UpgradeWorth: 0
   DeafaultUpgrade2:
-    Damage: 0
+    Damage: 1
     ClipSize: 0
     AmmoReserveSize: 0
     ReloadTime: 0
@@ -365,21 +369,27 @@ MonoBehaviour:
     BlastRadius: 0
     ProjectileForce: 0
     DamageTime: 0
-    Type: 0
+    HasAction: 0
+    Type: 1
+    Title: +Damage
+    UpgradeWorth: 0
   DeafaultUpgrade3:
     Damage: 0
     ClipSize: 0
     AmmoReserveSize: 0
     ReloadTime: 0
-    FireRate: 0
+    FireRate: 1
     ImpactForce: 0
     Range: 0
     FuzeTime: 0
     BlastRadius: 0
     ProjectileForce: 0
     DamageTime: 0
-    Type: 0
-  ExplosiveUpgrade1:
+    HasAction: 0
+    Type: 2
+    Title: +FireRate
+    UpgradeWorth: 0
+  DeafaultUpgrade4:
     Damage: 0
     ClipSize: 0
     AmmoReserveSize: 0
@@ -391,7 +401,26 @@ MonoBehaviour:
     BlastRadius: 0
     ProjectileForce: 0
     DamageTime: 0
+    HasAction: 1
+    Type: 3
+    Title: TripleShot
+    UpgradeWorth: 0
+  ExplosiveUpgrade1:
+    Damage: 1
+    ClipSize: 0
+    AmmoReserveSize: 0
+    ReloadTime: 0
+    FireRate: 0
+    ImpactForce: 0
+    Range: 0
+    FuzeTime: 0
+    BlastRadius: 0
+    ProjectileForce: 0
+    DamageTime: 0
+    HasAction: 0
     Type: 0
+    Title: +Damage
+    UpgradeWorth: 0
   ExplosiveUpgrade2:
     Damage: 0
     ClipSize: 0
@@ -401,10 +430,13 @@ MonoBehaviour:
     ImpactForce: 0
     Range: 0
     FuzeTime: 0
-    BlastRadius: 0
+    BlastRadius: 0.5
     ProjectileForce: 0
     DamageTime: 0
-    Type: 0
+    HasAction: 0
+    Type: 1
+    Title: +BlastRadius
+    UpgradeWorth: 0
   ExplosiveUpgrade3:
     Damage: 0
     ClipSize: 0
@@ -413,12 +445,15 @@ MonoBehaviour:
     FireRate: 0
     ImpactForce: 0
     Range: 0
-    FuzeTime: 0
+    FuzeTime: -0.5
     BlastRadius: 0
     ProjectileForce: 0
     DamageTime: 0
-    Type: 0
-  CreatureUpgrade1:
+    HasAction: 0
+    Type: 2
+    Title: -FuzeTime
+    UpgradeWorth: 0
+  ExplosiveUpgrade4:
     Damage: 0
     ClipSize: 0
     AmmoReserveSize: 0
@@ -430,7 +465,26 @@ MonoBehaviour:
     BlastRadius: 0
     ProjectileForce: 0
     DamageTime: 0
+    HasAction: 1
+    Type: 3
+    Title: SplitBomb
+    UpgradeWorth: 0
+  CreatureUpgrade1:
+    Damage: 1
+    ClipSize: 0
+    AmmoReserveSize: 0
+    ReloadTime: 0
+    FireRate: 0
+    ImpactForce: 0
+    Range: 0
+    FuzeTime: 0
+    BlastRadius: 0
+    ProjectileForce: 0
+    DamageTime: 0
+    HasAction: 0
     Type: 0
+    Title: +Damage
+    UpgradeWorth: 0
   CreatureUpgrade2:
     Damage: 0
     ClipSize: 0
@@ -442,9 +496,28 @@ MonoBehaviour:
     FuzeTime: 0
     BlastRadius: 0
     ProjectileForce: 0
-    DamageTime: 0
-    Type: 0
+    DamageTime: 1
+    HasAction: 0
+    Type: 1
+    Title: +DamageTime
+    UpgradeWorth: 0
   CreatureUpgrade3:
+    Damage: 0
+    ClipSize: 0
+    AmmoReserveSize: 0
+    ReloadTime: 0
+    FireRate: 1
+    ImpactForce: 0
+    Range: 0
+    FuzeTime: 0
+    BlastRadius: 0
+    ProjectileForce: 0
+    DamageTime: 0
+    HasAction: 0
+    Type: 2
+    Title: +FireRate
+    UpgradeWorth: 0
+  CreatureUpgrade4:
     Damage: 0
     ClipSize: 0
     AmmoReserveSize: 0
@@ -456,12 +529,21 @@ MonoBehaviour:
     BlastRadius: 0
     ProjectileForce: 0
     DamageTime: 0
-    Type: 0
+    HasAction: 1
+    Type: 3
+    Title: Slow
+    UpgradeWorth: 0
 --- !u!4 &61157480 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4786327881684109221, guid: faa7c5c7de8c1494684ebb67cd84a05d,
     type: 3}
   m_PrefabInstance: {fileID: 4786327881677633485}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &69351985 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2147924717401624213, guid: 604d552fdeb02bf40ab3b4da7c2a83f5,
+    type: 3}
+  m_PrefabInstance: {fileID: 1119865308}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &119511251
 PrefabInstance:
@@ -611,6 +693,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fa7234f9ad0918147aff06fd9ced8ca6, type: 3}
+--- !u!1 &169514442 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7783921332914701830, guid: 604d552fdeb02bf40ab3b4da7c2a83f5,
+    type: 3}
+  m_PrefabInstance: {fileID: 1119865308}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &186065199 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3520139637981983934, guid: 3876378a0a86dcf4693ca784ac180a29,
@@ -936,12 +1024,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fa7234f9ad0918147aff06fd9ced8ca6, type: 3}
---- !u!1 &335542012 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 489549631887403417, guid: 604d552fdeb02bf40ab3b4da7c2a83f5,
-    type: 3}
-  m_PrefabInstance: {fileID: 1119865308}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &347797377
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2001,6 +2083,12 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 30
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &639355551 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 709340757624604983, guid: 604d552fdeb02bf40ab3b4da7c2a83f5,
+    type: 3}
+  m_PrefabInstance: {fileID: 1119865308}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &645169072
 GameObject:
   m_ObjectHideFlags: 0
@@ -2113,37 +2201,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 28
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &651870480 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6548949642885993803, guid: 604d552fdeb02bf40ab3b4da7c2a83f5,
-    type: 3}
-  m_PrefabInstance: {fileID: 1119865308}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &651870484
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 651870480}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 86710e43de46f6f4bac7c8e50813a599, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_AspectMode: 0
-  m_AspectRatio: 1
 --- !u!4 &658662139 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3520139637981983934, guid: 3876378a0a86dcf4693ca784ac180a29,
     type: 3}
   m_PrefabInstance: {fileID: 611338613}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &664619442 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1589472332543077775, guid: 604d552fdeb02bf40ab3b4da7c2a83f5,
-    type: 3}
-  m_PrefabInstance: {fileID: 1119865308}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &672375755 stripped
 Transform:
@@ -2280,21 +2342,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 238e160869050874fba39cd608ac568e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Upgrades:
-  - Damage: 1
-    ClipSize: 1
-    AmmoReserveSize: 1
-    ReloadTime: 0
-    FireRate: 2
-    ImpactForce: 1
-    Range: 1
-    FuzeTime: 1
-    BlastRadius: 1
-    ProjectileForce: 1
-    DamageTime: 1
-    Type: 0
-  item_index: 2
-  HasAction: 1
+  worth: 1
 --- !u!135 &791277289
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -3362,16 +3410,61 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 335542012}
+      objectReference: {fileID: 0}
     - target: {fileID: 82798480939569659, guid: 604d552fdeb02bf40ab3b4da7c2a83f5,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 116331215341697347, guid: 604d552fdeb02bf40ab3b4da7c2a83f5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 761744847901309074, guid: 604d552fdeb02bf40ab3b4da7c2a83f5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1317052004797039338, guid: 604d552fdeb02bf40ab3b4da7c2a83f5,
         type: 3}
       propertyPath: m_SortingOrder
       value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 1356205973162281327, guid: 604d552fdeb02bf40ab3b4da7c2a83f5,
+        type: 3}
+      propertyPath: m_AspectRatio
+      value: 2.1176472
+      objectReference: {fileID: 0}
+    - target: {fileID: 2199059987979747120, guid: 604d552fdeb02bf40ab3b4da7c2a83f5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2774413137501476388, guid: 604d552fdeb02bf40ab3b4da7c2a83f5,
+        type: 3}
+      propertyPath: Parents.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2774413137501476388, guid: 604d552fdeb02bf40ab3b4da7c2a83f5,
+        type: 3}
+      propertyPath: Parents.Array.data[0]
+      value: 
+      objectReference: {fileID: 169514442}
+    - target: {fileID: 2774413137501476388, guid: 604d552fdeb02bf40ab3b4da7c2a83f5,
+        type: 3}
+      propertyPath: Parents.Array.data[1]
+      value: 
+      objectReference: {fileID: 639355551}
+    - target: {fileID: 2774413137501476388, guid: 604d552fdeb02bf40ab3b4da7c2a83f5,
+        type: 3}
+      propertyPath: Parents.Array.data[2]
+      value: 
+      objectReference: {fileID: 69351985}
+    - target: {fileID: 2806192668183102846, guid: 604d552fdeb02bf40ab3b4da7c2a83f5,
+        type: 3}
+      propertyPath: m_AspectRatio
+      value: 2.1176472
       objectReference: {fileID: 0}
     - target: {fileID: 3872594758646588735, guid: 604d552fdeb02bf40ab3b4da7c2a83f5,
         type: 3}
@@ -3432,17 +3525,17 @@ PrefabInstance:
         type: 3}
       propertyPath: CreatureGunParent
       value: 
-      objectReference: {fileID: 1863023680}
+      objectReference: {fileID: 0}
     - target: {fileID: 4889217158847058262, guid: 604d552fdeb02bf40ab3b4da7c2a83f5,
         type: 3}
       propertyPath: DeafaultGunParent
       value: 
-      objectReference: {fileID: 2115570206}
+      objectReference: {fileID: 0}
     - target: {fileID: 4889217158847058262, guid: 604d552fdeb02bf40ab3b4da7c2a83f5,
         type: 3}
       propertyPath: ExplosiveWeaponParent
       value: 
-      objectReference: {fileID: 664619442}
+      objectReference: {fileID: 0}
     - target: {fileID: 5044472050245547298, guid: 604d552fdeb02bf40ab3b4da7c2a83f5,
         type: 3}
       propertyPath: m_IsActive
@@ -3497,6 +3590,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Upgrade0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8019886706934724515, guid: 604d552fdeb02bf40ab3b4da7c2a83f5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8069899352487137291, guid: 604d552fdeb02bf40ab3b4da7c2a83f5,
         type: 3}
@@ -4230,21 +4328,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 238e160869050874fba39cd608ac568e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Upgrades:
-  - Damage: 1
-    ClipSize: 0.5
-    AmmoReserveSize: 0
-    ReloadTime: 0.1
-    FireRate: 2
-    ImpactForce: 2
-    Range: 1
-    FuzeTime: 0
-    BlastRadius: 0
-    ProjectileForce: 0
-    DamageTime: 0
-    Type: 0
-  item_index: 0
-  HasAction: 1
+  worth: 1
 --- !u!135 &1383960727
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -5432,12 +5516,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1863023680 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4624128217540768650, guid: 604d552fdeb02bf40ab3b4da7c2a83f5,
-    type: 3}
-  m_PrefabInstance: {fileID: 1119865308}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1868895892
 GameObject:
   m_ObjectHideFlags: 0
@@ -6198,21 +6276,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 238e160869050874fba39cd608ac568e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Upgrades:
-  - Damage: 1
-    ClipSize: 0
-    AmmoReserveSize: 0
-    ReloadTime: 0
-    FireRate: 0.5
-    ImpactForce: 1
-    Range: 1
-    FuzeTime: 0.8
-    BlastRadius: 1
-    ProjectileForce: 1
-    DamageTime: 0
-    Type: 0
-  item_index: 1
-  HasAction: 1
+  worth: 1
 --- !u!135 &2103195781
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -6401,12 +6465,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 24
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2115570206 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3733632827815991633, guid: 604d552fdeb02bf40ab3b4da7c2a83f5,
-    type: 3}
-  m_PrefabInstance: {fileID: 1119865308}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3794967224516955866
 PrefabInstance:
   m_ObjectHideFlags: 0

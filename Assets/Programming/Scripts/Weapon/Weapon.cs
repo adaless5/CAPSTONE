@@ -9,7 +9,7 @@ public enum WeaponType
     CreatureWeapon,
     NumberOfWeapons
 }
-public enum EUpgrade
+public enum EUpgradeType
 {
     Upgrade_1 = 0,
     Upgrade_2,
@@ -23,7 +23,7 @@ public abstract class Weapon : Tool
 
     [Header("Weapon Selected")]
     [SerializeField]
-    protected WeaponType _weapon;
+    public WeaponType _weapon;
 
     [Header("Damage Settings")]
     [SerializeField]
@@ -57,8 +57,8 @@ public abstract class Weapon : Tool
     protected float m_maxDamageTime;
     [Space]
 
-    protected WeaponScalars m_scalars;
-    protected List<EUpgrade> m_currentupgrades;
+    protected WeaponUpgrade m_upgradestats;
+    public List<EUpgradeType> m_currentupgrades;
 
     protected ALTPlayerController _playerController;
     protected float m_fireStart = 0.0f;
@@ -69,8 +69,8 @@ public abstract class Weapon : Tool
     protected void Awake()
     {
         EventBroker.OnPlayerSpawned += InitializePlayer;
-        m_currentupgrades = new List<EUpgrade>();
-        m_scalars.SetToDefault();
+        m_currentupgrades = new List<EUpgradeType>();
+        m_upgradestats.SetToDefault();
     }
 
     protected void InitializePlayer(GameObject player)
@@ -95,29 +95,13 @@ public abstract class Weapon : Tool
     }
 
 
-    public abstract void AddUpgrade(WeaponScalars scalars);
+    public abstract void AddUpgrade(WeaponUpgrade upgrade);
     //public abstract void RemoveUpgrade(WeaponScalars scalars);
-    public abstract void SetHasAction(bool hasaction);
 }
 
 [System.Serializable]
-public struct WeaponScalars
+public struct WeaponUpgrade
 {
-    //WeaponScalars(float amt = 1)
-    //{
-    //    Damage = 1;
-    //    ClipSize = 1;
-    //    AmmoReserveSize = 1;
-    //    ReloadTime = 1;
-    //    FireRate = 1;
-    //    ImpactForce = 1;
-    //    Range = 1;
-    //    FuzeTime = 1;
-    //    BlastRadius = 1;
-    //    ProjectileForce = 1;
-    //    DamageTime = 1;
-    //}
-
     public float Damage;
     public float ClipSize;
     public float AmmoReserveSize;
@@ -129,7 +113,10 @@ public struct WeaponScalars
     public float BlastRadius;
     public float ProjectileForce;
     public float DamageTime;
-    public EUpgrade Type;
+    public bool HasAction;
+    public EUpgradeType Type;
+    public string Title;
+    public int UpgradeWorth;
 
     public void SetToDefault()
     {
@@ -144,6 +131,7 @@ public struct WeaponScalars
         BlastRadius = 1;
         ProjectileForce = 1;
         DamageTime = 1;
+        UpgradeWorth = 0;
     }
 
     public void SetToZero()
@@ -161,7 +149,7 @@ public struct WeaponScalars
         DamageTime = 0;
     }
 
-    public static WeaponScalars operator +(WeaponScalars a, WeaponScalars b)
+    public static WeaponUpgrade operator +(WeaponUpgrade a, WeaponUpgrade b)
     {
         a.Damage += b.Damage;
         a.ClipSize += b.ClipSize;
@@ -178,7 +166,7 @@ public struct WeaponScalars
         return a;
     }
 
-    public static WeaponScalars operator -(WeaponScalars a, WeaponScalars b)
+    public static WeaponUpgrade operator -(WeaponUpgrade a, WeaponUpgrade b)
     {
         a.Damage -= b.Damage;
         a.ClipSize -= b.ClipSize;

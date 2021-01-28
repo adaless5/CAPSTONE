@@ -33,11 +33,11 @@ public class CreatureWeapon : Weapon, ISaveable
         bIsActive = false;
         bIsObtained = false;
 
-        m_fireRate = 0.5f;
-        m_hitImpact = 10.0f;
-        m_damageAmount = 5.0f;
-        m_maxDamageTime = 1f;
-        m_projectileLifeTime = 6.0f;
+        m_fireRate = 0.5f * m_upgradestats.FireRate;
+        m_hitImpact = 10.0f * m_upgradestats.ImpactForce;
+        m_damageAmount = 5.0f * m_upgradestats.Damage;
+        m_maxDamageTime = 1f * m_upgradestats.DamageTime;
+        m_projectileLifeTime = 6.0f * m_upgradestats.FuzeTime;
     }
 
     
@@ -153,23 +153,19 @@ public class CreatureWeapon : Weapon, ISaveable
             //gunAnimator.SetBool("bIsReloading", false);
         }
         
-    public override void AddUpgrade(WeaponScalars scalars)
+    public override void AddUpgrade(WeaponUpgrade upgrade)
     {
-        m_scalars += scalars;
-        m_damageAmount *= m_scalars.Damage;
-        m_fireRate *= m_scalars.FireRate;
-        m_hitImpact *= m_scalars.ImpactForce;
-        m_projectileLifeTime *= m_scalars.FuzeTime;
-        m_maxDamageTime *= m_scalars.DamageTime;
+        m_upgradestats += upgrade;
+        m_damageAmount *= upgrade.Damage + 1;
+        m_fireRate *= upgrade.FireRate + 1;
+        m_hitImpact *= upgrade.ImpactForce + 1;
+        m_projectileLifeTime *= upgrade.FuzeTime + 1;
+        m_maxDamageTime *= upgrade.DamageTime + 1;
+        if (upgrade.HasAction) m_bHasActionUpgrade = true;
 
-        m_currentupgrades.Add(scalars.Type);
+        m_currentupgrades.Add(upgrade.Type);
     }
     
-    public override void SetHasAction(bool hasaction)
-    {
-        m_bHasActionUpgrade = hasaction;
-        m_currentupgrades.Add(EUpgrade.Action);
-    }
 
     //Function for AmmoPickup class
     public void AmmoPickup(WeaponType type, int numberOfClips)

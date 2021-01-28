@@ -4,50 +4,65 @@ using UnityEngine;
 
 public class UpgradeAltar : MonoBehaviour
 {
+    [Header("Altar Settings")]
+    [SerializeField]
+    int NumberOfPermittedUpgrades = 99;
+
     [Header("Deafault Upgrades")]
     [SerializeField]
-    WeaponScalars DeafaultUpgrade1;
+    WeaponUpgrade DeafaultUpgrade1;
     [SerializeField]
-    WeaponScalars DeafaultUpgrade2;
+    WeaponUpgrade DeafaultUpgrade2;
     [SerializeField]
-    WeaponScalars DeafaultUpgrade3;
+    WeaponUpgrade DeafaultUpgrade3;
+    [SerializeField]
+    WeaponUpgrade DeafaultUpgrade4;
 
     [Header("Explosive Upgrades")]
     [SerializeField]
-    WeaponScalars ExplosiveUpgrade1;
+    WeaponUpgrade ExplosiveUpgrade1;
     [SerializeField]
-    WeaponScalars ExplosiveUpgrade2;
+    WeaponUpgrade ExplosiveUpgrade2;
     [SerializeField]
-    WeaponScalars ExplosiveUpgrade3;
+    WeaponUpgrade ExplosiveUpgrade3;
+    [SerializeField]
+    WeaponUpgrade ExplosiveUpgrade4;
 
     [Header("Creature Upgrades")]
     [SerializeField]
-    WeaponScalars CreatureUpgrade1;
+    WeaponUpgrade CreatureUpgrade1;
     [SerializeField]
-    WeaponScalars CreatureUpgrade2;
+    WeaponUpgrade CreatureUpgrade2;
     [SerializeField]
-    WeaponScalars CreatureUpgrade3;
+    WeaponUpgrade CreatureUpgrade3;
+    [SerializeField]
+    WeaponUpgrade CreatureUpgrade4;
 
     //dont need variable for action, its just a bool
 
-    List<WeaponScalars> _upgrades;
+    List<WeaponUpgrade> _upgrades;
     private void Start()
     {
-        _upgrades = new List<WeaponScalars>();
+        _upgrades = new List<WeaponUpgrade>();
         _upgrades.Add(DeafaultUpgrade1);
         _upgrades.Add(DeafaultUpgrade2);
         _upgrades.Add(DeafaultUpgrade3);
+        _upgrades.Add(DeafaultUpgrade4);
         _upgrades.Add(ExplosiveUpgrade1);
         _upgrades.Add(ExplosiveUpgrade2);
         _upgrades.Add(ExplosiveUpgrade3);
+        _upgrades.Add(ExplosiveUpgrade4);
         _upgrades.Add(CreatureUpgrade1);
         _upgrades.Add(CreatureUpgrade2);
         _upgrades.Add(CreatureUpgrade3);
+        _upgrades.Add(CreatureUpgrade4);
+
     }
     private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.GetComponentInChildren<UpgradeMenuUI>())
         {
+            other.gameObject.GetComponentInChildren<UpgradeMenuUI>()._numUpgradesAllowed = NumberOfPermittedUpgrades;
             other.gameObject.GetComponentInChildren<UpgradeMenuUI>().Activate();
             other.gameObject.GetComponentInChildren<UpgradeMenuUI>().InitUpgradeMenu(_upgrades);
         }

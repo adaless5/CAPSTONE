@@ -51,6 +51,8 @@ public class ALTPlayerController : MonoBehaviour
 
     public Vector3 m_Momentum { get; private set; } = Vector3.zero;
 
+    public int m_UpgradeCurrencyAmount = 0;
+
     public Belt _equipmentBelt;
     public Belt _weaponBelt;
 

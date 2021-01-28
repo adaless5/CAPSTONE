@@ -2,48 +2,54 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class UpgradeMenuUI : MonoBehaviour
 {
     // Start is called before the first frame update
     public GameObject UpgradeMenu;
-    public GameObject DeafaultGunParent;
-    public GameObject CreatureGunParent;
-    public GameObject ExplosiveWeaponParent;
+
+    public List<GameObject> Parents;
+
+    public int _numUpgradesAllowed = 999;
+    int upgradeamt = 0;
 
     GameObject _player;
     bool _bInMenu = false;
 
     List<Weapon> _weapons;
-    List<WeaponScalars> _upgrades;
+    List<WeaponUpgrade> _upgrades;
+    List<Button> _buttons;
 
-    int debug;
+    bool hasButtonListeners = false;
     void Start()
     {
         _weapons = new List<Weapon>();
-
+        _buttons = new List<Button>();
         _player = GameObject.FindGameObjectWithTag("Player");
     }
 
-    // Update is called once per frame
     private void LateUpdate()
     {
         if (Input.GetButtonDown("Pause") && _bInMenu == true)
         {
             Deactivate();
         }
+
     }
 
     public void Activate()
     {
-        UpgradeMenu.SetActive(true);
-        _bInMenu = true;
-        Time.timeScale = 0f;
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
-        ALTPlayerController pc = _player.GetComponent<ALTPlayerController>();
-        //pc.enabled = false;
-        pc.m_ControllerState = ALTPlayerController.ControllerState.Menu;
+        if (upgradeamt <= _numUpgradesAllowed)
+        {
+            UpgradeMenu.SetActive(true);
+            _bInMenu = true;
+            Time.timeScale = 0f;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            ALTPlayerController pc = _player.GetComponent<ALTPlayerController>();
+            pc.m_ControllerState = ALTPlayerController.ControllerState.Menu;
+        }
     }
 
     public void Deactivate()
@@ -54,76 +60,117 @@ public class UpgradeMenuUI : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         ALTPlayerController pc = _player.GetComponent<ALTPlayerController>();
-        //pc.enabled = false;
         pc.m_ControllerState = ALTPlayerController.ControllerState.Play;
     }
 
-    public void InitUpgradeMenu(List<WeaponScalars> list)
+    public void InitUpgradeMenu(List<WeaponUpgrade> list)
     {
-        _upgrades = list;
-        for (int i = 0; i < (int)WeaponType.NumberOfWeapons; i++)
+        if (upgradeamt <= _numUpgradesAllowed)
         {
-            Tool item = _player.GetComponent<ALTPlayerController>()._weaponBelt._items[i];
-            if(item.GetComponent<Weapon>())
-            {
-                Weapon weapon = item.GetComponent<Weapon>();
-                _weapons.Add(weapon);
-            }
-        }
-        //todo get weapons and what upgrades they have
-        //get all buttons and add function listeners
-        for (int i = 0; i < 3; i++)
-        {
-            if(DeafaultGunParent.transform.Find("Upgrade" + i))
-            {
-                GameObject obj = DeafaultGunParent.transform.Find("Upgrade" + i).gameObject;
-                if(obj.GetComponent<Button>())
-                {
-                    int x = i;
-                    Button button = obj.GetComponent<Button>();
-                    button.onClick.AddListener(() => AddUpgrade(0, x));
-                    debug = i;
-                }
-            }
-            if (ExplosiveWeaponParent.transform.Find("Upgrade" + i))
-            {
-                GameObject obj = ExplosiveWeaponParent.transform.Find("Upgrade" + i).gameObject;
-                if (obj.GetComponent<Button>())
-                {
-                    int x = i;
-                    Button button = obj.GetComponent<Button>();
-                    button.onClick.AddListener(() => AddUpgrade(1, x));
-                }
-            }
-            if (CreatureGunParent.transform.Find("Upgrade" + i))
-            {
-                GameObject obj = CreatureGunParent.transform.Find("Upgrade" + i).gameObject;
-                if (obj.GetComponent<Button>())
-                {
-                    int x = i;
-                    Button button = obj.GetComponent<Button>();
-                    button.onClick.AddListener(() => AddUpgrade(2, x));
-                }
-            }
-        
-        }
+            _upgrades = list;
+            _weapons.Clear();
+            _buttons.Clear();
 
-        Debug.Log(debug.ToString());
-        //enable and disable icons and buttons as needed
+            //set up weapon display and gets info from weapons
+            for (int i = 0; i < (int)WeaponType.NumberOfWeapons; i++)
+            {
+                Tool item = _player.GetComponent<ALTPlayerController>()._weaponBelt._items[i];
+                if (item.GetComponent<Weapon>())
+                {
+                    Weapon weapon = item.GetComponent<Weapon>();
+                    _weapons.Add(weapon);
+
+                    if (weapon.bIsObtained)
+                    {
+                        Parents[i].SetActive(true);
+                    }
+
+                }
+            }
+
+            //Set up buttons 
+
+            for(int i = 0; i < (int)WeaponType.NumberOfWeapons; i++)
+            {
+                for (int j = 0; j < (int)EUpgradeType.NumUpgrades; j++)
+                {
+                    if (Parents[i].transform.Find("Upgrade" + j))
+                    {
+                        GameObject obj = Parents[i].transform.Find("Upgrade" + j).gameObject;
+                        if (obj.GetComponent<Button>())
+                        {
+                            int x = i;
+                            int y = j;
+                            Button button = obj.GetComponent<Button>();
+                            if (!hasButtonListeners) button.onClick.AddListener(() => AddUpgrade(x, y));
+                            button.gameObject.SetActive(true);
+                            if (CheckHasUpgrade(i, j)) button.gameObject.SetActive(false);
+                            _buttons.Add(button);
+                        }
+                    }
+                }
+            }
+
+            //set up button text
+            for (int i = 0; i < _buttons.Count; i++)
+            {
+                if(_buttons[i].GetComponentInChildren<TMP_Text>())
+                {
+                    _buttons[i].GetComponentInChildren<TMP_Text>().text = _upgrades[i].Title;
+                }
+            }
+            hasButtonListeners = true;
+
+        }
     }
 
     public void AddUpgrade(int weaponindex, int upgradeindex)
     {
-        Debug.Log(debug.ToString());
-        Debug.Log(upgradeindex.ToString());
-        int x = _upgrades.Count / 3;
-        int y = (x * weaponindex) + upgradeindex;
+        int y = ((int)EUpgradeType.NumUpgrades * weaponindex) + upgradeindex;
 
-        _weapons[weaponindex].AddUpgrade(_upgrades[y]);
+        if (CheckValidBuy(y))
+        {
+            _player.GetComponent<ALTPlayerController>().m_UpgradeCurrencyAmount -= _upgrades[upgradeindex].UpgradeWorth;
+            _weapons[weaponindex].AddUpgrade(_upgrades[y]);
+            UpdateUI(y);
+            upgradeamt++;
+
+            if (upgradeamt >= _numUpgradesAllowed)
+            {
+                Deactivate();
+            }
+        }
     }
 
-    public void AddAction()
+    private void UpdateUI(int index)
     {
-
+        _buttons[index].gameObject.SetActive(false);
     }
+
+    private bool CheckHasUpgrade(int weapon, int upgrade)
+    {
+        bool hasup = false;
+        if (weapon < _weapons.Count)
+        {
+            foreach (EUpgradeType up in _weapons[weapon].m_currentupgrades)
+            {
+                if (up == (EUpgradeType)upgrade)
+                {
+                    hasup = true;
+                }
+            }
+        }
+        return hasup;
+    }
+
+    private bool CheckValidBuy(int upgradeindex)
+    {
+        if (_upgrades[upgradeindex].UpgradeWorth <= _player.GetComponent<ALTPlayerController>().m_UpgradeCurrencyAmount)
+        {
+            return true;
+        }
+        
+        return false;
+    }
+
 }

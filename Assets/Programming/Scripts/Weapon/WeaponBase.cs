@@ -35,12 +35,11 @@ public class WeaponBase : Weapon, ISaveable
 
         //TODO: Readd Save implementation
         //SaveSystem.SaveEvent += SaveDataOnSceneChange;
-        //Debug.Log(m_scalars.Damage);
-        m_weaponClipSize = 6 * (int)m_scalars.ClipSize;
-        m_reloadTime = 2.0f * m_scalars.ReloadTime;
-        m_fireRate = 0.8f * m_scalars.FireRate; //Default Gun shoots every 1.25 seconds, can be adjusted in editor - VR
-        m_hitImpact = 50.0f * m_scalars.ImpactForce;
-        m_weaponRange = 50.0f * m_scalars.Range;
+        m_weaponClipSize = 6 * (int)m_upgradestats.ClipSize;
+        m_reloadTime = 2.0f * m_upgradestats.ReloadTime;
+        m_fireRate = 0.8f * m_upgradestats.FireRate; //Default Gun shoots every 1.25 seconds, can be adjusted in editor - VR
+        m_hitImpact = 50.0f * m_upgradestats.ImpactForce;
+        m_weaponRange = 50.0f * m_upgradestats.Range;
         m_fireStart = 0.0f;       
         outOfAmmoAnimator = FindObjectOfType<AmmoUI>().GetComponent<Animator>();
         gunAnimator = GetComponent<Animator>();
@@ -128,7 +127,7 @@ public class WeaponBase : Weapon, ISaveable
     IEnumerator OnReload()
     {
         bIsReloading = true;
-        gunAnimator.speed = 1 / m_scalars.ReloadTime; // adjusts for reload time upgrades
+        gunAnimator.speed = 1 / m_upgradestats.ReloadTime; // adjusts for reload time upgrades
         gunAnimator.SetBool("bIsReloading", true);
         yield return new WaitForSeconds(m_reloadTime);
 
@@ -226,17 +225,20 @@ public class WeaponBase : Weapon, ISaveable
         }
     }
 
-    public override void AddUpgrade(WeaponScalars scalars)
+    public override void AddUpgrade(WeaponUpgrade upgrade)
     {
-        m_scalars += scalars;
-        m_damageAmount *= m_scalars.Damage;
-        m_weaponClipSize *= (int)m_scalars.ClipSize;
-        m_reloadTime *= m_scalars.ReloadTime;
-        m_fireRate *= m_scalars.FireRate;
-        m_hitImpact *= m_scalars.ImpactForce;
-        m_weaponRange *= m_scalars.Range;
+        //TODO:: this math sucks, make it better
+        m_upgradestats += upgrade;
+        m_damageAmount *= upgrade.Damage + 1;
+        m_weaponClipSize *= (int)upgrade.ClipSize + 1;
+        m_reloadTime *= upgrade.ReloadTime + 1;
+        m_fireRate *= upgrade.FireRate + 1;
+        m_hitImpact *= upgrade.ImpactForce + 1;
+        m_weaponRange *= upgrade.Range + 1;
 
-        m_currentupgrades.Add(scalars.Type);
+        if (upgrade.HasAction) m_bHasActionUpgrade = true;
+
+        m_currentupgrades.Add(upgrade.Type);
     }
 
     //todo: get this figured out
@@ -250,18 +252,10 @@ public class WeaponBase : Weapon, ISaveable
     //    m_weaponRange = 50.0f * m_scalars.Range;
     //}
 
-    public override void SetHasAction(bool hasaction)
-    {
-        m_bHasActionUpgrade = hasaction;
-        m_currentupgrades.Add(EUpgrade.Action);
-    }
-
     void UpgradedFire()
     {
-        Debug.Log("Upgraded fire");
         for (int i = -1; i < 2; i++)
         {
-            Debug.Log(i.ToString());
             RaycastHit hitInfo;
             if (Physics.Raycast(gunCamera.transform.position, Quaternion.Euler(0, 15f * i, 0) * gunCamera.transform.forward, out hitInfo, m_weaponRange))
             {
