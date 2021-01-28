@@ -423,26 +423,29 @@ public class ALTPlayerController : MonoBehaviour
     {
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
-        
+       
+
         //Sprinting logic & use of player's stamina - VR
-        if(CheckForSprintInput() && m_stamina.GetCurrentStamina() > 0)
+        if (CheckForSprintInput() && m_stamina.GetCurrentStamina() > 0 && _controller.velocity.magnitude > 0)
         {
             m_Velocity = transform.right * x * m_SprintSpeed + transform.forward * z * m_SprintSpeed;
-            m_stamina.UseStamina();
-        }
-        else if(CheckForSprintInputReleased())
-        {
-            m_stamina.StartCoroutine(m_stamina.RegenerateStamina());
-        }
+            m_stamina.UseStamina();          
+        }       
         else
         {
             m_Velocity = transform.right * x * m_MoveSpeed + transform.forward * z * m_MoveSpeed;
+        }
+
+        if (CheckForSprintInputReleased() || (_controller.velocity.magnitude == 0 && m_stamina.bCanRegenerate))
+        {
+            m_stamina.StartCoroutine(m_stamina.RegenerateStamina());
         }
 
         if (!bOnSlope)
         {
             HandleJump();
         }
+        
 
         ApplyGravity();
 
