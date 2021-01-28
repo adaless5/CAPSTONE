@@ -28,11 +28,12 @@ public class HUD : MonoBehaviour
     public Image m_toolIcon;
     public Sprite[] toolIcons;
 
-    //Ammo Info
-    public static int m_currentAmmo;
-    public static int m_overallAmmo;
-    public static int m_clipSize;
+    //HUD Overlay
+    public Image m_HUDOverlay;
 
+    //public RectTransform m_armorTransform;
+    //public RectTransform m_healthTransform;
+  
 
     private void Awake()
     {
@@ -46,6 +47,11 @@ public class HUD : MonoBehaviour
         m_weaponIcon = gameObject.transform.GetChild(1).Find("Weapon_Icon").GetComponent<Image>();
         m_ammoIcon = gameObject.transform.GetChild(1).Find("Ammo_Icon").GetComponent<Image>();
         m_toolIcon = gameObject.transform.GetChild(1).Find("Tool_Icon").GetComponent<Image>();
+        //HUD Overlay
+        m_HUDOverlay = gameObject.transform.GetChild(1).GetComponent<Image>();
+
+        //m_armorTransform = gameObject.transform.GetChild(2).GetComponent<RectTransform>();
+        //m_healthTransform = gameObject.transform.GetChild(3).GetComponent<RectTransform>();
 
     }
 
@@ -72,6 +78,12 @@ public class HUD : MonoBehaviour
         toolIcons[0] = Resources.Load<Sprite>("Sprites/Icons/Icon_Empty");
         toolIcons[1] = Resources.Load<Sprite>("Sprites/Icons/Icon_Grapple");
         toolIcons[2] = Resources.Load<Sprite>("Sprites/Icons/Icon_Sword_HUD");
+
+        //HUD Overlay        
+        m_HUDOverlay.sprite = Resources.Load<Sprite>("Sprites/HUD/HUD_Overlay");
+
+        //m_armorTransform.anchoredPosition = m_HUDOverlay.transform.position;
+        //m_healthTransform.anchoredPosition = m_armorTransform.anchoredPosition;
     }
 
     // Update is called once per frame

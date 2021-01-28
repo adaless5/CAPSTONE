@@ -21,6 +21,7 @@ public class Stamina : MonoBehaviour
 
     public StaminaUI staminaBar;
     private bool bIsRegenerating;
+    public bool bCanRegenerate;
 
     // Start is called before the first frame update
     void Start()
@@ -31,6 +32,7 @@ public class Stamina : MonoBehaviour
         m_energyAmount = 2f;       
         m_regenRate = 0.25f;       
         bIsRegenerating = false;
+        bCanRegenerate = false;
         m_timerMax = 0.15f;
         m_staminaTimer = m_timerMax;
 
@@ -53,6 +55,7 @@ public class Stamina : MonoBehaviour
     public void UseStamina()
     {
         bIsRegenerating = false;
+        bCanRegenerate = true;
         
         if (m_stamina > 0)
         {
@@ -64,8 +67,7 @@ public class Stamina : MonoBehaviour
                 m_staminaTimer = m_timerMax;
 
                 if (staminaBar != null)
-                    staminaBar.SetStamina(m_stamina);
-                if (bDebug) Debug.Log("Losing Stamina. Stamina at " + m_stamina);
+                    staminaBar.SetStamina(m_stamina);              
             }        
 
         }
@@ -74,23 +76,25 @@ public class Stamina : MonoBehaviour
 
     public IEnumerator RegenerateStamina()
     {
-        bIsRegenerating = true;
-        while (m_stamina < m_maxStamina && bIsRegenerating == true)
+        if(bIsRegenerating == false)
         {
-            if (bDebug) Debug.Log("Regenerating...");
+            bIsRegenerating = true;
+            while (m_stamina < m_maxStamina && bIsRegenerating == true)
+            {
+                if (bDebug) Debug.Log("Regenerating...");
 
-            m_stamina += m_energyAmount;
-            if (bDebug) Debug.Log("Stamina amount: " + m_stamina);
-            yield return new WaitForSeconds(m_regenRate);
+                m_stamina += m_energyAmount;               
+                yield return new WaitForSeconds(m_regenRate);
 
-            if (staminaBar != null)
-                staminaBar.SetStamina(m_stamina);
+                if (staminaBar != null)
+                    staminaBar.SetStamina(m_stamina);
 
-            m_stamina = Mathf.Clamp(m_stamina, 0, m_maxStamina);
+                m_stamina = Mathf.Clamp(m_stamina, 0, m_maxStamina);
+            }
+
+            bIsRegenerating = false;
+            bCanRegenerate = true;           
+            yield return null;
         }
-
-        bIsRegenerating = false;
-        if (bDebug) Debug.Log("Stamina Regenerated");
-        yield return null;
     }
 }
