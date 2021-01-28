@@ -103,11 +103,13 @@ public class MineSpawner : Weapon, ISaveable
         m_blastforce *= m_scalars.ImpactForce;
         m_damageAmount *= m_scalars.Damage;
 
+        m_currentupgrades.Add(scalars.Type);
     }
 
     public override void SetHasAction(bool hasaction)
     {
         m_bHasActionUpgrade = hasaction;
+        m_currentupgrades.Add(EUpgrade.Action);
     }
 
     public void LoadDataOnSceneEnter()

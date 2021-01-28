@@ -161,15 +161,18 @@ public class CreatureWeapon : Weapon, ISaveable
         m_hitImpact *= m_scalars.ImpactForce;
         m_projectileLifeTime *= m_scalars.FuzeTime;
         m_maxDamageTime *= m_scalars.DamageTime;
+
+        m_currentupgrades.Add(scalars.Type);
     }
     
     public override void SetHasAction(bool hasaction)
     {
         m_bHasActionUpgrade = hasaction;
+        m_currentupgrades.Add(EUpgrade.Action);
     }
 
-        //Function for AmmoPickup class
-        public void AmmoPickup(WeaponType type, int numberOfClips)
+    //Function for AmmoPickup class
+    public void AmmoPickup(WeaponType type, int numberOfClips)
         {
             //if (type == WeaponType.CreatureWeapon)
             if(bIsActive)

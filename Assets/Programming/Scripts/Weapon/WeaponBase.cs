@@ -235,6 +235,8 @@ public class WeaponBase : Weapon, ISaveable
         m_fireRate *= m_scalars.FireRate;
         m_hitImpact *= m_scalars.ImpactForce;
         m_weaponRange *= m_scalars.Range;
+
+        m_currentupgrades.Add(scalars.Type);
     }
 
     //todo: get this figured out
@@ -251,6 +253,7 @@ public class WeaponBase : Weapon, ISaveable
     public override void SetHasAction(bool hasaction)
     {
         m_bHasActionUpgrade = hasaction;
+        m_currentupgrades.Add(EUpgrade.Action);
     }
 
     void UpgradedFire()

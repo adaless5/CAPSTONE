@@ -9,7 +9,14 @@ public enum WeaponType
     CreatureWeapon,
     NumberOfWeapons
 }
-
+public enum EUpgrade
+{
+    Upgrade_1 = 0,
+    Upgrade_2,
+    Upgrade_3,
+    Action,
+    NumUpgrades
+}
 public abstract class Weapon : Tool
 {
 
@@ -51,6 +58,7 @@ public abstract class Weapon : Tool
     [Space]
 
     protected WeaponScalars m_scalars;
+    protected List<EUpgrade> m_currentupgrades;
 
     protected ALTPlayerController _playerController;
     protected float m_fireStart = 0.0f;
@@ -61,6 +69,7 @@ public abstract class Weapon : Tool
     protected void Awake()
     {
         EventBroker.OnPlayerSpawned += InitializePlayer;
+        m_currentupgrades = new List<EUpgrade>();
         m_scalars.SetToDefault();
     }
 
@@ -94,6 +103,21 @@ public abstract class Weapon : Tool
 [System.Serializable]
 public struct WeaponScalars
 {
+    //WeaponScalars(float amt = 1)
+    //{
+    //    Damage = 1;
+    //    ClipSize = 1;
+    //    AmmoReserveSize = 1;
+    //    ReloadTime = 1;
+    //    FireRate = 1;
+    //    ImpactForce = 1;
+    //    Range = 1;
+    //    FuzeTime = 1;
+    //    BlastRadius = 1;
+    //    ProjectileForce = 1;
+    //    DamageTime = 1;
+    //}
+
     public float Damage;
     public float ClipSize;
     public float AmmoReserveSize;
@@ -105,6 +129,7 @@ public struct WeaponScalars
     public float BlastRadius;
     public float ProjectileForce;
     public float DamageTime;
+    public EUpgrade Type;
 
     public void SetToDefault()
     {
@@ -170,5 +195,7 @@ public struct WeaponScalars
 
         return a;
     }
+
+
 }
 
