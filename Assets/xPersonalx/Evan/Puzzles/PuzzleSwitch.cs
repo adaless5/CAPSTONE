@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PuzzleSwitch : MonoBehaviour
+public class PuzzleSwitch : MonoBehaviour, ISaveable
 {
     public bool _DoesSwitchReset;
     public bool _DoesStartTurnedOn;
@@ -51,6 +51,12 @@ public class PuzzleSwitch : MonoBehaviour
 
     float fSwitchTimer;
     float fResetTimer;
+
+
+    void Awake()
+    {
+        LoadDataOnSceneEnter();
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -118,6 +124,7 @@ public class PuzzleSwitch : MonoBehaviour
             bIsActive = onOff;
             SetSwitchModel(onOff);
             bCanSwitch = false;
+            SaveDataOnSceneChange();
         }
     }
 
@@ -218,6 +225,19 @@ public class PuzzleSwitch : MonoBehaviour
                 _OnSwitch.SetActive(false);
             }
         }
+    }
+
+
+    public void SaveDataOnSceneChange()
+    {
+        SaveSystem.Save(gameObject.name, "bIsActive", gameObject.scene.name, bIsActive);
+
+    }
+
+    public void LoadDataOnSceneEnter()
+    {
+        bIsActive = SaveSystem.LoadBool(gameObject.name, "bIsActive", gameObject.scene.name);
+
     }
 
 }

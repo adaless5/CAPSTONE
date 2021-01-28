@@ -11,50 +11,67 @@ public class AmmoUI : MonoBehaviour
     public int m_clipSize;   
     Weapon m_baseGun;
     Weapon m_creatureWeapon;
+    Weapon m_grenade;
+
+    AmmoController m_ammo;
     Text m_text;
 
     // Start is called before the first frame update
     void Awake()
     {
-        //m_player = FindObjectOfType<ALTPlayerController>();
         m_text = GetComponent<Text>();
         m_baseGun = FindObjectOfType<WeaponBase>();
         m_creatureWeapon = FindObjectOfType<CreatureWeapon>();
-        //m_currentAmmo = weaponType.GetCurrentAmmo();
-        //weaponType =  m_player._weaponBelt.GetToolAtIndex(0);
-        
+        m_grenade = FindObjectOfType<MineSpawner>();
+        m_ammo = FindObjectOfType<AmmoController>();     
     }
 
     private void Update()
     {    
         if(m_baseGun.bIsActive)
-        {
-            SetBaseGunInfo();
-            SetAmmoText(m_currentAmmo, m_overallAmmo, m_clipSize);
+        {           
+            SetBaseGunInfo();           
         }
         else if(m_creatureWeapon.bIsActive)
         {
-            SetCreatureWeaponInfo();
-            SetAmmoText(m_currentAmmo, m_overallAmmo, m_clipSize);
+            SetCreatureWeaponInfo();           
+        }
+        else if(m_grenade.bIsActive)
+        {
+            SetGrenadeInfo();           
         }
         else
         {
             SetAmmoText(0, 0, 0);
-        }
+        }         
     }
 
     private void SetBaseGunInfo()
     {
-        m_currentAmmo = m_baseGun.GetCurrentAmmo();
-        m_overallAmmo = m_baseGun.GetOverallAmmo();
-        m_clipSize = m_baseGun.GetClipSize();
+        m_ammo.SetAmmoType((int)WeaponType.BaseWeapon);
+        GetAmmoInfo();
+        SetAmmoText(m_currentAmmo, m_overallAmmo, m_clipSize);
     }
 
     private void SetCreatureWeaponInfo()
     {
-        m_currentAmmo = m_creatureWeapon.GetCurrentAmmo();
-        m_overallAmmo = m_creatureWeapon.GetOverallAmmo();
-        m_clipSize = m_creatureWeapon.GetClipSize();
+        m_ammo.SetAmmoType((int)WeaponType.CreatureWeapon);
+        GetAmmoInfo();
+        SetAmmoText(m_currentAmmo, m_overallAmmo, m_clipSize);
+    }
+
+    private void SetGrenadeInfo()
+    {
+        m_ammo.SetAmmoType((int)WeaponType.GrenadeWeapon);
+        GetAmmoInfo();
+        SetAmmoText(m_currentAmmo, m_overallAmmo, m_clipSize);
+    }
+
+    private void GetAmmoInfo()
+    {
+        m_currentAmmo = m_ammo.GetCurrentAmmo();
+        m_overallAmmo = m_ammo.GetOverallAmmo();
+        m_clipSize = m_ammo.GetClipSize();
     }
 
     public void SetAmmoText(int currentAmmo, int overallAmmo, int clipSize)
