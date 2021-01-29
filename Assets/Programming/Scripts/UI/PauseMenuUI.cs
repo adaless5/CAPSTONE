@@ -26,19 +26,7 @@ public class PauseMenuUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButtonDown("Pause"))
-        {
-            if (GameIsPaused)
-            {
-                Unpause();
-            }
-            else
-            {
-                Pause();
 
-            }
-        }
-        //Debug.Log(EventSystem.current.currentSelectedGameObject);
     }
 
     private void OnEnable()
@@ -61,18 +49,26 @@ public class PauseMenuUI : MonoBehaviour
 
     public void Pause()
     {
-        enabled = true;
-        PauseMenu.SetActive(true);
-        Time.timeScale = 0f;
-        EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(pauseFirst);
+        if (GameIsPaused)
+        {
+            Unpause();
+        }
+        else
+        {
+            enabled = true;
+            PauseMenu.SetActive(true);
+            Time.timeScale = 0f;
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(pauseFirst);
 
-        GameIsPaused = true;
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
-        ALTPlayerController pc = Player.GetComponent<ALTPlayerController>();
-        //pc.enabled = false;
-        pc.m_ControllerState = ALTPlayerController.ControllerState.Menu;
+            GameIsPaused = true;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            ALTPlayerController pc = Player.GetComponent<ALTPlayerController>();
+            //pc.enabled = false;
+            pc.m_ControllerState = ALTPlayerController.ControllerState.Menu;
+
+        }
     }
 
     public void LoadMenu()

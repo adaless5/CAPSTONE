@@ -45,9 +45,18 @@ public class WeaponBase : Weapon, ISaveable
         outOfAmmoAnimator = FindObjectOfType<AmmoUI>().GetComponent<Animator>();
         gunAnimator = GetComponent<Animator>();
 
+        EventBroker.OnPlayerSpawned += InitWeaponControls;
+ 
+
         //Initializing AmmoCount and UI
         m_currentAmmoCount = m_weaponClipSize;
         m_overallAmmoCount = m_currentAmmoCount;
+    }
+
+    public void InitWeaponControls(GameObject player)
+    {
+        //Controls initializing for reloading
+        _playerController._controls.Player.Reload.performed += ctx => Reload();
     }
 
     public override void Start()
@@ -57,10 +66,12 @@ public class WeaponBase : Weapon, ISaveable
         GetComponent<MeshRenderer>().enabled = true;
         bIsActive = true;
         bIsObtained = true;
+
     }
 
     void OnEnable()
     {
+
         bIsReloading = false;       
     }
 
@@ -104,11 +115,6 @@ public class WeaponBase : Weapon, ISaveable
             StartCoroutine(OnReload());
             return;
         }
-        else if(Input.GetButtonDown("Reload") && m_overallAmmoCount >= 1)
-        {
-            StartCoroutine(OnReload());
-            return;
-        }
 
         if (_playerController.CheckForUseWeaponInput() && Time.time >= m_fireStart)
         {
@@ -122,6 +128,14 @@ public class WeaponBase : Weapon, ISaveable
             {
                 outOfAmmoAnimator.SetBool("bIsOut", true);               
             }
+        }
+    }
+
+    private void Reload()
+    {
+        if (m_overallAmmoCount >= 1)
+        {
+            StartCoroutine(OnReload());
         }
     }
 
