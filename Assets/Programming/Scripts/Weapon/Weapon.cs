@@ -9,14 +9,21 @@ public enum WeaponType
     CreatureWeapon,
     NumberOfWeapons
 }
-
+public enum EUpgradeType
+{
+    Upgrade_1 = 0,
+    Upgrade_2,
+    Upgrade_3,
+    Action,
+    NumUpgrades
+}
 public abstract class Weapon : Tool
 {
 
 
     [Header("Weapon Selected")]
     [SerializeField]
-    protected WeaponType _weapon;
+    public WeaponType _weapon;
 
     [Header("Damage Settings")]
     [SerializeField]
@@ -25,8 +32,7 @@ public abstract class Weapon : Tool
     [Header("Weapon Settings")]
     [SerializeField]
     protected int m_weaponClipSize = 6;
-    protected int m_currentAmmoCount;
-    protected int m_overallAmmoCount;
+    protected int m_startingOverstockAmmo = 0;
 
     [SerializeField]
     protected float m_reloadTime = 2.0f;
@@ -50,9 +56,11 @@ public abstract class Weapon : Tool
     protected float m_maxDamageTime;
     [Space]
 
-    protected WeaponScalars m_scalars;
+    protected WeaponUpgrade m_upgradestats;
+    public List<EUpgradeType> m_currentupgrades;
 
     protected ALTPlayerController _playerController;
+    protected AmmoController _ammoController;
     protected float m_fireStart = 0.0f;
     protected bool bIsReloading = false;
 
@@ -61,38 +69,26 @@ public abstract class Weapon : Tool
     protected void Awake()
     {
         EventBroker.OnPlayerSpawned += InitializePlayer;
-        m_scalars.SetToDefault();
+        m_currentupgrades = new List<EUpgradeType>();
+        m_upgradestats.SetToDefault();
     }
 
     protected void InitializePlayer(GameObject player)
     {
-        _playerController = player.GetComponent<ALTPlayerController>();
+        _playerController = player.GetComponent<ALTPlayerController>();        
         //Debug.Log(_playerController);
     }
 
-    public int GetCurrentAmmo()
-    {
-        return m_currentAmmoCount;
-    }
-
-    public int GetOverallAmmo()
-    {
-        return m_overallAmmoCount;
-    }
-
-    public int GetClipSize()
-    {
-        return m_weaponClipSize;
-    }
 
 
-    public abstract void AddUpgrade(WeaponScalars scalars);
+ 
+
+    public abstract void AddUpgrade(WeaponUpgrade upgrade);
     //public abstract void RemoveUpgrade(WeaponScalars scalars);
-    public abstract void SetHasAction(bool hasaction);
 }
 
 [System.Serializable]
-public struct WeaponScalars
+public struct WeaponUpgrade
 {
     public float Damage;
     public float ClipSize;
@@ -105,6 +101,10 @@ public struct WeaponScalars
     public float BlastRadius;
     public float ProjectileForce;
     public float DamageTime;
+    public bool HasAction;
+    public EUpgradeType Type;
+    public string Title;
+    public int UpgradeWorth;
 
     public void SetToDefault()
     {
@@ -119,6 +119,7 @@ public struct WeaponScalars
         BlastRadius = 1;
         ProjectileForce = 1;
         DamageTime = 1;
+        UpgradeWorth = 0;
     }
 
     public void SetToZero()
@@ -136,7 +137,7 @@ public struct WeaponScalars
         DamageTime = 0;
     }
 
-    public static WeaponScalars operator +(WeaponScalars a, WeaponScalars b)
+    public static WeaponUpgrade operator +(WeaponUpgrade a, WeaponUpgrade b)
     {
         a.Damage += b.Damage;
         a.ClipSize += b.ClipSize;
@@ -153,7 +154,7 @@ public struct WeaponScalars
         return a;
     }
 
-    public static WeaponScalars operator -(WeaponScalars a, WeaponScalars b)
+    public static WeaponUpgrade operator -(WeaponUpgrade a, WeaponUpgrade b)
     {
         a.Damage -= b.Damage;
         a.ClipSize -= b.ClipSize;
@@ -170,5 +171,7 @@ public struct WeaponScalars
 
         return a;
     }
+
+
 }
 
