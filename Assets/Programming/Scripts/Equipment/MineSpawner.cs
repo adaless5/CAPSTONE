@@ -43,12 +43,12 @@ public class MineSpawner : Weapon, ISaveable
             m_playerController = FindObjectOfType<ALTPlayerController>();
         }
 
-        m_projectileforce *= m_scalars.ProjectileForce;
-        m_fireRate = 5f * m_scalars.FireRate;
-        m_projectileLifeTime *= m_scalars.FuzeTime;
-        m_blastradius *= m_scalars.BlastRadius;
-        m_blastforce *= m_scalars.ImpactForce;
-        m_damageAmount = 50f * m_scalars.Damage;
+        m_projectileforce *= m_upgradestats.ProjectileForce;
+        m_fireRate = 5f * m_upgradestats.FireRate;
+        m_projectileLifeTime *= m_upgradestats.FuzeTime;
+        m_blastradius *= m_upgradestats.BlastRadius;
+        m_blastforce *= m_upgradestats.ImpactForce;
+        m_damageAmount = 50f * m_upgradestats.Damage;
     }
 
     // Update is called once per frame
@@ -117,15 +117,18 @@ public class MineSpawner : Weapon, ISaveable
         bIsReloading = false;      
     }
 
-    public override void AddUpgrade(WeaponScalars scalars)
+    public override void AddUpgrade(WeaponUpgrade upgrade)
     {
-        m_scalars += scalars;
-        m_projectileforce *= m_scalars.ProjectileForce;
-        m_fireRate *= m_scalars.FireRate;
-        m_projectileLifeTime *= m_scalars.FuzeTime;
-        m_blastradius *= m_scalars.BlastRadius;
-        m_blastforce *= m_scalars.ImpactForce;
-        m_damageAmount *= m_scalars.Damage;
+        m_upgradestats += upgrade;
+        m_projectileforce *= upgrade.ProjectileForce + 1;
+        m_fireRate *= upgrade.FireRate + 1;
+        m_projectileLifeTime *= upgrade.FuzeTime + 1;
+        m_blastradius *= upgrade.BlastRadius + 1;
+        m_blastforce *= upgrade.ImpactForce + 1;
+        m_damageAmount *= upgrade.Damage + 1;
+        if (upgrade.HasAction) m_bHasActionUpgrade = true;
+
+        m_currentupgrades.Add(upgrade.Type);    
 
     }
 
