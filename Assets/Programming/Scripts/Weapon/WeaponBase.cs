@@ -19,6 +19,8 @@ public class WeaponBase : Weapon, ISaveable
     float m_timeElapsed;
     float m_lerpDuration = 3f;
 
+    bool _bPlayedNewShellSound;
+
     void Awake()
     {
         base.Awake();        
@@ -29,12 +31,14 @@ public class WeaponBase : Weapon, ISaveable
 
         m_weaponClipSize = 6 * (int)m_upgradestats.ClipSize;
         m_reloadTime = 2.0f * m_upgradestats.ReloadTime;
-        m_fireRate = 0.8f * m_upgradestats.FireRate; //Default Gun shoots every 1.25 seconds, can be adjusted in editor - VR
+        m_fireRate = 1.5f * m_upgradestats.FireRate; //Default Gun shoots every 1.25 seconds, can be adjusted in editor - VR
         m_hitImpact = 50.0f * m_upgradestats.ImpactForce;
         m_weaponRange = 50.0f * m_upgradestats.Range;
         m_fireStart = 0.0f;       
 
         gunAnimator = GetComponent<Animator>();
+
+        _bPlayedNewShellSound = false;
     }
 
     public override void Start()
@@ -100,15 +104,27 @@ public class WeaponBase : Weapon, ISaveable
                 OnShoot();                
             }
             else
-            {               
+            {
                 //_ammoController.OutOfAmmo();
                            
             }
         }
+
+        //If gun is empty and player attempts to shoot. trigger empty gun sound
+        if (Input.GetMouseButtonDown(0) && !_ammoController.CanUseAmmo())
+        {
+            GetComponent<AudioManager_Archebus>().TriggerEmpty();
+        }
+        //
     }
 
     IEnumerator OnReload()
     {
+        //Reload Sounds
+        GetComponent<AudioManager_Archebus>().TriggerReloadStart();
+        StartCoroutine(TriggerReloadEndSound());
+        //
+        
         bIsReloading = true;
         gunAnimator.speed = 1 / m_upgradestats.ReloadTime; // adjusts for reload time upgrades
         gunAnimator.SetBool("bIsReloading", true);
@@ -125,6 +141,11 @@ public class WeaponBase : Weapon, ISaveable
         //Play Recoil animation
         gunAnimator.SetTrigger("OnRecoil");      
         muzzleFlash.Play();
+
+        //Gun Shot Sounds
+        GetComponent<AudioManager_Archebus>().TriggerShot();
+        StartCoroutine(TriggerNewShellSound());
+        //
 
         if (!m_bHasActionUpgrade)
         {
@@ -167,7 +188,7 @@ public class WeaponBase : Weapon, ISaveable
         }
 
         //Using ammo             
-        _ammoController.UseAmmo();              
+        _ammoController.UseAmmo();
     }
 
     //VR - Plays Animation to focus reticule on targeting
@@ -264,5 +285,17 @@ public class WeaponBase : Weapon, ISaveable
     {
         bIsActive = SaveSystem.LoadBool(gameObject.name, "bIsActive", gameObject.scene.name);
         bIsObtained = SaveSystem.LoadBool(gameObject.name, "bIsObtained", gameObject.scene.name);
+    }
+
+    IEnumerator TriggerNewShellSound()
+    {
+        yield return new WaitForSeconds(0.31f);
+        GetComponent<AudioManager_Archebus>().TriggerNewShell();
+    }
+
+    IEnumerator TriggerReloadEndSound()
+    {
+        yield return new WaitForSeconds(1.6f);
+        GetComponent<AudioManager_Archebus>().TriggerReloadEnd();
     }
 }
