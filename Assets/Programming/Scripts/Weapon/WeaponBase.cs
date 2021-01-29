@@ -4,54 +4,44 @@ using System.Collections;
 using UnityEngine.Rendering;
 
 public class WeaponBase : Weapon, ISaveable
-{
-    //Not being used yet, will be implemented with Ammo Pickups - VR
-    public enum AmmoTypes
-    {
-        Default,
-        Creature,
-        Explosive,
-    }
+{ 
 
     [Header("UI Elements - ParticleFX and Reticule")]
     public ParticleSystem muzzleFlash;
     public GameObject impactFX;
-    public Animator reticuleAnimator;
-    public Animator outOfAmmoAnimator;
+    public Animator reticuleAnimator;  
     [SerializeField]
     Animator gunAnimator;
 
     [Header("Camera Settings")]
-    public Camera gunCamera;    
-   
+    public Camera gunCamera;
+    
     float m_timeElapsed;
     float m_lerpDuration = 3f;
 
     void Awake()
     {
-        base.Awake();
-        EventBroker.OnAmmoPickup += AmmoPickup;
+        base.Awake();        
         LoadDataOnSceneEnter();
 
         //TODO: Readd Save implementation
         //SaveSystem.SaveEvent += SaveDataOnSceneChange;
+
         m_weaponClipSize = 6 * (int)m_upgradestats.ClipSize;
         m_reloadTime = 2.0f * m_upgradestats.ReloadTime;
         m_fireRate = 0.8f * m_upgradestats.FireRate; //Default Gun shoots every 1.25 seconds, can be adjusted in editor - VR
         m_hitImpact = 50.0f * m_upgradestats.ImpactForce;
         m_weaponRange = 50.0f * m_upgradestats.Range;
         m_fireStart = 0.0f;       
-        outOfAmmoAnimator = FindObjectOfType<AmmoUI>().GetComponent<Animator>();
-        gunAnimator = GetComponent<Animator>();
 
-        //Initializing AmmoCount and UI
-        m_currentAmmoCount = m_weaponClipSize;
-        m_overallAmmoCount = m_currentAmmoCount;
+        gunAnimator = GetComponent<Animator>();
     }
 
     public override void Start()
     { 
         gunCamera = GameObject.FindObjectOfType<Camera>();
+        _ammoController = FindObjectOfType<AmmoUI>().GetComponent<AmmoController>();
+        _ammoController.InitializeAmmo(AmmoController.AmmoTypes.Default, m_weaponClipSize, m_weaponClipSize);
 
         GetComponent<MeshRenderer>().enabled = true;
         bIsActive = true;
@@ -79,15 +69,13 @@ public class WeaponBase : Weapon, ISaveable
             {
                 GetComponent<MeshRenderer>().enabled = true;
                 UseTool();
-                OnTarget();
+                OnTarget();                
             }
             else if (!bIsActive)
-            {
-                outOfAmmoAnimator.SetBool("bIsOut", false);
+            {               
                 GetComponent<MeshRenderer>().enabled = false;
             }
         }
-
     }
 
     public override void UseTool()
@@ -97,29 +85,24 @@ public class WeaponBase : Weapon, ISaveable
             return;
         }
 
-        //Reloads automatically at 0 or if player users reload input "R"
-        if (m_currentAmmoCount <= 0 && m_overallAmmoCount >= 1)
+        //Reloads automatically at 0 or if player users reload input "R"        
+        if(_ammoController.NeedsReload() || (Input.GetButtonDown("Reload") && _ammoController.CanReload()))
         {
             StartCoroutine(OnReload());
             return;
-        }
-        else if(Input.GetButtonDown("Reload") && m_overallAmmoCount >= 1)
-        {
-            StartCoroutine(OnReload());
-            return;
-        }
+        }       
 
         if (_playerController.CheckForUseWeaponInput() && Time.time >= m_fireStart)
         {
-            m_fireStart = Time.time + 1.0f / m_fireRate;
-            if (m_currentAmmoCount > 0)
+            m_fireStart = Time.time + 1.0f / m_fireRate;           
+           if(_ammoController.CanUseAmmo())
             {
-                OnShoot();
-                
+                OnShoot();                
             }
             else
-            {
-                outOfAmmoAnimator.SetBool("bIsOut", true);               
+            {               
+                //_ammoController.OutOfAmmo();
+                           
             }
         }
     }
@@ -129,29 +112,13 @@ public class WeaponBase : Weapon, ISaveable
         bIsReloading = true;
         gunAnimator.speed = 1 / m_upgradestats.ReloadTime; // adjusts for reload time upgrades
         gunAnimator.SetBool("bIsReloading", true);
-        yield return new WaitForSeconds(m_reloadTime);
-
-        while (m_currentAmmoCount < m_weaponClipSize && m_overallAmmoCount > 0)
-        {
-            m_currentAmmoCount++;
-            m_overallAmmoCount--;
-        }
-      
+        yield return new WaitForSeconds(m_reloadTime);        
+        _ammoController.Reload();      
         bIsReloading = false;
 
-        //Play reload and ammo animations
-        outOfAmmoAnimator.SetBool("bIsOut", false);
+        //Play reload and ammo animations      
         gunAnimator.SetBool("bIsReloading", false);          
     }
-
-    //Function for AmmoPickup class, currently adding ammo to whatever weapon is active
-    public void AmmoPickup(WeaponType type, int numberOfClips)
-    {
-        //if (type == WeaponType.BaseWeapon)
-        if(bIsActive)
-            m_overallAmmoCount += (m_weaponClipSize * numberOfClips);        
-    }
-
 
     void OnShoot()
     {
@@ -199,12 +166,8 @@ public class WeaponBase : Weapon, ISaveable
             UpgradedFire();
         }
 
-        //Using ammo
-        m_currentAmmoCount--;      
-        if (m_currentAmmoCount == 0 && m_overallAmmoCount == 0)
-        {
-            outOfAmmoAnimator.SetBool("bIsOut", true);
-        }        
+        //Using ammo             
+        _ammoController.UseAmmo();              
     }
 
     //VR - Plays Animation to focus reticule on targeting
