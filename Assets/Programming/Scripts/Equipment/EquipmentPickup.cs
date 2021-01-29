@@ -13,6 +13,8 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
 
     string[] _tipName = { "EQUIPMENT_GRAPPLE", "EQUIPMENT_BLADE", "EQUIPMENT_THERMAL" };
 
+    ALTPlayerController player;
+
     void Awake()
     {
         LoadDataOnSceneEnter();
@@ -20,11 +22,12 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
         if (isUsed) GetComponent<MeshRenderer>().enabled = false;
         else GetComponent<MeshRenderer>().enabled = true;
 
+        player = FindObjectOfType<ALTPlayerController>();
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (player.CheckForInteract())
         {
             DestroyTip();
         }

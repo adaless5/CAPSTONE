@@ -64,20 +64,20 @@ public class PauseOptionsMenuUI : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetButtonDown("Pause"))
-        {
-            _pauseMenu.Unpause();
-            gameObject.SetActive(false);
-        }
+        //if (Input.GetButtonDown("Pause"))
+        //{
+        //    _pauseMenu.Unpause();
+        //    gameObject.SetActive(false);
+        //}
 
-        if (_isFullScreen)
-        {
-            FullScreenButton.Select();
-        }
-        else
-        {
-            WindowedButton.Select();
-        }
+        //if (_isFullScreen)
+        //{
+        //    FullScreenButton.Select();
+        //}
+        //else
+        //{
+        //    WindowedButton.Select();
+        //}
 
     }
 

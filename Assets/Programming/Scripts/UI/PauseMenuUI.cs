@@ -48,18 +48,17 @@ public class PauseMenuUI : MonoBehaviour
 
     public void Pause()
     {
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(pauseFirst);
         if (GameIsPaused)
         {
             Unpause();
         }
         else
         {
+            Time.timeScale = 0f;
             enabled = true;
             PauseMenu.SetActive(true);
-            Time.timeScale = 0f;
-            EventSystem.current.SetSelectedGameObject(null);
-            EventSystem.current.SetSelectedGameObject(pauseFirst);
-
             GameIsPaused = true;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;

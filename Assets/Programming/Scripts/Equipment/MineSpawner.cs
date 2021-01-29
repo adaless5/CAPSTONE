@@ -133,10 +133,10 @@ public class MineSpawner : Weapon, ISaveable
     }
 
 
-    public override void SetHasAction(bool hasaction)
-    {
-        m_bHasActionUpgrade = hasaction;
-    }
+    //public override void SetHasAction(bool hasaction)
+    //{
+    //    m_bHasActionUpgrade = hasaction;
+    //}
 
     public void LoadDataOnSceneEnter()
     {
