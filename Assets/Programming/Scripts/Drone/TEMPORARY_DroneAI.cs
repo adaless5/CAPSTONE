@@ -102,9 +102,7 @@ public class TEMPORARY_DroneAI : MonoBehaviour
                 m_CurrentState = DRONESTATE.FOLLOW;
             }
         }
-
     }
-
 
     public void LookTowards(Transform target, float turnspeed)
     {

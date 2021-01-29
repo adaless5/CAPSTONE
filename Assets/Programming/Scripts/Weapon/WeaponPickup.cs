@@ -115,11 +115,9 @@ public class WeaponPickup : MonoBehaviour, ITippable
             if (obj.tag == "Tip")
             {
                 Destroy(obj);
-                gameObject.SetActive(false);
             }
         }
   
         _imageObject = null;
-
     }
 }
