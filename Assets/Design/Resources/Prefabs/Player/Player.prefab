@@ -1305,7 +1305,8 @@ MonoBehaviour:
   m_LookSensitivity: 5
   _controller: {fileID: 7625975052174585823}
   m_Gravity: -60
-  m_JumpHeight: 10
+  m_JumpHeight: 20
+  m_UpgradeCurrencyAmount: 0
   _equipmentBelt: {fileID: 0}
   _weaponBelt: {fileID: 0}
   m_health: {fileID: 0}
@@ -2357,8 +2358,8 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 0.5754717, g: 0.3936009, b: 0.3936009, a: 1}
-  m_Intensity: 10
+  m_Color: {r: 0.509434, g: 0.36717695, b: 0.38480815, a: 1}
+  m_Intensity: 100
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -2407,7 +2408,7 @@ Light:
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
-  m_ShadowAngle: 0
+  m_ShadowAngle: 10
 --- !u!114 &4331069517975270083
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2428,13 +2429,13 @@ MonoBehaviour:
   m_PointlightHDType: 0
   m_SpotLightShape: 0
   m_AreaLightShape: 0
-  m_Intensity: 10
+  m_Intensity: 100
   m_EnableSpotReflector: 0
   m_LuxAtDistance: 1
   m_InnerSpotPercent: 0
   m_SpotIESCutoffPercent: 100
   m_LightDimmer: 1
-  m_VolumetricDimmer: 1
+  m_VolumetricDimmer: 2
   m_LightUnit: 2
   m_FadeDistance: 10000
   m_VolumetricFadeDistance: 10000
@@ -2458,12 +2459,12 @@ MonoBehaviour:
   m_AreaLightShadowCone: 120
   m_UseScreenSpaceShadows: 0
   m_InteractsWithSky: 1
-  m_AngularDiameter: 0.5
-  m_FlareSize: 50
-  m_FlareTint: {r: 0.019607844, g: 0.003921569, b: 0, a: 1}
-  m_FlareFalloff: 5
+  m_AngularDiameter: 10
+  m_FlareSize: 90
+  m_FlareTint: {r: 0.039215688, g: 0.011764706, b: 0, a: 1}
+  m_FlareFalloff: 10
   m_SurfaceTexture: {fileID: 0}
-  m_SurfaceTint: {r: 0.11320752, g: 0.011213952, b: 0.034735117, a: 1}
+  m_SurfaceTint: {r: 1, g: 0, b: 0, a: 1}
   m_Distance: 1.5e+11
   m_UseRayTracedShadows: 0
   m_NumRayTracingSamples: 4
