@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using TMPro;
 
 public class UpgradeMenuUI : MonoBehaviour
@@ -10,6 +11,9 @@ public class UpgradeMenuUI : MonoBehaviour
     public GameObject UpgradeMenu;
 
     public List<GameObject> Parents;
+    public List<GameObject> ParentsButtons;
+    public TMP_Text DiscriptionText;
+    public TMP_Text CurrentCurrencyText;
 
     public int _numUpgradesAllowed = 999;
     int upgradeamt = 0;
@@ -36,6 +40,15 @@ public class UpgradeMenuUI : MonoBehaviour
             Deactivate();
         }
 
+        DiscriptionText.text = "";
+        for (int i = 0; i < _buttons.Count; i++)
+        {
+            if (_buttons[i].GetComponent<ButtonHighlight>().IsHighlighted)
+            {
+                DiscriptionText.text = _upgrades[i].Discription;
+                break;
+            }
+        }
     }
 
     public void Activate()
@@ -72,6 +85,7 @@ public class UpgradeMenuUI : MonoBehaviour
             _buttons.Clear();
 
             //set up weapon display and gets info from weapons
+            bool set = false;
             for (int i = 0; i < (int)WeaponType.NumberOfWeapons; i++)
             {
                 Tool item = _player.GetComponent<ALTPlayerController>()._weaponBelt._items[i];
@@ -80,9 +94,14 @@ public class UpgradeMenuUI : MonoBehaviour
                     Weapon weapon = item.GetComponent<Weapon>();
                     _weapons.Add(weapon);
 
-                    if (weapon.bIsObtained)
+                    if (weapon.bIsObtained )
                     {
-                        Parents[i].SetActive(true);
+                        ParentsButtons[i].SetActive(true);
+                        if (!set)
+                        {
+                            Parents[i].SetActive(true);//todo: this will always set the default guns upgrades to active. it needs to check what the player has first
+                            set = true;
+                        }
                     }
 
                 }
@@ -116,9 +135,12 @@ public class UpgradeMenuUI : MonoBehaviour
             {
                 if(_buttons[i].GetComponentInChildren<TMP_Text>())
                 {
-                    _buttons[i].GetComponentInChildren<TMP_Text>().text = _upgrades[i].Title;
+                    _buttons[i].GetComponentInChildren<TMP_Text>().text = _upgrades[i].Title + " - Price: $" + _upgrades[i].UpgradeWorth.ToString();
                 }
             }
+
+            CurrentCurrencyText.text = "Current currency: $" + _player.GetComponent<ALTPlayerController>().m_UpgradeCurrencyAmount.ToString();
+
             hasButtonListeners = true;
 
         }
@@ -142,9 +164,20 @@ public class UpgradeMenuUI : MonoBehaviour
         }
     }
 
+    public void DisplayUpgradeButtons(int index)
+    {
+        foreach(GameObject obj in Parents)
+        {
+            obj.SetActive(false);
+        }
+
+        Parents[index].SetActive(true);
+    }
+
     private void UpdateUI(int index)
     {
         _buttons[index].gameObject.SetActive(false);
+        CurrentCurrencyText.text = "Current currency: $" + _player.GetComponent<ALTPlayerController>().m_UpgradeCurrencyAmount.ToString();
     }
 
     private bool CheckHasUpgrade(int weapon, int upgrade)

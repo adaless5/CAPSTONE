@@ -104,6 +104,7 @@ public struct WeaponUpgrade
     public bool HasAction;
     public EUpgradeType Type;
     public string Title;
+    public string Discription;
     public int UpgradeWorth;
 
     public void SetToDefault()
