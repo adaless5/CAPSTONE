@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.15712935, g: 0.052736737, b: 0.051667303, a: 1}
+  m_IndirectSpecularColor: {r: 0.17019325, g: 0.057746053, b: 0.065591455, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -356,7 +356,7 @@ MonoBehaviour:
     HasAction: 0
     Type: 0
     Title: -ReloadTime
-    UpgradeWorth: 0
+    UpgradeWorth: 1
   DeafaultUpgrade2:
     Damage: 1
     ClipSize: 0
@@ -372,7 +372,7 @@ MonoBehaviour:
     HasAction: 0
     Type: 1
     Title: +Damage
-    UpgradeWorth: 0
+    UpgradeWorth: 1
   DeafaultUpgrade3:
     Damage: 0
     ClipSize: 0
@@ -388,7 +388,7 @@ MonoBehaviour:
     HasAction: 0
     Type: 2
     Title: +FireRate
-    UpgradeWorth: 0
+    UpgradeWorth: 1
   DeafaultUpgrade4:
     Damage: 0
     ClipSize: 0
@@ -404,7 +404,7 @@ MonoBehaviour:
     HasAction: 1
     Type: 3
     Title: TripleShot
-    UpgradeWorth: 0
+    UpgradeWorth: 1
   ExplosiveUpgrade1:
     Damage: 1
     ClipSize: 0
@@ -538,12 +538,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4786327881684109221, guid: faa7c5c7de8c1494684ebb67cd84a05d,
     type: 3}
   m_PrefabInstance: {fileID: 4786327881677633485}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &69351985 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2147924717401624213, guid: 604d552fdeb02bf40ab3b4da7c2a83f5,
-    type: 3}
-  m_PrefabInstance: {fileID: 1119865308}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &119511251
 PrefabInstance:
@@ -693,12 +687,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fa7234f9ad0918147aff06fd9ced8ca6, type: 3}
---- !u!1 &169514442 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7783921332914701830, guid: 604d552fdeb02bf40ab3b4da7c2a83f5,
-    type: 3}
-  m_PrefabInstance: {fileID: 1119865308}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &186065199 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3520139637981983934, guid: 3876378a0a86dcf4693ca784ac180a29,
@@ -2152,12 +2140,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 30
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &639355551 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 709340757624604983, guid: 604d552fdeb02bf40ab3b4da7c2a83f5,
-    type: 3}
-  m_PrefabInstance: {fileID: 1119865308}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &645169072
 GameObject:
   m_ObjectHideFlags: 0
@@ -3528,17 +3510,17 @@ PrefabInstance:
         type: 3}
       propertyPath: Parents.Array.data[0]
       value: 
-      objectReference: {fileID: 169514442}
+      objectReference: {fileID: 0}
     - target: {fileID: 2774413137501476388, guid: 604d552fdeb02bf40ab3b4da7c2a83f5,
         type: 3}
       propertyPath: Parents.Array.data[1]
       value: 
-      objectReference: {fileID: 639355551}
+      objectReference: {fileID: 0}
     - target: {fileID: 2774413137501476388, guid: 604d552fdeb02bf40ab3b4da7c2a83f5,
         type: 3}
       propertyPath: Parents.Array.data[2]
       value: 
-      objectReference: {fileID: 69351985}
+      objectReference: {fileID: 0}
     - target: {fileID: 2806192668183102846, guid: 604d552fdeb02bf40ab3b4da7c2a83f5,
         type: 3}
       propertyPath: m_AspectRatio

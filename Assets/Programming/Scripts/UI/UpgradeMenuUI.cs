@@ -130,7 +130,7 @@ public class UpgradeMenuUI : MonoBehaviour
 
         if (CheckValidBuy(y))
         {
-            _player.GetComponent<ALTPlayerController>().m_UpgradeCurrencyAmount -= _upgrades[upgradeindex].UpgradeWorth;
+            _player.GetComponent<ALTPlayerController>().m_UpgradeCurrencyAmount -= _upgrades[y].UpgradeWorth;
             _weapons[weaponindex].AddUpgrade(_upgrades[y]);
             UpdateUI(y);
             upgradeamt++;
@@ -167,9 +167,14 @@ public class UpgradeMenuUI : MonoBehaviour
     {
         if (_upgrades[upgradeindex].UpgradeWorth <= _player.GetComponent<ALTPlayerController>().m_UpgradeCurrencyAmount)
         {
+            Debug.Log(_upgrades[upgradeindex].UpgradeWorth.ToString());
+            Debug.Log(_player.GetComponent<ALTPlayerController>().m_UpgradeCurrencyAmount.ToString());
+            Debug.Log("can buy");
             return true;
         }
-        
+        Debug.Log(_upgrades[upgradeindex].UpgradeWorth.ToString());
+        Debug.Log(_player.GetComponent<ALTPlayerController>().m_UpgradeCurrencyAmount.ToString());
+        Debug.Log("cant buy");
         return false;
     }
 
