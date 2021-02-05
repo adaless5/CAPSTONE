@@ -114,7 +114,7 @@ public class ALTPlayerController : MonoBehaviour
     //Special case: These guys needed some re-routing to make sure they didn't collude with the Pause logic 
     bool _bEquipWheel = true;
     bool _bWepWheel = true;
-    
+
     bool _bEquipment;
     bool _bThermal;
     bool _bInteract;
@@ -142,7 +142,7 @@ public class ALTPlayerController : MonoBehaviour
         _controls.Player.Pause.performed += ctx => PlayerPause();
         _controls.Player.Jump.performed += ctx => _bIsJumping = true;
         _controls.Player.Jump.canceled += ctx => _bIsJumping = false;
-        _controls.Player.EquipmentWheel.performed += ctx =>HandleEquipmentWheel();
+        _controls.Player.EquipmentWheel.performed += ctx => HandleEquipmentWheel();
         _controls.Player.EquipmentWheel.canceled += ctx => HandleEquipmentWheel();
         _controls.Player.WeaponWheel.performed += ctx => HandleWeaponWheel();
         _controls.Player.WeaponWheel.canceled += ctx => HandleWeaponWheel();
@@ -225,62 +225,60 @@ public class ALTPlayerController : MonoBehaviour
 
         //HandleEquipmentWheels();
 
-        //if (EquipmentWheel.enabled == true)
-        //{
-        //    joyX = 0;
-        //    joyY = 0;
-        //    //if (m_ControllerType == ControllerType.Controller)
-        //    //{
+        if (EquipmentWheel.enabled == true)
+        {
+            joyX = _look.x;
+            joyY = _look.y;
+            if (Gamepad.current.rightStick.IsActuated())
+            {
 
 
 
-        //    //    joyAngle = Mathf.Atan2(joyX, joyY) * Mathf.Rad2Deg;
-        //    //    Debug.Log("Joy Angle: " + joyAngle);
-        //    //    if (joyAngle > -45.0f && joyAngle < 0.0f)
-        //    //    {
-        //    //        _equipIndex = 0;
-        //    //    }
-        //    //    if (joyAngle > 0.0f && joyAngle < 90.0f)
-        //    //    {
-        //    //        _equipIndex = 1;
-        //    //    }
-        //    //    EventSystem.current.SetSelectedGameObject(_equipButtons[_equipIndex].gameObject);
-        //    //    _equipmentBelt.EquipToolAtIndex(_equipIndex);
-        //    //}
-        //}
+                joyAngle = Mathf.Atan2(joyX, joyY) * Mathf.Rad2Deg;
+                Debug.Log("Joy Angle: " + joyAngle);
+                if (joyAngle > -90.0f && joyAngle < -45.0f)
+                {
+                    _equipIndex = 0;
+                }
+                if (joyAngle > 0.0f && joyAngle < 90.0f)
+                {
+                    _equipIndex = 1;
+                }
+                EventSystem.current.SetSelectedGameObject(_equipButtons[_equipIndex].gameObject);
+                _equipmentBelt.EquipToolAtIndex(_equipIndex);
+            }
+        }
 
-        //if (WeaponWheel.enabled == true)
-        //{
-        //    //EventSystem.current.SetSelectedGameObject(null);
-        //    joyX = 0;
-        //    joyY = 0;
+        if (WeaponWheel.enabled == true)
+        {
+            //EventSystem.current.SetSelectedGameObject(null);
+            joyX = _look.x;
+            joyY = _look.y;
 
-        //    {
-        //        if (m_ControllerType == ControllerType.Controller)
-        //        {
-        //            //joyX += Input.GetAxis("Mouse X") * m_LookSensitivity;
-        //            //joyY += Input.GetAxis("Mouse Y") * m_LookSensitivity;
-        //            joyAngle = Mathf.Atan2(joyX, joyY) * Mathf.Rad2Deg;
-        //            Debug.Log(joyAngle);
-        //            if (joyAngle > -90.0f && joyAngle < -45.0f)
-        //            {
-        //                _wepIndex = 1;
+            {
+                if (Gamepad.current.rightStick.IsActuated())
+                {
+                    joyAngle = Mathf.Atan2(joyX, joyY) * Mathf.Rad2Deg;
+                    Debug.Log(joyAngle);
+                    if (joyAngle > -90.0f && joyAngle < -45.0f)
+                    {
+                        _wepIndex = 1;
 
-        //            }
-        //            if (joyAngle > -45.0f && joyAngle < 0.0f)
-        //            {
-        //                _wepIndex = 0;
-        //            }
-        //            if (joyAngle > 0.0f && joyAngle < 90.0f)
-        //            {
-        //                _wepIndex = 2;
-        //            }
-        //            Debug.Log(_wepIndex);
-        //            EventSystem.current.SetSelectedGameObject(_wepButtons[_wepIndex].gameObject);
-        //            _weaponBelt.EquipToolAtIndex(_wepIndex);
-        //        }
-        //    }
-        //}
+                    }
+                    if (joyAngle > -45.0f && joyAngle < 0.0f)
+                    {
+                        _wepIndex = 0;
+                    }
+                    if (joyAngle > 0.0f && joyAngle < 90.0f)
+                    {
+                        _wepIndex = 2;
+                    }
+                    Debug.Log(_wepIndex);
+                    EventSystem.current.SetSelectedGameObject(_wepButtons[_wepIndex].gameObject);
+                    _weaponBelt.EquipToolAtIndex(_wepIndex);
+                }
+            }
+        }
 
         //Below I am calculating a vector perpendincular to the surface the player is on to determine what direction to move while sliding.
         //Sliding activates when the angle between the surface normal and the down vector are <= 140 deg. -AD
@@ -332,8 +330,6 @@ public class ALTPlayerController : MonoBehaviour
 
         m_ControllerState = ControllerState.Menu;
         _pauseMenu.Pause();
-
-
     }
     //Death and Respawn functionality -LCC
     public void PlayerRespawn()

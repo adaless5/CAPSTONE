@@ -16,7 +16,7 @@ public class BossHomingAttack : BossState
     public override void Enter()
     {
         base.Enter();
-        _homingAttack = GameObject.Instantiate(_haRef, _currentEnemy.transform);
+        
     }
 
     public override void Update()
@@ -25,8 +25,9 @@ public class BossHomingAttack : BossState
 
         if (_homingAttack == null)
         {
+            _homingAttack = GameObject.Instantiate(_haRef, _currentEnemy.transform.position, Quaternion.identity);
             Debug.Log("Next state...");
-            _stage = EVENT.EXIT;
+            //_stage = EVENT.EXIT;
         }
     }
 

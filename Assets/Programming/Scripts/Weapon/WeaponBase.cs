@@ -44,8 +44,9 @@ public class WeaponBase : Weapon, ISaveable
 
     public void InitWeaponControls(GameObject player)
     {
-        //Controls initializing for reloading
+        //Controls initializing for reloading && trying to shoot with no ammo
         _playerController._controls.Player.Reload.performed += ctx => Reload();
+        _playerController._controls.Player.Shoot.started += ctx => TryShoot();
     }
 
     public override void Start()
@@ -119,12 +120,17 @@ public class WeaponBase : Weapon, ISaveable
             }
         }
 
+
+    }
+
+    public void TryShoot()
+    {
         //If gun is empty and player attempts to shoot. trigger empty gun sound
-        if (Input.GetMouseButtonDown(0) && !_ammoController.CanUseAmmo())
+        if (!_ammoController.CanUseAmmo())
         {
             GetComponent<AudioManager_Archebus>().TriggerEmpty();
         }
-        //
+        
     }
 
     private void Reload()
