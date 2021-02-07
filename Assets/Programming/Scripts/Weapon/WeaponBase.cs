@@ -36,9 +36,17 @@ public class WeaponBase : Weapon, ISaveable
         m_weaponRange = 50.0f * m_upgradestats.Range;
         m_fireStart = 0.0f;       
 
+        EventBroker.OnPlayerSpawned += InitWeaponControls;
         gunAnimator = GetComponent<Animator>();
 
         _bPlayedNewShellSound = false;
+    }
+
+    public void InitWeaponControls(GameObject player)
+    {
+        //Controls initializing for reloading && trying to shoot with no ammo
+        _playerController._controls.Player.Reload.performed += ctx => Reload();
+        _playerController._controls.Player.Shoot.started += ctx => TryShoot();
     }
 
     public override void Start()
@@ -50,10 +58,12 @@ public class WeaponBase : Weapon, ISaveable
         GetComponent<MeshRenderer>().enabled = true;
         bIsActive = true;
         bIsObtained = true;
+
     }
 
     void OnEnable()
     {
+
         bIsReloading = false;       
     }
 
@@ -90,7 +100,7 @@ public class WeaponBase : Weapon, ISaveable
         }
 
         //Reloads automatically at 0 or if player users reload input "R"        
-        if(_ammoController.NeedsReload() || (Input.GetButtonDown("Reload") && _ammoController.CanReload()))
+        if(_ammoController.NeedsReload())
         {
             StartCoroutine(OnReload());
             return;
@@ -110,12 +120,25 @@ public class WeaponBase : Weapon, ISaveable
             }
         }
 
+
+    }
+
+    public void TryShoot()
+    {
         //If gun is empty and player attempts to shoot. trigger empty gun sound
-        if (Input.GetMouseButtonDown(0) && !_ammoController.CanUseAmmo())
+        if (!_ammoController.CanUseAmmo())
         {
             GetComponent<AudioManager_Archebus>().TriggerEmpty();
         }
-        //
+        
+    }
+
+    private void Reload()
+    {
+        if (_ammoController.CanReload())
+        {
+            StartCoroutine(OnReload());
+        }
     }
 
     IEnumerator OnReload()

@@ -58,23 +58,23 @@ public class OptionsMenuUI : MonoBehaviour
 
     private void Update()
     {
-        if(_isStereo)
-        {
-            StereoButton.Select();
-        }
-        else
-        {
-            MonoButton.Select();
-        }
+        //if(_isStereo)
+        //{
+        //    StereoButton.Select();
+        //}
+        //else
+        //{
+        //    MonoButton.Select();
+        //}
 
-        if (_isFullScreen)
-        {
-            FullScreenButton.Select();
-        }
-        else
-        {
-            WindowedButton.Select();
-        }
+        //if (_isFullScreen)
+        //{
+        //    FullScreenButton.Select();
+        //}
+        //else
+        //{
+        //    WindowedButton.Select();
+        //}
     }
 
     public void SetVolume(float vol)

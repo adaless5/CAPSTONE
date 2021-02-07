@@ -24,8 +24,8 @@ public class UCState : BossState
     public override void Update()
     {
         base.Update();
-        //Debug.Log(_nextState);
         _nextState = new BossHomingAttack(_currentEnemy );
+        Debug.Log(_nextState);
         _stage = EVENT.EXIT;
     }
 

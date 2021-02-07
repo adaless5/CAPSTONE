@@ -51,33 +51,29 @@ public class PauseOptionsMenuUI : MonoBehaviour
         //expose.compensation = new FloatParameter(7f);
     }
 
-    private void OnEnable()
+
+    public void EnableOptions()
     {
-        try
-        {
-            if (bDebug) Debug.Log("Options Menu");
-            EventSystem.current.SetSelectedGameObject(null);
-            EventSystem.current.SetSelectedGameObject(firstSlider);
-        }catch { }
-        
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(firstSlider);
     }
 
     private void Update()
     {
-        if (Input.GetButtonDown("Pause"))
-        {
-            _pauseMenu.Unpause();
-            gameObject.SetActive(false);
-        }
+        //if (Input.GetButtonDown("Pause"))
+        //{
+        //    _pauseMenu.Unpause();
+        //    gameObject.SetActive(false);
+        //}
 
-        if (_isFullScreen)
-        {
-            FullScreenButton.Select();
-        }
-        else
-        {
-            WindowedButton.Select();
-        }
+        //if (_isFullScreen)
+        //{
+        //    FullScreenButton.Select();
+        //}
+        //else
+        //{
+        //    WindowedButton.Select();
+        //}
 
     }
 
