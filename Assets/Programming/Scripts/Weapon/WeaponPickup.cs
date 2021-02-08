@@ -35,14 +35,23 @@ public class WeaponPickup : MonoBehaviour, ITippable
         if (isUsed) GetComponent<MeshRenderer>().enabled = false;
         else GetComponent<MeshRenderer>().enabled = true;
 
-        player = FindObjectOfType<ALTPlayerController>();
+
+        EventBroker.OnPlayerSpawned += PlayerSpawn;
+    }
+
+    void PlayerSpawn(GameObject playerref)
+    {
+        player = playerref.GetComponent<ALTPlayerController>();
     }
 
     void Update()
     {
-        if (player.CheckForInteract())
+        if (player != null)
         {
-            DestroyTip();
+            if (player.CheckForInteract())
+            {
+                DestroyTip();
+            }
         }
     }
 
@@ -121,7 +130,7 @@ public class WeaponPickup : MonoBehaviour, ITippable
                 Destroy(obj);
             }
         }
-  
+
         _imageObject = null;
     }
 }
