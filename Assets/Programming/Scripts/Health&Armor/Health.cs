@@ -32,14 +32,20 @@ public class Health : MonoBehaviour, ISaveable
 
     void Start()
     {
+        EventBroker.OnPlayerSpawned += PlayerSpawned;
+
         healthBar = FindObjectOfType<HealthBarUI>();
 
         if (healthBar != null)
             healthBar.SetMaxHealth(m_MaxHealth);
 
+
+    }
+
+    void PlayerSpawned(GameObject playerReference)
+    {
         m_compass = FindObjectOfType<Compass>();
         m_marker = GetComponent<CompassMarkers>();
-
         if(gameObject.tag != "Player" && m_marker != null)
         {           
                 m_compass.AddMarker(m_marker);

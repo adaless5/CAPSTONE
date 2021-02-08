@@ -30,7 +30,6 @@ public class Compass : MonoBehaviour
         m_player = FindObjectOfType<ALTPlayerController>();
         m_compassDirections = GetComponentInChildren<RawImage>();
         m_background = GetComponentInChildren<Image>();
-
     }
 
     void Start()

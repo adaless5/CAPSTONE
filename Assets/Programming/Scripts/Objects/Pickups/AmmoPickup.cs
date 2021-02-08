@@ -24,12 +24,9 @@ public class AmmoPickup : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        m_compass = FindObjectOfType<Compass>();
-        m_marker = GetComponent<CompassMarkers>();
-        m_ammoPickup = GetComponent<Pickup>();
+        EventBroker.OnPlayerSpawned += PlayerSpawned;
 
-        if(m_marker != null)
-        m_compass.AddMarker(m_marker);
+        m_ammoPickup = GetComponent<Pickup>();
 
         //if (ammoType == WeaponType.BaseWeapon)
         //{
@@ -47,6 +44,14 @@ public class AmmoPickup : MonoBehaviour
        // m_marker.m_markerImage = FindObjectOfType<Sprite>();
 
         isPickedUp = false;
+    }
+
+    void PlayerSpawned(GameObject playerReference)
+    {
+        m_compass = FindObjectOfType<Compass>();
+        m_marker = GetComponent<CompassMarkers>();
+        if(m_marker != null)
+        m_compass.AddMarker(m_marker);
     }
 
     void Awake()
