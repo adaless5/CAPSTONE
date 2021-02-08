@@ -17,6 +17,13 @@ public class CreatureWeapon : Weapon, ISaveable
         _creatureProjectile = (GameObject)Resources.Load("Prefabs/Weapon/Creature Projectile");     
         m_weaponClipSize = 8;
         m_reloadTime = 0.5f;
+
+        EventBroker.OnPlayerSpawned += InitWeaponControls;
+    }
+
+    public void InitWeaponControls(GameObject player)
+    {
+        _playerController._controls.Player.Reload.performed += ctx => Reload();
     }
 
     // Start is called before the first frame update
@@ -47,7 +54,7 @@ public class CreatureWeapon : Weapon, ISaveable
         }
 
         //Reloads automatically at 0 or if player users reload input "R"       
-        if(_ammoController.NeedsReload() || (Input.GetButtonDown("Reload") && _ammoController.CanReload()))
+        if(_ammoController.NeedsReload())
         {
             StartCoroutine(OnReload());
             return;
@@ -60,6 +67,14 @@ public class CreatureWeapon : Weapon, ISaveable
             {
                 OnShoot();
             }           
+        }
+    }
+
+    private void Reload()
+    {
+        if (_ammoController.CanReload())
+        {
+            StartCoroutine(OnReload());
         }
     }
 

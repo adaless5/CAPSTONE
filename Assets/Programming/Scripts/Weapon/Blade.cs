@@ -63,7 +63,7 @@ public class Blade : Equipment, ISaveable
             _hitbox.enabled = true;
             _bisAttacking = true;
         }
-        else if (playerController.CheckForUseEquipmentInputReleased() && _bisAttacking == true)
+        else if (playerController.CheckForUseEquipmentInput() == false && _bisAttacking == true)
         {
             _hitbox.enabled = false;
             _bisAttacking = false;

@@ -9,12 +9,13 @@ public class ActivateButton : MonoBehaviour, IPointerEnterHandler
     Button _button;
     Belt _Belt;
     public int _CorrespondingToolIndex;
+    Canvas canvas;
 
     // Start is called before the first frame update
     void Start()
     {
         _Belt = GetComponentInParent<Belt>();
-
+        canvas = GetComponentInParent<Canvas>();
         _button = GetComponent<Button>();
         //_button.onClick.AddListener(EquipToolAtCorrespondingToolIndex); 
         
@@ -32,7 +33,7 @@ public class ActivateButton : MonoBehaviour, IPointerEnterHandler
         {
             _button.interactable = true;
         }
-        else if (IsToolActive())
+        else if (IsToolActive() && canvas.enabled)
         {
             _button.Select();
         }

@@ -13,6 +13,8 @@ public class WeaponPickup : MonoBehaviour, ITippable
 
     string[] _tipName = { "EQUIPMENT_DEFAULT_GUN", "EQUIPMENT_GRENADE", "EQUIPMENT_GLANDGUN" };
 
+    ALTPlayerController player;
+
     void Awake()
     {
         LoadDataOnSceneEnter();
@@ -32,11 +34,13 @@ public class WeaponPickup : MonoBehaviour, ITippable
 
         if (isUsed) GetComponent<MeshRenderer>().enabled = false;
         else GetComponent<MeshRenderer>().enabled = true;
+
+        player = FindObjectOfType<ALTPlayerController>();
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (player.CheckForInteract())
         {
             DestroyTip();
         }

@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Rendering;
 using UnityEngine.EventSystems;
-
+using UnityEngine.InputSystem;
 
 public enum ControllerType
 {
@@ -29,6 +29,8 @@ public class ALTPlayerController : MonoBehaviour
         Wheel,
     }
 
+
+
     public PlayerState m_PlayerState { get; private set; }
     public ControllerState m_ControllerState;
     public ControllerType m_ControllerType;
@@ -37,7 +39,7 @@ public class ALTPlayerController : MonoBehaviour
     public PauseMenuUI _pauseMenu;
 
     public Camera _camera;
-    public float m_LookSensitivity = 100.0f;
+    public float m_LookSensitivity = 10f;
     private float m_XRotation = 0f;
 
     public CharacterController _controller;
@@ -100,13 +102,56 @@ public class ALTPlayerController : MonoBehaviour
     bool isDead = false;
     Vector3 _respawnPosition;
 
+    //New Controller
+    public PlayerControls _controls;
+    Vector2 _movement;
+    Vector2 _look;
+    bool _bIsShooting;
+    bool _bIsRunning;
+    bool _bPaused;
+    bool _bIsJumping;
+
+    //Special case: These guys needed some re-routing to make sure they didn't collude with the Pause logic 
+    bool _bEquipWheel = true;
+    bool _bWepWheel = true;
+
+    bool _bEquipment;
+    bool _bThermal;
+    bool _bInteract;
+
     private void Awake()
     {
         OnTakeDamage += TakeDamage;
         _respawnPosition = gameObject.transform.position;
         m_ControllerState = ControllerState.Play;
-
+        InitializeControls();
         _controller = GetComponent<CharacterController>();
+    }
+
+    void InitializeControls()
+    {
+        _controls = new PlayerControls();
+        _controls.Player.Move.performed += ctx => _movement = ctx.ReadValue<Vector2>();
+        _controls.Player.Move.canceled += ctx => _movement = Vector2.zero;
+        _controls.Player.Camera.performed += ctx => _look = ctx.ReadValue<Vector2>();
+        _controls.Player.Camera.canceled += ctx => _look = Vector2.zero;
+        _controls.Player.Shoot.performed += ctx => _bIsShooting = true;
+        _controls.Player.Shoot.canceled += ctx => _bIsShooting = false;
+        _controls.Player.Sprint.performed += ctx => _bIsRunning = true;
+        _controls.Player.Sprint.canceled += ctx => _bIsRunning = false;
+        _controls.Player.Pause.performed += ctx => PlayerPause();
+        _controls.Player.Jump.performed += ctx => _bIsJumping = true;
+        _controls.Player.Jump.canceled += ctx => _bIsJumping = false;
+        _controls.Player.EquipmentWheel.performed += ctx => HandleEquipmentWheel();
+        _controls.Player.EquipmentWheel.canceled += ctx => HandleEquipmentWheel();
+        _controls.Player.WeaponWheel.performed += ctx => HandleWeaponWheel();
+        _controls.Player.WeaponWheel.canceled += ctx => HandleWeaponWheel();
+        _controls.Player.Equipment.performed += ctx => _bEquipment = true;
+        _controls.Player.Equipment.canceled += ctx => _bEquipment = false;
+        _controls.Player.Thermal.performed += ctx => _bThermal = true;
+        _controls.Player.Thermal.canceled += ctx => _bThermal = false;
+        _controls.Player.Interact.performed += ctx => _bInteract = true;
+        _controls.Player.Interact.canceled += ctx => _bInteract = false;
     }
 
     void Start()
@@ -159,7 +204,8 @@ public class ALTPlayerController : MonoBehaviour
         Vector3 downdir = new Vector3(0.0f, -1.0f, 0.0f);
         RaycastHit hit;
 
-        ControllerCheck();
+        //Debug.Log(m_ControllerState);
+        //Debug.Log(Time.timeScale);
 
         switch (m_ControllerState)
         {
@@ -177,41 +223,20 @@ public class ALTPlayerController : MonoBehaviour
         }
 
 
-        if (Input.GetButtonDown("Pause"))
-        {
-            //try
-            //{
-            //    m_ControllerState = ControllerState.Menu;
-            //    _pauseMenu.Pause();
-            //}catch (Exception e)
-            //{
-            //    Debug.Log(e.Message);
-            //}
-            
-        }
-
-
-        HandleEquipmentWheels();
-
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            EventBroker.CallOnPlayerDeath();
-        }
+        //HandleEquipmentWheels();
 
         if (EquipmentWheel.enabled == true)
         {
-            joyX = 0;
-            joyY = 0;
-            if (m_ControllerType == ControllerType.Controller)
+            joyX = _look.x;
+            joyY = _look.y;
+            if (Gamepad.current.rightStick.IsActuated())
             {
 
-                joyX += Input.GetAxis("Mouse X") * m_LookSensitivity;
-                joyY += Input.GetAxis("Mouse Y") * m_LookSensitivity;
 
 
                 joyAngle = Mathf.Atan2(joyX, joyY) * Mathf.Rad2Deg;
                 Debug.Log("Joy Angle: " + joyAngle);
-                if (joyAngle > -45.0f && joyAngle < 0.0f)
+                if (joyAngle > -90.0f && joyAngle < -45.0f)
                 {
                     _equipIndex = 0;
                 }
@@ -227,14 +252,12 @@ public class ALTPlayerController : MonoBehaviour
         if (WeaponWheel.enabled == true)
         {
             //EventSystem.current.SetSelectedGameObject(null);
-            joyX = 0;
-            joyY = 0;
+            joyX = _look.x;
+            joyY = _look.y;
 
             {
-                if (m_ControllerType == ControllerType.Controller)
+                if (Gamepad.current.rightStick.IsActuated())
                 {
-                    joyX += Input.GetAxis("Mouse X") * m_LookSensitivity;
-                    joyY += Input.GetAxis("Mouse Y") * m_LookSensitivity;
                     joyAngle = Mathf.Atan2(joyX, joyY) * Mathf.Rad2Deg;
                     Debug.Log(joyAngle);
                     if (joyAngle > -90.0f && joyAngle < -45.0f)
@@ -288,10 +311,26 @@ public class ALTPlayerController : MonoBehaviour
         m_Velocity.y = Mathf.Clamp(m_Velocity.y, -15.0f, 1000.0f);  //Clamping the minimum y velocity to prevent rapidly falling after sliding. -AD
 
         //Stand in death animation -LCC
-        if(isDead)
+        if (isDead)
             gameObject.transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(new Vector3(0, 0, 100)), Time.deltaTime * 5.0f);
     }
 
+    private void OnEnable()
+    {
+        _controls.Enable();
+    }
+
+    private void OnDisable()
+    {
+        _controls.Disable();
+    }
+
+    private void PlayerPause()
+    {
+
+        m_ControllerState = ControllerState.Menu;
+        _pauseMenu.Pause();
+    }
     //Death and Respawn functionality -LCC
     public void PlayerRespawn()
     {
@@ -317,21 +356,21 @@ public class ALTPlayerController : MonoBehaviour
         }
     }
 
-    private void ControllerCheck()
-    {
-        _controllerNames = Input.GetJoystickNames();
-        if (_controllerNames != null)
-        {
-            if (_controllerNames.Length > 0)
-            {
-                m_ControllerType = ControllerType.Controller;
-            }
-            else
-            {
-                m_ControllerType = ControllerType.Mouse;
-            }
-        }
-    }
+    //private void ControllerCheck()
+    //{
+    //    _controllerNames = Input.GetJoystickNames();
+    //    if (_controllerNames != null)
+    //    {
+    //        if (_controllerNames.Length > 0)
+    //        {
+    //            m_ControllerType = ControllerType.Controller;
+    //        }
+    //        else
+    //        {
+    //            m_ControllerType = ControllerType.Mouse;
+    //        }
+    //    }
+    //}
 
     private void CursorVisibility()
     {
@@ -355,64 +394,52 @@ public class ALTPlayerController : MonoBehaviour
         _ControllerCollisionPos = hit.point;
     }
 
-    public bool CheckForJumpInput()
+    public bool CheckForInteract()
     {
-        return Input.GetButtonDown("Jump");
+        return _bInteract;
     }
 
-    public bool CheckForJumpInputReleased()
+    public bool CheckForJumpInput()
     {
-        return Input.GetButtonUp("Jump");
+        return _bIsJumping;
+    }
+
+    public bool CheckForEquipWheelInput()
+    {
+        return _bEquipWheel;
+    }
+
+    public bool CheckForWepWheelInput()
+    {
+        return _bWepWheel;
     }
 
     public bool CheckForUseEquipmentInput()
     {
-        return Input.GetButtonDown("Equipment");
-    }
-
-    public bool CheckForUseEquipmentInputReleased()
-    {
-        return Input.GetButtonUp("Equipment");
+        return _bEquipment;
     }
 
     public bool CheckForUseThermalInput()
     {
-        //return Input.GetButtonDown("Equipment");
-        return Input.GetKeyDown(KeyCode.F);
+        return _bThermal;
     }
 
-    public bool CheckForUseThermalInputReleased()
-    {
-        //return Input.GetButtonUp("Equipment");
-        return Input.GetKeyUp(KeyCode.F);
-    }
 
     public bool CheckForUseWeaponInput()
     {
-        bool rightTrigger = Mathf.Abs(Input.GetAxis("Fire1")) == 0 ? false : true;
-        return Input.GetButtonDown("Fire1") || rightTrigger;
-    }
-
-    public bool CheckForUseWeaponInputReleased()
-    {
-        bool rightTrigger = Mathf.Abs(Input.GetAxis("Fire1")) == 0 ? true : false;
-        return Input.GetButtonUp("Fire1") || rightTrigger;
+        return _bIsShooting;
     }
 
     public bool CheckForSprintInput()
     {
-        return Input.GetButton("Sprint");        
-    }
-
-    public bool CheckForSprintInputReleased()
-    {
-        return Input.GetButtonUp("Sprint");
+        return _bIsRunning;
     }
 
     public void PlayerRotation()
     {
-        float mouseX = Input.GetAxis("Mouse X") * m_LookSensitivity;
-        float mouseY = Input.GetAxis("Mouse Y") * m_LookSensitivity;
+
+        float mouseX = _look.x * Time.deltaTime * m_LookSensitivity;
+        float mouseY = _look.y * Time.deltaTime * m_LookSensitivity;
         if (m_ControllerState == ControllerState.Play)
         {
             m_XRotation += mouseY;
@@ -424,22 +451,20 @@ public class ALTPlayerController : MonoBehaviour
 
     public void PlayerMovement()
     {
-        float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxis("Vertical");
-       
+
 
         //Sprinting logic & use of player's stamina - VR
         if (CheckForSprintInput() && m_stamina.GetCurrentStamina() > 0 && _controller.velocity.magnitude > 0)
         {
-            m_Velocity = transform.right * x * m_SprintSpeed + transform.forward * z * m_SprintSpeed;
-            m_stamina.UseStamina();          
-        }       
+            m_Velocity = (transform.right * _movement.x * m_SprintSpeed) + (transform.forward * _movement.y * m_SprintSpeed);
+            m_stamina.UseStamina();
+        }
         else
         {
-            m_Velocity = transform.right * x * m_MoveSpeed + transform.forward * z * m_MoveSpeed;
+            m_Velocity = (transform.right * _movement.x * m_MoveSpeed) + (transform.forward * _movement.y * m_MoveSpeed);
         }
 
-        if (CheckForSprintInputReleased() || (_controller.velocity.magnitude == 0 && m_stamina.bCanRegenerate))
+        if (CheckForSprintInput() == false || (_controller.velocity.magnitude == 0 && m_stamina.bCanRegenerate))
         {
             m_stamina.StartCoroutine(m_stamina.RegenerateStamina());
         }
@@ -448,7 +473,7 @@ public class ALTPlayerController : MonoBehaviour
         {
             HandleJump();
         }
-        
+
 
         ApplyGravity();
 
@@ -462,6 +487,8 @@ public class ALTPlayerController : MonoBehaviour
         }
 
         _controller.Move(m_Velocity * Time.deltaTime);
+
+
 
         if (m_Momentum.magnitude >= 0f)
         {
@@ -504,13 +531,13 @@ public class ALTPlayerController : MonoBehaviour
                 {
                     m_YVelocity = -2.0f;
                 }
-                if(CheckForJumpInputReleased() && m_YVelocity > 0.0f)
+                if (CheckForJumpInput() == false && m_YVelocity > 0.0f)
                 {
-                   if (m_YVelocity > 0.01f)
+                    if (m_YVelocity > 0.01f)
                     {
                         m_YVelocity *= 0.5f;
                     }
-                   else
+                    else
                     {
                         m_YVelocity = 0.0f;
                     }
@@ -519,52 +546,62 @@ public class ALTPlayerController : MonoBehaviour
         }
     }
 
-    void HandleEquipmentWheels()
+    void HandleEquipmentWheel()
     {
-        if(WeaponWheel.enabled == false)
+        if (WeaponWheel.enabled == false)
         {
-            if (Input.GetButtonDown("EquipmentBelt"))
+            if (_bEquipWheel)
             {
+                _bEquipWheel = false;
                 EquipmentWheel.enabled = true;
                 Time.timeScale = 0.3f;
                 EquipmentWheel.GetComponent<CanvasGroup>().interactable = true;
                 EquipmentWheel.GetComponent<CanvasGroup>().blocksRaycasts = true;
                 Cursor.lockState = CursorLockMode.None;
                 m_ControllerState = ControllerState.Wheel;
+                return;
             }
 
-            if (Input.GetButtonUp("EquipmentBelt"))
+            if (_bEquipWheel == false)
             {
+                _bEquipWheel = true;
                 EquipmentWheel.enabled = false;
                 Time.timeScale = 1;
                 EquipmentWheel.GetComponent<CanvasGroup>().interactable = false;
                 EquipmentWheel.GetComponent<CanvasGroup>().blocksRaycasts = false;
                 Cursor.lockState = CursorLockMode.Locked;
                 m_ControllerState = ControllerState.Play;
+                return;
             }
         }
+    }
 
-        if(EquipmentWheel.enabled == false)
+    public void HandleWeaponWheel()
+    {
+        if (EquipmentWheel.enabled == false)
         {
-            if (Input.GetButtonDown("WeaponBelt"))
+            if (_bWepWheel)
             {
+                _bWepWheel = false;
                 WeaponWheel.enabled = true;
                 Time.timeScale = 0.3f;
                 WeaponWheel.GetComponent<CanvasGroup>().interactable = true;
                 WeaponWheel.GetComponent<CanvasGroup>().blocksRaycasts = true;
                 Cursor.lockState = CursorLockMode.None;
                 m_ControllerState = ControllerState.Wheel;
-
+                return;
             }
 
-            if (Input.GetButtonUp("WeaponBelt"))
+            if (_bWepWheel == false)
             {
+                _bWepWheel = true;
                 WeaponWheel.enabled = false;
                 Time.timeScale = 1;
                 WeaponWheel.GetComponent<CanvasGroup>().interactable = false;
                 WeaponWheel.GetComponent<CanvasGroup>().blocksRaycasts = false;
                 Cursor.lockState = CursorLockMode.Locked;
                 m_ControllerState = ControllerState.Play;
+                return;
             }
         }
     }
