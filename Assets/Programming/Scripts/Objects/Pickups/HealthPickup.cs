@@ -7,10 +7,18 @@ public class HealthPickup : MonoBehaviour
     public float m_healAmount = 20f;
     Pickup m_healthPickup;
 
+    public Compass m_compass;
+    public CompassMarkers m_marker;
+
     // Start is called before the first frame update
     void Start()
     {
+        m_compass = FindObjectOfType<Compass>();
+        m_marker = GetComponent<CompassMarkers>();       
         m_healthPickup = GetComponent<Pickup>();
+
+       // if (m_marker != null)
+            m_compass.AddMarker(m_marker);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -22,6 +30,10 @@ public class HealthPickup : MonoBehaviour
             {
                 playerHP.Heal(m_healAmount);
                 Destroy(gameObject);
+                if (m_marker != null)
+                {
+                    m_compass.RemoveMarker(m_marker);
+                }
             }
         }
     }

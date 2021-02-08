@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class AmmoPickup : MonoBehaviour
 {
@@ -15,12 +16,36 @@ public class AmmoPickup : MonoBehaviour
     Weapon m_creatureWeapon;
     Weapon m_grenadeWeapon;
 
+    public Compass m_compass;
+    public CompassMarkers m_marker;
+
     bool isPickedUp;
 
     // Start is called before the first frame update
     void Start()
     {
-        m_ammoPickup = GetComponent<Pickup>();        
+        m_compass = FindObjectOfType<Compass>();
+        m_marker = GetComponent<CompassMarkers>();
+        m_ammoPickup = GetComponent<Pickup>();
+
+        if(m_marker != null)
+        m_compass.AddMarker(m_marker);
+
+        //if (ammoType == WeaponType.BaseWeapon)
+        //{
+        //    m_marker.m_markerImage = Resources.Load<Image>("Sprites/Icons/Ammo/AMMO_DEFAULT");
+        //}
+        //else if (ammoType == WeaponType.CreatureWeapon)
+        //{
+        //    m_marker.m_markerImage = Resources.Load<Image>("Sprites/Icons/Ammo/AMMO_CREATURE");
+        //}
+        //else
+        //{
+        //    m_marker.m_markerImage = Resources.Load<Image>("Sprites/Icons/Ammo/AMMO_GRENADE");
+        //}
+
+       // m_marker.m_markerImage = FindObjectOfType<Sprite>();
+
         isPickedUp = false;
     }
 
@@ -45,13 +70,15 @@ public class AmmoPickup : MonoBehaviour
     // Update is called once per frame
     private void OnTriggerEnter(Collider other)
     {
-        // WeaponBase playerAmmo = (WeaponBase)other.gameObject.GetComponent<WeaponBelt>().GetToolAtIndex(weaponIndex);
         if (isPickedUp == false)
         {   
             isPickedUp = true;
             EventBroker.CallOnAmmoPickup(ammoType, m_amountOfClipsInPickup);
             //Destroy(gameObject); // EVAN COMMENTED THIS OUT AND ADDED THE LINE BELOW, IF THERE IS A PROBLEM YELL AT HIM
-            gameObject.SetActive(false);            
+            gameObject.SetActive(false);
+
+            if(m_marker != null)
+            m_compass.RemoveMarker(m_marker);            
         }
     }
 }
