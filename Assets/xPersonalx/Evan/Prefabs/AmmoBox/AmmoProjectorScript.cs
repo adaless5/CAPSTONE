@@ -12,9 +12,15 @@ public class AmmoProjectorScript : MonoBehaviour
 
     void Start()
     {
-        
+
     }
     void Awake()
+    {
+        EventBroker.OnPlayerSpawned += PlayerSpawn;
+
+    }
+
+    void PlayerSpawn(GameObject playerRef)
     {
         m_Player = GameObject.Find("Player_Camera");
     }
@@ -22,17 +28,20 @@ public class AmmoProjectorScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (m_Player == null)
-        {
-            m_Player = GameObject.Find("Player_Camera");
-        }
+        //if (m_Player == null)
+        //{
+        //    m_Player = GameObject.Find("Player_Camera");
+        //}
 
-        if (Hologram != null && Beam_1 != null && Beam_1 != null)
+        if (m_Player != null)
         {
-            Beam_1.transform.Rotate(0.0f, 0.0f,2.0f);
-            Beam_2.transform.Rotate(0.0f, 0.0f, 3.5f);
-            Hologram.transform.LookAt(m_Player.transform);
-            Hologram.transform.Rotate(90.0f,0.0f,0.0f);
+            if (Hologram != null && Beam_1 != null && Beam_1 != null)
+            {
+                Beam_1.transform.Rotate(0.0f, 0.0f, 2.0f);
+                Beam_2.transform.Rotate(0.0f, 0.0f, 3.5f);
+                Hologram.transform.LookAt(m_Player.transform);
+                Hologram.transform.Rotate(90.0f, 0.0f, 0.0f);
+            }
         }
     }
 }
