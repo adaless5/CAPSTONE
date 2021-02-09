@@ -95,6 +95,7 @@ GameObject:
   - component: {fileID: 6090537323409428594}
   - component: {fileID: 7100729660596821976}
   - component: {fileID: 2063106154109216067}
+  - component: {fileID: -7174558523040842994}
   m_Layer: 0
   m_Name: AMMO_Grenade
   m_TagString: Untagged
@@ -109,7 +110,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1856370411733414902}
-  m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071068}
+  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
@@ -120,7 +121,7 @@ Transform:
   - {fileID: 2998805694536531270}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!33 &2677157105585432297
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -185,6 +186,8 @@ MonoBehaviour:
   ammoType: 1
   m_amountOfClipsInPickup: 3
   m_clipSize: 2
+  m_compass: {fileID: 0}
+  m_marker: {fileID: 0}
 --- !u!65 &7100729660596821976
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -213,6 +216,22 @@ MonoBehaviour:
   Hologram: {fileID: 969481544462500900}
   Beam_1: {fileID: 4087039597037773273}
   Beam_2: {fileID: 2510252428208957436}
+--- !u!114 &-7174558523040842994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1856370411733414902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9726084a9cd7ec9449d233b5a9385c79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  icon: {fileID: 21300000, guid: 3f06a5a2d7978ea49a8994da4b51fcf5, type: 3}
+  m_markerImage: {fileID: 0}
+  m_markerPosition: {x: 0, y: 0}
+  bIsMoving: 0
 --- !u!1 &8466806244691321220
 GameObject:
   m_ObjectHideFlags: 0

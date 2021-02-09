@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: -6393086001432044041}
   - component: {fileID: -5497219566204380676}
   - component: {fileID: 7818323249915035984}
+  - component: {fileID: 4162866364527498211}
   m_Layer: 0
   m_Name: RoamingEnemy_TEMP
   m_TagString: Untagged
@@ -146,6 +147,8 @@ MonoBehaviour:
   m_HP: 20
   m_IsLoadingShield: 0
   healthBar: {fileID: 0}
+  m_compass: {fileID: 0}
+  m_marker: {fileID: 0}
 --- !u!135 &-6393086001432044041
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -189,3 +192,19 @@ CapsuleCollider:
   m_Height: 1.6244617
   m_Direction: 1
   m_Center: {x: 0.018806934, y: 0.8530079, z: 0.053272113}
+--- !u!114 &4162866364527498211
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3520139637981983928}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9726084a9cd7ec9449d233b5a9385c79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  icon: {fileID: 21300000, guid: db9e886826840af4d82ae3d56ecb8b9f, type: 3}
+  m_markerImage: {fileID: 0}
+  m_markerPosition: {x: 0, y: 0}
+  bIsMoving: 1
