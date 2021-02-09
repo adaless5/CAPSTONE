@@ -24,14 +24,7 @@ public class CameraBehaviour : MonoBehaviour
         {
             if (bIsWalking)
             {
-                if (!bIsWalking)
-                {
-                    walkingTime = 0;
-                }
-                else
-                {
-                    walkingTime += Time.deltaTime;
-                }
+                walkingTime += Time.deltaTime;
 
                 targetCameraPosition = headTransform.position + CalculateHeadBob(walkingTime);
 
@@ -42,6 +35,14 @@ public class CameraBehaviour : MonoBehaviour
                     transform.position = targetCameraPosition;
                 }
             }
+            else
+            {
+                if ((cameraTransform.position - targetCameraPosition).magnitude <= 0.001f)
+                {
+                    transform.position = targetCameraPosition;
+                }
+            }
+          
         }
     }
 
