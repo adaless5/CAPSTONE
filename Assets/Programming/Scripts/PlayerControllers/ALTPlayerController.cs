@@ -29,18 +29,17 @@ public class ALTPlayerController : MonoBehaviour
         Wheel,
     }
 
-
-
     public PlayerState m_PlayerState { get; private set; }
     public ControllerState m_ControllerState;
     public ControllerType m_ControllerType;
-
 
     public PauseMenuUI _pauseMenu;
 
     public Camera _camera;
     public float m_LookSensitivity = 10f;
     private float m_XRotation = 0f;
+
+    CameraBehaviour _cameraBehaviour;
 
     public CharacterController _controller;
     Vector3 m_Velocity;
@@ -126,6 +125,7 @@ public class ALTPlayerController : MonoBehaviour
         m_ControllerState = ControllerState.Play;
         InitializeControls();
         _controller = GetComponent<CharacterController>();
+        _cameraBehaviour = GetComponent<CameraBehaviour>();
     }
 
     void InitializeControls()
@@ -212,9 +212,11 @@ public class ALTPlayerController : MonoBehaviour
             case ControllerState.Play:
                 PlayerRotation();
                 PlayerMovement();
+                _cameraBehaviour.SetIsInMenu(false);
                 break;
 
             case ControllerState.Menu:
+                _cameraBehaviour.SetIsInMenu(true);
                 break;
 
             case ControllerState.Wheel:
@@ -313,6 +315,15 @@ public class ALTPlayerController : MonoBehaviour
         //Stand in death animation -LCC
         if (isDead)
             gameObject.transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(new Vector3(0, 0, 100)), Time.deltaTime * 5.0f);
+
+        if (_controller.velocity.magnitude > 0.0f)
+        {
+            _cameraBehaviour.SetIsWalking(true);
+        }
+        else
+        {
+            _cameraBehaviour.SetIsWalking(false);
+        }
     }
 
     private void OnEnable()

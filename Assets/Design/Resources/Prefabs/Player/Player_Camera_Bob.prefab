@@ -365,6 +365,37 @@ CanvasGroup:
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
+--- !u!1 &1262159533036176766
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8985456314995525668}
+  m_Layer: 9
+  m_Name: Head
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8985456314995525668
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1262159533036176766}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 3094653446611372868}
+  m_Father: {fileID: 496014468107801626}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1559969848887386506
 GameObject:
   m_ObjectHideFlags: 0
@@ -698,37 +729,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   outOfAmmoAnimator: {fileID: 0}
---- !u!1 &3419359680426563119
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1166619264705472541}
-  m_Layer: 9
-  m_Name: Head
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1166619264705472541
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3419359680426563119}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.9, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 3094653446611372868}
-  m_Father: {fileID: 496014468107801626}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3987769228802818061
 GameObject:
   m_ObjectHideFlags: 0
@@ -756,7 +756,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3987769228802818061}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.9, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8123814583154287386}
@@ -769,7 +769,7 @@ Transform:
   - {fileID: 1625614663710696735}
   - {fileID: 5846762340469646992}
   - {fileID: 5428132839681462875}
-  m_Father: {fileID: 1166619264705472541}
+  m_Father: {fileID: 8985456314995525668}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &5825818126392136262
@@ -1285,9 +1285,9 @@ GameObject:
   - component: {fileID: 3207576798768987432}
   - component: {fileID: -8071468345296215061}
   - component: {fileID: 4779102304736620747}
-  - component: {fileID: 2076327989549020281}
+  - component: {fileID: 7959905691182538471}
   m_Layer: 9
-  m_Name: Player
+  m_Name: Player_Camera_Bob
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1308,7 +1308,7 @@ Transform:
   - {fileID: 5359333502207367839}
   - {fileID: 675834715209866344}
   - {fileID: 6104262905942268889}
-  - {fileID: 1166619264705472541}
+  - {fileID: 8985456314995525668}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1434,7 +1434,7 @@ MonoBehaviour:
   m_regenRate: 0
   staminaBar: {fileID: 8101279713086301975}
   bCanRegenerate: 0
---- !u!114 &2076327989549020281
+--- !u!114 &7959905691182538471
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1446,13 +1446,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea060e6e0c106eb459741515e8072dac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  headTransform: {fileID: 1166619264705472541}
-  cameraTransform: {fileID: 3094653446611372868}
-  bobFrequency: 5
-  bobHorizontalAmplitude: 0.5
-  bobVerticalAmplitude: 0.5
-  headBobSmoothing: 0.1
-  bIsWalking: 1
 --- !u!1 &5479253186814775376
 GameObject:
   m_ObjectHideFlags: 0
