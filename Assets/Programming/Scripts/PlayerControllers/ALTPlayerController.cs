@@ -212,11 +212,13 @@ public class ALTPlayerController : MonoBehaviour
             case ControllerState.Play:
                 PlayerRotation();
                 PlayerMovement();
-                _cameraBehaviour.SetIsInMenu(false);
+                if (_cameraBehaviour != null)
+                    _cameraBehaviour.SetIsInMenu(false);
                 break;
 
             case ControllerState.Menu:
-                _cameraBehaviour.SetIsInMenu(true);
+                if(_cameraBehaviour != null)
+                    _cameraBehaviour.SetIsInMenu(true);
                 break;
 
             case ControllerState.Wheel:
@@ -450,11 +452,13 @@ public class ALTPlayerController : MonoBehaviour
     {
         if (_movement.magnitude > 0 && !_bIsJumping)
         {
-            _cameraBehaviour.SetIsWalking(true);
+            if (_cameraBehaviour != null)
+                _cameraBehaviour.SetIsWalking(true);
         }
         else
         {
-            _cameraBehaviour.SetIsWalking(false);
+            if (_cameraBehaviour != null)
+                _cameraBehaviour.SetIsWalking(false);
         }
         
 
