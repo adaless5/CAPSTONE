@@ -29,18 +29,17 @@ public class ALTPlayerController : MonoBehaviour
         Wheel,
     }
 
-
-
     public PlayerState m_PlayerState { get; private set; }
     public ControllerState m_ControllerState;
     public ControllerType m_ControllerType;
-
 
     public PauseMenuUI _pauseMenu;
 
     public Camera _camera;
     public float m_LookSensitivity = 10f;
     private float m_XRotation = 0f;
+
+    CameraBehaviour _cameraBehaviour;
 
     public CharacterController _controller;
     Vector3 m_Velocity;
@@ -74,6 +73,9 @@ public class ALTPlayerController : MonoBehaviour
     float _slopeAngle;
     Vector3 _slopeAcceleration;
     float _slopeSpeed = 500.0f;
+
+    [SerializeField] private float _slopeForce;
+    [SerializeField] private float _slopeForceRayLength;
 
     bool bIsInThermalView = false;
     bool bIsInDarknessVolume = false;
@@ -126,6 +128,7 @@ public class ALTPlayerController : MonoBehaviour
         m_ControllerState = ControllerState.Play;
         InitializeControls();
         _controller = GetComponent<CharacterController>();
+        _cameraBehaviour = GetComponent<CameraBehaviour>();
     }
 
     void InitializeControls()
@@ -204,17 +207,18 @@ public class ALTPlayerController : MonoBehaviour
         Vector3 downdir = new Vector3(0.0f, -1.0f, 0.0f);
         RaycastHit hit;
 
-        //Debug.Log(m_ControllerState);
-        //Debug.Log(Time.timeScale);
-
         switch (m_ControllerState)
         {
             case ControllerState.Play:
                 PlayerRotation();
                 PlayerMovement();
+                if (_cameraBehaviour != null)
+                    _cameraBehaviour.SetIsInMenu(false);
                 break;
 
             case ControllerState.Menu:
+                if(_cameraBehaviour != null)
+                    _cameraBehaviour.SetIsInMenu(true);
                 break;
 
             case ControllerState.Wheel:
@@ -222,18 +226,12 @@ public class ALTPlayerController : MonoBehaviour
                 break;
         }
 
-
-        //HandleEquipmentWheels();
-
         if (EquipmentWheel.enabled == true)
         {
             joyX = _look.x;
             joyY = _look.y;
             if (Gamepad.current.rightStick.IsActuated())
             {
-
-
-
                 joyAngle = Mathf.Atan2(joyX, joyY) * Mathf.Rad2Deg;
                 Debug.Log("Joy Angle: " + joyAngle);
                 if (joyAngle > -90.0f && joyAngle < -45.0f)
@@ -313,6 +311,7 @@ public class ALTPlayerController : MonoBehaviour
         //Stand in death animation -LCC
         if (isDead)
             gameObject.transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(new Vector3(0, 0, 100)), Time.deltaTime * 5.0f);
+
     }
 
     private void OnEnable()
@@ -451,10 +450,20 @@ public class ALTPlayerController : MonoBehaviour
 
     public void PlayerMovement()
     {
-
+        if (_movement.magnitude > 0 && !_bIsJumping)
+        {
+            if (_cameraBehaviour != null)
+                _cameraBehaviour.SetIsWalking(true);
+        }
+        else
+        {
+            if (_cameraBehaviour != null)
+                _cameraBehaviour.SetIsWalking(false);
+        }
+        
 
         //Sprinting logic & use of player's stamina - VR
-        if (CheckForSprintInput() && m_stamina.GetCurrentStamina() > 0 && _controller.velocity.magnitude > 0)
+        if (CheckForSprintInput() && m_stamina.GetCurrentStamina() > 0 && _movement.magnitude > 0)
         {
             m_Velocity = (transform.right * _movement.x * m_SprintSpeed) + (transform.forward * _movement.y * m_SprintSpeed);
             m_stamina.UseStamina();
@@ -464,7 +473,7 @@ public class ALTPlayerController : MonoBehaviour
             m_Velocity = (transform.right * _movement.x * m_MoveSpeed) + (transform.forward * _movement.y * m_MoveSpeed);
         }
 
-        if (CheckForSprintInput() == false || (_controller.velocity.magnitude == 0 && m_stamina.bCanRegenerate))
+        if (CheckForSprintInput() == false || (_movement.magnitude == 0 && m_stamina.bCanRegenerate))
         {
             m_stamina.StartCoroutine(m_stamina.RegenerateStamina());
         }
@@ -473,7 +482,6 @@ public class ALTPlayerController : MonoBehaviour
         {
             HandleJump();
         }
-
 
         ApplyGravity();
 
@@ -488,7 +496,10 @@ public class ALTPlayerController : MonoBehaviour
 
         _controller.Move(m_Velocity * Time.deltaTime);
 
-
+        if (OnWalkableSlope())
+        {
+            _controller.Move(Vector3.down * _controller.height / 2 * _slopeForce * Time.deltaTime);
+        }
 
         if (m_Momentum.magnitude >= 0f)
         {
@@ -502,6 +513,19 @@ public class ALTPlayerController : MonoBehaviour
                 m_Momentum = Vector3.zero;
             }
         }
+    }
+
+    private bool OnWalkableSlope()
+    {
+        if (_bIsJumping)
+            return false;
+
+        RaycastHit hit;
+
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, _controller.height / 2 * _slopeForceRayLength))
+            if (hit.normal != Vector3.up)
+                return true;
+        return false;
     }
 
     void ApplyGravity()
