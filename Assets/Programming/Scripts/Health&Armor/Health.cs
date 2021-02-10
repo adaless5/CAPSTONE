@@ -26,12 +26,30 @@ public class Health : MonoBehaviour, ISaveable
 
     public HealthBarUI healthBar;
 
+    //Compass Markers
+    public Compass m_compass;
+    public CompassMarkers m_marker;
+
     void Start()
     {
+        EventBroker.OnPlayerSpawned += PlayerSpawned;
+
         healthBar = FindObjectOfType<HealthBarUI>();
 
         if (healthBar != null)
             healthBar.SetMaxHealth(m_MaxHealth);
+
+
+    }
+
+    void PlayerSpawned(GameObject playerReference)
+    {
+        m_compass = FindObjectOfType<Compass>();
+        m_marker = GetComponent<CompassMarkers>();
+        if(gameObject.tag != "Player" && m_marker != null)
+        {           
+                m_compass.AddMarker(m_marker);
+        }
     }
 
     void Awake()
@@ -58,7 +76,7 @@ public class Health : MonoBehaviour, ISaveable
             }
             else
             {
-                Die();
+                Die();                
             }
         }
 
@@ -73,6 +91,11 @@ public class Health : MonoBehaviour, ISaveable
     }
     void Die()
     {
+        if (m_marker != null)
+        {
+            m_compass.RemoveMarker(m_marker);
+        }
+
         //Temporary Spawning Stuff - Anthony
         Spawner spawner = GetComponent<Spawner>();
         if (spawner != null)
