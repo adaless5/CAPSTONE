@@ -2,15 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
-
+using UnityEngine.InputSystem;
 
 public class TitleScreen : MonoBehaviour
 {
-        private void Update()
+    private void Update()
     {
-        if(Input.anyKey)
+        if (Gamepad.current != null)
         {
-            SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
+            if (Gamepad.current.IsPressed())
+            {
+                SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
+            }
+        }
+        if (Keyboard.current != null)
+        {
+            if (Keyboard.current.anyKey.isPressed)
+            {
+                SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
+            }
         }
     }
 }

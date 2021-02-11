@@ -11,7 +11,7 @@ public class BossAI : MonoBehaviour
     public BoxCollider _boxCol;
     Vector3 direction;
     Health _health;
-    BossState _currentBossState;
+    State _currentBossState;
 
     private void Awake()
     {
@@ -81,7 +81,8 @@ public class BossAI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        _currentBossState.Process();
+        if (_currentBossState != null)
+            _currentBossState = _currentBossState.Process();
         //Debug.Log(_currentBossState);
     }
 
@@ -100,7 +101,7 @@ public class BossAI : MonoBehaviour
         {
             Debug.Log("Still UCs");
             return false;
-        }    
+        }
         return true;
     }
 

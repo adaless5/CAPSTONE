@@ -5,33 +5,31 @@ using UnityEngine;
 public class UCState : BossState
 {
     BossState[] _randomState;
-    public UCState(GameObject boss)
+    int _bossStateNum;
+    public UCState(GameObject boss) : base (boss)
     {
+        _randomState = new BossState[2];
         Debug.Log("UC State Started");
-        _currentEnemy = boss;
-        //_randomState = new BossState[2];
-        //_randomState[0] = new BossHomingAttack(boss);
-        //_randomState[1] = new BossProjAttack(boss);
     }
 
     public override void Enter()
     {
         base.Enter();
-       // int randStateInt = Random.Range(0, _randomState.Length);
-        
+        _randomState[0] = new BossHomingAttack(_currentEnemy);
+        _randomState[1] = new BossProjAttack(_currentEnemy);
+        _bossStateNum = Random.Range(0, _randomState.Length);
+        Debug.Log("Random State chosen is " + _bossStateNum);
     }
 
     public override void Update()
     {
         base.Update();
-        _nextState = new BossHomingAttack(_currentEnemy );
-        Debug.Log(_nextState);
+        _nextState = _randomState[_bossStateNum];
         _stage = EVENT.EXIT;
     }
 
     public override void Exit()
     {
         base.Exit();
-
     }
 }

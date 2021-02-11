@@ -48,6 +48,8 @@ public class DroneAI : MonoBehaviour
             _currentState = _currentState.Process();
 
 
+        Debug.Log(_currentState);
+
     }
 
     public void Stun()
