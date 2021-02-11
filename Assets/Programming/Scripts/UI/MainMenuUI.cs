@@ -50,6 +50,7 @@ public class MainMenuUI : MonoBehaviour
 
     void Start()
     {
+        OptionMenuAnimator.SetBool("OptionsActive", false);
         InitializeMenu();
         _canvasGroup = GetComponent<CanvasGroup>();
         _optionsGroup = FindObjectOfType<OptionsMenuUI>().GetComponent<CanvasGroup>();
@@ -63,7 +64,8 @@ public class MainMenuUI : MonoBehaviour
 
     public void InitializeMenu()
     {
-        EventSystem.current.SetSelectedGameObject(firstMenuOption);
+        EventSystem.current.SetSelectedGameObject(null);
+        //EventSystem.current.SetSelectedGameObject(firstMenuOption);
 
     }
     public void ActivateOptionsMenu()
@@ -124,7 +126,6 @@ public class MainMenuUI : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(EventSystem.current.currentSelectedGameObject);
     }
 
     public void Quit(GameObject firstSelected)
