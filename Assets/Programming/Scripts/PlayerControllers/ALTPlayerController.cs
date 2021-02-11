@@ -27,6 +27,7 @@ public class ALTPlayerController : MonoBehaviour
         Play,
         Menu,
         Wheel,
+        Debug
     }
 
     public PlayerState m_PlayerState { get; private set; }
@@ -135,8 +136,8 @@ public class ALTPlayerController : MonoBehaviour
         _cameraBehaviour = GetComponent<CameraBehaviour>();
         instance = this;
     }
-
-    public void UnlockAllWeapons()
+    #region Debug Functions
+    public void DebugUnlockAllWeapons()
     {
         for (int i = 0; i < _weaponBelt._items.Length; i++)
         {
@@ -144,13 +145,19 @@ public class ALTPlayerController : MonoBehaviour
         }
     }
 
-    public void UnlockAllTools()
+    public void DebugUnlockAllTools()
     {
         for (int i = 0; i < _weaponBelt._items.Length; i++)
         {
             _equipmentBelt._items[i].ObtainEquipment();
         }
     }
+
+    public void DebugGainCurrency()
+    {
+        m_UpgradeCurrencyAmount += 10;
+    }
+    #endregion
 
     void InitializeControls()
     {
@@ -251,20 +258,23 @@ public class ALTPlayerController : MonoBehaviour
         {
             joyX = _look.x;
             joyY = _look.y;
-            if (Gamepad.current.rightStick.IsActuated())
+            if (Gamepad.current != null)
             {
-                joyAngle = Mathf.Atan2(joyX, joyY) * Mathf.Rad2Deg;
-                Debug.Log("Joy Angle: " + joyAngle);
-                if (joyAngle > -90.0f && joyAngle < -45.0f)
+                if (Gamepad.current.rightStick.IsActuated())
                 {
-                    _equipIndex = 0;
+                    joyAngle = Mathf.Atan2(joyX, joyY) * Mathf.Rad2Deg;
+                    Debug.Log("Joy Angle: " + joyAngle);
+                    if (joyAngle > -90.0f && joyAngle < -45.0f)
+                    {
+                        _equipIndex = 0;
+                    }
+                    if (joyAngle > 0.0f && joyAngle < 90.0f)
+                    {
+                        _equipIndex = 1;
+                    }
+                    EventSystem.current.SetSelectedGameObject(_equipButtons[_equipIndex].gameObject);
+                    _equipmentBelt.EquipToolAtIndex(_equipIndex);
                 }
-                if (joyAngle > 0.0f && joyAngle < 90.0f)
-                {
-                    _equipIndex = 1;
-                }
-                EventSystem.current.SetSelectedGameObject(_equipButtons[_equipIndex].gameObject);
-                _equipmentBelt.EquipToolAtIndex(_equipIndex);
             }
         }
 
@@ -275,26 +285,29 @@ public class ALTPlayerController : MonoBehaviour
             joyY = _look.y;
 
             {
-                if (Gamepad.current.rightStick.IsActuated())
+                if (Gamepad.current != null)
                 {
-                    joyAngle = Mathf.Atan2(joyX, joyY) * Mathf.Rad2Deg;
-                    Debug.Log(joyAngle);
-                    if (joyAngle > -90.0f && joyAngle < -45.0f)
+                    if (Gamepad.current.rightStick.IsActuated())
                     {
-                        _wepIndex = 1;
+                        joyAngle = Mathf.Atan2(joyX, joyY) * Mathf.Rad2Deg;
+                        Debug.Log(joyAngle);
+                        if (joyAngle > -90.0f && joyAngle < -45.0f)
+                        {
+                            _wepIndex = 1;
 
+                        }
+                        if (joyAngle > -45.0f && joyAngle < 0.0f)
+                        {
+                            _wepIndex = 0;
+                        }
+                        if (joyAngle > 0.0f && joyAngle < 90.0f)
+                        {
+                            _wepIndex = 2;
+                        }
+                        Debug.Log(_wepIndex);
+                        EventSystem.current.SetSelectedGameObject(_wepButtons[_wepIndex].gameObject);
+                        _weaponBelt.EquipToolAtIndex(_wepIndex);
                     }
-                    if (joyAngle > -45.0f && joyAngle < 0.0f)
-                    {
-                        _wepIndex = 0;
-                    }
-                    if (joyAngle > 0.0f && joyAngle < 90.0f)
-                    {
-                        _wepIndex = 2;
-                    }
-                    Debug.Log(_wepIndex);
-                    EventSystem.current.SetSelectedGameObject(_wepButtons[_wepIndex].gameObject);
-                    _weaponBelt.EquipToolAtIndex(_wepIndex);
                 }
             }
         }
@@ -346,7 +359,6 @@ public class ALTPlayerController : MonoBehaviour
 
     private void PlayerPause()
     {
-
         m_ControllerState = ControllerState.Menu;
         _pauseMenu.Pause();
     }
