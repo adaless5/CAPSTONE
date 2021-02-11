@@ -6,17 +6,18 @@ public class BossHomingAttack : BossState
 {
     GameObject _haRef;
     GameObject _homingAttack;
-    public BossHomingAttack(GameObject boss)
+    public BossHomingAttack(GameObject boss) : base(boss)
     {
-        Debug.Log("Homing State");
+        Debug.Log("Homing State Initiated");
         _currentEnemy = boss;
-        _haRef = (GameObject)Resources.Load("Prefabs/Enemies/Boss/Homing Attack");
+        _haRef = (GameObject)Resources.Load("Prefabs/Enemies/Boss/HA");
+        _homingAttack = new GameObject();
     }
 
     public override void Enter()
     {
         base.Enter();
-        
+        _homingAttack = GameObject.Instantiate(_haRef, _currentEnemy.transform.position + Vector3.up, Quaternion.identity);
     }
 
     public override void Update()
@@ -25,16 +26,13 @@ public class BossHomingAttack : BossState
 
         if (_homingAttack == null)
         {
-            _homingAttack = GameObject.Instantiate(_haRef, _currentEnemy.transform.position, Quaternion.identity);
-            Debug.Log("Next state...");
-            //_stage = EVENT.EXIT;
+            _stage = EVENT.EXIT;
+            _nextState = new UCState(_currentEnemy);
         }
     }
 
     public override void Exit()
     {
         base.Exit();
-        _nextState = new UCState(_currentEnemy);
-        Debug.Log("Homing State Complete");
     }
 }

@@ -217,7 +217,7 @@ public class ALTPlayerController : MonoBehaviour
                 break;
 
             case ControllerState.Menu:
-                if(_cameraBehaviour != null)
+                if (_cameraBehaviour != null)
                     _cameraBehaviour.SetIsInMenu(true);
                 break;
 
@@ -230,20 +230,23 @@ public class ALTPlayerController : MonoBehaviour
         {
             joyX = _look.x;
             joyY = _look.y;
-            if (Gamepad.current.rightStick.IsActuated())
+            if (Gamepad.current != null)
             {
-                joyAngle = Mathf.Atan2(joyX, joyY) * Mathf.Rad2Deg;
-                Debug.Log("Joy Angle: " + joyAngle);
-                if (joyAngle > -90.0f && joyAngle < -45.0f)
+                if (Gamepad.current.rightStick.IsActuated())
                 {
-                    _equipIndex = 0;
+                    joyAngle = Mathf.Atan2(joyX, joyY) * Mathf.Rad2Deg;
+                    Debug.Log("Joy Angle: " + joyAngle);
+                    if (joyAngle > -90.0f && joyAngle < -45.0f)
+                    {
+                        _equipIndex = 0;
+                    }
+                    if (joyAngle > 0.0f && joyAngle < 90.0f)
+                    {
+                        _equipIndex = 1;
+                    }
+                    EventSystem.current.SetSelectedGameObject(_equipButtons[_equipIndex].gameObject);
+                    _equipmentBelt.EquipToolAtIndex(_equipIndex);
                 }
-                if (joyAngle > 0.0f && joyAngle < 90.0f)
-                {
-                    _equipIndex = 1;
-                }
-                EventSystem.current.SetSelectedGameObject(_equipButtons[_equipIndex].gameObject);
-                _equipmentBelt.EquipToolAtIndex(_equipIndex);
             }
         }
 
@@ -254,26 +257,29 @@ public class ALTPlayerController : MonoBehaviour
             joyY = _look.y;
 
             {
-                if (Gamepad.current.rightStick.IsActuated())
+                if (Gamepad.current != null)
                 {
-                    joyAngle = Mathf.Atan2(joyX, joyY) * Mathf.Rad2Deg;
-                    Debug.Log(joyAngle);
-                    if (joyAngle > -90.0f && joyAngle < -45.0f)
+                    if (Gamepad.current.rightStick.IsActuated())
                     {
-                        _wepIndex = 1;
+                        joyAngle = Mathf.Atan2(joyX, joyY) * Mathf.Rad2Deg;
+                        Debug.Log(joyAngle);
+                        if (joyAngle > -90.0f && joyAngle < -45.0f)
+                        {
+                            _wepIndex = 1;
 
+                        }
+                        if (joyAngle > -45.0f && joyAngle < 0.0f)
+                        {
+                            _wepIndex = 0;
+                        }
+                        if (joyAngle > 0.0f && joyAngle < 90.0f)
+                        {
+                            _wepIndex = 2;
+                        }
+                        Debug.Log(_wepIndex);
+                        EventSystem.current.SetSelectedGameObject(_wepButtons[_wepIndex].gameObject);
+                        _weaponBelt.EquipToolAtIndex(_wepIndex);
                     }
-                    if (joyAngle > -45.0f && joyAngle < 0.0f)
-                    {
-                        _wepIndex = 0;
-                    }
-                    if (joyAngle > 0.0f && joyAngle < 90.0f)
-                    {
-                        _wepIndex = 2;
-                    }
-                    Debug.Log(_wepIndex);
-                    EventSystem.current.SetSelectedGameObject(_wepButtons[_wepIndex].gameObject);
-                    _weaponBelt.EquipToolAtIndex(_wepIndex);
                 }
             }
         }
@@ -460,7 +466,7 @@ public class ALTPlayerController : MonoBehaviour
             if (_cameraBehaviour != null)
                 _cameraBehaviour.SetIsWalking(false);
         }
-        
+
 
         //Sprinting logic & use of player's stamina - VR
         if (CheckForSprintInput() && m_stamina.GetCurrentStamina() > 0 && _movement.magnitude > 0)

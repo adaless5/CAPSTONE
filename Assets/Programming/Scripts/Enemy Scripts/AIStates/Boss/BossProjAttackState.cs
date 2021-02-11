@@ -4,10 +4,9 @@ using UnityEngine;
 
 public class BossProjAttack : BossState
 {
-    public BossProjAttack(GameObject boss)
+    public BossProjAttack(GameObject boss) : base(boss)
     {
         Debug.Log("Projectile State");
-        _currentEnemy = boss;
     }
 
     public override void Enter()
@@ -19,12 +18,13 @@ public class BossProjAttack : BossState
     public override void Update()
     {
         base.Update();
-        _stage = EVENT.EXIT;
+        Debug.Log("Currently in Projectile State");
+        //_stage = EVENT.EXIT;
     }
 
     public override void Exit()
     {
-        _nextState = new UCState(_currentEnemy);
+        //_nextState = new UCState(_currentEnemy);
         base.Exit();
 
     }

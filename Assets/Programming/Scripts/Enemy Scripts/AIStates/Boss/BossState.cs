@@ -4,26 +4,9 @@ using UnityEngine;
 
 public class BossState : State
 {
-    public BossState()
+    public BossState(GameObject boss)
     {
-        _stage = EVENT.ENTER;
+        _currentEnemy = boss;
     }
 
-    public override void Enter()
-    {
-        base.Enter();
-        
-    }
-
-    public override void Update()
-    {
-        base.Update();
-
-    }
-
-    public override void Exit()
-    {
-        base.Exit();
-
-    }
 }
