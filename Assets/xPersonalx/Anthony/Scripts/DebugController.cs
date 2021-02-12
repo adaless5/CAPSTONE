@@ -8,7 +8,7 @@ public class DebugController : MonoBehaviour
     bool bToggleGui = false;
     bool bCanShow = true;
 
-    string _userInput;
+    string _userInput = "type here";
 
     public ALTPlayerController _player;
 
@@ -16,6 +16,8 @@ public class DebugController : MonoBehaviour
     public static DebugCommand ALL_TOOLS;
     public static DebugCommand ADD_MONEY;
     public List<DebugCommandBase> commandList;
+
+    const float BUFFER = 5.0f;
 
     public void Awake()
     {
@@ -89,13 +91,19 @@ public class DebugController : MonoBehaviour
 
             float y = Screen.height / 2f;
 
+            GUI.Box(new Rect(Screen.width / 4, y, Screen.width / 2, 40), "");
+            GUI.Box(new Rect(Screen.width / 4, y - (20.0f + (40.0f * commandList.Count)), Screen.width / 2, (40.0f * commandList.Count)), "");
+            GUI.backgroundColor = new Color(0, 0, 0, 0);
+
             GUIStyle style = new GUIStyle();
             style.fontSize = 20;
             style.normal.textColor = Color.white;
+            _userInput = GUI.TextField(new Rect(Screen.width / 4 + BUFFER, y + BUFFER, Screen.width / 2, 40), _userInput, style);
 
-            GUI.Box(new Rect(0, y, Screen.width, 40), "");
-            GUI.backgroundColor = Color.red;
-            _userInput = GUI.TextField(new Rect(0, y + 5f, Screen.width - 20f, 100f), _userInput, style);
+            for (int i = 0; i < commandList.Count; i++)
+            {
+                GUI.Label(new Rect(Screen.width / 4 + BUFFER, y - (20.0f + (40.0f * commandList.Count)) + (25.0f * i), Screen.width, 40.0f), commandList[i].commandName + " : " + commandList[i].commandDescription, style);
+            }
 
         }
         else
