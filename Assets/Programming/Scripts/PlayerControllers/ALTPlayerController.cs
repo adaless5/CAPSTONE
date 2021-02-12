@@ -27,6 +27,7 @@ public class ALTPlayerController : MonoBehaviour
         Play,
         Menu,
         Wheel,
+        Debug
     }
 
     public PlayerState m_PlayerState { get; private set; }
@@ -121,6 +122,10 @@ public class ALTPlayerController : MonoBehaviour
     bool _bThermal;
     bool _bInteract;
 
+    DebugController debugController;
+
+    public static ALTPlayerController instance;
+
     private void Awake()
     {
         OnTakeDamage += TakeDamage;
@@ -129,7 +134,30 @@ public class ALTPlayerController : MonoBehaviour
         InitializeControls();
         _controller = GetComponent<CharacterController>();
         _cameraBehaviour = GetComponent<CameraBehaviour>();
+        instance = this;
     }
+    #region Debug Functions
+    public void DebugUnlockAllWeapons()
+    {
+        for (int i = 0; i < _weaponBelt._items.Length; i++)
+        {
+            _weaponBelt._items[i].ObtainEquipment();
+        }
+    }
+
+    public void DebugUnlockAllTools()
+    {
+        for (int i = 0; i < _weaponBelt._items.Length; i++)
+        {
+            _equipmentBelt._items[i].ObtainEquipment();
+        }
+    }
+
+    public void DebugGainCurrency()
+    {
+        m_UpgradeCurrencyAmount += 10;
+    }
+    #endregion
 
     void InitializeControls()
     {
@@ -317,7 +345,6 @@ public class ALTPlayerController : MonoBehaviour
         //Stand in death animation -LCC
         if (isDead)
             gameObject.transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(new Vector3(0, 0, 100)), Time.deltaTime * 5.0f);
-
     }
 
     private void OnEnable()
@@ -332,7 +359,6 @@ public class ALTPlayerController : MonoBehaviour
 
     private void PlayerPause()
     {
-
         m_ControllerState = ControllerState.Menu;
         _pauseMenu.Pause();
     }
