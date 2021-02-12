@@ -96,6 +96,8 @@ public class DarknessTrigger : MonoBehaviour, ITippable
                 CreateTip("Sprites/Messages/DARKNESS_WARNING");
             }
 
+            //footstepNG
+            collider.gameObject.GetComponent<DarknessFootprint>().EnterDarkness();
         }
     }
 
@@ -108,6 +110,9 @@ public class DarknessTrigger : MonoBehaviour, ITippable
             _playerController.SetDarknessVolume(false);
 
             DestroyTip();
+
+            //footstep NG
+            collider.gameObject.GetComponent<DarknessFootprint>().ExitDarkness();
         }
     }
 

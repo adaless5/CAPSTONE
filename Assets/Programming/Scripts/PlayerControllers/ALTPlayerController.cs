@@ -691,4 +691,9 @@ public class ALTPlayerController : MonoBehaviour
     {
         return m_ControllerState;
     }
+
+    public Vector3 GetVelocity()
+    {
+        return m_Velocity;
+    }
 }
