@@ -13,7 +13,7 @@ public class PuzzleSwitch : MonoBehaviour, ISaveable
 
     public PuzzleSwitch[] _AffectedSwitches; // The array of switches that this switch will affect
 
-
+    ALTPlayerController _PlayerController;
     public enum Switch_PlayerInteract_Type // Determines how the player interacts with the switch
     {
         UseButton,//------------------------------------------------ Player presses the use button to activate the switch
@@ -102,20 +102,16 @@ public class PuzzleSwitch : MonoBehaviour, ISaveable
     public void Interact()
     {
         SwitchInteract();
-        if (bCanSwitch)
+        if (bCanSwitch && _ResponseType == Switch_Response_Type.InteractSwitches)
         {
-            if (_ResponseType == Switch_Response_Type.InteractSwitches)
+            for (int i = 0; i < _AffectedSwitches.Length; i++)
             {
-                for (int i = 0; i < _AffectedSwitches.Length; i++)
+                if (_AffectedSwitches[i] != null)
                 {
-                    if (_AffectedSwitches[i] != null)
-                    {
-                        _AffectedSwitches[i].SwitchInteract();
-                    }
+                    _AffectedSwitches[i].SwitchInteract();
                 }
             }
         }
-
     }
     void Activate(bool onOff)
     {
@@ -177,9 +173,16 @@ public class PuzzleSwitch : MonoBehaviour, ISaveable
 
     void PlayerInput()
     {
-        if (Input.GetButtonDown("Continue"))
+        if (_PlayerController != null)
         {
-            Interact();
+            if (_PlayerController.CheckForInteract())
+            {
+                Interact();
+            }
+        }
+        else
+        {
+            _PlayerController = GameObject.FindGameObjectWithTag("Player").GetComponent<ALTPlayerController>();
         }
     }
 

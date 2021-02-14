@@ -24,7 +24,7 @@ public class Pickup : MonoBehaviour
         m_pickupBody = GetComponent<Rigidbody>();
         m_Collider = GetComponent<Collider>();
 
-        m_pickupBody.isKinematic = true;
+       // m_pickupBody.isKinematic = true;
         m_Collider.isTrigger = true;
 
         m_StartPosition = transform.position;
