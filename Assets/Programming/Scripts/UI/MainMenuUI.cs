@@ -29,10 +29,12 @@ public class MainMenuUI : MonoBehaviour
 
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            //SceneManager.LoadScene(2);
         }
         else
         {
             SceneManager.LoadScene(data.sceneName);
+            //SceneManager.LoadScene(2);
         }
 
         //get info from save system and load accordnaly
@@ -45,7 +47,8 @@ public class MainMenuUI : MonoBehaviour
 
         FileIO.ClearAllSavedData();
 
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        SceneManager.LoadScene(2);
     }
 
     void Start()

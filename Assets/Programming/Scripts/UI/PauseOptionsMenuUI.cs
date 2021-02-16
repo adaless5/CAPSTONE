@@ -94,7 +94,25 @@ public class PauseOptionsMenuUI : MonoBehaviour
         //RenderSettings.ambientIntensity = amt;
         //RenderSettings.ambientLight = new Color(amt, amt, amt, 1);
         //Debug.Log(RenderSettings.ambientLight);
+
+        GameObject _sfVol = GameObject.Find("Sky and Fog Volume");
+        if (_sfVol != null)
+        {
+            Volume volume = _sfVol.GetComponentInChildren<Volume>();
+            if (volume != null)
+            {
+                ColorAdjustments color;
+                volume.profile.TryGet<ColorAdjustments>(out color);
+
+                if (color != null)
+                {
+                    //exposure.postExposure.SetValue(new FloatParameter(amt));
+                    color.postExposure.SetValue(new FloatParameter(amt));
+                }
+            }
+        }
     }
+
     public void SetVolume(float vol)
     {
         //audioMaster.SetFloat("volume", vol);

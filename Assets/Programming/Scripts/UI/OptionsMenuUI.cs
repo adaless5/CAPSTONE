@@ -5,7 +5,8 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.HighDefinition;
 
 public class OptionsMenuUI : MonoBehaviour
 {
@@ -107,8 +108,25 @@ public class OptionsMenuUI : MonoBehaviour
 
     public void SetBrightness(float amt)
     {
-        RenderSettings.ambientLight = new Color(amt, amt, amt, 1);
-        Debug.Log(RenderSettings.ambientLight);
+        //RenderSettings.ambientLight = new Color(amt, amt, amt, 1);
+        //Debug.Log(RenderSettings.ambientLight);
+
+        //Trying to debug Lighting adjustment.
+        Camera[] Cameras = GameObject.FindObjectsOfType<Camera>();
+        for (int i = 0; i < Cameras.Length; i++)
+        {
+            Volume volume = Cameras[i].GetComponentInChildren<Volume>();
+            if (volume != null)
+            {
+                ColorAdjustments color;
+                volume.profile.TryGet<ColorAdjustments>(out color);
+
+                if (color != null)
+                {
+                    color.postExposure.SetValue(new FloatParameter(amt));
+                }
+            }
+        }
     }
     public void SetOptions()
     {
