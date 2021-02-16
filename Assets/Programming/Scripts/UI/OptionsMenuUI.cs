@@ -108,14 +108,10 @@ public class OptionsMenuUI : MonoBehaviour
 
     public void SetBrightness(float amt)
     {
-        //RenderSettings.ambientLight = new Color(amt, amt, amt, 1);
-        //Debug.Log(RenderSettings.ambientLight);
-
-        //Trying to debug Lighting adjustment.
-        Camera[] Cameras = GameObject.FindObjectsOfType<Camera>();
-        for (int i = 0; i < Cameras.Length; i++)
+        GameObject _sfVol = GameObject.Find("Sky and Fog Volume");
+        if (_sfVol != null)
         {
-            Volume volume = Cameras[i].GetComponentInChildren<Volume>();
+            Volume volume = _sfVol.GetComponentInChildren<Volume>();
             if (volume != null)
             {
                 ColorAdjustments color;

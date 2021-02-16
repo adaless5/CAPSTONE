@@ -88,13 +88,6 @@ public class PauseOptionsMenuUI : MonoBehaviour
     }
     public void SetBrightness(float amt)
     {
-        //m_Exposure.compensation = new FloatParameter(amt);
-        //_light.intensity = amt;
-        //RenderSettings.skybox.SetFloat("_Exposure", amt);
-        //RenderSettings.ambientIntensity = amt;
-        //RenderSettings.ambientLight = new Color(amt, amt, amt, 1);
-        //Debug.Log(RenderSettings.ambientLight);
-
         GameObject _sfVol = GameObject.Find("Sky and Fog Volume");
         if (_sfVol != null)
         {
@@ -106,7 +99,6 @@ public class PauseOptionsMenuUI : MonoBehaviour
 
                 if (color != null)
                 {
-                    //exposure.postExposure.SetValue(new FloatParameter(amt));
                     color.postExposure.SetValue(new FloatParameter(amt));
                 }
             }
