@@ -194,6 +194,14 @@ public class WeaponBase : Weapon, ISaveable
                     wall.Break(gameObject.tag);
                 }
 
+                /// Evan's Item container call vvv
+                ItemContainer container = hitInfo.transform.GetComponentInParent<ItemContainer>();
+                if (container)
+                {
+                    container.Break(gameObject.tag);
+                }
+                /// Evan's Item container call ^^^
+                /// 
                 //Force of impact on hit
                 if (hitInfo.rigidbody != null)
                 {

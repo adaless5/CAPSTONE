@@ -73,10 +73,8 @@ public class PuzzleSwitch : MonoBehaviour, ISaveable
         }
     }
 
-    void SwitchInteract()
+    public void SwitchInteract()
     {
-        if (bCanSwitch)
-        {
             if (_DoesSwitchReset)
             {
                 fResetTimer = _ResetTimer;
@@ -86,30 +84,27 @@ public class PuzzleSwitch : MonoBehaviour, ISaveable
                 Activate(!bIsActive);
             }
 
-            if (_ActivationPolicy == Switch_ActivationPolicy_Type.CanInteractWhenActive && bIsActive)
+            else if (_ActivationPolicy == Switch_ActivationPolicy_Type.CanInteractWhenActive && bIsActive)
             {
                 Activate(!bIsActive);
             }
 
-            if (_ActivationPolicy == Switch_ActivationPolicy_Type.CanInteractWhenInactive && !bIsActive)
+            else if (_ActivationPolicy == Switch_ActivationPolicy_Type.CanInteractWhenInactive && !bIsActive)
             {
                 Activate(!bIsActive);
             }
 
-        }
+        
     }
 
     public void Interact()
     {
         SwitchInteract();
-        if (bCanSwitch && _ResponseType == Switch_Response_Type.InteractSwitches)
+        if (_ResponseType == Switch_Response_Type.InteractSwitches)
         {
-            for (int i = 0; i < _AffectedSwitches.Length; i++)
+            foreach (PuzzleSwitch pswitch in _AffectedSwitches)
             {
-                if (_AffectedSwitches[i] != null)
-                {
-                    _AffectedSwitches[i].SwitchInteract();
-                }
+                pswitch.SwitchInteract();
             }
         }
     }
@@ -134,7 +129,7 @@ public class PuzzleSwitch : MonoBehaviour, ISaveable
         if (bCanSwitch == false)
         {
             if (fSwitchTimer > 0.0f)
-            { fSwitchTimer -= Time.fixedDeltaTime; }
+            { fSwitchTimer -= Time.deltaTime; }
 
             else
             {
@@ -146,14 +141,15 @@ public class PuzzleSwitch : MonoBehaviour, ISaveable
 
     void ResetSwitchTimer()
     {
-        if (_DoesSwitchReset == true)
+        if (_DoesSwitchReset == true && bIsActive != _DoesStartTurnedOn)
         {
             if (fResetTimer > 0.0f)
             {
-                fResetTimer -= Time.fixedDeltaTime;
-                if (fResetTimer <= 0.0f)
+                fResetTimer -= Time.deltaTime;
+                if (fResetTimer < 0.0f)
                 {
-                    Interact();
+                    fResetTimer = _ResetTimer;
+                    Activate(_DoesStartTurnedOn);
                 }
             }
         }
@@ -162,7 +158,8 @@ public class PuzzleSwitch : MonoBehaviour, ISaveable
     // Update is called once per frame
     void Update()
     {
-        CanSwitchTimer(); ResetSwitchTimer();
+        CanSwitchTimer(); 
+        ResetSwitchTimer();
         if (_PlayerInteractType == Switch_PlayerInteract_Type.UseButton && bPlayerInRange)
         {
             PlayerInput();

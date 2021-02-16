@@ -204,7 +204,7 @@ public class MovingDoor : MonoBehaviour//, ISaveable
     void CheckCloseDoors()
     {
 
-        if (_CloseType == Close_Type.Object && bRoomOneFlip)
+        if (_CloseType == Close_Type.Object)
         {
 
             bIsOpen = CheckObjectArray(_CloseObjects);
@@ -223,7 +223,7 @@ public class MovingDoor : MonoBehaviour//, ISaveable
     }
     void ProximityOpenClose()
     {
-        if (bRoomOneLogic && CheckObjectArray(_OpenObjects))
+        if (bRoomOneLogic && CheckObjectArray(_OpenObjects) || bRoomOneLogic && CheckSwitches(_Switches))
         {
             return;
         }
