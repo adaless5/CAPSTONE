@@ -115,4 +115,14 @@ public class PauseOptionsMenuUI : MonoBehaviour
         _isFullScreen = isfull;
         Screen.fullScreen = isfull;
     }
+
+    public void SetXAxisInvert(bool bInvert)
+    {
+        ALTPlayerController.instance.SetXAxisInvert();
+    }
+
+    public void SetYAxisInvert(bool bInvert)
+    {
+        ALTPlayerController.instance.SetYAxisInvert();
+    }
 }

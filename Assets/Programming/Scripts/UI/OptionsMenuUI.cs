@@ -130,6 +130,4 @@ public class OptionsMenuUI : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(firstOption);
     }
-
-
 }
