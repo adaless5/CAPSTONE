@@ -48,7 +48,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 969481544462500900}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_MotionVectors: 1
@@ -93,9 +93,11 @@ GameObject:
   - component: {fileID: 2677157105585432297}
   - component: {fileID: 199244142281609763}
   - component: {fileID: 6090537323409428594}
-  - component: {fileID: 7100729660596821976}
+  - component: {fileID: -8348661998178333790}
   - component: {fileID: 2063106154109216067}
-  - component: {fileID: -7174558523040842994}
+  - component: {fileID: -9170204793469808695}
+  - component: {fileID: 6471633619917847824}
+  - component: {fileID: 6764864172721924733}
   m_Layer: 0
   m_Name: AMMO_Grenade
   m_TagString: Grenade Ammo
@@ -188,7 +190,7 @@ MonoBehaviour:
   m_clipSize: 2
   m_compass: {fileID: 0}
   m_marker: {fileID: 0}
---- !u!65 &7100729660596821976
+--- !u!65 &-8348661998178333790
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -199,7 +201,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.41022307, y: 0.31051576, z: 0.20013961}
+  m_Size: {x: 0.7, y: 0.6, z: 0.6}
   m_Center: {x: 0.00031062216, y: -0.0010870027, z: 0.09993023}
 --- !u!114 &2063106154109216067
 MonoBehaviour:
@@ -216,7 +218,7 @@ MonoBehaviour:
   Hologram: {fileID: 969481544462500900}
   Beam_1: {fileID: 4087039597037773273}
   Beam_2: {fileID: 2510252428208957436}
---- !u!114 &-7174558523040842994
+--- !u!114 &-9170204793469808695
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -232,6 +234,35 @@ MonoBehaviour:
   m_markerImage: {fileID: 0}
   m_markerPosition: {x: 0, y: 0}
   bIsMoving: 0
+--- !u!54 &6471633619917847824
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1856370411733414902}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &6764864172721924733
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1856370411733414902}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.4, y: 0.3, z: 0.19}
+  m_Center: {x: 0.00031062216, y: -0.0010870027, z: 0.09993023}
 --- !u!1 &8466806244691321220
 GameObject:
   m_ObjectHideFlags: 0
@@ -527,6 +558,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 783252364b910664c9c509753daced93,
         type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 783252364b910664c9c509753daced93,
+        type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: b82673da7c261864fb8082e3e57bccc2, type: 2}
@@ -624,6 +660,11 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 783252364b910664c9c509753daced93,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 783252364b910664c9c509753daced93,
+        type: 3}
+      propertyPath: m_CastShadows
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 783252364b910664c9c509753daced93,

@@ -41,6 +41,7 @@ public class UpgradeAltar : MonoBehaviour
     //dont need variable for action, its just a bool
 
     List<WeaponUpgrade> _upgrades;
+
     private void Start()
     {
         _upgrades = new List<WeaponUpgrade>();
@@ -58,13 +59,16 @@ public class UpgradeAltar : MonoBehaviour
         _upgrades.Add(CreatureUpgrade4);
 
     }
+
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.GetComponentInChildren<UpgradeMenuUI>())
-        {
-            other.gameObject.GetComponentInChildren<UpgradeMenuUI>()._numUpgradesAllowed = NumberOfPermittedUpgrades;
-            other.gameObject.GetComponentInChildren<UpgradeMenuUI>().Activate();
-            other.gameObject.GetComponentInChildren<UpgradeMenuUI>().InitUpgradeMenu(_upgrades);
-        }
+
+            if (other.gameObject.GetComponentInChildren<UpgradeMenuUI>())
+            {
+                other.gameObject.GetComponentInChildren<UpgradeMenuUI>()._numUpgradesAllowed = NumberOfPermittedUpgrades;
+                other.gameObject.GetComponentInChildren<UpgradeMenuUI>().Activate();
+                other.gameObject.GetComponentInChildren<UpgradeMenuUI>().InitUpgradeMenu(_upgrades);
+            }
+    
     }
 }

@@ -52,6 +52,18 @@ public class Mine : MonoBehaviour
             }
         }
 
+        /// Evan's Item container call vvv
+        foreach (Collider obj in hits)
+        {
+            Debug.Log(obj);
+            if (obj.GetComponentInParent<ItemContainer>())
+            {
+                obj.GetComponentInParent<ItemContainer>().Break(gameObject.tag);
+            }
+        }
+        /// Evan's Item container call ^^^
+
+
         //applies damage and forces to all nearby gameobjects
 
         foreach (Collider obj in hits)

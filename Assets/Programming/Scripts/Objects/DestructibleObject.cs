@@ -91,6 +91,7 @@ public class DestructibleObject : MonoBehaviour, ISaveable
                 Destroy(_currentstate.gameObject);
             }
             _currentstate = Instantiate(DestructionStates[_index + 1], transform.position, transform.rotation, transform);
+
             _index++;
         }
 
