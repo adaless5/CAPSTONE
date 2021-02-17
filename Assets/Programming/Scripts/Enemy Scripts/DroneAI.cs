@@ -52,6 +52,11 @@ public class DroneAI : MonoBehaviour
 
     }
 
+    public void SetCurrentDroneState(DroneState state)
+    {
+        _currentState = state;
+    }
+
     public void Stun()
     {
         State savedState = _currentState;
