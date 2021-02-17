@@ -35,7 +35,7 @@ public class UpgradeMenuUI : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (Input.GetButtonDown("Pause") && _bInMenu == true)
+        if (_player.GetComponent<ALTPlayerController>().CheckForInteract() && _bInMenu == true)
         {
             Deactivate();
         }

@@ -9,7 +9,6 @@ public class DarknessFootprint : MonoBehaviour
 
     bool _bStep = false;
     bool _bLast = false;
-    bool _bHasEntered = false;
     ALTPlayerController _PC;
 
     float _maxStepTime = 0.3f;
@@ -47,7 +46,7 @@ public class DarknessFootprint : MonoBehaviour
         }
 
         //decides whether its active or not
-        if (_bLast != _PC.GetThermalView())
+        //if (_bLast != _PC.GetThermalView())
         {
             if (!_PC.GetThermalView())
             {
@@ -68,7 +67,6 @@ public class DarknessFootprint : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(gameObject.transform.position, -gameObject.transform.up, out hit, 2))
         {
-            Debug.Log("Right");
             GameObject newprint = Instantiate(FootRight, hit.point - new Vector3(0.5f, -0.01f, 0), Quaternion.FromToRotation(Vector3.forward, hit.normal));
             newprint.transform.Rotate(0, 0, gameObject.transform.localEulerAngles.y + 180);
             _footSteps.Add(newprint);
@@ -81,8 +79,7 @@ public class DarknessFootprint : MonoBehaviour
         _bStep = true;
         RaycastHit hit;
         if (Physics.Raycast(gameObject.transform.position, -gameObject.transform.up, out hit, 2))
-        {
-            Debug.Log("Left");
+        { 
             GameObject newprint = Instantiate(FootLeft, hit.point + new Vector3(0.5f, 0.01f, 0), Quaternion.FromToRotation(Vector3.forward, hit.normal));
             newprint.transform.Rotate(0, 0, gameObject.transform.localEulerAngles.y + 180);
             _footSteps.Add(newprint);
@@ -96,7 +93,6 @@ public class DarknessFootprint : MonoBehaviour
             obj.SetActive(true);
         }
         _bLast = _PC.GetThermalView();
-        //Debug.Log("Active");
     }
 
     private void DeactivateSteps()
@@ -106,7 +102,6 @@ public class DarknessFootprint : MonoBehaviour
             obj.SetActive(false);
         }
         _bLast = _PC.GetThermalView();
-        //Debug.Log("Not Active");
     }
 
     public void EnterDarkness()
@@ -122,5 +117,6 @@ public class DarknessFootprint : MonoBehaviour
     {
         enabled = false;
         DeactivateSteps();
+        _footSteps.Clear();
     }
 }

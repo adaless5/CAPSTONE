@@ -15,6 +15,7 @@ public class MainMenuUI : MonoBehaviour
     public CanvasGroup _canvasGroup;
     public CanvasGroup _quitGroup;
 
+    public static bool bNewGame = true;
 
     public void Continue()
     {
@@ -29,10 +30,14 @@ public class MainMenuUI : MonoBehaviour
 
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            //SceneManager.LoadScene(2);
+            bNewGame = true;
         }
         else
         {
             SceneManager.LoadScene(data.sceneName);
+            //SceneManager.LoadScene(2);
+            bNewGame = false;
         }
 
         //get info from save system and load accordnaly
@@ -45,7 +50,9 @@ public class MainMenuUI : MonoBehaviour
 
         FileIO.ClearAllSavedData();
 
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        SceneManager.LoadScene(2);
+        bNewGame = true;
     }
 
     void Start()

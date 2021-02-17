@@ -12,7 +12,7 @@ public class Pickup : MonoBehaviour
     protected float m_bounceAmount = 0.25f;
     [SerializeField]
     protected float m_rotationSpeed = 10f;
-    
+    public bool DoesMove;
     public Rigidbody m_pickupBody { get; private set; }
 
     Collider m_Collider;
@@ -24,7 +24,7 @@ public class Pickup : MonoBehaviour
         m_pickupBody = GetComponent<Rigidbody>();
         m_Collider = GetComponent<Collider>();
 
-        m_pickupBody.isKinematic = true;
+       // m_pickupBody.isKinematic = true;
         m_Collider.isTrigger = true;
 
         m_StartPosition = transform.position;
@@ -33,9 +33,12 @@ public class Pickup : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Animation of pickup
-        float bobbingAnimationPhase = ((Mathf.Sin(Time.time * m_verticalBounceSpeed) * 0.5f) + 0.5f) * m_bounceAmount;
-        transform.position = m_StartPosition + Vector3.up * bobbingAnimationPhase;
-        transform.Rotate(Vector3.up, m_rotationSpeed * Time.deltaTime, Space.Self);
+        if (DoesMove)
+        {
+            //Animation of pickup
+            float bobbingAnimationPhase = ((Mathf.Sin(Time.time * m_verticalBounceSpeed) * 0.5f) + 0.5f) * m_bounceAmount;
+            transform.position = m_StartPosition + Vector3.up * bobbingAnimationPhase;
+            transform.Rotate(Vector3.up, m_rotationSpeed * Time.deltaTime, Space.Self);
+        }
     }
 }

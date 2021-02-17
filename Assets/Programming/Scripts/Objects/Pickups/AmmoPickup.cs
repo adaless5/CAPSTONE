@@ -75,7 +75,7 @@ public class AmmoPickup : MonoBehaviour
     // Update is called once per frame
     private void OnTriggerEnter(Collider other)
     {
-        if (isPickedUp == false)
+        if (other.tag == "Player" && isPickedUp == false)
         {   
             isPickedUp = true;
             EventBroker.CallOnAmmoPickup(ammoType, m_amountOfClipsInPickup);

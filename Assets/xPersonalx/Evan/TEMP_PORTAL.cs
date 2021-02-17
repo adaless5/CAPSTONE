@@ -5,6 +5,7 @@ using UnityEngine;
 public class TEMP_PORTAL : MonoBehaviour
 {
     public GameObject Target;
+    public ParticleSystem Teleparticles;
     // Start is called before the first frame update
     void Start()
     {
@@ -21,6 +22,7 @@ public class TEMP_PORTAL : MonoBehaviour
             Vector3 newpos = Target.transform.position;
             Vector3 newrot = Target.transform.eulerAngles;
                 playerTransform.position = newpos;
+            Teleparticles.Play();
         }
     }
     // Update is called once per frame

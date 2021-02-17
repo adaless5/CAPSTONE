@@ -88,13 +88,23 @@ public class PauseOptionsMenuUI : MonoBehaviour
     }
     public void SetBrightness(float amt)
     {
-        //m_Exposure.compensation = new FloatParameter(amt);
-        //_light.intensity = amt;
-        //RenderSettings.skybox.SetFloat("_Exposure", amt);
-        //RenderSettings.ambientIntensity = amt;
-        //RenderSettings.ambientLight = new Color(amt, amt, amt, 1);
-        //Debug.Log(RenderSettings.ambientLight);
+        GameObject _sfVol = GameObject.Find("Sky and Fog Volume");
+        if (_sfVol != null)
+        {
+            Volume volume = _sfVol.GetComponentInChildren<Volume>();
+            if (volume != null)
+            {
+                ColorAdjustments color;
+                volume.profile.TryGet<ColorAdjustments>(out color);
+
+                if (color != null)
+                {
+                    color.postExposure.SetValue(new FloatParameter(amt));
+                }
+            }
+        }
     }
+
     public void SetVolume(float vol)
     {
         //audioMaster.SetFloat("volume", vol);
@@ -104,5 +114,15 @@ public class PauseOptionsMenuUI : MonoBehaviour
     {
         _isFullScreen = isfull;
         Screen.fullScreen = isfull;
+    }
+
+    public void SetXAxisInvert(bool bInvert)
+    {
+        ALTPlayerController.instance.SetXAxisInvert();
+    }
+
+    public void SetYAxisInvert(bool bInvert)
+    {
+        ALTPlayerController.instance.SetYAxisInvert();
     }
 }
