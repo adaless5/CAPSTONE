@@ -23,7 +23,6 @@ public class PauseMenuUI : MonoBehaviour
         _canvasGroup = gameObject.transform.GetChild(0).GetChild(0).GetComponent<CanvasGroup>();
     }
 
-    // Update is called once per frame
     void Update()
     {
 
@@ -66,7 +65,6 @@ public class PauseMenuUI : MonoBehaviour
             ALTPlayerController pc = Player.GetComponent<ALTPlayerController>();
             //pc.enabled = false;
             pc.m_ControllerState = ALTPlayerController.ControllerState.Menu;
-
         }
     }
 
@@ -126,6 +124,7 @@ public class PauseMenuUI : MonoBehaviour
         OptionsMenu.GetComponent<CanvasGroup>().blocksRaycasts = true;
         OptionMenuAnimator.SetBool("PauseOptionsActive", true);
     }
+
     public void DeactivateOptionsMenu()
     {
         Debug.Log("DeactivateOptions");
@@ -137,5 +136,4 @@ public class PauseMenuUI : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(pauseFirst);
     }
-
 }
