@@ -13,6 +13,7 @@ public class AmmoProjectorScript : MonoBehaviour
     void Start()
     {
 
+        EventBroker.OnPlayerSpawned += PlayerSpawn;
     }
     void Awake()
     {
@@ -43,5 +44,7 @@ public class AmmoProjectorScript : MonoBehaviour
                 Hologram.transform.Rotate(90.0f, 0.0f, 0.0f);
             }
         }
+        else
+            m_Player = GameObject.Find("Player_Camera");
     }
 }

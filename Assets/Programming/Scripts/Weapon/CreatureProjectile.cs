@@ -114,6 +114,13 @@ public class CreatureProjectile : MonoBehaviour
         {
             wall.Break(gameObject.tag);
         }
+        /// Evan's Item container call vvv
+        ItemContainer container = collision.transform.GetComponentInParent<ItemContainer>();
+        if (container)
+        {
+            container.Break(gameObject.tag);
+        }
+        /// Evan's Item container call ^^^
     }
     void DeStick()
     {

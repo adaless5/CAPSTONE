@@ -13,7 +13,7 @@ public class PuzzleSwitch : MonoBehaviour, ISaveable
 
     public PuzzleSwitch[] _AffectedSwitches; // The array of switches that this switch will affect
 
-
+    ALTPlayerController _PlayerController;
     public enum Switch_PlayerInteract_Type // Determines how the player interacts with the switch
     {
         UseButton,//------------------------------------------------ Player presses the use button to activate the switch
@@ -73,10 +73,8 @@ public class PuzzleSwitch : MonoBehaviour, ISaveable
         }
     }
 
-    void SwitchInteract()
+    public void SwitchInteract()
     {
-        if (bCanSwitch)
-        {
             if (_DoesSwitchReset)
             {
                 fResetTimer = _ResetTimer;
@@ -86,36 +84,29 @@ public class PuzzleSwitch : MonoBehaviour, ISaveable
                 Activate(!bIsActive);
             }
 
-            if (_ActivationPolicy == Switch_ActivationPolicy_Type.CanInteractWhenActive && bIsActive)
+            else if (_ActivationPolicy == Switch_ActivationPolicy_Type.CanInteractWhenActive && bIsActive)
             {
                 Activate(!bIsActive);
             }
 
-            if (_ActivationPolicy == Switch_ActivationPolicy_Type.CanInteractWhenInactive && !bIsActive)
+            else if (_ActivationPolicy == Switch_ActivationPolicy_Type.CanInteractWhenInactive && !bIsActive)
             {
                 Activate(!bIsActive);
             }
 
-        }
+        
     }
 
     public void Interact()
     {
         SwitchInteract();
-        if (bCanSwitch)
+        if (_ResponseType == Switch_Response_Type.InteractSwitches)
         {
-            if (_ResponseType == Switch_Response_Type.InteractSwitches)
+            foreach (PuzzleSwitch pswitch in _AffectedSwitches)
             {
-                for (int i = 0; i < _AffectedSwitches.Length; i++)
-                {
-                    if (_AffectedSwitches[i] != null)
-                    {
-                        _AffectedSwitches[i].SwitchInteract();
-                    }
-                }
+                pswitch.SwitchInteract();
             }
         }
-
     }
     void Activate(bool onOff)
     {
@@ -138,7 +129,7 @@ public class PuzzleSwitch : MonoBehaviour, ISaveable
         if (bCanSwitch == false)
         {
             if (fSwitchTimer > 0.0f)
-            { fSwitchTimer -= Time.fixedDeltaTime; }
+            { fSwitchTimer -= Time.deltaTime; }
 
             else
             {
@@ -150,14 +141,15 @@ public class PuzzleSwitch : MonoBehaviour, ISaveable
 
     void ResetSwitchTimer()
     {
-        if (_DoesSwitchReset == true)
+        if (_DoesSwitchReset == true && bIsActive != _DoesStartTurnedOn)
         {
             if (fResetTimer > 0.0f)
             {
-                fResetTimer -= Time.fixedDeltaTime;
-                if (fResetTimer <= 0.0f)
+                fResetTimer -= Time.deltaTime;
+                if (fResetTimer < 0.0f)
                 {
-                    Interact();
+                    fResetTimer = _ResetTimer;
+                    Activate(_DoesStartTurnedOn);
                 }
             }
         }
@@ -166,7 +158,8 @@ public class PuzzleSwitch : MonoBehaviour, ISaveable
     // Update is called once per frame
     void Update()
     {
-        CanSwitchTimer(); ResetSwitchTimer();
+        CanSwitchTimer(); 
+        ResetSwitchTimer();
         if (_PlayerInteractType == Switch_PlayerInteract_Type.UseButton && bPlayerInRange)
         {
             PlayerInput();
@@ -177,9 +170,16 @@ public class PuzzleSwitch : MonoBehaviour, ISaveable
 
     void PlayerInput()
     {
-        if (Input.GetButtonDown("Continue"))
+        if (_PlayerController != null)
         {
-            Interact();
+            if (_PlayerController.CheckForInteract())
+            {
+                Interact();
+            }
+        }
+        else
+        {
+            _PlayerController = GameObject.FindGameObjectWithTag("Player").GetComponent<ALTPlayerController>();
         }
     }
 
