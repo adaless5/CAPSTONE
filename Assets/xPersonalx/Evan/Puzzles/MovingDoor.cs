@@ -98,19 +98,13 @@ public class MovingDoor : MonoBehaviour//, ISaveable
     }
     void Update()
     {
-        
 
-        if (!bHasBeenOpened)
-        {
-            CheckOpenDoors();
-        }
-        if (!bHasBeenClosed)
-        {
-            CheckCloseDoors();
-        }
+
+        CheckOpenDoors();
+        CheckCloseDoors();
         OpenCloseDoors();
-        ProximityOpenClose(); 
- 
+        ProximityOpenClose();
+
     }
     // public void SaveDataOnSceneChange()
     // {
@@ -207,7 +201,7 @@ public class MovingDoor : MonoBehaviour//, ISaveable
         if (_CloseType == Close_Type.Object)
         {
 
-            bIsOpen = CheckObjectArray(_CloseObjects);
+            bIsOpen = !CheckObjectArray(_CloseObjects);
 
         }
 
@@ -223,35 +217,37 @@ public class MovingDoor : MonoBehaviour//, ISaveable
     }
     void ProximityOpenClose()
     {
-        if (bRoomOneLogic && CheckObjectArray(_OpenObjects) || bRoomOneLogic && CheckSwitches(_Switches))
+
+        if (_CloseType == Close_Type.Proximity)
         {
-            return;
-        }
-            if (_CloseType == Close_Type.Proximity)
+            if ((_OpenType == Open_Type.Object && CheckObjectArray(_OpenObjects))||(_OpenType == Open_Type.Switch && CheckSwitches(_Switches)) )
             {
+                return;
+            }
                 if (_StayClosed)
                 {
                     if (CheckProximity(_CloseProximityTrigger) == true)
-                    { bIsOpen = false; bRoomOneFlip = false; }
+                    { bIsOpen = false; }
                 }
                 else
                 {
                     bIsOpen = !CheckProximity(_CloseProximityTrigger);
-                    bRoomOneLogic = false;
+
                 }
-            }
-            if (_OpenType == Open_Type.Proximity)
+            
+        }
+        if (_OpenType == Open_Type.Proximity)
+        {
+            if (_StayOpen)
             {
-                if (_StayOpen)
-                {
-                    if (CheckProximity(_OpenProximityTrigger) == true)
-                    { bIsOpen = true; }
-                }
-                else
-                {
-                    bIsOpen = CheckProximity(_OpenProximityTrigger);
-                }
+                if (CheckProximity(_OpenProximityTrigger) == true)
+                { bIsOpen = true; }
             }
-        
+            else
+            {
+                bIsOpen = CheckProximity(_OpenProximityTrigger);
+            }
+        }
+
     }
 }
