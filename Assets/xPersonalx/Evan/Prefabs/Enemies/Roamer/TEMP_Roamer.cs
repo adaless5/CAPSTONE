@@ -9,7 +9,6 @@ public class TEMP_Roamer : MonoBehaviour
         Patrol, Wander, Follow, Attack
     }
 
-    MeshRenderer _MeshRenderComponent;
     Vector3      _StartPosition;
     GameObject   _Player;
     public bool         _MakeThisRoamerWanderRandomly;   // When enabled the roamer will wander randomly withing the area of the _WanderAreaSphereObject. When disabled the roamer will move towards its patrol points.
@@ -50,7 +49,6 @@ public class TEMP_Roamer : MonoBehaviour
         _StartPosition = transform.position;
         _WanderPoint = _StartPosition;
         _FollowSpeed = 0.5f;
-        _MeshRenderComponent = GetComponent<MeshRenderer>();
 
         _AttackTime = 0.5f;
         _IsAttacking = false;
@@ -76,7 +74,7 @@ public class TEMP_Roamer : MonoBehaviour
         {      
             if (_MakeThisRoamerWanderRandomly)
             {
-           
+                
                 _WanderAreaScale = _WanderAreaSphereObject.transform.localScale;
                 _WanderAreaPosition = _WanderAreaSphereObject.transform.position;
                 _WanderPoint = new Vector3(_WanderPoint.x, transform.position.y, _WanderPoint.z);
@@ -93,7 +91,7 @@ public class TEMP_Roamer : MonoBehaviour
             MakeIdle();
         }
 
-        
+ 
             transform.eulerAngles = new Vector3(0.0f, transform.localEulerAngles.y, 0.0f);
         
     }

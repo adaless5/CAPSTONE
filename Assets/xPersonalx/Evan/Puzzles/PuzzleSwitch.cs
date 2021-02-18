@@ -62,7 +62,7 @@ public class PuzzleSwitch : MonoBehaviour, ISaveable
     void Start()
     {
         fSwitchTimer = _ActivationTimer;
-        fResetTimer = 0.0f;
+        fResetTimer = 0.1f;
         if (_DoesStartTurnedOn)
         {
             SetSwitchModel(_DoesStartTurnedOn);
