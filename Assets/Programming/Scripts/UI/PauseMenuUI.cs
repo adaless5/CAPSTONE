@@ -28,7 +28,7 @@ public class PauseMenuUI : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(EventSystem.current.currentSelectedGameObject);
+       
     }
 
     private void OnEnable()
