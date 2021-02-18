@@ -18,7 +18,8 @@ public class DroneAI : MonoBehaviour
 
         if (Physics.Raycast(transform.position, Vector3.down, out hit))
         {
-            _navMeshAgent.baseOffset += hit.distance;
+            if (_navMeshAgent != null)
+                _navMeshAgent.baseOffset += hit.distance;
         }
     }
 
@@ -48,7 +49,7 @@ public class DroneAI : MonoBehaviour
             _currentState = _currentState.Process();
 
 
-        Debug.Log(_currentState);
+        
 
     }
 

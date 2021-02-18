@@ -15,7 +15,6 @@ public class DroneAttack : DroneState
         _stateName = STATENAME.ATTACK;
         _droneProjectile = (GameObject)Resources.Load("Prefabs/Weapon/Drone Projectile");
     }
-
     public override void Enter()
     {
         base.Enter();

@@ -13,7 +13,7 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
 
     string[] _tipName = { "EQUIPMENT_GRAPPLE", "EQUIPMENT_BLADE", "EQUIPMENT_THERMAL" };
 
-    ALTPlayerController player;
+    ALTPlayerController _player;
 
     void Awake()
     {
@@ -22,14 +22,25 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
         if (isUsed) GetComponent<MeshRenderer>().enabled = false;
         else GetComponent<MeshRenderer>().enabled = true;
 
-        player = FindObjectOfType<ALTPlayerController>();
+        EventBroker.OnPlayerSpawned += PlayerStart;
+
+
+    }
+
+    void PlayerStart(GameObject player)
+    {
+        _player = player.GetComponent<ALTPlayerController>();
     }
 
     void Update()
     {
-        if (player.CheckForInteract())
+        if (_player != null)
         {
-            DestroyTip();
+            if (_player.CheckForInteract())
+            {
+                DestroyTip();
+            }
+
         }
     }
 
@@ -79,13 +90,13 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
                 trans.localScale = Vector3.one;
                 trans.anchoredPosition = new Vector2(0f, 0f); // setting position, will be on center
                 Texture2D tex = Resources.Load<Texture2D>(filename);
-                if(tex != null)
+                if (tex != null)
                 {
                     trans.sizeDelta = new Vector2(tex.width, tex.height); // custom size
                 }
 
                 Image image = _imageObject.AddComponent<Image>();
-                if(image != null)
+                if (image != null)
                 {
                     if (tex != null)
                     {
@@ -100,7 +111,7 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
     public void DestroyTip()
     {
         GameObject[] array = FindObjectsOfType<GameObject>();
-        foreach(GameObject obj in array)
+        foreach (GameObject obj in array)
         {
             if (obj.tag == "Tip")
             {

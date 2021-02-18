@@ -6,28 +6,48 @@ public class ThermalSkin : MonoBehaviour
 {
     public Material m_ThermalViewMaterial;
     Material m_NormalViewMaterial;
-    MeshRenderer m_MeshRenderer;
+    public MeshRenderer[] m_MeshRenderer;
 
     // Start is called before the first frame update
     void Start()
     {
-        m_MeshRenderer = GetComponent<MeshRenderer>();
-        m_NormalViewMaterial = m_MeshRenderer.material; 
+        if (GetComponent<MeshRenderer>() != null)
+        {
+            //m_MeshRenderer = GetComponent<MeshRenderer>();
+            //m_NormalViewMaterial = m_MeshRenderer.material;
+
+        }
+
+        if (GetComponentsInChildren<MeshRenderer>() != null)
+        {
+            m_MeshRenderer = GetComponentsInChildren<MeshRenderer>();
+        }
+
+
+
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void ChangeToThermalSkin()
     {
-        m_MeshRenderer.material = m_ThermalViewMaterial;
+        foreach (MeshRenderer m in m_MeshRenderer)
+        {
+            m.material = m_ThermalViewMaterial;
+        }
+            //m_MeshRenderer.material = m_ThermalViewMaterial;
     }
 
     public void ChangeToNormalSkin()
     {
-        m_MeshRenderer.material = m_NormalViewMaterial;
+        foreach (MeshRenderer m in m_MeshRenderer)
+        {
+            m.material = m_NormalViewMaterial;
+        }
     }
 }
