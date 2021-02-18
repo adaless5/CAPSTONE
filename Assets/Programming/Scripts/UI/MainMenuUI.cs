@@ -9,10 +9,15 @@ public class MainMenuUI : MonoBehaviour
     public GameObject firstMenuOption;
     public GameObject firstOptionsOption;
     public GameObject firstQuitOption;
+    public GameObject firstControlOption;
+    public GameObject firstCreditsOption;
     public GameObject _quitMenu;
+    public GameObject _controlScheme;
     public Animator OptionMenuAnimator;
+    public Animator ControlSchemeAnimator;
     public CanvasGroup _optionsGroup;
     public CanvasGroup _canvasGroup;
+    public CanvasGroup _controlsGroup;
     public CanvasGroup _quitGroup;
 
     public static bool bNewGame = true;
@@ -58,11 +63,15 @@ public class MainMenuUI : MonoBehaviour
     void Start()
     {
         OptionMenuAnimator.SetBool("OptionsActive", false);
+        ControlSchemeAnimator.SetBool("IsActive", false);
         InitializeMenu();
         _canvasGroup = GetComponent<CanvasGroup>();
         _optionsGroup = FindObjectOfType<OptionsMenuUI>().GetComponent<CanvasGroup>();
         _optionsGroup.interactable = false;
         _optionsGroup.blocksRaycasts = false;
+        _controlsGroup = _controlScheme.GetComponent<CanvasGroup>();
+        _controlsGroup.interactable = false;
+        _controlsGroup.blocksRaycasts = false;
         _quitGroup = _quitMenu.GetComponent<CanvasGroup>();
         _quitGroup.interactable = false;
         _quitGroup.blocksRaycasts = false;
@@ -93,6 +102,28 @@ public class MainMenuUI : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(firstMenuOption);
         _optionsGroup.interactable = false;
         _optionsGroup.blocksRaycasts = false;
+        _canvasGroup.interactable = true;
+        _canvasGroup.blocksRaycasts = true;
+    }
+
+    public void ActivateControlScheme()
+    {
+        ControlSchemeAnimator.SetBool("IsActive", true);
+        _canvasGroup.interactable = false;
+        _canvasGroup.blocksRaycasts = false;
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(firstControlOption);
+        _controlsGroup.interactable = true;
+        _controlsGroup.blocksRaycasts = true;       
+    }
+
+    public void DeactivateControlScheme()
+    {
+        ControlSchemeAnimator.SetBool("IsActive", false);
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(firstMenuOption);
+        _controlsGroup.interactable = false;
+        _controlsGroup.blocksRaycasts = false;
         _canvasGroup.interactable = true;
         _canvasGroup.blocksRaycasts = true;
     }
@@ -155,7 +186,7 @@ public class MainMenuUI : MonoBehaviour
     {
         _canvasGroup.interactable = active;
         _canvasGroup.blocksRaycasts = active;
-    }
+    }  
 
     //TODO:: make a new game function that wipes the save and starts from the begining 
 }
