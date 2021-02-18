@@ -126,6 +126,9 @@ public class ALTPlayerController : MonoBehaviour
 
     public static ALTPlayerController instance;
 
+    private bool bInvertXAxis = false;
+    private bool bInvertYAxis = false;
+
     private void Awake()
     {
         OnTakeDamage += TakeDamage;
@@ -332,7 +335,6 @@ public class ALTPlayerController : MonoBehaviour
             if (_controller.isGrounded && _slopeAngle <= 140.0f)
             {
                 bOnSlope = true;
-
             }
             else
             {
@@ -362,6 +364,7 @@ public class ALTPlayerController : MonoBehaviour
         m_ControllerState = ControllerState.Menu;
         _pauseMenu.Pause();
     }
+
     //Death and Respawn functionality -LCC
     public void PlayerRespawn()
     {
@@ -471,6 +474,13 @@ public class ALTPlayerController : MonoBehaviour
 
         float mouseX = _look.x * Time.deltaTime * m_LookSensitivity;
         float mouseY = _look.y * Time.deltaTime * m_LookSensitivity;
+
+        if (bInvertXAxis)
+            mouseX *= -1f;
+
+        if (bInvertYAxis)
+            mouseY *= -1f;
+
         if (m_ControllerState == ControllerState.Play)
         {
             m_XRotation += mouseY;
@@ -721,5 +731,15 @@ public class ALTPlayerController : MonoBehaviour
     public Vector3 GetVelocity()
     {
         return m_Velocity;
+    }
+
+    public void SetXAxisInvert()
+    {
+        bInvertXAxis = !bInvertXAxis;
+    }
+
+    public void SetYAxisInvert()
+    {
+        bInvertYAxis = !bInvertYAxis;
     }
 }

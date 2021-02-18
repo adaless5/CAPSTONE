@@ -5,7 +5,8 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.HighDefinition;
 
 public class OptionsMenuUI : MonoBehaviour
 {
@@ -107,8 +108,21 @@ public class OptionsMenuUI : MonoBehaviour
 
     public void SetBrightness(float amt)
     {
-        RenderSettings.ambientLight = new Color(amt, amt, amt, 1);
-        Debug.Log(RenderSettings.ambientLight);
+        GameObject _sfVol = GameObject.Find("Sky and Fog Volume");
+        if (_sfVol != null)
+        {
+            Volume volume = _sfVol.GetComponentInChildren<Volume>();
+            if (volume != null)
+            {
+                ColorAdjustments color;
+                volume.profile.TryGet<ColorAdjustments>(out color);
+
+                if (color != null)
+                {
+                    color.postExposure.SetValue(new FloatParameter(amt));
+                }
+            }
+        }
     }
     public void SetOptions()
     {
@@ -116,6 +130,4 @@ public class OptionsMenuUI : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(firstOption);
     }
-
-
 }
