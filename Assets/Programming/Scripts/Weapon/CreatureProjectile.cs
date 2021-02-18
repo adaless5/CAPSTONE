@@ -12,6 +12,8 @@ public class CreatureProjectile : MonoBehaviour
     public float _lifeTime;
     Transform _transformOrigin;
 
+    AudioManager_CreatureWeapon audioManager;
+
     bool m_bHasAction = false;
     float _damage;
     float _targetDefaultSpeed;
@@ -132,5 +134,12 @@ public class CreatureProjectile : MonoBehaviour
     {
         _rigidBody.isKinematic = true;
         _rigidBody.detectCollisions = false;
+
+        audioManager.TriggerStickCreatureWeapon(GetComponentInChildren<AudioSource>());
+    }
+
+    public void LinkAudioManager(AudioManager_CreatureWeapon amc)
+    {
+        audioManager = amc;
     }
 }
