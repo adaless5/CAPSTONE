@@ -17,6 +17,7 @@ public class DronePatrol : DroneState
     {
         base.Enter();
         destination = _patrolPoints[_currentPatrolIndex].transform.position;
+        Debug.Log("Destination: " + destination);
     }
 
     public override void Update()

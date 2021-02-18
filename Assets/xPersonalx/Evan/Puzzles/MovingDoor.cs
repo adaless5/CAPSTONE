@@ -99,9 +99,11 @@ public class MovingDoor : MonoBehaviour//, ISaveable
     void Update()
     {
 
-
+        if (!bRoomOneLogic)
+        {
         CheckOpenDoors();
         CheckCloseDoors();
+        }
         OpenCloseDoors();
         ProximityOpenClose();
 
@@ -171,6 +173,7 @@ public class MovingDoor : MonoBehaviour//, ISaveable
     {
         if (trigger != null)
         {
+
             return trigger.bIsTriggered;
         }
         else
@@ -227,7 +230,7 @@ public class MovingDoor : MonoBehaviour//, ISaveable
                 if (_StayClosed)
                 {
                     if (CheckProximity(_CloseProximityTrigger) == true)
-                    { bIsOpen = false; }
+                    { bIsOpen = false; bRoomOneLogic = false; }
                 }
                 else
                 {

@@ -75,6 +75,7 @@ public class MainMenuUI : MonoBehaviour
         _quitGroup = _quitMenu.GetComponent<CanvasGroup>();
         _quitGroup.interactable = false;
         _quitGroup.blocksRaycasts = false;
+        Time.timeScale = 1.0f;
     }
 
 

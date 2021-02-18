@@ -182,9 +182,9 @@ public class ALTPlayerController : MonoBehaviour
         _controls.Player.WeaponWheel.canceled += ctx => HandleWeaponWheel();
         _controls.Player.Equipment.performed += ctx => _bEquipment = true;
         _controls.Player.Equipment.canceled += ctx => _bEquipment = false;
-        _controls.Player.Thermal.performed += ctx => _bThermal = true;
+        _controls.Player.Thermal.started += ctx => _bThermal = true;
         _controls.Player.Thermal.canceled += ctx => _bThermal = false;
-        _controls.Player.Interact.performed += ctx => _bInteract = true;
+        _controls.Player.Interact.started += ctx => _bInteract = true;
         _controls.Player.Interact.canceled += ctx => _bInteract = false;
     }
 
