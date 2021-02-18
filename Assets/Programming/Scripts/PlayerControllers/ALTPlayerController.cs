@@ -126,8 +126,8 @@ public class ALTPlayerController : MonoBehaviour
 
     public static ALTPlayerController instance;
 
-    private bool bInvertXAxis = true;
-    private bool bInvertYAxis = true;
+    private bool bInvertXAxis = false;
+    private bool bInvertYAxis = false;
 
     private void Awake()
     {
