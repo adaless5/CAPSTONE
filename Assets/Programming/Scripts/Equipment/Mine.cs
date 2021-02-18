@@ -15,6 +15,9 @@ public class Mine : MonoBehaviour
     float m_Timer;
     bool m_bIsBlownUp;
 
+
+    AudioManager_Grenade audioManager;
+
     public void InitMine(float fuzetime, float blastradius, float explosionforce, float damage, bool hasaction)
     {
         m_FuzeTimer = fuzetime;
@@ -94,6 +97,7 @@ public class Mine : MonoBehaviour
             for(int i = 0; i < 4; i++)
             {
                 GameObject mine = Instantiate(gameObject, transform.position, transform.rotation);
+
                 if(mine)
                 {
                     mine.transform.localScale -= new Vector3(0.5f, 0.5f, 0.5f);
@@ -119,7 +123,35 @@ public class Mine : MonoBehaviour
 
         //deletes self from world
         Destroy(gameObject);
+
     }
 
-    
+    private void FixedUpdate()
+    {
+        audioManager.SetGrenadeSoundPointTransform(transform);
+    }
+
+    public void BindAudioManager(AudioManager_Grenade amg)
+    {
+        audioManager = amg;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Terrain_Concrete"))
+        {
+            audioManager.TriggerGrenadeHit(AudioManager_Grenade.HitType.Rock);
+        }
+        else if (collision.gameObject.layer == LayerMask.NameToLayer("Terrain_Metal"))
+        {
+            audioManager.TriggerGrenadeHit(AudioManager_Grenade.HitType.Metal);
+        }
+        else
+        {
+            audioManager.TriggerGrenadeHit(AudioManager_Grenade.HitType.Dirt);
+        }
+    }
+
+
 }
