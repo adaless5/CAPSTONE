@@ -128,7 +128,11 @@ public class WeaponBase : Weapon, ISaveable
         //If gun is empty and player attempts to shoot. trigger empty gun sound
         if (!_ammoController.CanUseAmmo())
         {
-            GetComponent<AudioManager_Archebus>().TriggerEmpty();
+            if(bIsActive)
+            {
+                GetComponent<AudioManager_Archebus>().TriggerEmpty();
+            }
+
         }
         
     }
@@ -143,11 +147,14 @@ public class WeaponBase : Weapon, ISaveable
 
     IEnumerator OnReload()
     {
-        //Reload Sounds
-        GetComponent<AudioManager_Archebus>().TriggerReloadStart();
-        StartCoroutine(TriggerReloadEndSound());
-        //
-        
+        if(bIsActive)
+        {
+            //Reload Sounds
+            GetComponent<AudioManager_Archebus>().TriggerReloadStart();
+            StartCoroutine(TriggerReloadEndSound());
+            //
+        }
+
         bIsReloading = true;
         gunAnimator.speed = 1 / m_upgradestats.ReloadTime; // adjusts for reload time upgrades
         gunAnimator.SetBool("bIsReloading", true);
@@ -165,10 +172,13 @@ public class WeaponBase : Weapon, ISaveable
         gunAnimator.SetTrigger("OnRecoil");      
         muzzleFlash.Play();
 
-        //Gun Shot Sounds
-        GetComponent<AudioManager_Archebus>().TriggerShot();
-        StartCoroutine(TriggerNewShellSound());
-        //
+        if (bIsActive)
+        {
+            //Gun Shot Sounds
+            GetComponent<AudioManager_Archebus>().TriggerShot();
+            StartCoroutine(TriggerNewShellSound());
+            //
+        }
 
         if (!m_bHasActionUpgrade)
         {

@@ -11,6 +11,7 @@ public class AudioManager_Footsteps : AudioManager
     const int NUM_CONCRETE_JUMP_STARTS = 6;
     const int NUM_DIRT_JUMP_LANDS = 6;
     const int NUM_CONCRETE_JUMP_LANDS = 6;
+    const int NUM_METAL_FOOTSTEPS = 8;
 
     const float MIN_LANDING_VOLUME_SCALE = 1.0f;
     const float MAX_LANDING_VOLUME_SCALE = 2f;
@@ -19,6 +20,7 @@ public class AudioManager_Footsteps : AudioManager
     {
         Dirt,
         Concrete,
+        Metal,
     }
     TerrainType _terrainType = TerrainType.Dirt;
 
@@ -38,10 +40,11 @@ public class AudioManager_Footsteps : AudioManager
     int _lastJumpLandIndex = -1;
 
     float _footSeperationWidthFromCenter = 0.2f;
-    float _distanceTillFootstepTriggered = 3f;
+    float _distanceTillFootstepTriggered = 6f;
 
     int _dirtTerrainLayerIndex;
     int _concreteTerrainLayerIndex;
+    int _metalTerrainLayerIndex;
 
     bool _isFalling = false;
     float _maxFallVelocity = 0;
@@ -55,11 +58,12 @@ public class AudioManager_Footsteps : AudioManager
         _camRef = GetComponentInChildren<Camera>();
         _controllerRef = GetComponent<CharacterController>();
         _lastPosition = gameObject.transform.position;
-        _dirtTerrainLayerIndex = LayerMask.NameToLayer("Terrain_Dirt");
+        _dirtTerrainLayerIndex = LayerMask.NameToLayer("terrainmask");
         _concreteTerrainLayerIndex = LayerMask.NameToLayer("Terrain_Concrete");
+        _metalTerrainLayerIndex = LayerMask.NameToLayer("Terrain_Metal");
 
         ////Setup Sounds and mixer routing
-        
+
         //Concrete footsteps
         for (int i = 1; i <= NUM_CONCRETE_FOOTSTEPS; i++)
         {
@@ -87,7 +91,7 @@ public class AudioManager_Footsteps : AudioManager
             Sound s = new Sound(
             Resources.Load<AudioClip>("Data/AudioData/AudioClips/Footsteps/Jump_Start/Jump_Start_Dirt_"+ i),
             "Jump_Start_Dirt_" + i,
-            footstepsMixer.FindMatchingGroups("Master")[3]
+            footstepsMixer.FindMatchingGroups("Master")[4]
             ); _sounds.Add(s);
         }
         //
@@ -98,7 +102,7 @@ public class AudioManager_Footsteps : AudioManager
             Sound s = new Sound(
             Resources.Load<AudioClip>("Data/AudioData/AudioClips/Footsteps/Jump_Start/Jump_Start_Concrete_" + i),
             "Jump_Start_Concrete_" + i,
-            footstepsMixer.FindMatchingGroups("Master")[3]
+            footstepsMixer.FindMatchingGroups("Master")[4]
             ); _sounds.Add(s);
         }
         //
@@ -109,7 +113,7 @@ public class AudioManager_Footsteps : AudioManager
             Sound s = new Sound(
             Resources.Load<AudioClip>("Data/AudioData/AudioClips/Footsteps/Jump_Land/Jump_Land_Dirt_" + i),
             "Jump_Land_Dirt_" + i,
-            footstepsMixer.FindMatchingGroups("Master")[4]
+            footstepsMixer.FindMatchingGroups("Master")[5]
             ); _sounds.Add(s);
         }
         //
@@ -120,10 +124,20 @@ public class AudioManager_Footsteps : AudioManager
             Sound s = new Sound(
             Resources.Load<AudioClip>("Data/AudioData/AudioClips/Footsteps/Jump_Land/Jump_Land_Concrete_" + i),
             "Jump_Land_Concrete_" + i,
-            footstepsMixer.FindMatchingGroups("Master")[4]
+            footstepsMixer.FindMatchingGroups("Master")[5]
             ); _sounds.Add(s);
         }
         //
+
+        //Metal footsteps
+        for (int i = 1; i <= NUM_METAL_FOOTSTEPS; i++)
+        {
+            Sound s = new Sound(
+            Resources.Load<AudioClip>("Data/AudioData/AudioClips/Footsteps/Metal/Footstep_Metal_" + i),
+            "Footstep_Metal_" + i,
+            footstepsMixer.FindMatchingGroups("Master")[3]
+            ); _sounds.Add(s);
+        }
 
         ////
 
@@ -147,7 +161,7 @@ public class AudioManager_Footsteps : AudioManager
         //Raycast down to find terrain type
         RaycastHit hit;
         if (Physics.Raycast(transform.position,-transform.up,out hit,10f, 
-                (1 << _dirtTerrainLayerIndex) | (1 << _concreteTerrainLayerIndex)))
+                (1 << _dirtTerrainLayerIndex) | (1 << _concreteTerrainLayerIndex) | (1 << _metalTerrainLayerIndex)))
         {
             if (hit.collider.gameObject.layer == _dirtTerrainLayerIndex)
             {
@@ -160,6 +174,14 @@ public class AudioManager_Footsteps : AudioManager
                 //Hit Concrete
                 _terrainType = TerrainType.Concrete;
             }
+
+            else if (hit.collider.gameObject.layer == _metalTerrainLayerIndex)
+            {
+                //Hit Metal
+                _terrainType = TerrainType.Metal;
+            }
+
+            else _terrainType = TerrainType.Dirt;
         }
         //
     }
@@ -321,6 +343,21 @@ public class AudioManager_Footsteps : AudioManager
         return i;
     }
 
+    const int METAL_FOOTSTEP_INDEX_START = 66;
+    const int METAL_FOOTSTEP_INDEX_END = 73;
+    //Picks a random Metal Footstep index, (never the same one in a row)
+    int PickRandomMetalFootstep()
+    {
+        int i;
+        do
+        {
+            i = Random.Range(METAL_FOOTSTEP_INDEX_START, METAL_FOOTSTEP_INDEX_END + 1);
+        } while (i == _lastFootstepIndex);
+        _lastFootstepIndex = i;
+
+        return i;
+    }
+
     void TriggerFootstep()
     {
         //Stop Previous footstep
@@ -331,11 +368,15 @@ public class AudioManager_Footsteps : AudioManager
         int i = 0;
         switch (_terrainType)
         {
+            case TerrainType.Metal:
+                i = PickRandomMetalFootstep(); break;
+
             case TerrainType.Dirt:
                 i = PickRandomDirtFootstep();break;
 
             case TerrainType.Concrete:
                 i = PickRandomConcreteFootstep();break;
+            
         }
         //
 

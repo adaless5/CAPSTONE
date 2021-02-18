@@ -509,10 +509,14 @@ public class ALTPlayerController : MonoBehaviour
         {
             m_Velocity = (transform.right * _movement.x * m_SprintSpeed) + (transform.forward * _movement.y * m_SprintSpeed);
             m_stamina.UseStamina();
+
+            GetComponent<CameraBehaviour>().bobFrequency = 7.5f;
         }
         else
         {
             m_Velocity = (transform.right * _movement.x * m_MoveSpeed) + (transform.forward * _movement.y * m_MoveSpeed);
+            
+            GetComponent<CameraBehaviour>().bobFrequency = 5.0f;
         }
 
         if (CheckForSprintInput() == false || (_movement.magnitude == 0 && m_stamina.bCanRegenerate))
