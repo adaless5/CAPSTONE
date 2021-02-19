@@ -33,7 +33,6 @@ public class MovingDoor : MonoBehaviour//, ISaveable
     public bool bHasBeenOpened;
 
     public bool bRoomOneLogic;
-    bool bRoomOneFlip;
     public PuzzleSwitch[] _Switches;
 
     public GameObject[] _OpenObjects;
@@ -43,22 +42,21 @@ public class MovingDoor : MonoBehaviour//, ISaveable
     public PuzzleProximityTrigger _CloseProximityTrigger;
     void Start()
     {
-        bRoomOneFlip = bRoomOneLogic;
         bIsOpen = _StartOpened;
         bHasBeenClosed = false;
         bHasBeenOpened = false;
         SetDoorPositions(bIsOpen);
 
-        if (doorType == DoorType.Metal) audioManager = new AudioManager_MetalDoor();
-        else { audioManager = new AudioManager_RockDoor(); }
+        //++++ if (doorType == DoorType.Metal) audioManager = new AudioManager_MetalDoor();
+        //++++ else { audioManager = new AudioManager_RockDoor(); }
 
-        
+        //++++ audioSource = new AudioSource();
+        //++++ audioSource.transform.position = transform.position;
+
     }
 
     private void Awake()
     {
-        audioSource = new AudioSource();
-        audioSource.transform.position = transform.position;
     }
 
     // Update is called once per frame
@@ -81,7 +79,7 @@ public class MovingDoor : MonoBehaviour//, ISaveable
     }
     void Open()
     {
-        audioManager.SendMessage("TriggerOpenDoor");
+        //++++ audioManager.SendMessage("TriggerOpenDoor");
 
         bHasBeenClosed = false;
         bool AllDoorsReachedOpen = true;
