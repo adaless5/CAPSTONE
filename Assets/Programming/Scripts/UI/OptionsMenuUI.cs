@@ -13,7 +13,8 @@ public class OptionsMenuUI : MonoBehaviour
     bool bDebug = false;
 
     public GameObject firstOption;
-    public AudioMixer audioMaster;
+    public AudioMixer audioMusicMixer;
+    public AudioMixer audioFXMixer;
     public TMP_Dropdown resolutionMenu;
 
     public Button StereoButton;
@@ -78,9 +79,17 @@ public class OptionsMenuUI : MonoBehaviour
         //}
     }
 
-    public void SetVolume(float vol)
+    public void SetMusicVolume(Slider slider)
     {
-        audioMaster.SetFloat("volume", vol);
+        //Debug.Log(slider.value);
+        audioMusicMixer.SetFloat("musicVol", Mathf.Log10(slider.value) * 20);
+        
+    }
+
+    public void SetFXVolume(Slider slider)
+    {
+        audioFXMixer.SetFloat("FXVol", Mathf.Log10(slider.value) * 20);
+        //Debug.Log(slider.value);
     }
 
     public void SetQuality(int index)
