@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 public class DeathMenuUI : MonoBehaviour
 {
 
@@ -53,18 +54,16 @@ public class DeathMenuUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void LoadSave()
     {
-        //_playerController.PlayerRespawn();
-        StartCoroutine(FadeTo(0.0f, 1.5f));
         _deathMenuCanvas.interactable = false;
         _deathMenuCanvas.blocksRaycasts = false;
 
         //MainMenuUI..Continue()
-        DestroyImmediate(GameObject.FindGameObjectWithTag("Player"));
+        //Destroy(GameObject.FindGameObjectWithTag("Player"));
         Time.timeScale = 1f;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -73,13 +72,57 @@ public class DeathMenuUI : MonoBehaviour
 
         if (data.sceneName == null || data.sceneName == "")
         {
-            SceneManager.LoadScene(2);
+
+            //SceneManager.LoadSceneAsync(4, LoadSceneMode.Additive);
+            StartCoroutine(LoadAsyncScene(4));
         }
         else
         {
-            SceneManager.LoadScene(data.sceneName);
-            _player.transform.position = data.pos;
-            _player.transform.rotation = data.rot;
+           
+            //SceneManager.LoadSceneAsync(data.sceneName, LoadSceneMode.Additive);
+            StartCoroutine(LoadAsyncScene(data.sceneName));
+
+
+            //if (_player != null)
+            //{
+            //    _player.transform.rotation = data.rot;
+            //    _player.transform.position = data.pos;
+            //}
+        }
+        _playerController.PlayerRespawn();
+        StartCoroutine(FadeTo(0.0f, 1.0f));
+    }
+
+    IEnumerator LoadAsyncScene(int sceneIndex)
+    {
+        AsyncOperation firstLevel = SceneManager.LoadSceneAsync(3);
+        AsyncOperation secondlevel = SceneManager.LoadSceneAsync(sceneIndex, LoadSceneMode.Additive);
+
+
+        while (firstLevel.progress < 1f)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+
+        while (secondlevel.progress < 1f)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+    }
+    IEnumerator LoadAsyncScene(string scenename)
+    {
+        AsyncOperation firstLevel = SceneManager.LoadSceneAsync(3);
+        AsyncOperation secondlevel = SceneManager.LoadSceneAsync(scenename, LoadSceneMode.Additive);
+
+
+        while (firstLevel.progress < 1f)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+
+        while (secondlevel.progress < 1f)
+        {
+            yield return new WaitForEndOfFrame();
         }
     }
 
@@ -88,9 +131,10 @@ public class DeathMenuUI : MonoBehaviour
         _deathMenuCanvas.interactable = false;
         _deathMenuCanvas.blocksRaycasts = false;
 
-        DestroyImmediate(GameObject.FindGameObjectWithTag("Player"));
+     
+        Destroy(_playerController.gameObject);
         SceneManager.LoadScene(1);
         //_deathMenuCanvas.alpha = 0;
-        
+
     }
 }

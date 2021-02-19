@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -41,7 +42,14 @@ public class WeaponPickup : MonoBehaviour, ITippable
 
     void PlayerSpawn(GameObject playerref)
     {
-        player = playerref.GetComponent<ALTPlayerController>();
+        try
+        {
+            player = playerref.GetComponent<ALTPlayerController>();
+        }
+        catch(Exception e)
+        {
+            Debug.Log(e);
+        }
     }
 
     void Update()

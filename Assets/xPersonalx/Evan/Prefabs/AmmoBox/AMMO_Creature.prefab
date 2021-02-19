@@ -98,6 +98,7 @@ GameObject:
   - component: {fileID: -897794058969087749}
   - component: {fileID: 731343146066044867}
   - component: {fileID: 330568300304248474}
+  - component: {fileID: -2893258586217256907}
   m_Layer: 0
   m_Name: AMMO_Creature
   m_TagString: Gland Gun Ammo
@@ -263,6 +264,22 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.4, y: 0.3, z: 0.19}
   m_Center: {x: 0.00031062216, y: -0.0010870027, z: 0.09993023}
+--- !u!114 &-2893258586217256907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3515572242083968421}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f510780ecdb793841bbacb201d069d44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_verticalBounceSpeed: 2
+  m_bounceAmount: 0.25
+  m_rotationSpeed: 10
+  DoesMove: 0
 --- !u!1 &6668377723975215063
 GameObject:
   m_ObjectHideFlags: 0

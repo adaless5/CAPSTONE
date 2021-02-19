@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using UnityEngine.Rendering;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-
+using UnityEngine.SceneManagement;
 public enum ControllerType
 {
     Mouse,
@@ -102,7 +102,7 @@ public class ALTPlayerController : MonoBehaviour
     //bool bHasEnteredDarkness = false;
 
     //Death mechanic stuff
-    bool isDead = false;
+    public bool isDead = false;
     Vector3 _respawnPosition;
 
     //New Controller
@@ -131,7 +131,9 @@ public class ALTPlayerController : MonoBehaviour
 
     private void Awake()
     {
+        Debug.Log("Awake");
         OnTakeDamage += TakeDamage;
+        EventBroker.OnPlayerDeath += PlayerDeath;
         _respawnPosition = gameObject.transform.position;
         m_ControllerState = ControllerState.Play;
         InitializeControls();
@@ -190,6 +192,7 @@ public class ALTPlayerController : MonoBehaviour
 
     void Start()
     {
+        Debug.Log("Start");
         DontDestroyOnLoad(this);
         Application.targetFrameRate = 60;
         Cursor.lockState = CursorLockMode.Locked;
@@ -203,6 +206,7 @@ public class ALTPlayerController : MonoBehaviour
         _equipmentBelt = FindObjectOfType<EquipmentBelt>();
         _weaponBelt = FindObjectOfType<WeaponBelt>();
         _pauseMenu = FindObjectOfType<PauseMenuUI>();
+        isDead = false;
 
         Canvas[] wheelsInScene;
         wheelsInScene = FindObjectsOfType<Canvas>();
@@ -219,16 +223,23 @@ public class ALTPlayerController : MonoBehaviour
                 WeaponWheel.enabled = false;
             }
         }
-
+        SceneManager.sceneLoaded += PlayerSceneChange;
         //Subscribing to Event Broker
         EventBroker.CallOnPlayerSpawned(gameObject);
         OnTakeDamage += m_armor.ResetArmorTimer;
-        EventBroker.OnPlayerDeath += PlayerDeath;
+
 
         Cursor.lockState = CursorLockMode.Locked;
 
         _equipButtons = _equipmentBelt.GetComponentsInChildren<Button>();
         _wepButtons = _weaponBelt.GetComponentsInChildren<Button>();
+    }
+
+    private void PlayerSceneChange(Scene arg0, LoadSceneMode arg1)
+    {
+        Debug.Log("Scene Changed");
+        if (this != null)
+            EventBroker.CallOnPlayerSpawned(gameObject);
     }
 
     void Update()
@@ -237,6 +248,13 @@ public class ALTPlayerController : MonoBehaviour
         Vector3 dir = _ControllerCollisionPos - transform.position;
         Vector3 downdir = new Vector3(0.0f, -1.0f, 0.0f);
         RaycastHit hit;
+
+        if (Keyboard.current.gKey.wasPressedThisFrame)
+        {
+            m_health.TakeDamage(1000);
+        }
+
+
 
         switch (m_ControllerState)
         {
@@ -369,24 +387,25 @@ public class ALTPlayerController : MonoBehaviour
     public void PlayerRespawn()
     {
         m_health.Heal(m_health.GetMaxHealth());
+        m_armor.ResetArmor();
         isDead = false;
         m_ControllerState = ControllerState.Play;
         _controller.enabled = true;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        gameObject.transform.position = _respawnPosition;
         gameObject.transform.rotation = Quaternion.identity;
     }
 
     void PlayerDeath()
     {
+        isDead = true;
+        m_ControllerState = ControllerState.Menu;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
         if (_controller != null)
         {
+            Debug.Log("Controller vibe passed");
             _controller.enabled = false;
-            m_ControllerState = ControllerState.Menu;
-            isDead = true;
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
         }
     }
 
@@ -515,7 +534,7 @@ public class ALTPlayerController : MonoBehaviour
         else
         {
             m_Velocity = (transform.right * _movement.x * m_MoveSpeed) + (transform.forward * _movement.y * m_MoveSpeed);
-            
+
             GetComponent<CameraBehaviour>().bobFrequency = 5.0f;
         }
 

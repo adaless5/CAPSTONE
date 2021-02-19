@@ -23,7 +23,7 @@ public class AmmoController : MonoBehaviour, ISaveable
     private void Awake()
     {
         outOfAmmoAnimator = FindObjectOfType<AmmoUI>().GetComponent<Animator>();
-        SceneManager.sceneUnloaded += ctx => SaveAmmo();        
+        //SceneManager.sceneUnloaded += ctx => SaveAmmo();        
 
         LoadDataOnSceneEnter();
         EventBroker.OnAmmoPickup += AmmoPickup;      

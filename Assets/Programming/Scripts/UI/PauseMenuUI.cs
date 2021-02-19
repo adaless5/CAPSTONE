@@ -78,6 +78,7 @@ public class PauseMenuUI : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         Player.GetComponent<ALTPlayerController>().enabled = true;
+        Destroy(GameObject.Find("EventSystem"));
         Destroy(Player);
         //SceneManager.LoadScene(0);
         SceneManager.LoadScene("MainMenu");

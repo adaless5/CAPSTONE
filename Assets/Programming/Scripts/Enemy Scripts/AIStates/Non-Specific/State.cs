@@ -32,7 +32,6 @@ public class State
     protected float _bulletRange = 300.0f;
     protected float _maxDeviation = 350.0f;
     protected float _rotDamp = 10.0f;
-    protected float _droneVisualDistance = 50.0f;
 
     private Quaternion _desiredRot;
 
@@ -68,7 +67,7 @@ public class State
 
 
         RaycastHit hit;
-        if (Physics.Raycast(_playerPos.position, direction, out hit, _droneVisualDistance))
+        if (Physics.Raycast(_playerPos.position, direction, out hit, _visualDistance))
         {
             if (direction.magnitude < _visualDistance && angle < _visualAngle)
             {

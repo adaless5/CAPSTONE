@@ -26,12 +26,12 @@ public class DebugController : MonoBehaviour
             ALTPlayerController.instance.DebugUnlockAllWeapons();
         });
 
-        ALL_TOOLS = new DebugCommand("all_tools", "Unlocks all tools.", "all_tools", () => 
+        ALL_TOOLS = new DebugCommand("all_tools", "Unlocks all tools.", "all_tools", () =>
         {
-            ALTPlayerController.instance.DebugUnlockAllTools();        
+            ALTPlayerController.instance.DebugUnlockAllTools();
         });
 
-        ADD_MONEY = new DebugCommand("add_money", "Adds +10 currency.", "add_money", () => 
+        ADD_MONEY = new DebugCommand("add_money", "Adds +10 currency.", "add_money", () =>
         {
             ALTPlayerController.instance.DebugGainCurrency();
         });
@@ -39,7 +39,7 @@ public class DebugController : MonoBehaviour
         commandList = new List<DebugCommandBase>
         {
             ALL_WEAPONS,
-            ALL_TOOLS, 
+            ALL_TOOLS,
             ADD_MONEY
         };
     }
@@ -63,13 +63,17 @@ public class DebugController : MonoBehaviour
             }
         }
 
-        if (ALTPlayerController.instance.m_ControllerState == ALTPlayerController.ControllerState.Menu || ALTPlayerController.instance.m_ControllerState == ALTPlayerController.ControllerState.Wheel)
+        if (ALTPlayerController.instance != null)
         {
-            bCanShow = false;
-        }
-        else if (ALTPlayerController.instance.m_ControllerState == ALTPlayerController.ControllerState.Play || ALTPlayerController.instance.m_ControllerState == ALTPlayerController.ControllerState.Debug)
-        {
-            bCanShow = true;
+            if (ALTPlayerController.instance.m_ControllerState == ALTPlayerController.ControllerState.Menu || ALTPlayerController.instance.m_ControllerState == ALTPlayerController.ControllerState.Wheel)
+            {
+                bCanShow = false;
+            }
+            else if (ALTPlayerController.instance.m_ControllerState == ALTPlayerController.ControllerState.Play || ALTPlayerController.instance.m_ControllerState == ALTPlayerController.ControllerState.Debug)
+            {
+                bCanShow = true;
+            }
+
         }
     }
 
@@ -79,13 +83,15 @@ public class DebugController : MonoBehaviour
         {
             if (!bToggleGui)
             {
-                ALTPlayerController.instance.m_ControllerState = ALTPlayerController.ControllerState.Play;
+                if (ALTPlayerController.instance != null)
+                    ALTPlayerController.instance.m_ControllerState = ALTPlayerController.ControllerState.Play;
                 Cursor.lockState = CursorLockMode.Locked;
                 Cursor.visible = false;
                 return;
             }
 
-            ALTPlayerController.instance.m_ControllerState = ALTPlayerController.ControllerState.Debug;
+            if (ALTPlayerController.instance != null)
+                ALTPlayerController.instance.m_ControllerState = ALTPlayerController.ControllerState.Debug;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
 

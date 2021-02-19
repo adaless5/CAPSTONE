@@ -15,9 +15,10 @@ public class CompassMarkers : MonoBehaviour
     [Tooltip("Mark as true for enemies or movable markers")]
     public bool bIsMoving;
 
+
+
     void Start()
-    {
-        //m_markerImage = FindObjectOfType<Image>();
+    {       
         m_markerPosition = new Vector2(transform.position.x, transform.position.z);        
     }
 

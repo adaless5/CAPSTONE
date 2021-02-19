@@ -34,10 +34,18 @@ public class Load_Scene : MonoBehaviour
         if (MainMenuUI.bNewGame)
         {
             AsyncOperation firstLevel = SceneManager.LoadSceneAsync(3);
-        
+            AsyncOperation secondlevel = SceneManager.LoadSceneAsync(4,LoadSceneMode.Additive);
+
+
             while (firstLevel.progress < 1f)
             {
                 _fillMeter.fillAmount = firstLevel.progress;
+                yield return new WaitForEndOfFrame();
+            }
+
+            while (secondlevel.progress < 1f)
+            {
+                _fillMeter.fillAmount = secondlevel.progress;
                 yield return new WaitForEndOfFrame();
             }
         }
