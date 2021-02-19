@@ -13,7 +13,8 @@ public class PauseOptionsMenuUI : MonoBehaviour
 
     public GameObject firstSlider;
     public Slider slider;
-    public AudioMixer audioMaster;
+    public AudioMixer audioMusicMixer;
+    public AudioMixer audioFXMixer;
     public Button FullScreenButton;
     public Button WindowedButton;
 
@@ -105,9 +106,17 @@ public class PauseOptionsMenuUI : MonoBehaviour
         }
     }
 
-    public void SetVolume(float vol)
+    public void SetMusicVolume(Slider slider)
     {
-        //audioMaster.SetFloat("volume", vol);
+        //Debug.Log(slider.value);
+        audioMusicMixer.SetFloat("musicVol", Mathf.Log10(slider.value) * 20);
+
+    }
+
+    public void SetFXVolume(Slider slider)
+    {
+        audioFXMixer.SetFloat("FXVol", Mathf.Log10(slider.value) * 20);
+        //Debug.Log(slider.value);
     }
 
     public void SetFullScreen(bool isfull)

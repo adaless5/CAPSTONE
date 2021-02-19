@@ -5338,7 +5338,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   firstOption: {fileID: 0}
-  audioMaster: {fileID: 24100000, guid: b5dd59c44c5f5f943b7ac9c0cf4f33eb, type: 2}
+  audioMusicMixer: {fileID: 24100000, guid: 71f0ca5d6e03d6f4c8f30fee3f0a46fd, type: 2}
+  audioFXMixer: {fileID: 24100000, guid: 76d06d050aee79f4cb4bc0c5e0a93f42, type: 2}
   resolutionMenu: {fileID: 1449503059}
   StereoButton: {fileID: 556324054}
   MonoButton: {fileID: 1137960630}
@@ -5823,8 +5824,8 @@ GameObject:
   - component: {fileID: 891057993}
   - component: {fileID: 891057994}
   m_Layer: 5
-  m_Name: Slider (1)
-  m_TagString: Untagged
+  m_Name: MusicSlider
+  m_TagString: MusicSlider
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5895,20 +5896,20 @@ MonoBehaviour:
   m_FillRect: {fileID: 20294215}
   m_HandleRect: {fileID: 1297120271}
   m_Direction: 0
-  m_MinValue: -80
-  m_MaxValue: 0
+  m_MinValue: 0.0001
+  m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0
+  m_Value: 0.0001
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 843691353}
         m_TargetAssemblyTypeName: OptionsMenuUI, Assembly-CSharp
-        m_MethodName: SetVolume
-        m_Mode: 4
+        m_MethodName: SetMusicVolume
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 891057994}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Slider, UnityEngine.UI
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -6430,8 +6431,8 @@ GameObject:
   - component: {fileID: 942436330}
   - component: {fileID: 942436331}
   m_Layer: 5
-  m_Name: Slider
-  m_TagString: Untagged
+  m_Name: FXSlider
+  m_TagString: FXSlider
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6502,25 +6503,25 @@ MonoBehaviour:
   m_FillRect: {fileID: 1775069578}
   m_HandleRect: {fileID: 809105229}
   m_Direction: 0
-  m_MinValue: -80
-  m_MaxValue: 0
+  m_MinValue: 0.0001
+  m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0
+  m_Value: 0.0001
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 843691353}
         m_TargetAssemblyTypeName: OptionsMenuUI, Assembly-CSharp
-        m_MethodName: SetVolume
-        m_Mode: 0
+        m_MethodName: SetFXVolume
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 942436331}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Slider, UnityEngine.UI
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 2
+        m_CallState: 1
 --- !u!1 &944200833
 GameObject:
   m_ObjectHideFlags: 0
