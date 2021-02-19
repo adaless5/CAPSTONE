@@ -98,6 +98,7 @@ GameObject:
   - component: {fileID: -9170204793469808695}
   - component: {fileID: 6471633619917847824}
   - component: {fileID: 6764864172721924733}
+  - component: {fileID: 67910030497235699}
   m_Layer: 0
   m_Name: AMMO_Grenade
   m_TagString: Grenade Ammo
@@ -263,6 +264,22 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.4, y: 0.3, z: 0.19}
   m_Center: {x: 0.00031062216, y: -0.0010870027, z: 0.09993023}
+--- !u!114 &67910030497235699
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1856370411733414902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f510780ecdb793841bbacb201d069d44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_verticalBounceSpeed: 2
+  m_bounceAmount: 0.25
+  m_rotationSpeed: 10
+  DoesMove: 0
 --- !u!1 &8466806244691321220
 GameObject:
   m_ObjectHideFlags: 0

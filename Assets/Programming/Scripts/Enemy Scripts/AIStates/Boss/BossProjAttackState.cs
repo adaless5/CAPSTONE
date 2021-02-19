@@ -18,7 +18,6 @@ public class BossProjAttack : BossState
     public override void Update()
     {
         base.Update();
-        Debug.Log("Currently in Projectile State");
         //_stage = EVENT.EXIT;
     }
 

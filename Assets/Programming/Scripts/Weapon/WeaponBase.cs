@@ -45,6 +45,7 @@ public class WeaponBase : Weapon, ISaveable
     public void InitWeaponControls(GameObject player)
     {
         //Controls initializing for reloading && trying to shoot with no ammo
+
         _playerController._controls.Player.Reload.performed += ctx => Reload();
         _playerController._controls.Player.Shoot.started += ctx => TryShoot();
     }
@@ -52,9 +53,9 @@ public class WeaponBase : Weapon, ISaveable
     public override void Start()
     { 
         gunCamera = GameObject.FindObjectOfType<Camera>();
+
         _ammoController = FindObjectOfType<AmmoUI>().GetComponent<AmmoController>();
         _ammoController.InitializeAmmo(AmmoController.AmmoTypes.Default, m_weaponClipSize, m_weaponClipSize);
-
         GetComponent<MeshRenderer>().enabled = true;
         bIsActive = true;
         bIsObtained = true;

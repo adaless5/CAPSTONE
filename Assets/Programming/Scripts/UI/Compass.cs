@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class Compass : MonoBehaviour
 {
     public RawImage m_compassDirections;
-    public ALTPlayerController m_player; 
+    public ALTPlayerController m_player;
     public Image m_background;
     public CompassMarkers m_marker;
 
@@ -26,7 +26,7 @@ public class Compass : MonoBehaviour
     //public CompassMarkers drone;
 
     private void Awake()
-    {        
+    {
         m_player = FindObjectOfType<ALTPlayerController>();
         m_compassDirections = GetComponentInChildren<RawImage>();
         m_background = GetComponentInChildren<Image>();
@@ -41,7 +41,7 @@ public class Compass : MonoBehaviour
         //temporary references
         //AddMarker(defaultAmmo);
         //AddMarker(creatureAmmo);
-       // AddMarker(grenadeAmmo);
+        // AddMarker(grenadeAmmo);
         //AddMarker(drone);
     }
 
@@ -58,28 +58,36 @@ public class Compass : MonoBehaviour
         int m_compassAngle;
         m_compassAngle = Mathf.RoundToInt(m_playerAngle);
 
-        foreach(CompassMarkers marker in m_compassMarkers)
+        foreach (CompassMarkers marker in m_compassMarkers)
         {
             marker.m_markerImage.rectTransform.anchoredPosition = GetPosOnCompass(marker);
 
             //Setting Distance checks between marked item and player for whether to appear on compass
             float distance = Vector2.Distance(new Vector2(m_player.transform.position.x, m_player.transform.position.z), marker.m_markerPosition);
             float scale = 0f;
-            if(distance < m_maxDistance)
+            if (distance < m_maxDistance)
             {
                 scale = 1f - (distance / m_maxDistance);
             }
             marker.m_markerImage.rectTransform.localScale = Vector3.one * scale;
-        }     
+        }
     }
-    
+
     public void AddMarker(CompassMarkers marker)
     {
-        GameObject newMarker = Instantiate(m_iconPrefab, m_compassDirections.transform);
-        marker.m_markerImage = newMarker.GetComponent<Image>();
-        marker.m_markerImage.sprite = marker.icon;
+        try
+        {
+            GameObject newMarker = Instantiate(m_iconPrefab, m_compassDirections.transform);
+            marker.m_markerImage = newMarker.GetComponent<Image>();
+            marker.m_markerImage.sprite = marker.icon;
 
-        m_compassMarkers.Add(marker);
+            m_compassMarkers.Add(marker);
+
+        }
+        catch
+        {
+
+        }
     }
 
     Vector2 GetPosOnCompass(CompassMarkers marker)

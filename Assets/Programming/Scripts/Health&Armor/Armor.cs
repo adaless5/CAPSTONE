@@ -37,6 +37,11 @@ public class Armor : MonoBehaviour
     }
 
 
+    public void ResetArmor()
+    {
+        m_Armor = m_MaxArmor;
+    }
+
     public float GetCurrentArmor()
     {
         return m_Armor;

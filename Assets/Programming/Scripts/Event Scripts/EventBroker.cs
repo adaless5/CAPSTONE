@@ -16,8 +16,16 @@ public class EventBroker
     {
         SpawnEnemy?.Invoke(enemyToSpawn);
     }
+
     public static void CallOnPlayerSpawned(GameObject player)
     {
+        Debug.Log("Player has spawned");
+        OnPlayerSpawned?.Invoke(player);
+    }
+
+    public static void CallOnPlayerSpawned(ref GameObject player)
+    {
+        Debug.Log("Player has spawned");
         OnPlayerSpawned?.Invoke(player);
     }
 

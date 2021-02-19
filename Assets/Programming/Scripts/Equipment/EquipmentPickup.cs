@@ -7,13 +7,14 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
 {
     [SerializeField] int _CorrespondingEquipmentBeltIndex = 0;
 
-    bool isUsed = false;
+    public bool isUsed = false;
 
     GameObject _imageObject = null;
 
     string[] _tipName = { "EQUIPMENT_GRAPPLE", "EQUIPMENT_BLADE", "EQUIPMENT_THERMAL" };
 
-    ALTPlayerController _player;
+    public ALTPlayerController _player;
+
 
     void Awake()
     {
@@ -47,10 +48,13 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log("Triggered");
         if (!isUsed)
         {
+            Debug.Log("Isn't used");
             if (other.gameObject.tag == "Player")
             {
+                Debug.Log("Is player");
                 Belt belt = other.gameObject.GetComponentInChildren<Belt>();
                 belt.ObtainEquipmentAtIndex(_CorrespondingEquipmentBeltIndex);
 
@@ -59,7 +63,10 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
 
                 GetComponent<MeshRenderer>().enabled = false;
                 GetComponent<SphereCollider>().enabled = false;
-
+                if(transform.GetChild(0) != null)
+                {
+                    transform.GetChild(0).gameObject.SetActive(false);
+                }
                 CreateTip("Sprites/Messages/" + _tipName[_CorrespondingEquipmentBeltIndex]);
             }
         }
@@ -68,6 +75,10 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
     public void LoadDataOnSceneEnter()
     {
         isUsed = SaveSystem.LoadBool(gameObject.name, "isEnabled", gameObject.scene.name);
+        if (transform.GetChild(0) != null)
+        {
+            transform.GetChild(0).gameObject.SetActive(!isUsed);
+        }
     }
 
     public void CreateTip(string filename)

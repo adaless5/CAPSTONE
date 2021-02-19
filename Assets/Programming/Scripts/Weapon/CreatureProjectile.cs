@@ -75,6 +75,7 @@ public class CreatureProjectile : MonoBehaviour
     private void OnEnable()
     {
         _lifeTime = 3.0f;
+        _rigidBody.velocity = Vector3.zero;
     }
 
     private void OnDisable()
