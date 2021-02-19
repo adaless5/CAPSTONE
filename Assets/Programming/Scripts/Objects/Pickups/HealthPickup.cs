@@ -13,18 +13,21 @@ public class HealthPickup : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        EventBroker.OnPlayerSpawned += PlayerSpawned;
-     
-        m_marker = GetComponent<CompassMarkers>();
-        m_healthPickup = GetComponent<Pickup>();
+        EventBroker.OnPlayerSpawned += PlayerSpawned;    
 
     }
 
     void PlayerSpawned(GameObject playerRef)
     {
-        m_compass = FindObjectOfType<Compass>();
-        if (m_marker != null)
-        m_compass.AddMarker(m_marker);
+        try
+        {
+            m_healthPickup = GetComponent<Pickup>();
+            m_compass = FindObjectOfType<Compass>();
+            m_marker = GetComponent<CompassMarkers>();
+            if (m_marker != null)
+            m_compass.AddMarker(m_marker);
+        }
+        catch { }
     }
 
     private void OnTriggerEnter(Collider other)

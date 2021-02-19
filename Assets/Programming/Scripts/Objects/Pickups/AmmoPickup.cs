@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class AmmoPickup : MonoBehaviour
 {
@@ -18,31 +19,24 @@ public class AmmoPickup : MonoBehaviour
 
     public Compass m_compass;
     public CompassMarkers m_marker;
+    public ALTPlayerController m_player;
 
     bool isPickedUp;
+    bool m_markerCreated;
 
     // Start is called before the first frame update
     void Start()
     {
         EventBroker.OnPlayerSpawned += PlayerSpawned;
-        
-
-        //if (ammoType == WeaponType.BaseWeapon)
-        //{
-        //    m_marker.m_markerImage = Resources.Load<Image>("Sprites/Icons/Ammo/AMMO_DEFAULT");
-        //}
-        //else if (ammoType == WeaponType.CreatureWeapon)
-        //{
-        //    m_marker.m_markerImage = Resources.Load<Image>("Sprites/Icons/Ammo/AMMO_CREATURE");
-        //}
-        //else
-        //{
-        //    m_marker.m_markerImage = Resources.Load<Image>("Sprites/Icons/Ammo/AMMO_GRENADE");
-        //}
-
-        // m_marker.m_markerImage = FindObjectOfType<Sprite>();
+        SceneManager.sceneLoaded += onSceneLoaded;
 
         isPickedUp = false;
+        m_markerCreated = false;      
+    }
+
+    void onSceneLoaded(Scene currentScene, LoadSceneMode newScene)
+    {       
+        
     }
 
     void PlayerSpawned(GameObject playerReference)
@@ -54,9 +48,12 @@ public class AmmoPickup : MonoBehaviour
             m_marker = GetComponent<CompassMarkers>();
 
         }
-        catch { }
-           if (m_marker != null && m_ammoPickup != null)
+        catch { }     
+           if (m_marker != null && m_markerCreated == false)
+            {               
                 m_compass.AddMarker(m_marker);
+                m_markerCreated = true;
+            }
     }
 
     void Awake()
