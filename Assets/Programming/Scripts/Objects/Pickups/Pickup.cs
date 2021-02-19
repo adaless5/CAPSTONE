@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-[RequireComponent(typeof(Rigidbody), typeof(Collider))]
+[RequireComponent(/*typeof(Rigidbody),*/ typeof(Collider))]
 public class Pickup : MonoBehaviour
 {
     [SerializeField]
@@ -13,7 +13,7 @@ public class Pickup : MonoBehaviour
     [SerializeField]
     protected float m_rotationSpeed = 10f;
     public bool DoesMove;
-    public Rigidbody m_pickupBody { get; private set; }
+   // public Rigidbody m_pickupBody { get; private set; }
 
     Collider m_Collider;
     protected Vector3 m_StartPosition;
@@ -21,7 +21,7 @@ public class Pickup : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        m_pickupBody = GetComponent<Rigidbody>();
+      //  m_pickupBody = GetComponent<Rigidbody>();
         m_Collider = GetComponent<Collider>();
 
        // m_pickupBody.isKinematic = true;

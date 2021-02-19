@@ -138,7 +138,7 @@ public class WeaponPickup : MonoBehaviour, ITippable
                 Destroy(obj);
             }
         }
-
+        
         _imageObject = null;
     }
 }
