@@ -116,6 +116,10 @@ public class PuzzleSwitch : MonoBehaviour, ISaveable
             SetSwitchModel(onOff);
             bCanSwitch = false;
             SaveDataOnSceneChange();
+            if(_ActivationPolicy == Switch_ActivationPolicy_Type.CanInteractWhenInactive || _ActivationPolicy == Switch_ActivationPolicy_Type.CanInteractWhenActive)
+            {
+                gameObject.tag = "Untagged";
+            }
         }
     }
 
