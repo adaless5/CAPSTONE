@@ -25,7 +25,7 @@ public class AmmoPickup : MonoBehaviour
     void Start()
     {
         EventBroker.OnPlayerSpawned += PlayerSpawned;
-        
+
 
         //if (ammoType == WeaponType.BaseWeapon)
         //{
@@ -55,8 +55,9 @@ public class AmmoPickup : MonoBehaviour
 
         }
         catch { }
-           if (m_marker != null && m_ammoPickup != null)
-                m_compass.AddMarker(m_marker);
+        if (m_marker != null && m_ammoPickup != null)
+            m_compass.AddMarker(m_marker);
+
     }
 
     void Awake()

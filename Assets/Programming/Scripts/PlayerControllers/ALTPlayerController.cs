@@ -240,6 +240,7 @@ public class ALTPlayerController : MonoBehaviour
         Debug.Log("Scene Changed");
         if (this != null)
             EventBroker.CallOnPlayerSpawned(gameObject);
+
     }
 
     void Update()
