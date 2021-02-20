@@ -32,9 +32,13 @@ public class DroneAI : MonoBehaviour
 
     private void EventStart(GameObject player)
     {
+        try
+        {
+            _currentState = new DronePatrol(gameObject, _patrolPoints, player.transform, _navMeshAgent);
+            _playerReference = player;
 
-        _currentState = new DronePatrol(gameObject, _patrolPoints, player.transform, _navMeshAgent);
-        _playerReference = player;
+        }
+        catch { }
     }
 
     // Update is called once per frame

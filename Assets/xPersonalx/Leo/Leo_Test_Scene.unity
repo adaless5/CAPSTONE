@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.7168058, g: 0.20425497, b: 0.10615586, a: 1}
+  m_IndirectSpecularColor: {r: 0.7022002, g: 0.19831073, b: 0.10104007, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -123,6 +123,18 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 23800000, guid: c65c57c07bc32ec428ebb9f9c068d22c, type: 2}
+--- !u!114 &91053213 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7105097650705247081, guid: 1651baf7980c8be4e85feb3177ec71d8,
+    type: 3}
+  m_PrefabInstance: {fileID: 1456701892}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 361dd545d6ff7fe4c84c967d087b5656, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &151689776
 GameObject:
   m_ObjectHideFlags: 0
@@ -430,6 +442,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -9181894958035885969, guid: dc0af854b0d4901448ef1ef2e003c581,
+        type: 3}
+      propertyPath: m_PointerBehavior
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -9181894958035885969, guid: dc0af854b0d4901448ef1ef2e003c581,
+        type: 3}
+      propertyPath: m_DeselectOnBackgroundClick
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8354182916541207384, guid: dc0af854b0d4901448ef1ef2e003c581,
         type: 3}
       propertyPath: m_Name
@@ -1115,35 +1137,35 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 44819129, guid: 1651baf7980c8be4e85feb3177ec71d8, type: 3}
       propertyPath: m_AspectRatio
-      value: 1.7784195
+      value: 1.7782881
       objectReference: {fileID: 0}
     - target: {fileID: 126170714, guid: 1651baf7980c8be4e85feb3177ec71d8, type: 3}
       propertyPath: m_AspectRatio
-      value: 1.7559035
+      value: 1.7542968
       objectReference: {fileID: 0}
     - target: {fileID: 408777896, guid: 1651baf7980c8be4e85feb3177ec71d8, type: 3}
       propertyPath: m_AspectRatio
-      value: 21.410341
+      value: 21.494295
       objectReference: {fileID: 0}
     - target: {fileID: 411728297, guid: 1651baf7980c8be4e85feb3177ec71d8, type: 3}
       propertyPath: m_AspectRatio
-      value: 1.7434049
+      value: 1.7443666
       objectReference: {fileID: 0}
     - target: {fileID: 1133244492, guid: 1651baf7980c8be4e85feb3177ec71d8, type: 3}
       propertyPath: m_AspectRatio
-      value: 11.805085
+      value: 11.818475
       objectReference: {fileID: 0}
     - target: {fileID: 1519743030, guid: 1651baf7980c8be4e85feb3177ec71d8, type: 3}
       propertyPath: m_AspectRatio
-      value: 1.0202496
+      value: 1.0196406
       objectReference: {fileID: 0}
     - target: {fileID: 1812851586, guid: 1651baf7980c8be4e85feb3177ec71d8, type: 3}
       propertyPath: m_AspectRatio
-      value: 11.805084
+      value: 11.818474
       objectReference: {fileID: 0}
     - target: {fileID: 1831535030, guid: 1651baf7980c8be4e85feb3177ec71d8, type: 3}
       propertyPath: m_AspectRatio
-      value: 5.6540484
+      value: 5.655426
       objectReference: {fileID: 0}
     - target: {fileID: 496014468107801626, guid: 1651baf7980c8be4e85feb3177ec71d8,
         type: 3}
@@ -1200,6 +1222,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3074341672958639537, guid: 1651baf7980c8be4e85feb3177ec71d8,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.000015258789
+      objectReference: {fileID: 0}
     - target: {fileID: 5341162584005937555, guid: 1651baf7980c8be4e85feb3177ec71d8,
         type: 3}
       propertyPath: m_Name
@@ -1214,6 +1241,56 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5989098217344917158, guid: 1651baf7980c8be4e85feb3177ec71d8,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.14419556
+      objectReference: {fileID: 0}
+    - target: {fileID: 7105097650675595956, guid: 1651baf7980c8be4e85feb3177ec71d8,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7105097650675595956, guid: 1651baf7980c8be4e85feb3177ec71d8,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7105097650675595956, guid: 1651baf7980c8be4e85feb3177ec71d8,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7105097650675595956, guid: 1651baf7980c8be4e85feb3177ec71d8,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 91053213}
+    - target: {fileID: 7105097650675595956, guid: 1651baf7980c8be4e85feb3177ec71d8,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ExitGame
+      objectReference: {fileID: 0}
+    - target: {fileID: 7105097650675595956, guid: 1651baf7980c8be4e85feb3177ec71d8,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: ExitGame
+      objectReference: {fileID: 0}
+    - target: {fileID: 7105097650675595956, guid: 1651baf7980c8be4e85feb3177ec71d8,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: PauseMenuUI, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 7105097650675595956, guid: 1651baf7980c8be4e85feb3177ec71d8,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 7115843362055500529, guid: 1651baf7980c8be4e85feb3177ec71d8,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -2.1049805
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1651baf7980c8be4e85feb3177ec71d8, type: 3}
