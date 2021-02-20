@@ -53,6 +53,7 @@ public class MainMenuUI : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
+
         FileIO.ClearAllSavedData();
 
         //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
