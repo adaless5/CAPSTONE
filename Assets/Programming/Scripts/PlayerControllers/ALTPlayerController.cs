@@ -250,11 +250,6 @@ public class ALTPlayerController : MonoBehaviour
         Vector3 downdir = new Vector3(0.0f, -1.0f, 0.0f);
         RaycastHit hit;
 
-        if (Keyboard.current.gKey.wasPressedThisFrame)
-        {
-            m_health.TakeDamage(1000);
-        }
-
 
 
         switch (m_ControllerState)
