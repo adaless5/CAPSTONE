@@ -19,12 +19,6 @@ public class Compass : MonoBehaviour
     [Tooltip("Maximum distance between player and marker to appear on compass")]
     public float m_maxDistance = 75f;
 
-    //temporary references
-    //public CompassMarkers defaultAmmo;
-    //public CompassMarkers creatureAmmo;
-    //public CompassMarkers grenadeAmmo;
-    //public CompassMarkers drone;
-
     private void Awake()
     {
         m_player = FindObjectOfType<ALTPlayerController>();
@@ -37,12 +31,6 @@ public class Compass : MonoBehaviour
         m_compassDirections.texture = Resources.Load<Texture>("Sprites/HUD/Compass_Directions");
         m_background.sprite = Resources.Load<Sprite>("Sprites/HUD/Compass_Background");
         m_compassUnit = m_compassDirections.rectTransform.rect.width / 360f;
-
-        //temporary references
-        //AddMarker(defaultAmmo);
-        //AddMarker(creatureAmmo);
-        // AddMarker(grenadeAmmo);
-        //AddMarker(drone);
     }
 
     // Update is called once per frame

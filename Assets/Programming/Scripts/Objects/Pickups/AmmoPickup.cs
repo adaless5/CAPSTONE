@@ -18,31 +18,18 @@ public class AmmoPickup : MonoBehaviour
 
     public Compass m_compass;
     public CompassMarkers m_marker;
+    
 
     bool isPickedUp;
+    bool isMarkerCreated;
 
     // Start is called before the first frame update
     void Start()
     {
         EventBroker.OnPlayerSpawned += PlayerSpawned;
 
-
-        //if (ammoType == WeaponType.BaseWeapon)
-        //{
-        //    m_marker.m_markerImage = Resources.Load<Image>("Sprites/Icons/Ammo/AMMO_DEFAULT");
-        //}
-        //else if (ammoType == WeaponType.CreatureWeapon)
-        //{
-        //    m_marker.m_markerImage = Resources.Load<Image>("Sprites/Icons/Ammo/AMMO_CREATURE");
-        //}
-        //else
-        //{
-        //    m_marker.m_markerImage = Resources.Load<Image>("Sprites/Icons/Ammo/AMMO_GRENADE");
-        //}
-
-        // m_marker.m_markerImage = FindObjectOfType<Sprite>();
-
         isPickedUp = false;
+        isMarkerCreated = false;
     }
 
     void PlayerSpawned(GameObject playerReference)
@@ -55,8 +42,11 @@ public class AmmoPickup : MonoBehaviour
 
         }
         catch { }
-        if (m_marker != null && m_ammoPickup != null)
+        if (m_marker != null && isMarkerCreated == false)
+        {
             m_compass.AddMarker(m_marker);
+            isMarkerCreated = true;
+        }
 
     }
 
