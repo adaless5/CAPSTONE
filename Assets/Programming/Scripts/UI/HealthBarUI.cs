@@ -10,7 +10,8 @@ public class HealthBarUI : MonoBehaviour
 
     private void Awake()
     {
-        // slider = GetComponent<Slider>();        
+        // slider = GetComponent<Slider>();  
+        
     }
 
     public void SetMaxHealth(float HP)
@@ -22,13 +23,29 @@ public class HealthBarUI : MonoBehaviour
     public void LoseHealth(float HP, float damage, float maxHP)
     {
         float damagePercent = damage / maxHP;
-        healthFill.transform.localScale -= new Vector3(damagePercent, damagePercent, damagePercent);        
+        
+        if (healthFill.transform.localScale.x <= 1 && healthFill.transform.localScale.x > 0)
+        {            
+
+            healthFill.transform.localScale -= new Vector3(damagePercent, damagePercent, damagePercent);
+
+            if(healthFill.transform.localScale.x < 0)
+            healthFill.transform.localScale = new Vector3(0f, 0f, 0f);
+                  
+        }
+        else
+        {
+            healthFill.transform.localScale = new Vector3(0f, 0f, 0f);
+        }
        // slider.value = HP;
     } 
 
     public void GainHealth(float HP, float healAmount, float maxHP)
     {
         float healPercent = healAmount / maxHP;
-        healthFill.transform.localScale += new Vector3(healPercent, healPercent, healPercent);
+
+        if(healthFill.transform.localScale.x < 1 && healthFill.transform.localScale.x >= 0)      
+        healthFill.transform.localScale += new Vector3(healPercent, healPercent, healPercent);       
+        
     }
 }
