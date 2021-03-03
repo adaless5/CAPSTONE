@@ -23,6 +23,7 @@ public class Health : MonoBehaviour, ISaveable
     public event Action OnDeath;
 
     bool isDead = false;
+    bool isMarkerCreated;
 
     public HealthBarUI healthBar;
 
@@ -30,32 +31,42 @@ public class Health : MonoBehaviour, ISaveable
     public Compass m_compass;
     public CompassMarkers m_marker;
 
+
     void Start()
     {
-        EventBroker.OnPlayerSpawned += PlayerSpawned;
 
         healthBar = FindObjectOfType<HealthBarUI>();
 
         if (healthBar != null)
             healthBar.SetMaxHealth(m_MaxHealth);
 
+        isMarkerCreated = false;
 
     }
 
     void PlayerSpawned(GameObject playerReference)
     {
-        m_compass = FindObjectOfType<Compass>();
-        m_marker = GetComponent<CompassMarkers>();
-        if(gameObject.tag != "Player" && m_marker != null)
-        {           
+        try
+        {
+            m_compass = FindObjectOfType<Compass>();
+            m_marker = GetComponent<CompassMarkers>();
+            if (gameObject.tag != "Player" && m_marker != null && isMarkerCreated == false)
+            {
                 m_compass.AddMarker(m_marker);
+                isMarkerCreated = true;
+            }
         }
+        catch
+        {
+
+        }
+
     }
 
     void Awake()
     {
         LoadDataOnSceneEnter();
-
+        EventBroker.OnPlayerSpawned += PlayerSpawned;
         OnTakeHealthDamage += TakeDamage;
         //if (isDead) GetComponent<MeshRenderer>().enabled = false;
         //else GetComponent<MeshRenderer>().enabled = true;
@@ -76,7 +87,7 @@ public class Health : MonoBehaviour, ISaveable
             }
             else
             {
-                Die();                
+                Die();
             }
         }
 

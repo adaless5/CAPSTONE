@@ -60,6 +60,7 @@ public abstract class Weapon : Tool
     public List<EUpgradeType> m_currentupgrades;
 
     protected ALTPlayerController _playerController;
+    [SerializeField]
     protected AmmoController _ammoController;
     protected float m_fireStart = 0.0f;
     protected bool bIsReloading = false;
@@ -75,13 +76,12 @@ public abstract class Weapon : Tool
 
     protected void InitializePlayer(GameObject player)
     {
-        _playerController = player.GetComponent<ALTPlayerController>();        
+        _playerController = player.GetComponent<ALTPlayerController>();
         //Debug.Log(_playerController);
     }
 
 
 
- 
 
     public abstract void AddUpgrade(WeaponUpgrade upgrade);
     //public abstract void RemoveUpgrade(WeaponScalars scalars);

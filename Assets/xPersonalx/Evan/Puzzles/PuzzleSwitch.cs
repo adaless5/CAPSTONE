@@ -62,7 +62,7 @@ public class PuzzleSwitch : MonoBehaviour, ISaveable
     void Start()
     {
         fSwitchTimer = _ActivationTimer;
-        fResetTimer = 0.0f;
+        fResetTimer = 0.1f;
         if (_DoesStartTurnedOn)
         {
             SetSwitchModel(_DoesStartTurnedOn);
@@ -116,6 +116,10 @@ public class PuzzleSwitch : MonoBehaviour, ISaveable
             SetSwitchModel(onOff);
             bCanSwitch = false;
             SaveDataOnSceneChange();
+            if(_ActivationPolicy == Switch_ActivationPolicy_Type.CanInteractWhenInactive || _ActivationPolicy == Switch_ActivationPolicy_Type.CanInteractWhenActive)
+            {
+                gameObject.tag = "Untagged";
+            }
         }
     }
 

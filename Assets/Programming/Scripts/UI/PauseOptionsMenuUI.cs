@@ -13,7 +13,8 @@ public class PauseOptionsMenuUI : MonoBehaviour
 
     public GameObject firstSlider;
     public Slider slider;
-    public AudioMixer audioMaster;
+    public AudioMixer audioMusicMixer;
+    public AudioMixer audioFXMixer;
     public Button FullScreenButton;
     public Button WindowedButton;
 
@@ -88,21 +89,49 @@ public class PauseOptionsMenuUI : MonoBehaviour
     }
     public void SetBrightness(float amt)
     {
-        //m_Exposure.compensation = new FloatParameter(amt);
-        //_light.intensity = amt;
-        //RenderSettings.skybox.SetFloat("_Exposure", amt);
-        //RenderSettings.ambientIntensity = amt;
-        //RenderSettings.ambientLight = new Color(amt, amt, amt, 1);
-        //Debug.Log(RenderSettings.ambientLight);
+        GameObject _sfVol = GameObject.Find("Sky and Fog Volume");
+        if (_sfVol != null)
+        {
+            Volume volume = _sfVol.GetComponentInChildren<Volume>();
+            if (volume != null)
+            {
+                ColorAdjustments color;
+                volume.profile.TryGet<ColorAdjustments>(out color);
+
+                if (color != null)
+                {
+                    color.postExposure.SetValue(new FloatParameter(amt));
+                }
+            }
+        }
     }
-    public void SetVolume(float vol)
+
+    public void SetMusicVolume(Slider slider)
     {
-        //audioMaster.SetFloat("volume", vol);
+        //Debug.Log(slider.value);
+        audioMusicMixer.SetFloat("musicVol", Mathf.Log10(slider.value) * 20);
+
+    }
+
+    public void SetFXVolume(Slider slider)
+    {
+        audioFXMixer.SetFloat("FXVol", Mathf.Log10(slider.value) * 20);
+        //Debug.Log(slider.value);
     }
 
     public void SetFullScreen(bool isfull)
     {
         _isFullScreen = isfull;
         Screen.fullScreen = isfull;
+    }
+
+    public void SetXAxisInvert(bool bInvert)
+    {
+        ALTPlayerController.instance.SetXAxisInvert();
+    }
+
+    public void SetYAxisInvert(bool bInvert)
+    {
+        ALTPlayerController.instance.SetYAxisInvert();
     }
 }

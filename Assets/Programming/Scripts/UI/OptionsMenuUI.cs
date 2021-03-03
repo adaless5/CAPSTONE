@@ -5,14 +5,16 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.HighDefinition;
 
 public class OptionsMenuUI : MonoBehaviour
 {
     bool bDebug = false;
 
     public GameObject firstOption;
-    public AudioMixer audioMaster;
+    public AudioMixer audioMusicMixer;
+    public AudioMixer audioFXMixer;
     public TMP_Dropdown resolutionMenu;
 
     public Button StereoButton;
@@ -77,9 +79,17 @@ public class OptionsMenuUI : MonoBehaviour
         //}
     }
 
-    public void SetVolume(float vol)
+    public void SetMusicVolume(Slider slider)
     {
-        audioMaster.SetFloat("volume", vol);
+        //Debug.Log(slider.value);
+        audioMusicMixer.SetFloat("musicVol", Mathf.Log10(slider.value) * 20);
+        
+    }
+
+    public void SetFXVolume(Slider slider)
+    {
+        audioFXMixer.SetFloat("FXVol", Mathf.Log10(slider.value) * 20);
+        //Debug.Log(slider.value);
     }
 
     public void SetQuality(int index)
@@ -107,8 +117,21 @@ public class OptionsMenuUI : MonoBehaviour
 
     public void SetBrightness(float amt)
     {
-        RenderSettings.ambientLight = new Color(amt, amt, amt, 1);
-        Debug.Log(RenderSettings.ambientLight);
+        GameObject _sfVol = GameObject.Find("Sky and Fog Volume");
+        if (_sfVol != null)
+        {
+            Volume volume = _sfVol.GetComponentInChildren<Volume>();
+            if (volume != null)
+            {
+                ColorAdjustments color;
+                volume.profile.TryGet<ColorAdjustments>(out color);
+
+                if (color != null)
+                {
+                    color.postExposure.SetValue(new FloatParameter(amt));
+                }
+            }
+        }
     }
     public void SetOptions()
     {
@@ -116,6 +139,4 @@ public class OptionsMenuUI : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(firstOption);
     }
-
-
 }

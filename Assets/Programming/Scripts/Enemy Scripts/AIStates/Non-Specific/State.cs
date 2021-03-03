@@ -67,11 +67,11 @@ public class State
 
 
         RaycastHit hit;
-        if (Physics.Raycast(_playerPos.position, direction, out hit))
+        if (Physics.Raycast(_playerPos.position, direction, out hit, _visualDistance))
         {
             if (direction.magnitude < _visualDistance && angle < _visualAngle)
             {
-                //Debug.Log("Player found");
+                Debug.Log("Player found");
                 return true;
             }
         }

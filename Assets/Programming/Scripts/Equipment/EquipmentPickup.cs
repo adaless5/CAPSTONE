@@ -7,13 +7,14 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
 {
     [SerializeField] int _CorrespondingEquipmentBeltIndex = 0;
 
-    bool isUsed = false;
+    public bool isUsed = false;
 
     GameObject _imageObject = null;
 
     string[] _tipName = { "EQUIPMENT_GRAPPLE", "EQUIPMENT_BLADE", "EQUIPMENT_THERMAL" };
 
-    ALTPlayerController player;
+    public ALTPlayerController _player;
+
 
     void Awake()
     {
@@ -22,24 +23,38 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
         if (isUsed) GetComponent<MeshRenderer>().enabled = false;
         else GetComponent<MeshRenderer>().enabled = true;
 
-        player = FindObjectOfType<ALTPlayerController>();
+        EventBroker.OnPlayerSpawned += PlayerStart;
+
+
+    }
+
+    void PlayerStart(GameObject player)
+    {
+        _player = player.GetComponent<ALTPlayerController>();
     }
 
     void Update()
     {
-        if (player.CheckForInteract())
+        if (_player != null)
         {
-            DestroyTip();
+            if (_player.CheckForInteract())
+            {
+                DestroyTip();
+            }
+
         }
     }
 
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log("Triggered");
         if (!isUsed)
         {
+            Debug.Log("Isn't used");
             if (other.gameObject.tag == "Player")
             {
+                Debug.Log("Is player");
                 Belt belt = other.gameObject.GetComponentInChildren<Belt>();
                 belt.ObtainEquipmentAtIndex(_CorrespondingEquipmentBeltIndex);
 
@@ -48,7 +63,10 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
 
                 GetComponent<MeshRenderer>().enabled = false;
                 GetComponent<SphereCollider>().enabled = false;
-
+                if(transform.GetChild(0) != null)
+                {
+                    transform.GetChild(0).gameObject.SetActive(false);
+                }
                 CreateTip("Sprites/Messages/" + _tipName[_CorrespondingEquipmentBeltIndex]);
             }
         }
@@ -57,6 +75,10 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
     public void LoadDataOnSceneEnter()
     {
         isUsed = SaveSystem.LoadBool(gameObject.name, "isEnabled", gameObject.scene.name);
+        if (transform.GetChild(0) != null)
+        {
+            transform.GetChild(0).gameObject.SetActive(!isUsed);
+        }
     }
 
     public void CreateTip(string filename)
@@ -79,13 +101,13 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
                 trans.localScale = Vector3.one;
                 trans.anchoredPosition = new Vector2(0f, 0f); // setting position, will be on center
                 Texture2D tex = Resources.Load<Texture2D>(filename);
-                if(tex != null)
+                if (tex != null)
                 {
                     trans.sizeDelta = new Vector2(tex.width, tex.height); // custom size
                 }
 
                 Image image = _imageObject.AddComponent<Image>();
-                if(image != null)
+                if (image != null)
                 {
                     if (tex != null)
                     {
@@ -100,7 +122,7 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
     public void DestroyTip()
     {
         GameObject[] array = FindObjectsOfType<GameObject>();
-        foreach(GameObject obj in array)
+        foreach (GameObject obj in array)
         {
             if (obj.tag == "Tip")
             {

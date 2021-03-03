@@ -16,7 +16,7 @@ public class CreatureWeapon : Weapon, ISaveable
         base.Awake();      
         _creatureProjectile = (GameObject)Resources.Load("Prefabs/Weapon/Creature Projectile");     
         m_weaponClipSize = 8;
-        m_reloadTime = 0.5f;
+        m_reloadTime = 3.0f;
 
         EventBroker.OnPlayerSpawned += InitWeaponControls;
     }
@@ -97,6 +97,10 @@ public class CreatureWeapon : Weapon, ISaveable
 
     void OnShoot()
     {
+        //Play shot
+        AudioManager_CreatureWeapon amc = GetComponent<AudioManager_CreatureWeapon>();
+        amc.TriggerShootCreatureWeapon();
+
         for (int i = 0; i < m_weaponClipSize; i++)
         {
             Vector3 bulletDeviation = UnityEngine.Random.insideUnitCircle * 300.0f;
@@ -115,6 +119,7 @@ public class CreatureWeapon : Weapon, ISaveable
                     creatureProjectile.transform.localScale = randomSize;
                     creatureProjectile.GetComponent<Rigidbody>().AddForce(transform.forward * m_hitImpact, ForceMode.Impulse);
                     creatureProjectile.GetComponent<CreatureProjectile>().InitCreatureProjectile(m_maxDamageTime, m_projectileLifeTime, m_damageAmount, m_bHasActionUpgrade);
+                    creatureProjectile.GetComponent<CreatureProjectile>().LinkAudioManager(amc);
                 }
                 //  else
                 {
@@ -133,6 +138,13 @@ public class CreatureWeapon : Weapon, ISaveable
 
         IEnumerator OnReload()
         {
+            if(bIsActive)
+            {
+            //Play Reload Sound
+                GetComponent<AudioManager_CreatureWeapon>().TriggerReloadCreatureWeapon();
+            }
+           
+
             bIsReloading = true;
             // gunAnimator.SetBool("bIsReloading", true);
 

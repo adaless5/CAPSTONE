@@ -717,6 +717,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6472833657483725439}
+  - component: {fileID: 604287185342829145}
   m_Layer: 0
   m_Name: CylPullSwitch
   m_TagString: Untagged
@@ -750,6 +751,19 @@ Transform:
   m_Father: {fileID: 612027018742092930}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &604287185342829145
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5953705132602609861}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.69, y: 1, z: 0.99}
+  m_Center: {x: 0, y: 0.49, z: 0}
 --- !u!1 &6260324785944891810
 GameObject:
   m_ObjectHideFlags: 0
@@ -794,7 +808,7 @@ GameObject:
   - component: {fileID: 2063422201348553294}
   m_Layer: 0
   m_Name: TechSwitch
-  m_TagString: Untagged
+  m_TagString: Interactable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -873,6 +887,7 @@ MonoBehaviour:
   - {fileID: 1130539211406771155}
   _ClosedPositions:
   - {fileID: 4231334383736885335}
+  doorType: 0
   bIsOpen: 0
   bHasBeenClosed: 0
   bHasBeenOpened: 0

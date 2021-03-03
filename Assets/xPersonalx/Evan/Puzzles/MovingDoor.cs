@@ -22,14 +22,17 @@ public class MovingDoor : MonoBehaviour//, ISaveable
     public GameObject[] _OpenPositions;
     public GameObject[] _ClosedPositions;
 
+    AudioManager audioManager;
+    AudioSource audioSource;
 
+    public enum DoorType { Metal, Rock};
+    public DoorType doorType;
 
     public bool bIsOpen;
     public bool bHasBeenClosed;
     public bool bHasBeenOpened;
 
     public bool bRoomOneLogic;
-    bool bRoomOneFlip;
     public PuzzleSwitch[] _Switches;
 
     public GameObject[] _OpenObjects;
@@ -39,15 +42,24 @@ public class MovingDoor : MonoBehaviour//, ISaveable
     public PuzzleProximityTrigger _CloseProximityTrigger;
     void Start()
     {
-        bRoomOneFlip = bRoomOneLogic;
         bIsOpen = _StartOpened;
         bHasBeenClosed = false;
         bHasBeenOpened = false;
         SetDoorPositions(bIsOpen);
+
+        //++++ if (doorType == DoorType.Metal) audioManager = new AudioManager_MetalDoor();
+        //++++ else { audioManager = new AudioManager_RockDoor(); }
+
+        //++++ audioSource = new AudioSource();
+        //++++ audioSource.transform.position = transform.position;
+
+    }
+
+    private void Awake()
+    {
     }
 
     // Update is called once per frame
-
     void SetDoorPositions(bool OpenClosed)
     {
 
@@ -63,11 +75,12 @@ public class MovingDoor : MonoBehaviour//, ISaveable
                 _Doors[i].transform.position = _ClosedPositions[i].transform.position;
                 bHasBeenClosed = true;
             }
-
         }
     }
     void Open()
     {
+        //++++ audioManager.SendMessage("TriggerOpenDoor");
+
         bHasBeenClosed = false;
         bool AllDoorsReachedOpen = true;
         for (int i = 0; i < _Doors.Length; i++)
@@ -79,6 +92,7 @@ public class MovingDoor : MonoBehaviour//, ISaveable
             }
         }
         bHasBeenOpened = AllDoorsReachedOpen;
+        
     }
     void Close()
     {
@@ -99,9 +113,11 @@ public class MovingDoor : MonoBehaviour//, ISaveable
     void Update()
     {
 
-
+        if (!bRoomOneLogic)
+        {
         CheckOpenDoors();
         CheckCloseDoors();
+        }
         OpenCloseDoors();
         ProximityOpenClose();
 
@@ -171,6 +187,7 @@ public class MovingDoor : MonoBehaviour//, ISaveable
     {
         if (trigger != null)
         {
+
             return trigger.bIsTriggered;
         }
         else
@@ -227,7 +244,7 @@ public class MovingDoor : MonoBehaviour//, ISaveable
                 if (_StayClosed)
                 {
                     if (CheckProximity(_CloseProximityTrigger) == true)
-                    { bIsOpen = false; }
+                    { bIsOpen = false; bRoomOneLogic = false; }
                 }
                 else
                 {

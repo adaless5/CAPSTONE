@@ -60,7 +60,7 @@ public class Belt : MonoBehaviour
 
     public void EquipToolAtIndex(int index)
     {
-        if(_items[index].GetComponentInChildren<Tool>().bIsObtained)
+        if (_items[index].GetComponentInChildren<Tool>().bIsObtained)
         {
             selectedWeaponIndex = index;
             ChangeActiveEquipment();
@@ -69,7 +69,15 @@ public class Belt : MonoBehaviour
 
     public void ObtainEquipmentAtIndex(int index)
     {
-        _items[index].GetComponentInChildren<Tool>().ObtainEquipment();
+        try
+        {
+            _items[index].GetComponentInChildren<Tool>().ObtainEquipment();
+
+        }
+        catch
+        {
+
+        }
     }
 
     public Tool GetToolAtIndex(int index)

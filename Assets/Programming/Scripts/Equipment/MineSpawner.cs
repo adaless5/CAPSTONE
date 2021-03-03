@@ -101,7 +101,15 @@ public class MineSpawner : Weapon, ISaveable
         GameObject mine = Instantiate(minePrefab, transform.position, transform.rotation);
         if(mine)
         {
-           // mine.GetComponent<Mine>().InitMine(
+            //Trigger Grenade Sounds
+            AudioManager_Grenade audioManager = GetComponent<AudioManager_Grenade>();
+            mine.SendMessage("BindAudioManager", audioManager);
+            audioManager.TriggerThrowGrenade();
+            StartCoroutine(StartExplosionSounds(audioManager));
+            
+            //
+
+            // mine.GetComponent<Mine>().InitMine(
             mine.GetComponent<Rigidbody>().AddForce(transform.forward * m_projectileforce);
             mine.GetComponent<Rigidbody>().AddTorque(new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), -90f));
             mine.GetComponent<Mine>().InitMine(m_projectileLifeTime, m_blastradius, m_blastforce, m_damageAmount, m_bHasActionUpgrade);
@@ -137,6 +145,14 @@ public class MineSpawner : Weapon, ISaveable
     //{
     //    m_bHasActionUpgrade = hasaction;
     //}
+
+    IEnumerator StartExplosionSounds(AudioManager_Grenade amg)
+    {
+        yield return new WaitForSeconds(.8f);
+        amg.TriggerGrenadeCook();
+        yield return new WaitForSeconds(2f);
+        amg.TriggerGrenadeExplode();
+    }
 
     public void LoadDataOnSceneEnter()
     {

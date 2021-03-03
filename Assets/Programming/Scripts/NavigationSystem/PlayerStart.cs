@@ -36,7 +36,8 @@ public class PlayerStart : MonoBehaviour
                 
                 _playerPrefab = Instantiate(_playerPrefab, _startPosition + _halfCharacterControllerHeight, Quaternion.Euler(_startRotation));
 
-                GameObject player = GameObject.FindWithTag("Player");
+                GameObject player = (GameObject)_playerPrefab;
+                EventBroker.CallOnPlayerSpawned(ref player);
                 player.transform.position = _startPosition;
                 player.transform.Rotate(_startRotation, Space.Self);
             }

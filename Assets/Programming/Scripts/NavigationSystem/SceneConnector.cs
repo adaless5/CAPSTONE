@@ -101,6 +101,10 @@ public class SceneConnector : MonoBehaviour
     {
         yield return new WaitForSeconds(3f);
         FileIO.ExportRespawnInfoToFile(playerTransform, SceneManager.GetActiveScene().name);
+        if (SceneManager.sceneCount > 1)
+        {
+            FileIO.ExportRespawnInfoToFile(playerTransform, SceneManager.GetSceneAt(1).name);
+        }
     }
 
     public void CreateUnloadTrigger()

@@ -7,7 +7,7 @@ public class AmmoPickup : MonoBehaviour
 {
     public WeaponType ammoType;
     private int weaponIndex;
-   
+
     public int m_amountOfClipsInPickup = 2;
     public int m_clipSize = 6;
     Pickup m_ammoPickup;
@@ -18,45 +18,41 @@ public class AmmoPickup : MonoBehaviour
 
     public Compass m_compass;
     public CompassMarkers m_marker;
+    
 
     bool isPickedUp;
+    bool isMarkerCreated;
 
     // Start is called before the first frame update
     void Start()
     {
         EventBroker.OnPlayerSpawned += PlayerSpawned;
 
-        m_ammoPickup = GetComponent<Pickup>();
-
-        //if (ammoType == WeaponType.BaseWeapon)
-        //{
-        //    m_marker.m_markerImage = Resources.Load<Image>("Sprites/Icons/Ammo/AMMO_DEFAULT");
-        //}
-        //else if (ammoType == WeaponType.CreatureWeapon)
-        //{
-        //    m_marker.m_markerImage = Resources.Load<Image>("Sprites/Icons/Ammo/AMMO_CREATURE");
-        //}
-        //else
-        //{
-        //    m_marker.m_markerImage = Resources.Load<Image>("Sprites/Icons/Ammo/AMMO_GRENADE");
-        //}
-
-       // m_marker.m_markerImage = FindObjectOfType<Sprite>();
-
         isPickedUp = false;
+        isMarkerCreated = false;
     }
 
     void PlayerSpawned(GameObject playerReference)
     {
-        m_compass = FindObjectOfType<Compass>();
-        m_marker = GetComponent<CompassMarkers>();
-        if(m_marker != null)
-        m_compass.AddMarker(m_marker);
+        try
+        {
+            m_ammoPickup = GetComponent<Pickup>();
+            m_compass = FindObjectOfType<Compass>();
+            m_marker = GetComponent<CompassMarkers>();
+
+        }
+        catch { }
+        if (m_marker != null && isMarkerCreated == false)
+        {
+            m_compass.AddMarker(m_marker);
+            isMarkerCreated = true;
+        }
+
     }
 
     void Awake()
     {
-        switch(ammoType)
+        switch (ammoType)
         {
             case WeaponType.BaseWeapon:
                 weaponIndex = 0;
@@ -76,14 +72,14 @@ public class AmmoPickup : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Player" && isPickedUp == false)
-        {   
+        {
             isPickedUp = true;
             EventBroker.CallOnAmmoPickup(ammoType, m_amountOfClipsInPickup);
             //Destroy(gameObject); // EVAN COMMENTED THIS OUT AND ADDED THE LINE BELOW, IF THERE IS A PROBLEM YELL AT HIM
             gameObject.SetActive(false);
 
-            if(m_marker != null)
-            m_compass.RemoveMarker(m_marker);            
+            if (m_marker != null)
+                m_compass.RemoveMarker(m_marker);
         }
     }
 }

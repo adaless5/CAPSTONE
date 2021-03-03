@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using UnityEngine.Rendering;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-
+using UnityEngine.SceneManagement;
 public enum ControllerType
 {
     Mouse,
@@ -102,7 +102,7 @@ public class ALTPlayerController : MonoBehaviour
     //bool bHasEnteredDarkness = false;
 
     //Death mechanic stuff
-    bool isDead = false;
+    public bool isDead = false;
     Vector3 _respawnPosition;
 
     //New Controller
@@ -126,9 +126,14 @@ public class ALTPlayerController : MonoBehaviour
 
     public static ALTPlayerController instance;
 
+    private bool bInvertXAxis = false;
+    private bool bInvertYAxis = false;
+
     private void Awake()
     {
+        Debug.Log("Awake");
         OnTakeDamage += TakeDamage;
+        EventBroker.OnPlayerDeath += PlayerDeath;
         _respawnPosition = gameObject.transform.position;
         m_ControllerState = ControllerState.Play;
         InitializeControls();
@@ -179,14 +184,15 @@ public class ALTPlayerController : MonoBehaviour
         _controls.Player.WeaponWheel.canceled += ctx => HandleWeaponWheel();
         _controls.Player.Equipment.performed += ctx => _bEquipment = true;
         _controls.Player.Equipment.canceled += ctx => _bEquipment = false;
-        _controls.Player.Thermal.performed += ctx => _bThermal = true;
+        _controls.Player.Thermal.started += ctx => _bThermal = true;
         _controls.Player.Thermal.canceled += ctx => _bThermal = false;
-        _controls.Player.Interact.performed += ctx => _bInteract = true;
+        _controls.Player.Interact.started += ctx => _bInteract = true;
         _controls.Player.Interact.canceled += ctx => _bInteract = false;
     }
 
     void Start()
     {
+        Debug.Log("Start");
         DontDestroyOnLoad(this);
         Application.targetFrameRate = 60;
         Cursor.lockState = CursorLockMode.Locked;
@@ -200,6 +206,7 @@ public class ALTPlayerController : MonoBehaviour
         _equipmentBelt = FindObjectOfType<EquipmentBelt>();
         _weaponBelt = FindObjectOfType<WeaponBelt>();
         _pauseMenu = FindObjectOfType<PauseMenuUI>();
+        isDead = false;
 
         Canvas[] wheelsInScene;
         wheelsInScene = FindObjectsOfType<Canvas>();
@@ -216,16 +223,24 @@ public class ALTPlayerController : MonoBehaviour
                 WeaponWheel.enabled = false;
             }
         }
-
+        SceneManager.sceneLoaded += PlayerSceneChange;
         //Subscribing to Event Broker
         EventBroker.CallOnPlayerSpawned(gameObject);
         OnTakeDamage += m_armor.ResetArmorTimer;
-        EventBroker.OnPlayerDeath += PlayerDeath;
+
 
         Cursor.lockState = CursorLockMode.Locked;
 
         _equipButtons = _equipmentBelt.GetComponentsInChildren<Button>();
         _wepButtons = _weaponBelt.GetComponentsInChildren<Button>();
+    }
+
+    private void PlayerSceneChange(Scene arg0, LoadSceneMode arg1)
+    {
+        Debug.Log("Scene Changed");
+        if (this != null)
+            EventBroker.CallOnPlayerSpawned(gameObject);
+
     }
 
     void Update()
@@ -234,6 +249,8 @@ public class ALTPlayerController : MonoBehaviour
         Vector3 dir = _ControllerCollisionPos - transform.position;
         Vector3 downdir = new Vector3(0.0f, -1.0f, 0.0f);
         RaycastHit hit;
+
+
 
         switch (m_ControllerState)
         {
@@ -332,7 +349,6 @@ public class ALTPlayerController : MonoBehaviour
             if (_controller.isGrounded && _slopeAngle <= 140.0f)
             {
                 bOnSlope = true;
-
             }
             else
             {
@@ -362,28 +378,30 @@ public class ALTPlayerController : MonoBehaviour
         m_ControllerState = ControllerState.Menu;
         _pauseMenu.Pause();
     }
+
     //Death and Respawn functionality -LCC
     public void PlayerRespawn()
     {
         m_health.Heal(m_health.GetMaxHealth());
+        m_armor.ResetArmor();
         isDead = false;
         m_ControllerState = ControllerState.Play;
         _controller.enabled = true;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        gameObject.transform.position = _respawnPosition;
         gameObject.transform.rotation = Quaternion.identity;
     }
 
     void PlayerDeath()
     {
+        isDead = true;
+        m_ControllerState = ControllerState.Menu;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
         if (_controller != null)
         {
+            Debug.Log("Controller vibe passed");
             _controller.enabled = false;
-            m_ControllerState = ControllerState.Menu;
-            isDead = true;
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
         }
     }
 
@@ -471,6 +489,13 @@ public class ALTPlayerController : MonoBehaviour
 
         float mouseX = _look.x * Time.deltaTime * m_LookSensitivity;
         float mouseY = _look.y * Time.deltaTime * m_LookSensitivity;
+
+        if (bInvertXAxis)
+            mouseX *= -1f;
+
+        if (bInvertYAxis)
+            mouseY *= -1f;
+
         if (m_ControllerState == ControllerState.Play)
         {
             m_XRotation += mouseY;
@@ -499,10 +524,14 @@ public class ALTPlayerController : MonoBehaviour
         {
             m_Velocity = (transform.right * _movement.x * m_SprintSpeed) + (transform.forward * _movement.y * m_SprintSpeed);
             m_stamina.UseStamina();
+
+            GetComponent<CameraBehaviour>().bobFrequency = 7.5f;
         }
         else
         {
             m_Velocity = (transform.right * _movement.x * m_MoveSpeed) + (transform.forward * _movement.y * m_MoveSpeed);
+
+            GetComponent<CameraBehaviour>().bobFrequency = 5.0f;
         }
 
         if (CheckForSprintInput() == false || (_movement.magnitude == 0 && m_stamina.bCanRegenerate))
@@ -721,5 +750,15 @@ public class ALTPlayerController : MonoBehaviour
     public Vector3 GetVelocity()
     {
         return m_Velocity;
+    }
+
+    public void SetXAxisInvert()
+    {
+        bInvertXAxis = !bInvertXAxis;
+    }
+
+    public void SetYAxisInvert()
+    {
+        bInvertYAxis = !bInvertYAxis;
     }
 }

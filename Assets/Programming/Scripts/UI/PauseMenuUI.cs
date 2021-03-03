@@ -10,23 +10,26 @@ public class PauseMenuUI : MonoBehaviour
     static bool GameIsPaused = false;
     public GameObject PauseMenu;
     public GameObject OptionsMenu;
+    public GameObject ControlScheme;
     public GameObject Player;
     public GameObject pauseFirst;
+    public GameObject quitFirst;
+    public GameObject defaultControlOption;
     public Animator OptionMenuAnimator;
+    public Animator ControlSchemeAnimator;
 
     ControllerType _playerContType;
 
     public CanvasGroup _canvasGroup;
+    public CanvasGroup _quitCanvasGroup;
 
     void Awake()
     {
         _canvasGroup = gameObject.transform.GetChild(0).GetChild(0).GetComponent<CanvasGroup>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-
     }
 
     private void OnEnable()
@@ -66,7 +69,6 @@ public class PauseMenuUI : MonoBehaviour
             ALTPlayerController pc = Player.GetComponent<ALTPlayerController>();
             //pc.enabled = false;
             pc.m_ControllerState = ALTPlayerController.ControllerState.Menu;
-
         }
     }
 
@@ -77,6 +79,7 @@ public class PauseMenuUI : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         Player.GetComponent<ALTPlayerController>().enabled = true;
+        Destroy(GameObject.Find("EventSystem"));
         Destroy(Player);
         //SceneManager.LoadScene(0);
         SceneManager.LoadScene("MainMenu");
@@ -95,18 +98,24 @@ public class PauseMenuUI : MonoBehaviour
         Application.Quit();
     }
 
-    public void Quit(GameObject firstQuitButton)
+    public void Quit()
     {
+        _quitCanvasGroup.gameObject.SetActive(true);
         _canvasGroup.interactable = false;
         _canvasGroup.blocksRaycasts = false;
+        _quitCanvasGroup.interactable = true;
+        _quitCanvasGroup.blocksRaycasts = true;
         EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(firstQuitButton);
+        EventSystem.current.SetSelectedGameObject(quitFirst);
     }
 
     public void NotQuit()
     {
+        _quitCanvasGroup.gameObject.SetActive(false);
         _canvasGroup.interactable = true;
         _canvasGroup.blocksRaycasts = true;
+        _quitCanvasGroup.interactable = false;
+        _quitCanvasGroup.blocksRaycasts = false;
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(pauseFirst);
     }
@@ -126,6 +135,7 @@ public class PauseMenuUI : MonoBehaviour
         OptionsMenu.GetComponent<CanvasGroup>().blocksRaycasts = true;
         OptionMenuAnimator.SetBool("PauseOptionsActive", true);
     }
+
     public void DeactivateOptionsMenu()
     {
         Debug.Log("DeactivateOptions");
@@ -138,4 +148,26 @@ public class PauseMenuUI : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(pauseFirst);
     }
 
+    public void ActivateControlScheme()
+    {
+        ControlSchemeAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;       
+        _canvasGroup.interactable = false;
+        _canvasGroup.blocksRaycasts = false;
+        ControlScheme.GetComponent<CanvasGroup>().interactable = true;
+        ControlScheme.GetComponent<CanvasGroup>().blocksRaycasts = true;
+        ControlSchemeAnimator.SetBool("IsActive", true);
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(defaultControlOption);
+    }
+
+    public void DeactivateControlScheme()
+    {       
+        _canvasGroup.interactable = true;
+        _canvasGroup.blocksRaycasts = true;
+        ControlScheme.GetComponent<CanvasGroup>().interactable = false;
+        ControlScheme.GetComponent<CanvasGroup>().blocksRaycasts = false;
+        ControlSchemeAnimator.SetBool("IsActive", false);
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(pauseFirst);
+    }
 }
