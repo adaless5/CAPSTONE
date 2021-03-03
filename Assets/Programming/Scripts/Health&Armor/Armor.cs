@@ -32,8 +32,10 @@ public class Armor : MonoBehaviour
         m_ArmorCooldown = 6f;
         m_RegenAmount = 20f;
         m_ArmorTimer = m_ArmorCooldown;
-
-        //armorBar.SetMaxArmor(m_MaxArmor);
+                
+        armorBar = FindObjectOfType<ArmorBarUI>();
+        if (armorBar != null)
+            armorBar.SetMaxArmor(m_MaxArmor);
     }
 
 
@@ -59,7 +61,10 @@ public class Armor : MonoBehaviour
         {
 
             m_Armor -= damage;
-            armorBar.LoseArmor(m_Armor, damage, m_MaxArmor);
+
+            armorBar.SetCurrentArmor(m_Armor);
+            //OLD ARMOR UI
+            //armorBar.LoseArmor(m_Armor, damage, m_MaxArmor);
 
             if (bDebug) Debug.Log("Damage to Armor, Current Armor at " + m_Armor);
         }
@@ -88,7 +93,10 @@ public class Armor : MonoBehaviour
             if (bDebug) Debug.Log("Regenerating...");
 
             m_Armor += m_RegenAmount;
-            armorBar.GainArmor(m_Armor, m_RegenAmount, m_MaxArmor);
+            armorBar.SetCurrentArmor(m_Armor);
+
+            //OLD ARMOR UI LOGIC - temp commented out
+            //armorBar.GainArmor(m_Armor, m_RegenAmount, m_MaxArmor);
             yield return new WaitForSeconds(m_ArmorRefreshRate);
         }
 
