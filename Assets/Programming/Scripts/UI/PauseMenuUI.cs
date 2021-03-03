@@ -94,8 +94,8 @@ public class PauseMenuUI : MonoBehaviour
     public void ExitGame()
     {
         SaveSystem.SaveRespawnInfo(Player.transform, Player.scene.name);
-        Debug.Log("Exit");
         Application.Quit();
+        Debug.Log("Exit");
     }
 
     public void Quit()
