@@ -127,11 +127,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Container: {fileID: 8921470080645234065}
-  _PossiblePickups:
-  - {fileID: 3515572242083968421, guid: cbdde4869247d8549a73d6c5b63bf47b, type: 3}
-  - {fileID: 4314808963406957361, guid: f58df40efc5123844a75a7810cbf4358, type: 3}
-  - {fileID: 1856370411733414902, guid: 0a723e034bfb32c4e84ca88a86639571, type: 3}
-  - {fileID: 5522114212442294000, guid: 3faa2bef9f39942469aeff7064933f23, type: 3}
+  _DefaultAmmoPickup: {fileID: 4314808963406957361, guid: f58df40efc5123844a75a7810cbf4358,
+    type: 3}
+  _GrenadePickup: {fileID: 1856370411733414902, guid: 0a723e034bfb32c4e84ca88a86639571,
+    type: 3}
+  _CreaturePickup: {fileID: 3515572242083968421, guid: cbdde4869247d8549a73d6c5b63bf47b,
+    type: 3}
+  _HealthPickup: {fileID: 5522114212442294000, guid: 3faa2bef9f39942469aeff7064933f23,
+    type: 3}
+  _Jumper: {fileID: 977401896139285840, guid: cf28fde148e505b4ca07a367a414e5fa, type: 3}
 --- !u!135 &5288735970200445577
 SphereCollider:
   m_ObjectHideFlags: 0
