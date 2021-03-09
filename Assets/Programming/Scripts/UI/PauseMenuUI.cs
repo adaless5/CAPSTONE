@@ -23,9 +23,12 @@ public class PauseMenuUI : MonoBehaviour
     public CanvasGroup _canvasGroup;
     public CanvasGroup _quitCanvasGroup;
 
+    bool _isOptionsActive = false;
+    Vector3 _menupos;
     void Awake()
     {
         _canvasGroup = gameObject.transform.GetChild(0).GetChild(0).GetComponent<CanvasGroup>();
+        _menupos = OptionsMenu.transform.position;
     }
 
     void Update()
@@ -40,14 +43,22 @@ public class PauseMenuUI : MonoBehaviour
 
     public void Unpause()
     {
-        Time.timeScale = 1f;
-        GameIsPaused = false;
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-        ALTPlayerController pc = Player.GetComponent<ALTPlayerController>();
-        //pc.enabled = true;
-        pc.m_ControllerState = ALTPlayerController.ControllerState.Play;
-        PauseMenu.SetActive(false);
+        if (_isOptionsActive)
+        {
+            DeactivateOptionsMenu();
+        }
+        else
+        {
+            OptionsMenu.transform.position = _menupos;
+            Time.timeScale = 1f;
+            GameIsPaused = false;
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            ALTPlayerController pc = Player.GetComponent<ALTPlayerController>();
+            //pc.enabled = true;
+            pc.m_ControllerState = ALTPlayerController.ControllerState.Play;
+            PauseMenu.SetActive(false);
+        }
     }
 
     public void Pause()
@@ -134,6 +145,7 @@ public class PauseMenuUI : MonoBehaviour
         OptionsMenu.GetComponent<CanvasGroup>().interactable = true;
         OptionsMenu.GetComponent<CanvasGroup>().blocksRaycasts = true;
         OptionMenuAnimator.SetBool("PauseOptionsActive", true);
+        _isOptionsActive = true;
     }
 
     public void DeactivateOptionsMenu()
@@ -146,6 +158,7 @@ public class PauseMenuUI : MonoBehaviour
         OptionMenuAnimator.SetBool("PauseOptionsActive", false);
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(pauseFirst);
+        _isOptionsActive = false;
     }
 
     public void ActivateControlScheme()

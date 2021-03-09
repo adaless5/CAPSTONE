@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.HighDefinition;
+using System.Linq;
 
 public class OptionsMenuUI : MonoBehaviour
 {
@@ -28,7 +29,9 @@ public class OptionsMenuUI : MonoBehaviour
     Resolution[] resolutions;
     private void Start()
     {
-        resolutions = Screen.resolutions;
+        //resolutions = Screen.resolutions;
+        resolutions = Screen.resolutions.Select(resolution => new Resolution { width = resolution.width, height = resolution.height }).Distinct().ToArray();
+
         resolutionMenu.ClearOptions();
 
         List<string> data = new List<string>();
@@ -139,4 +142,5 @@ public class OptionsMenuUI : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(firstOption);
     }
+
 }
