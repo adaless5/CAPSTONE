@@ -121,7 +121,7 @@ public class Health : MonoBehaviour, ISaveable
         {
             transform.GetChild(i).gameObject.SetActive(false);
         }
-        transform.DetachChildren();
+        //transform.DetachChildren();
         CallOnDeath();
     }
 

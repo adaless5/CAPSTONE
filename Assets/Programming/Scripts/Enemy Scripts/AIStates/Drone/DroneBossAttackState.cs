@@ -1,20 +1,15 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
-
-public class DroneAttack : DroneState
+public class DroneBossAttack : DroneState
 {
-    GameObject _droneProjectile;
-
-    public DroneAttack(GameObject enemy, Transform[] pp, Transform playerposition, NavMeshAgent nav) : base(enemy, pp, playerposition, nav)
+    public DroneBossAttack(GameObject enemy, Transform[] pp, Transform playerposition, UnityEngine.AI.NavMeshAgent nav) : base(enemy, pp, playerposition, nav)
     {
-        _stateName = STATENAME.ATTACK;
-        _droneProjectile = (GameObject)Resources.Load("Prefabs/Weapon/Drone Projectile");
+
     }
-    
-    public DroneAttack(GameObject enemy) : base (enemy, null, ALTPlayerController.instance.transform, null)
+
+    public DroneBossAttack(GameObject enemy) : base(enemy, null, ALTPlayerController.instance.transform, null)
     {
 
     }
@@ -27,24 +22,16 @@ public class DroneAttack : DroneState
     public override void Update()
     {
         base.Update();
-        if (CanSeePlayer())
+
+        LookAt(_playerPos);
+
+        if (Vector3.Distance(_currentEnemy.transform.position, _playerPos.position) < _shootDistance)
         {
-
-            LookAt(_playerPos);
-
-            if (Vector3.Distance(_currentEnemy.transform.position, _playerPos.position) < _shootDistance)
-            {
-                ShootPlayer();
-            }
-            else
-            {
-                _currentEnemy.transform.position = Vector3.MoveTowards(_currentEnemy.transform.position, _playerPos.position, _enemySpeed * Time.deltaTime);
-            }
+            ShootPlayer();
         }
         else
         {
-            _nextState = new DronePatrol(_currentEnemy, _patrolPoints, _playerPos, _navMeshAgent);
-            _stage = EVENT.EXIT;
+            _currentEnemy.transform.position = Vector3.MoveTowards(_currentEnemy.transform.position, _playerPos.position, _enemySpeed * Time.deltaTime);
         }
     }
 
@@ -74,12 +61,10 @@ public class DroneAttack : DroneState
                     Debug.Log("Player not hit");
                 }
             }
-
-            //GameObject tempbullet = GameObject.Instantiate(_droneProjectile, finalFowardVector, Quaternion.identity, _currentEnemy.transform);
-            //tempbullet.GetComponent<Rigidbody>().AddForce(playerDir * _shootDistance, ForceMode.Impulse);
             _shootTimer = 0.5f;
         }
     }
+
 
     public override void Exit()
     {
