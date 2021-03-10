@@ -28,7 +28,7 @@ public class MineSpawner : Weapon, ISaveable
         _ammoController = FindObjectOfType<AmmoUI>().GetComponent<AmmoController>();
         _ammoController.InitializeAmmo(AmmoController.AmmoTypes.Explosive, m_weaponClipSize, m_startingOverstockAmmo);
 
-        m_timer = m_fireRate;
+       
         bIsActive = false;
         bIsObtained = false;
     }
@@ -44,11 +44,13 @@ public class MineSpawner : Weapon, ISaveable
         }
 
         m_projectileforce *= m_upgradestats.ProjectileForce;
-        m_fireRate = 5f * m_upgradestats.FireRate;
+        m_fireRate = 2f * m_upgradestats.FireRate;
         m_projectileLifeTime *= m_upgradestats.FuzeTime;
         m_blastradius *= m_upgradestats.BlastRadius;
         m_blastforce *= m_upgradestats.ImpactForce;
         m_damageAmount = 50f * m_upgradestats.Damage;
+
+        m_timer = m_fireRate;
     }
 
     // Update is called once per frame
@@ -76,9 +78,9 @@ public class MineSpawner : Weapon, ISaveable
         {
             if (m_bCanThrow && _ammoController.CanUseAmmo())
             {
-                ThrowMine();
                 m_bCanThrow = false;
                 m_timer = m_fireRate;
+                ThrowMine();
                 //Debug.Log("THROWN");
             }
         }
@@ -99,21 +101,21 @@ public class MineSpawner : Weapon, ISaveable
     void ThrowMine()
     {
         GameObject mine = Instantiate(minePrefab, transform.position, transform.rotation);
+        //Debug.Log("MINE SPAWNED");
         if(mine)
         {
+            mine.GetComponent<Rigidbody>().AddForce(transform.forward * m_projectileforce);
+            mine.GetComponent<Rigidbody>().AddTorque(new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), -90f));
+            mine.GetComponent<Mine>().InitMine(m_projectileLifeTime, m_blastradius, m_blastforce, m_damageAmount, m_bHasActionUpgrade);
+
             //Trigger Grenade Sounds
             AudioManager_Grenade audioManager = GetComponent<AudioManager_Grenade>();
             mine.SendMessage("BindAudioManager", audioManager);
             audioManager.TriggerThrowGrenade();
             StartCoroutine(StartExplosionSounds(audioManager));
-            
             //
-
-            // mine.GetComponent<Mine>().InitMine(
-            mine.GetComponent<Rigidbody>().AddForce(transform.forward * m_projectileforce);
-            mine.GetComponent<Rigidbody>().AddTorque(new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), -90f));
-            mine.GetComponent<Mine>().InitMine(m_projectileLifeTime, m_blastradius, m_blastforce, m_damageAmount, m_bHasActionUpgrade);
         }
+
         _ammoController.UseAmmo();
     }
 
