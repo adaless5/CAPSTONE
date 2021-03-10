@@ -22,5 +22,12 @@ public class TitleScreen : MonoBehaviour
                 SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
             }
         }
+        if (Mouse.current != null)
+        {
+            if (Mouse.current.IsPressed())
+            {
+                SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
+            }
+        }
     }
 }

@@ -57,8 +57,8 @@ public class WeaponBase : Weapon, ISaveable
         _ammoController = FindObjectOfType<AmmoUI>().GetComponent<AmmoController>();
         _ammoController.InitializeAmmo(AmmoController.AmmoTypes.Default, m_weaponClipSize, m_weaponClipSize);
         GetComponent<MeshRenderer>().enabled = true;
-        bIsActive = true;
-        bIsObtained = true;
+        //bIsActive = true;
+        //bIsObtained = true;
 
     }
 
