@@ -10,6 +10,7 @@ public class CreatureProjectile : MonoBehaviour
     private float _damageTimer;
     public float _maxDamageTime;
     public float _lifeTime;
+    private float _maxLifeTime;
     Transform _transformOrigin;
 
     AudioManager_CreatureWeapon audioManager;
@@ -28,13 +29,13 @@ public class CreatureProjectile : MonoBehaviour
     {
         _transformOrigin = ObjectPool.Instance.transform;
         _damageTimer = _maxDamageTime;
-       // _lifeTime = 6.0f;
+        // _lifeTime = 6.0f;
     }
 
     public void InitCreatureProjectile(float maxdamagetime, float lifetime, float damage, bool hasaction)
     {
         //_maxDamageTime = maxdamagetime;
-        _lifeTime = lifetime;
+        _maxLifeTime = lifetime;
         _damage = damage;
         m_bHasAction = hasaction;
         _rigidBody.velocity = new Vector3();
@@ -43,6 +44,7 @@ public class CreatureProjectile : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         _lifeTime -= Time.deltaTime;
 
         if (_lifeTime >= 0)
@@ -59,7 +61,7 @@ public class CreatureProjectile : MonoBehaviour
         }
         else
         {
-            _lifeTime = 3.0f;
+            _lifeTime = _maxLifeTime;
             transform.parent = _transformOrigin;
             DeStick();
             ObjectPool.Instance.ReturnToPool("Creature", gameObject);
@@ -71,16 +73,17 @@ public class CreatureProjectile : MonoBehaviour
             DeStick();
         }
 
+
     }
     private void OnEnable()
     {
-        _lifeTime = 3.0f;
+        _lifeTime = _maxLifeTime;
         _rigidBody.velocity = Vector3.zero;
     }
 
     private void OnDisable()
     {
-        _lifeTime = 3.0f;
+        _lifeTime = _maxLifeTime;
         //transform.parent = _transformOrigin;
         if (m_bHasAction)
         {
