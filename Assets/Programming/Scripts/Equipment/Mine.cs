@@ -28,13 +28,11 @@ public class Mine : MonoBehaviour
 
         m_Timer = m_FuzeTimer;
         m_bIsBlownUp = false;
-
         StartCoroutine(Explode());
     }
     IEnumerator Explode()
     {
         yield return new WaitForSeconds(m_Timer);
-
 
         //playes particle effect
         if (explosionParticleEffect)
@@ -58,7 +56,7 @@ public class Mine : MonoBehaviour
         /// Evan's Item container call vvv
         foreach (Collider obj in hits)
         {
-            Debug.Log(obj);
+           // Debug.Log(obj);
             if (obj.GetComponentInParent<ItemContainer>())
             {
                 obj.GetComponentInParent<ItemContainer>().Break(gameObject.tag);

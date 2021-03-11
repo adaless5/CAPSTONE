@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class BossProjAttack : BossState
 {
+    GameObject _drone;
+    float _droneTimer = 3.0f;
     public BossProjAttack(GameObject boss) : base(boss)
     {
         Debug.Log("Projectile State");
@@ -12,13 +14,21 @@ public class BossProjAttack : BossState
     public override void Enter()
     {
         base.Enter();
-
+        _drone = GameObject.Instantiate(Resources.Load("Prefabs/Enemies/Drone/DroneEnemy") as GameObject, _currentEnemy.transform.position, Quaternion.identity);
+        _drone.GetComponent<DroneAI>().SetCurrentDroneState(new DroneBossAttack(_drone));
     }
 
     public override void Update()
     {
         base.Update();
-        //_stage = EVENT.EXIT;
+        Debug.Log("Currently in Projectile State");
+        _droneTimer -= Time.deltaTime;
+
+        if (_droneTimer <= 0)
+        {
+            _nextState = new UCState(_currentEnemy);
+            _stage = EVENT.EXIT;
+        }
     }
 
     public override void Exit()

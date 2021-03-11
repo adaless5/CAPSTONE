@@ -1,21 +1,35 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System;
 public class BossAI : MonoBehaviour
 {
     GameObject _ucReference;
-    GameObject[] _umbilicalCords;
+    public GameObject[] _umbilicalCords;
     private float _distance = 0.6f;
     private float[] _facePos = new float[3];
     public BoxCollider _boxCol;
     Vector3 direction;
     Health _health;
     State _currentBossState;
+    Vector3 boxDimensions;
+    float ucLength;
+    event Action OnWeakStateStarted;
+    event Action OnWeakStateEnded;
+    public float _ucHealth = 20.0f;
+    public GameObject _deathParticle;
 
     private void Awake()
     {
-        _health = GetComponent<Health>();
+        foreach (Transform g in transform)
+        {
+            if (g.gameObject.name == "Weak")
+            {
+                Debug.Log("Weak Component Found");
+                _health = g.GetComponent<Health>();
+                g.GetComponent<Health>().OnDeath += BossDeath;
+            }
+        }
 
         direction = (Vector3.down - transform.position);
         _boxCol = GetComponent<BoxCollider>();
@@ -27,42 +41,28 @@ public class BossAI : MonoBehaviour
         Vector3 _rotAxis = Vector3.forward;
         GameObject _rot = gameObject;
 
-        float ucLength = _ucReference.GetComponent<MeshRenderer>().bounds.size.magnitude;
+        ucLength = _ucReference.GetComponent<MeshRenderer>().bounds.size.magnitude;
 
-        Vector3 boxDimensions = _boxCol.size;
+        boxDimensions = _boxCol.size;
         boxDimensions.x *= _boxCol.transform.lossyScale.x;
         boxDimensions.y *= _boxCol.transform.lossyScale.y;
         boxDimensions.z *= _boxCol.transform.lossyScale.z;
 
+
+
         Vector3 sidePos = new Vector3(_boxCol.center.x, _boxCol.center.y, _boxCol.center.z - 0.5f * boxDimensions.z - ucLength) + transform.localPosition;
 
-        InitializeUC(_umbilicalCords[0], sidePos);
+        InitializeUC(ref _umbilicalCords[0], sidePos);
 
         sidePos = new Vector3(_boxCol.center.x - 0.5f * boxDimensions.x - ucLength, _boxCol.center.y, _boxCol.center.z) + transform.localPosition;
 
-        InitializeUC(_umbilicalCords[1], sidePos);
+        InitializeUC(ref _umbilicalCords[1], sidePos);
 
         sidePos = new Vector3(_boxCol.center.x + 0.5f * boxDimensions.x + ucLength, _boxCol.center.y, _boxCol.center.z) + transform.localPosition;
 
-        InitializeUC(_umbilicalCords[2], sidePos);
+        InitializeUC(ref _umbilicalCords[2], sidePos);
 
-        //for (int i = 0; i < _umbilicalChords.Length; i++)
-        //{
-
-        //    RaycastHit hit;
-
-        //    if (Physics.Raycast(_umbilicalChords[i].transform.position, Vector3.down, out hit))
-        //    {
-        //        direction = Vector3.down - _umbilicalChords[i].transform.position;
-        //        _umbilicalChords[i].transform.LookAt(direction);
-        //        _umbilicalChords[i].transform.localScale = new Vector3(1, 1, 5);
-        //    }
-        //    else
-        //    {
-        //        Debug.Log("No hit");
-        //    }
-        //    //_umbilicalChords[i]
-        //}
+        OnWeakStateEnded += RegenerateUC;
     }
 
     private void Start()
@@ -70,7 +70,30 @@ public class BossAI : MonoBehaviour
         _currentBossState = new UCState(gameObject);
     }
 
-    void InitializeUC(GameObject umcord, Vector3 position)
+    void BossDeath()
+    {
+        gameObject.SetActive(false);
+        for (int i = 0; i < transform.childCount; ++i)
+        {
+            transform.GetChild(i).gameObject.SetActive(false);
+        }
+    }
+
+    void RegenerateUC()
+    {
+        foreach (GameObject g in _umbilicalCords)
+        {
+            foreach (Transform f in g.transform)
+            {
+                f.gameObject.SetActive(true);
+                f.gameObject.GetComponent<Health>().Heal(_ucHealth);
+            }
+            g.SetActive(true);
+        }
+
+    }
+
+    void InitializeUC(ref GameObject umcord, Vector3 position)
     {
         umcord = Instantiate(_ucReference, position, Quaternion.identity) as GameObject;
         umcord.GetComponentInChildren<UmbilicalCord>().GetHealth().OnDeath += CheckUC;
@@ -92,6 +115,7 @@ public class BossAI : MonoBehaviour
         if (AreGOInactive())
         {
             Debug.Log("Weak Spot State");
+            _currentBossState = new BossWeakState(gameObject);
         }
     }
 
@@ -103,6 +127,11 @@ public class BossAI : MonoBehaviour
             return false;
         }
         return true;
+    }
+
+    public void CallOnWeakStateEnded()
+    {
+        OnWeakStateEnded?.Invoke();
     }
 
 }

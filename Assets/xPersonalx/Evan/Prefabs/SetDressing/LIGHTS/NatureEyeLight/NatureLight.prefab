@@ -253,6 +253,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5480007020156348156}
   - component: {fileID: 1472550645926694303}
+  - component: {fileID: 2249333749096022434}
   m_Layer: 0
   m_Name: NatureLight
   m_TagString: Untagged
@@ -295,17 +296,26 @@ MonoBehaviour:
   Eyelid_1: {fileID: 1914624829517296442}
   Eyelid_2: {fileID: 1334357225691142609}
   WatchDistance: 4
-  LookSpeed: 6
-  bIsWatching: 0
-  LookPoint: {x: 0, y: 0, z: 0}
-  LookAtSpotTime: 0
-  LookAroundTime: 0
-  LookAtPlayerTime: 0
-  BlinkTimer: 0
-  LidAngle: 0
-  LidClosing: 0
-  LidClosingSpeed: 300
-  Blinking: 0
+  LookAroundTimeRange: {x: 3, y: 12}
+  WatchingPlayerTimeRange: {x: 3, y: 10}
+  LookAtSpotTimeRange: {x: 0.4, y: 3.5}
+  LookSpeedRange: {x: 1, y: 5}
+  LidClosingSpeedRange: {x: 25, y: 1000}
+  BlinkingTimeRange: {x: 0.5, y: 5}
+  HitReactTimeRange: {x: 2, y: 7}
+--- !u!135 &2249333749096022434
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5136133226986781766}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.4
+  m_Center: {x: 0, y: 0.14, z: 0}
 --- !u!1 &7778504812174623123
 GameObject:
   m_ObjectHideFlags: 0

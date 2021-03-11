@@ -217,10 +217,9 @@ public class AudioManager_Grenade : AudioManager
         int i;
         do
         {
-            i = Random.Range(THROW_INDEX_START, THROW_INDEX_END + 1);
+            i = Random.Range(THROW_INDEX_START, THROW_INDEX_END - 1); //changed from  + 1 to - 1. for some reason this was causing the grenade dud glitch NG
         } while (i == _lastThrowIndex);
         _lastThrowIndex = i;
-
         return i;
     }
 
