@@ -100,6 +100,7 @@ public class Health : MonoBehaviour, ISaveable
     {
         return m_MaxHealth;
     }
+
     void Die()
     {
         if (m_marker != null)

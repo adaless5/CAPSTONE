@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HealthPickup : MonoBehaviour
 {
@@ -10,10 +11,14 @@ public class HealthPickup : MonoBehaviour
     public Compass m_compass;
     public CompassMarkers m_marker;
 
+    
+
+
     // Start is called before the first frame update
     void Start()
     {
         EventBroker.OnPlayerSpawned += PlayerSpawned;     
+       
        
 
     }
@@ -41,6 +46,7 @@ public class HealthPickup : MonoBehaviour
         {
             if (!playerHP.IsAtFullHealth())
             {
+                EventBroker.CallOnHealthPickup(m_healAmount);
                 playerHP.Heal(m_healAmount);
                 Destroy(gameObject);
                 if (m_marker != null)
