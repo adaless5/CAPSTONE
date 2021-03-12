@@ -29,7 +29,7 @@ public class CreatureProjectile : MonoBehaviour
     {
         _transformOrigin = ObjectPool.Instance.transform;
         _damageTimer = _maxDamageTime;
-        // _lifeTime = 6.0f;
+        _lifeTime = _maxLifeTime;
     }
 
     public void InitCreatureProjectile(float maxdamagetime, float lifetime, float damage, bool hasaction)
@@ -38,7 +38,7 @@ public class CreatureProjectile : MonoBehaviour
         _maxLifeTime = lifetime;
         _damage = damage;
         m_bHasAction = hasaction;
-        _rigidBody.velocity = new Vector3();
+        _rigidBody.velocity = Vector3.zero;
     }
 
     // Update is called once per frame

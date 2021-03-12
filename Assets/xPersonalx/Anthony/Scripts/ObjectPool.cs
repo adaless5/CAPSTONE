@@ -1,6 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+
 
 public class ObjectPool : MonoBehaviour
 {
@@ -11,7 +15,7 @@ public class ObjectPool : MonoBehaviour
         public GameObject prefab;
         public int size;
         [Tooltip("This should be turned on if this pool will be considered for random item spawning.")]
-        public bool bIsItemPool; 
+        public bool bIsItemPool;
     }
 
     public static ObjectPool Instance;
@@ -19,10 +23,12 @@ public class ObjectPool : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+        DontDestroyOnLoad(this);
     }
 
     public List<Pool> _pools;
     public Dictionary<string, Queue<GameObject>> _poolDictionary;
+
 
     void Start()
     {
@@ -35,6 +41,7 @@ public class ObjectPool : MonoBehaviour
             for (int i = 0; i < pool.size; i++)
             {
                 GameObject obj = Instantiate(pool.prefab);
+                obj.transform.parent = Instance.transform;
                 obj.SetActive(false);
                 objectPool.Enqueue(obj);
             }
@@ -45,38 +52,46 @@ public class ObjectPool : MonoBehaviour
 
     public GameObject SpawnFromPool(string tag, GameObject gameobject, Vector3 position, Quaternion rotation)
     {
-        if(!_poolDictionary.ContainsKey(tag))
+        if (!_poolDictionary.ContainsKey(tag))
         {
             //Debug.LogWarning("Pool with tag " + tag + " does not exist exist.");
             //return null;
             _poolDictionary.Add(tag, new Queue<GameObject>());
         }
 
-        if(_poolDictionary[tag].Count <= 10)
+        GameObject objectToSpawn = null;
+
+        var disabledObject = _poolDictionary[tag].Where(x => x.activeSelf == false);
+
+        if (disabledObject.Any())
         {
+            Debug.Log("Pulling from pool");
+        }
+        else
+        {
+            Debug.Log("Making new object");
             GameObject obj = Instantiate(gameobject);
             obj.SetActive(false);
             _poolDictionary[tag].Enqueue(obj);
         }
 
-        GameObject objectToSpawn = _poolDictionary[tag].Dequeue();
+        objectToSpawn = _poolDictionary[tag].Dequeue();
+
         objectToSpawn.SetActive(true);
         objectToSpawn.transform.position = position;
         objectToSpawn.transform.rotation = rotation;
 
-        _poolDictionary[tag].Enqueue(objectToSpawn);
 
-        
 
         return objectToSpawn;
     }
 
     public void ReturnToPool(string tag, GameObject objectToReturn)
     {
-        if(_poolDictionary.ContainsKey(tag))
+        if (_poolDictionary.ContainsKey(tag))
         {
             _poolDictionary[tag].Enqueue(objectToReturn);
             objectToReturn.SetActive(false);
-        }    
+        }
     }
 }
