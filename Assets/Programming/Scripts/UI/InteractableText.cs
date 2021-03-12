@@ -12,8 +12,9 @@ public class InteractableText : MonoBehaviour
     public Camera m_playerCamera;
     public TMP_Text m_pickupText;
     public Image m_backgroundImage;
-    public RectTransform m_transform;
+    public RectTransform m_transform;    
     float m_raycastRange;
+    List<string> m_TagsToIgnore = new List<string>();
 
     // Start is called before the first frame update
     void Start()
@@ -26,6 +27,12 @@ public class InteractableText : MonoBehaviour
         m_backgroundImage.enabled = false;
         m_pickupText.text = "";
         m_raycastRange = 50f;
+
+        //List of Tags to Ignore for Interactable Text
+        m_TagsToIgnore.Add("Player");
+        m_TagsToIgnore.Add("Untagged");
+        m_TagsToIgnore.Add("Enemy");
+        m_TagsToIgnore.Add("Player_Blade");
     }
 
     // Update is called once per frame
@@ -39,7 +46,8 @@ public class InteractableText : MonoBehaviour
         RaycastHit hitInfo = new RaycastHit();
         if (Physics.Raycast(m_playerCamera.transform.position, m_playerCamera.transform.forward, out hitInfo, m_raycastRange))
         {
-            if (hitInfo.collider.gameObject.tag != "Untagged" && hitInfo.collider.gameObject.tag != "Player") 
+            //if (hitInfo.collider.gameObject.tag != "Untagged" && hitInfo.collider.gameObject.tag != "Player") 
+            if(ShouldIgnoreTag(hitInfo.collider.gameObject.tag) == false)
             {
                 m_backgroundImage.enabled = true;
                 if(hitInfo.collider.gameObject.tag == "Interactable")
@@ -64,5 +72,15 @@ public class InteractableText : MonoBehaviour
                 m_pickupText.text = "";
             }          
         }
+    }
+
+    bool ShouldIgnoreTag(string tagName)
+    {      
+        foreach(string tag in m_TagsToIgnore)
+        {
+            if (tag == tagName)
+            return true;            
+        }
+        return false;
     }
 }

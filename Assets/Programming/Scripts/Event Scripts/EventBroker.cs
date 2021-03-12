@@ -12,6 +12,8 @@ public class EventBroker
     public static event Action OnPlayerDeath;
     public static event Action<WeaponType, int> OnAmmoPickup;
 
+    public static event Action<float> OnHealthPickup;
+
     public static void CallSpawnEnemy(GameObject enemyToSpawn)
     {
         SpawnEnemy?.Invoke(enemyToSpawn);
@@ -37,6 +39,11 @@ public class EventBroker
     public static void CallOnAmmoPickup(WeaponType type, int clipAmount)
     {
         OnAmmoPickup?.Invoke(type, clipAmount);
+    }
+
+    public static void CallOnHealthPickup(float healthValue)
+    {
+        OnHealthPickup?.Invoke(healthValue);
     }
 
     public static void CallOnPlayerDeath()
