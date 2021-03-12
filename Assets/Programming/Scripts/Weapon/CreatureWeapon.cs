@@ -8,13 +8,13 @@ public class CreatureWeapon : Weapon, ISaveable
 {
     public Camera _camera;
     public ParticleSystem _spreadEffect;
-    public Animator reticuleAnimator;   
+    public Animator reticuleAnimator;
     GameObject _creatureProjectile;
-   
+
     private void Awake()
     {
-        base.Awake();      
-        _creatureProjectile = (GameObject)Resources.Load("Prefabs/Weapon/Creature Projectile");     
+        base.Awake();
+        _creatureProjectile = (GameObject)Resources.Load("Prefabs/Weapon/Creature Projectile");
         m_weaponClipSize = 8;
         m_reloadTime = 3.0f;
 
@@ -31,8 +31,8 @@ public class CreatureWeapon : Weapon, ISaveable
     {
         //Initializing Ammo Controller
         _ammoController = FindObjectOfType<AmmoUI>().GetComponent<AmmoController>();
-        _ammoController.InitializeAmmo(AmmoController.AmmoTypes.Creature, m_weaponClipSize, m_weaponClipSize);       
-     
+        _ammoController.InitializeAmmo(AmmoController.AmmoTypes.Creature, m_weaponClipSize, m_weaponClipSize);
+
         _camera = FindObjectOfType<Camera>();
         GetComponent<MeshRenderer>().enabled = false;
         bIsActive = false;
@@ -45,7 +45,7 @@ public class CreatureWeapon : Weapon, ISaveable
         m_projectileLifeTime = 6.0f * m_upgradestats.FuzeTime;
     }
 
-    
+
     public override void UseTool()
     {
         if (bIsReloading)
@@ -54,19 +54,19 @@ public class CreatureWeapon : Weapon, ISaveable
         }
 
         //Reloads automatically at 0 or if player users reload input "R"       
-        if(_ammoController.NeedsReload())
+        if (_ammoController.NeedsReload())
         {
             StartCoroutine(OnReload());
             return;
         }
-       
+
         if (_playerController.CheckForUseWeaponInput() && Time.time >= m_fireStart)
         {
-            m_fireStart = Time.time + 1.0f / m_fireRate;         
-            if(_ammoController.CanUseAmmo())
+            m_fireStart = Time.time + 1.0f / m_fireRate;
+            if (_ammoController.CanUseAmmo())
             {
                 OnShoot();
-            }           
+            }
         }
     }
 
@@ -86,10 +86,10 @@ public class CreatureWeapon : Weapon, ISaveable
             {
                 GetComponent<MeshRenderer>().enabled = true;
                 UseTool();
-                OnTarget();                
+                OnTarget();
             }
             else if (!bIsActive)
-            {               
+            {
                 GetComponent<MeshRenderer>().enabled = false;
             }
         }
@@ -111,20 +111,15 @@ public class CreatureWeapon : Weapon, ISaveable
             //GameObject creatureProjectile = Instantiate(_creatureProjectile, finalFowardVector, Quaternion.identity);
             if (ObjectPool.Instance != null)
             {
-                //  if (ObjectPool.Instance._poolDictionary.ContainsKey("Creature"))
-                {
-                    GameObject creatureProjectile = ObjectPool.Instance.SpawnFromPool("Creature", finalFowardVector, Quaternion.identity);
-                    float randomfloat = UnityEngine.Random.Range(0.1f, 0.5f);
-                    Vector3 randomSize = new Vector3(randomfloat, randomfloat, randomfloat);
-                    creatureProjectile.transform.localScale = randomSize;
-                    creatureProjectile.GetComponent<Rigidbody>().AddForce(transform.forward * m_hitImpact, ForceMode.Impulse);
-                    creatureProjectile.GetComponent<CreatureProjectile>().InitCreatureProjectile(m_maxDamageTime, m_projectileLifeTime, m_damageAmount, m_bHasActionUpgrade);
-                    creatureProjectile.GetComponent<CreatureProjectile>().LinkAudioManager(amc);
-                }
-                //  else
-                {
-                    //    Debug.LogError("doesnt contain creature key");
-                }
+
+                GameObject creatureProjectile = ObjectPool.Instance.SpawnFromPool("Creature", _creatureProjectile, finalFowardVector, Quaternion.identity);
+                float randomfloat = UnityEngine.Random.Range(0.1f, 0.5f);
+                Vector3 randomSize = new Vector3(randomfloat, randomfloat, randomfloat);
+                creatureProjectile.transform.localScale = randomSize;
+                creatureProjectile.GetComponent<Rigidbody>().AddForce(transform.forward * m_hitImpact, ForceMode.Impulse);
+                creatureProjectile.GetComponent<CreatureProjectile>().InitCreatureProjectile(m_maxDamageTime, m_projectileLifeTime, m_damageAmount, m_bHasActionUpgrade);
+                creatureProjectile.GetComponent<CreatureProjectile>().LinkAudioManager(amc);
+
             }
             else
             {
@@ -133,29 +128,29 @@ public class CreatureWeapon : Weapon, ISaveable
         }
 
         //Using ammo      
-        _ammoController.UseAmmo();    
+        _ammoController.UseAmmo();
     }
 
-        IEnumerator OnReload()
+    IEnumerator OnReload()
+    {
+        if (bIsActive)
         {
-            if(bIsActive)
-            {
             //Play Reload Sound
-                GetComponent<AudioManager_CreatureWeapon>().TriggerReloadCreatureWeapon();
-            }
-           
-
-            bIsReloading = true;
-            // gunAnimator.SetBool("bIsReloading", true);
-
-            yield return new WaitForSeconds(m_reloadTime);       
-            _ammoController.Reload();
-            bIsReloading = false;
-
-            //Play reload animations once set up         
-            //gunAnimator.SetBool("bIsReloading", false);
+            GetComponent<AudioManager_CreatureWeapon>().TriggerReloadCreatureWeapon();
         }
-        
+
+
+        bIsReloading = true;
+        // gunAnimator.SetBool("bIsReloading", true);
+
+        yield return new WaitForSeconds(m_reloadTime);
+        _ammoController.Reload();
+        bIsReloading = false;
+
+        //Play reload animations once set up         
+        //gunAnimator.SetBool("bIsReloading", false);
+    }
+
     public override void AddUpgrade(WeaponUpgrade upgrade)
     {
         m_upgradestats += upgrade;
@@ -169,25 +164,25 @@ public class CreatureWeapon : Weapon, ISaveable
         m_currentupgrades.Add(upgrade.Type);
     }
 
-        private void OnTarget()
+    private void OnTarget()
+    {
+        RaycastHit targetInfo;
+        if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out targetInfo, m_weaponRange))
         {
-            RaycastHit targetInfo;
-            if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out targetInfo, m_weaponRange))
+            Health target = targetInfo.transform.GetComponent<Health>();
+            if (target != null && target.gameObject.tag != "Player")
             {
-                Health target = targetInfo.transform.GetComponent<Health>();
-                if (target != null && target.gameObject.tag != "Player")
-                {
-                    reticuleAnimator.SetBool("isTargetted", true);
-                }
-                else
-                {
-                    reticuleAnimator.SetBool("isTargetted", false);
-                }
+                reticuleAnimator.SetBool("isTargetted", true);
+            }
+            else
+            {
+                reticuleAnimator.SetBool("isTargetted", false);
             }
         }
+    }
 
-        public void LoadDataOnSceneEnter()
-        {
+    public void LoadDataOnSceneEnter()
+    {
 
-        }
+    }
 }

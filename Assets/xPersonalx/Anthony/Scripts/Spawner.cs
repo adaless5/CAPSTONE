@@ -92,7 +92,7 @@ public class Spawner : MonoBehaviour
     {
         foreach (string tag in _ObjectPoolTags)
         {
-            _ObjectPool.SpawnFromPool(tag, _Position, _Rotation);
+            _ObjectPool.SpawnFromPool(tag, gameObject, _Position, _Rotation);
         }
     }
 
@@ -107,6 +107,6 @@ public class Spawner : MonoBehaviour
         }
         while (_ObjectPool._pools[RandNum].bIsItemPool != true);
 
-        _ObjectPool.SpawnFromPool(_ObjectPool._pools[RandNum].tag, _Position, _Rotation); 
+        _ObjectPool.SpawnFromPool(_ObjectPool._pools[RandNum].tag, gameObject, _Position, _Rotation); 
     }
 }
