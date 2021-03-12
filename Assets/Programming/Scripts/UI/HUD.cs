@@ -31,9 +31,12 @@ public class HUD : MonoBehaviour
     //HUD Overlay
     public Image m_HUDOverlay;
 
-    //public RectTransform m_armorTransform;
-    //public RectTransform m_healthTransform;
-  
+    //Pickup Notification Box
+    private Image m_NotificationBox;
+    private Text m_notificationText;
+    private AmmoController m_ammoController;
+    private Animator m_pickupAnimator;
+
 
     private void Awake()
     {
@@ -41,7 +44,9 @@ public class HUD : MonoBehaviour
         m_armorUI = GetComponentInChildren<ArmorBarUI>();
         m_ammoUI = GetComponentInChildren<AmmoUI>();
 
+
         m_player = FindObjectOfType<ALTPlayerController>();
+        m_ammoController = gameObject.transform.GetChild(1).GetComponentInChildren<AmmoController>();
 
         //Icons
         m_weaponIcon = gameObject.transform.GetChild(1).Find("Weapon_Icon").GetComponent<Image>();
@@ -50,9 +55,14 @@ public class HUD : MonoBehaviour
         //HUD Overlay
         m_HUDOverlay = gameObject.transform.GetChild(1).GetComponent<Image>();
 
-        //m_armorTransform = gameObject.transform.GetChild(2).GetComponent<RectTransform>();
-        //m_healthTransform = gameObject.transform.GetChild(3).GetComponent<RectTransform>();
 
+        //Pickup Notifications
+        m_NotificationBox = gameObject.transform.GetChild(1).Find("Pickup Notification").GetComponent<Image>();       
+        m_notificationText = gameObject.transform.GetChild(1).Find("Pickup Notification").GetComponentInChildren<Text>();
+        m_pickupAnimator = gameObject.transform.GetChild(1).Find("Pickup Notification").GetComponent<Animator>();
+
+        EventBroker.OnHealthPickup += NotificationText;
+        EventBroker.OnAmmoPickup += NotificationText;  
     }
 
     // Start is called before the first frame update
@@ -80,10 +90,7 @@ public class HUD : MonoBehaviour
         toolIcons[2] = Resources.Load<Sprite>("Sprites/Icons/Icon_Sword_HUD");
 
         //HUD Overlay        
-        m_HUDOverlay.sprite = Resources.Load<Sprite>("Sprites/HUD/HUD_Overlay");
-
-        //m_armorTransform.anchoredPosition = m_HUDOverlay.transform.position;
-        //m_healthTransform.anchoredPosition = m_armorTransform.anchoredPosition;
+        m_HUDOverlay.sprite = Resources.Load<Sprite>("Sprites/HUD/HUD_Overlay");      
     }
 
     // Update is called once per frame
@@ -118,5 +125,44 @@ public class HUD : MonoBehaviour
         {
             m_toolIcon.sprite = toolIcons[index];
         }
+    }
+
+    void NotificationText(float healAmount)
+    {
+        m_pickupAnimator.SetTrigger("IsPicked");      
+
+        float maxHealth = m_player.m_health.GetMaxHealth();
+        float percentHealed = healAmount / maxHealth * 100;
+
+        m_notificationText.text = "HEALED " + percentHealed + "%";     
+    }
+
+    void NotificationText(WeaponType weapon, int clipAmount)
+    {
+        m_pickupAnimator.SetTrigger("IsPicked");
+
+        string weaponName;
+        int clipSize = m_ammoController.GetClipSize();
+        int ammoAdded = clipAmount * clipSize;
+        
+        switch (weapon)
+        {
+            case WeaponType.BaseWeapon:
+                weaponName = "ARCHEBUS";
+                break;
+
+            case WeaponType.GrenadeWeapon:
+                weaponName = "GRENADES";
+                break;
+
+            case WeaponType.CreatureWeapon:
+                weaponName = "GLAND GUN";
+                break;
+            default:
+                weaponName = "";
+                break;
+        }
+        
+        m_notificationText.text = "ACQUIRED +" + ammoAdded + " AMMO FOR " + weaponName;      
     }
 }

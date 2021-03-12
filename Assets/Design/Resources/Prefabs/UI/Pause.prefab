@@ -170,7 +170,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -100, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!95 &7471767091187042014
@@ -3376,7 +3376,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AspectMode: 0
-  m_AspectRatio: 1.5615141
+  m_AspectRatio: 1.7779456
 --- !u!1 &4031174148593501204
 GameObject:
   m_ObjectHideFlags: 0
@@ -5947,7 +5947,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   firstSlider: {fileID: 4031174148601472013}
   slider: {fileID: 4031174148396944223}
-  audioMaster: {fileID: 24100000, guid: 76d06d050aee79f4cb4bc0c5e0a93f42, type: 2}
+  audioMusicMixer: {fileID: 0}
+  audioFXMixer: {fileID: 0}
   FullScreenButton: {fileID: 4031174149040478068}
   WindowedButton: {fileID: 4031174148076317558}
 --- !u!225 &1434548678670508451
@@ -6593,7 +6594,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -161, y: -178.63}
+  m_AnchoredPosition: {x: -216, y: -224.8}
   m_SizeDelta: {x: 67, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6290729925075410619
@@ -6800,8 +6801,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -9.8671, y: 9.864992}
-  m_SizeDelta: {x: 480.2657, y: 480.27}
+  m_AnchoredPosition: {x: -0.000048637, y: -12.373}
+  m_SizeDelta: {x: 633.49, y: 633.4932}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6578082887350501206
 CanvasRenderer:
@@ -7564,8 +7565,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 198.99994, y: 0}
-  m_SizeDelta: {x: 500, y: 500}
+  m_AnchoredPosition: {x: 338, y: 0.0000090599}
+  m_SizeDelta: {x: 651.579, y: 608.7468}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8922766085059598067
 CanvasRenderer:
@@ -7597,7 +7598,7 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: 038a4f1ff4992f8468df67b6e717ab09, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
