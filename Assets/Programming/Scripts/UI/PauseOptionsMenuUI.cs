@@ -119,6 +119,19 @@ public class PauseOptionsMenuUI : MonoBehaviour
         //Debug.Log(slider.value);
     }
 
+    public void InitializeVolumeSliders(Slider musicSlider, Slider fxSlider)
+    {
+        float f1;
+        audioMusicMixer.GetFloat("musicVol", out f1);
+        Debug.Log(f1);
+        musicSlider.value = Mathf.Pow(10, f1 / 20);
+
+        float f2;
+        audioFXMixer.GetFloat("FXVol", out f2);
+        Debug.Log(f2);
+        fxSlider.value = Mathf.Pow(10, f2 / 20);
+    }
+
     public void SetFullScreen(bool isfull)
     {
         _isFullScreen = isfull;
