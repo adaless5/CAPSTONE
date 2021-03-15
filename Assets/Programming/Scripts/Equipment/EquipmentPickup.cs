@@ -22,7 +22,6 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
 
         if (isUsed) GetComponent<MeshRenderer>().enabled = false;
         else GetComponent<MeshRenderer>().enabled = true;
-
         EventBroker.OnPlayerSpawned += PlayerStart;
 
 
