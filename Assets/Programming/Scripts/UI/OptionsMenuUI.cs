@@ -86,13 +86,23 @@ public class OptionsMenuUI : MonoBehaviour
     {
         //Debug.Log(slider.value);
         audioMusicMixer.SetFloat("musicVol", Mathf.Log10(slider.value) * 20);
-        
     }
 
     public void SetFXVolume(Slider slider)
     {
         audioFXMixer.SetFloat("FXVol", Mathf.Log10(slider.value) * 20);
         //Debug.Log(slider.value);
+    }
+
+    public void InitializeVolumeSliders(Slider musicSlider, Slider fxSlider)
+    {
+        float f1;
+        audioMusicMixer.GetFloat("musicVol", out f1);
+        musicSlider.value = Mathf.Pow(10, f1 / 20);
+
+        float f2;
+        audioFXMixer.GetFloat("FXVol", out f2);
+        fxSlider.value = Mathf.Pow(10, f2 / 20);
     }
 
     public void SetQuality(int index)

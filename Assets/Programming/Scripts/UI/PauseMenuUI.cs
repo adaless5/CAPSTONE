@@ -85,16 +85,33 @@ public class PauseMenuUI : MonoBehaviour
 
     public void LoadMenu()
     {
+        StartCoroutine(LoadMenuDelayedForSound());
+    }
+
+    public void ResetMenuAmbiance()
+    {
+        Destroy(GameObject.Find("MusicAudioSource").gameObject);
+    }
+
+    public IEnumerator LoadMenuDelayedForSound()
+    {
+        
+
         PauseMenu.SetActive(false);
         GameIsPaused = false;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         Player.GetComponent<ALTPlayerController>().enabled = true;
+        yield return null;
+        yield return null;
+        yield return null;
+        yield return null;
         Destroy(GameObject.Find("EventSystem"));
         Destroy(Player);
         //SceneManager.LoadScene(0);
         SceneManager.LoadScene("MainMenu");
         //tigger save and exit
+
     }
 
     public void ReloadScene()

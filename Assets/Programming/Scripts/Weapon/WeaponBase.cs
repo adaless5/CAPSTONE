@@ -337,7 +337,7 @@ public class WeaponBase : Weapon, ISaveable
 
     IEnumerator TriggerReloadEndSound()
     {
-        yield return new WaitForSeconds(1.6f);
+        yield return new WaitForSeconds(1.45f);
         GetComponent<AudioManager_Archebus>().TriggerReloadEnd();
     }
 }
