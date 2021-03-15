@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-
 public class DroneAttack : DroneState
 {
     GameObject _droneProjectile;
+    bool bDebug = false;
 
     public DroneAttack(GameObject enemy, Transform[] pp, Transform playerposition, NavMeshAgent nav) : base(enemy, pp, playerposition, nav)
     {
@@ -66,12 +66,18 @@ public class DroneAttack : DroneState
             {
                 if (hit.transform.tag == "Player")
                 {
-                    Debug.Log("Player hit");
+                    if (bDebug)
+                    {
+                         Debug.Log("Player hit");
+                    }
                     _playerPos.gameObject.GetComponent<ALTPlayerController>().CallOnTakeDamage(_enemyDamage);
                 }
                 else
                 {
-                    Debug.Log("Player not hit");
+                    if (bDebug)
+                    {
+                        Debug.Log("Player not hit");
+                    }
                 }
             }
 

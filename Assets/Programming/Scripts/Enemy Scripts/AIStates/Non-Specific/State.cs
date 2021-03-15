@@ -71,7 +71,7 @@ public class State
         {
             if (direction.magnitude < _visualDistance && angle < _visualAngle)
             {
-                Debug.Log("Player found");
+                //Debug.Log("Player found");
                 return true;
             }
         }

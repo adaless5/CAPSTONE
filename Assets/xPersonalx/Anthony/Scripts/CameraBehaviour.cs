@@ -22,26 +22,26 @@ public class CameraBehaviour : MonoBehaviour
     {
         if (!bInMenu)
         {
-            if (bIsWalking)
-            {
-                walkingTime += Time.deltaTime;
+            //if (bIsWalking)
+            //{
+            //    walkingTime += Time.deltaTime;
 
-                targetCameraPosition = headTransform.position + CalculateHeadBob(walkingTime);
+            //    targetCameraPosition = headTransform.position + CalculateHeadBob(walkingTime);
 
-                cameraTransform.position = Vector3.Lerp(cameraTransform.position, targetCameraPosition, headBobSmoothing);
+            //    cameraTransform.position = Vector3.Lerp(cameraTransform.position, targetCameraPosition, headBobSmoothing);
 
-                if ((cameraTransform.position - targetCameraPosition).magnitude <= 0.001f)
-                {
-                    transform.position = targetCameraPosition;
-                }
-            }
-            else
-            {
-                if ((cameraTransform.position - targetCameraPosition).magnitude <= 0.001f)
-                {
-                    transform.position = targetCameraPosition;
-                }
-            }
+            //    if ((cameraTransform.position - targetCameraPosition).magnitude <= 0.001f)
+            //    {
+            //        transform.position = targetCameraPosition;
+            //    }
+            //}
+            //else
+            //{
+            //    if ((cameraTransform.position - targetCameraPosition).magnitude <= 0.001f)
+            //    {
+            //        transform.position = targetCameraPosition;
+            //    }
+            //}
           
         }
     }
