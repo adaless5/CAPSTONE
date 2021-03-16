@@ -15,6 +15,7 @@ public class PauseMenuUI : MonoBehaviour
     public GameObject pauseFirst;
     public GameObject quitFirst;
     public GameObject defaultControlOption;
+    public GameObject clickawaybackbutton;
     public Animator OptionMenuAnimator;
     public Animator ControlSchemeAnimator;
 
@@ -46,6 +47,7 @@ public class PauseMenuUI : MonoBehaviour
         if (_isOptionsActive)
         {
             DeactivateOptionsMenu();
+            DeactivateControlScheme();
         }
         else
         {
@@ -163,6 +165,7 @@ public class PauseMenuUI : MonoBehaviour
         OptionsMenu.GetComponent<CanvasGroup>().blocksRaycasts = true;
         OptionMenuAnimator.SetBool("PauseOptionsActive", true);
         _isOptionsActive = true;
+        clickawaybackbutton.SetActive(true);
     }
 
     public void DeactivateOptionsMenu()
@@ -176,6 +179,8 @@ public class PauseMenuUI : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(pauseFirst);
         _isOptionsActive = false;
+        clickawaybackbutton.SetActive(false);
+
     }
 
     public void ActivateControlScheme()
@@ -188,6 +193,9 @@ public class PauseMenuUI : MonoBehaviour
         ControlSchemeAnimator.SetBool("IsActive", true);
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(defaultControlOption);
+        _isOptionsActive = true;
+        clickawaybackbutton.SetActive(true);
+
     }
 
     public void DeactivateControlScheme()
@@ -199,5 +207,8 @@ public class PauseMenuUI : MonoBehaviour
         ControlSchemeAnimator.SetBool("IsActive", false);
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(pauseFirst);
+        _isOptionsActive = false;
+        clickawaybackbutton.SetActive(false);
+
     }
 }
