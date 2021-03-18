@@ -34,8 +34,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 3.4378, y: -0.8594}
-  m_SizeDelta: {x: 606.9156, y: 114.2264}
+  m_AnchoredPosition: {x: -1.3986, y: 1.3684}
+  m_SizeDelta: {x: 440.6079, y: 68.1095}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &604479279
 CanvasRenderer:
@@ -69,13 +69,13 @@ MonoBehaviour:
     m_Font: {fileID: 12800000, guid: 75b249f66527cde4b80c180c58e9ff65, type: 3}
     m_FontSize: 25
     m_FontStyle: 0
-    m_BestFit: 0
+    m_BestFit: 1
     m_MinSize: 2
-    m_MaxSize: 40
+    m_MaxSize: 25
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
-    m_HorizontalOverflow: 0
+    m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: YOU PICKED UP THIS BLAH BLAH
@@ -252,8 +252,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 611, y: 359.88}
-  m_SizeDelta: {x: 593.3255, y: 124.405}
+  m_AnchoredPosition: {x: 643.9415, y: 381.84106}
+  m_SizeDelta: {x: 527.4423, y: 80.4829}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1061874722
 CanvasRenderer:
@@ -431,7 +431,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AspectMode: 0
-  m_AspectRatio: 13.974523
+  m_AspectRatio: 11.702653
 --- !u!114 &408777896
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -445,7 +445,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AspectMode: 0
-  m_AspectRatio: 24.378754
+  m_AspectRatio: 20.828566
 --- !u!114 &1812851586
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -459,7 +459,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AspectMode: 0
-  m_AspectRatio: 14.031848
+  m_AspectRatio: 11.702652
 --- !u!114 &6153891893479197954
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1135,7 +1135,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AspectMode: 0
-  m_AspectRatio: 2.127637
+  m_AspectRatio: 1.7792499
 --- !u!1 &2274327040977851073
 GameObject:
   m_ObjectHideFlags: 0
@@ -1246,7 +1246,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AspectMode: 0
-  m_AspectRatio: 1.2243634
+  m_AspectRatio: 1.0248455
 --- !u!114 &8229807208405292592
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4176,7 +4176,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AspectMode: 0
-  m_AspectRatio: 6.750667
+  m_AspectRatio: 5.6429315
 --- !u!1 &7922734317199265129
 GameObject:
   m_ObjectHideFlags: 0
@@ -4596,7 +4596,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AspectMode: 0
-  m_AspectRatio: 2.0834796
+  m_AspectRatio: 1.7358252
 --- !u!1 &8586854027277901604
 GameObject:
   m_ObjectHideFlags: 0
@@ -4702,7 +4702,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AspectMode: 0
-  m_AspectRatio: 2.1093373
+  m_AspectRatio: 1.7681184
 --- !u!1 &9012466203571668948
 GameObject:
   m_ObjectHideFlags: 0
@@ -5542,6 +5542,11 @@ PrefabInstance:
       objectReference: {fileID: 5079456467959872846}
     - target: {fileID: 5412781567319305590, guid: 5e1f8c6b9ae99c64fac20774486e2dc6,
         type: 3}
+      propertyPath: m_ammoCapAmount
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 5412781567319305590, guid: 5e1f8c6b9ae99c64fac20774486e2dc6,
+        type: 3}
       propertyPath: reticuleAnimator
       value: 
       objectReference: {fileID: 7581503158297917060}
@@ -5609,6 +5614,11 @@ PrefabInstance:
         type: 3}
       propertyPath: bIsObtained
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7116710076979945091, guid: 5e1f8c6b9ae99c64fac20774486e2dc6,
+        type: 3}
+      propertyPath: m_ammoCapAmount
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 7116710076979945091, guid: 5e1f8c6b9ae99c64fac20774486e2dc6,
         type: 3}

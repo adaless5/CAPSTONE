@@ -10,6 +10,8 @@ public class AmmoPickup : MonoBehaviour
 
     public int m_amountOfClipsInPickup = 2;
     public int m_clipSize = 6;
+    protected int m_ammoCap = 0;
+
     Pickup m_ammoPickup;
 
     Weapon m_baseWeapon;
@@ -18,7 +20,7 @@ public class AmmoPickup : MonoBehaviour
 
     public Compass m_compass;
     public CompassMarkers m_marker;
-    
+    public AmmoController m_ammoController;
 
     bool isPickedUp;
     bool isMarkerCreated;
@@ -30,6 +32,7 @@ public class AmmoPickup : MonoBehaviour
 
         isPickedUp = false;
         isMarkerCreated = false;
+        m_ammoController = FindObjectOfType<AmmoController>();
     }
 
     void PlayerSpawned(GameObject playerReference)
@@ -39,7 +42,6 @@ public class AmmoPickup : MonoBehaviour
             m_ammoPickup = GetComponent<Pickup>();
             m_compass = FindObjectOfType<Compass>();
             m_marker = GetComponent<CompassMarkers>();
-
         }
         catch { }
         if (m_marker != null && isMarkerCreated == false)
@@ -70,16 +72,19 @@ public class AmmoPickup : MonoBehaviour
 
     // Update is called once per frame
     private void OnTriggerEnter(Collider other)
-    {
-        if (other.tag == "Player" && isPickedUp == false)
-        {
+    {             
+        if (other.tag == "Player" && isPickedUp == false && m_ammoController.IsAmmoFull(ammoType) == false)
+        { 
             isPickedUp = true;
-            EventBroker.CallOnAmmoPickup(ammoType, m_amountOfClipsInPickup);
-            //Destroy(gameObject); // EVAN COMMENTED THIS OUT AND ADDED THE LINE BELOW, IF THERE IS A PROBLEM YELL AT HIM
+            EventBroker.CallOnAmmoPickup(ammoType, m_amountOfClipsInPickup, m_ammoCap);              
             gameObject.SetActive(false);
 
             if (m_marker != null)
                 m_compass.RemoveMarker(m_marker);
+        }
+        else if(other.tag == "Player" && isPickedUp == false && m_ammoController.IsAmmoFull(ammoType) == true)
+        {
+            EventBroker.CallOnAmmoPickupAttempt();
         }
     }
 }
