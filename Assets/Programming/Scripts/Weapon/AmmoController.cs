@@ -14,7 +14,8 @@ public class AmmoController : MonoBehaviour, ISaveable
         MaxAmmoTypes
     };
 
-    int m_ammoType;    
+    int m_ammoType;
+    int newAmmoAddedTotal;
     public Animator outOfAmmoAnimator;
     protected List<int> currentAmmoList = new List<int>();
     protected List<int> overstockAmmoList = new List<int>();
@@ -98,11 +99,14 @@ public class AmmoController : MonoBehaviour, ISaveable
     public void AmmoPickup(WeaponType type, int numberOfClips, int ammoCap)
     {       
         int weaponType = (int)type;       
-        if(!ammoFullList[weaponType])        {
-            overstockAmmoList[weaponType] += (weaponClipList[weaponType] * numberOfClips);
-            
+        if(!ammoFullList[weaponType])
+        {
+            int tempOverstock = overstockAmmoList[weaponType];
+            //int ammoAddedTotal = (weaponClipList[weaponType] * numberOfClips) + overstockAmmoList[weaponType];
+            overstockAmmoList[weaponType] += (weaponClipList[weaponType] * numberOfClips);           
             if(overstockAmmoList[weaponType] > ammoCapList[weaponType])
-            {                
+            {
+                newAmmoAddedTotal = ammoCapList[weaponType] - tempOverstock;
                 overstockAmmoList[weaponType] = ammoCapList[weaponType];
                 ammoFullList[weaponType] = true;              
             }
@@ -152,6 +156,11 @@ public class AmmoController : MonoBehaviour, ISaveable
     public int GetClipSize()
     {
         return weaponClipList[m_ammoType];
+    }
+
+    public int GetAmmoAdded()
+    {
+        return newAmmoAddedTotal;
     }
 
 

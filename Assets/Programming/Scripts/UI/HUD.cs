@@ -135,10 +135,10 @@ public class HUD : MonoBehaviour
         m_notificationText.text = "MAX AMMO REACHED";
     }
 
-    void NotificationText(bool healthFull)
+    void NotificationText(bool healthFull) 
     {
         m_pickupAnimator.SetTrigger("IsPicked");
-        m_notificationText.text = "AT MAX HEALTH";
+        m_notificationText.text = "MAX HEALTH REACHED";
     }
 
     void NotificationText(float healAmount)
@@ -181,12 +181,14 @@ public class HUD : MonoBehaviour
         int overallAmmo = m_ammoController.GetOverallAmmo();
         ammoCap = m_ammoController.GetAmmoCap();
         int ammoAdded = clipAmount * clipSize;
-        int newTotal = overallAmmo + ammoAdded;       
+        //int newTotal = overallAmmo + ammoAdded;       
         
 
-        if (newTotal > ammoCap)
+        //if (newTotal > ammoCap)
+        if(m_ammoController.IsAmmoFull(weapon))
         {
-            ammoAdded = ammoCap - overallAmmo;
+            // ammoAdded = ammoCap - overallAmmo;
+            ammoAdded = m_ammoController.GetAmmoAdded();
             m_notificationText.text = "ACQUIRED +" + ammoAdded + " AMMO FOR " + weaponName + "\nMAX AMMO REACHED";           
         }
         else
