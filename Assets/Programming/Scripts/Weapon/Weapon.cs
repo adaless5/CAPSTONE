@@ -31,8 +31,10 @@ public abstract class Weapon : Tool
 
     [Header("Weapon Settings")]
     [SerializeField]
-    protected int m_weaponClipSize = 6;
+    protected int m_weaponClipSize = 6;    
     protected int m_startingOverstockAmmo = 0;
+    [SerializeField]
+    protected int m_ammoCapAmount = 20;
 
     [SerializeField]
     protected float m_reloadTime = 2.0f;
@@ -79,9 +81,6 @@ public abstract class Weapon : Tool
         _playerController = player.GetComponent<ALTPlayerController>();
         //Debug.Log(_playerController);
     }
-
-
-
 
     public abstract void AddUpgrade(WeaponUpgrade upgrade);
     //public abstract void RemoveUpgrade(WeaponScalars scalars);

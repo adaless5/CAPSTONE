@@ -370,7 +370,7 @@ public class ALTPlayerController : MonoBehaviour
 
     private void OnDisable()
     {
-        _controls.Disable();
+ 
     }
 
     private void PlayerPause()

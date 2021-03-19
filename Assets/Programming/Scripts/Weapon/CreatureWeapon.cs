@@ -31,7 +31,7 @@ public class CreatureWeapon : Weapon, ISaveable
     {
         //Initializing Ammo Controller
         _ammoController = FindObjectOfType<AmmoUI>().GetComponent<AmmoController>();
-        _ammoController.InitializeAmmo(AmmoController.AmmoTypes.Creature, m_weaponClipSize, m_weaponClipSize);
+        _ammoController.InitializeAmmo(AmmoController.AmmoTypes.Creature, m_weaponClipSize, m_weaponClipSize, m_ammoCapAmount);
 
         _camera = FindObjectOfType<Camera>();
         GetComponent<MeshRenderer>().enabled = false;

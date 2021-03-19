@@ -55,7 +55,7 @@ public class WeaponBase : Weapon, ISaveable
         gunCamera = GameObject.FindObjectOfType<Camera>();
 
         _ammoController = FindObjectOfType<AmmoUI>().GetComponent<AmmoController>();
-        _ammoController.InitializeAmmo(AmmoController.AmmoTypes.Default, m_weaponClipSize, m_weaponClipSize);
+        _ammoController.InitializeAmmo(AmmoController.AmmoTypes.Default, m_weaponClipSize, m_weaponClipSize, m_ammoCapAmount);
         GetComponent<MeshRenderer>().enabled = true;
         //bIsActive = true;
         //bIsObtained = true;

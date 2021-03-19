@@ -54,6 +54,10 @@ public class HealthPickup : MonoBehaviour
                     m_compass.RemoveMarker(m_marker);
                 }
             }
+            else
+            {
+                EventBroker.CallOnHealthPickupAttempt(playerHP.IsAtFullHealth());
+            }
         }
     }
 }
