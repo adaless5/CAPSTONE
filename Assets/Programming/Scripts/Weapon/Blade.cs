@@ -29,7 +29,7 @@ public class Blade : Equipment, ISaveable
 
         _hitbox.enabled = false;
         _hitbox.isTrigger = true;
-        GetComponent<MeshRenderer>().enabled = false;
+        //GetComponent<MeshRenderer>().enabled = false;
 
         
     }

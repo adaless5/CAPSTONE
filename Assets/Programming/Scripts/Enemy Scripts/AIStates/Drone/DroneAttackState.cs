@@ -59,24 +59,24 @@ public class DroneAttack : DroneState
         RaycastHit hit;
         Vector3 playerDir = _playerPos.position - _currentEnemy.transform.position;
 
-        Debug.DrawRay(finalFowardVector, playerDir * _shootDistance, Color.green);
+        Debug.DrawRay(_currentEnemy.transform.forward, playerDir * _shootDistance, Color.green);
         if (_shootTimer <= 0)
         {
-            if (Physics.Raycast(finalFowardVector, playerDir * _shootDistance, out hit, _shootDistance))
-            {
-                if (hit.transform.tag == "Player")
-                {
-                    Debug.Log("Player hit");
-                    _playerPos.gameObject.GetComponent<ALTPlayerController>().CallOnTakeDamage(_enemyDamage);
-                }
-                else
-                {
-                    Debug.Log("Player not hit");
-                }
-            }
+            //if (Physics.Raycast(finalFowardVector, playerDir * _shootDistance, out hit, _shootDistance))
+            //{
+            //    if (hit.transform.tag == "Player")
+            //    {
+            //        Debug.Log("Player hit");
+            //        _playerPos.gameObject.GetComponent<ALTPlayerController>().CallOnTakeDamage(_enemyDamage);
+            //    }
+            //    else
+            //    {
+            //        Debug.Log("Player not hit");
+            //    }
+            //}
 
-            //GameObject tempbullet = GameObject.Instantiate(_droneProjectile, finalFowardVector, Quaternion.identity, _currentEnemy.transform);
-            //tempbullet.GetComponent<Rigidbody>().AddForce(playerDir * _shootDistance, ForceMode.Impulse);
+            GameObject tempbullet = GameObject.Instantiate(_droneProjectile, playerDir, Quaternion.identity, _currentEnemy.transform);
+            tempbullet.GetComponent<Rigidbody>().AddForce(playerDir * _shootDistance, ForceMode.Impulse);
             _shootTimer = 0.5f;
         }
     }
