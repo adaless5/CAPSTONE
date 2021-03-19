@@ -8,7 +8,7 @@ public class BossAI : MonoBehaviour
     public GameObject[] _umbilicalCords;
     private float _distance = 0.6f;
     private float[] _facePos = new float[3];
-    public BoxCollider _boxCol;
+    public MeshCollider _boxCol;
     Vector3 direction;
     Health _health;
     State _currentBossState;
@@ -31,36 +31,14 @@ public class BossAI : MonoBehaviour
             }
         }
 
-        direction = (Vector3.down - transform.position);
-        _boxCol = GetComponent<BoxCollider>();
-        _ucReference = (GameObject)Resources.Load("Prefabs/Enemies/Boss/Umbilical Cord");
-        _umbilicalCords = new GameObject[3];
 
+
+        direction = (Vector3.down - transform.position);
 
 
         Vector3 _rotAxis = Vector3.forward;
         GameObject _rot = gameObject;
 
-        ucLength = _ucReference.GetComponent<MeshRenderer>().bounds.size.magnitude;
-
-        boxDimensions = _boxCol.size;
-        boxDimensions.x *= _boxCol.transform.lossyScale.x;
-        boxDimensions.y *= _boxCol.transform.lossyScale.y;
-        boxDimensions.z *= _boxCol.transform.lossyScale.z;
-
-
-
-        Vector3 sidePos = new Vector3(_boxCol.center.x, _boxCol.center.y, _boxCol.center.z - 0.5f * boxDimensions.z - ucLength) + transform.localPosition;
-
-        InitializeUC(ref _umbilicalCords[0], sidePos);
-
-        sidePos = new Vector3(_boxCol.center.x - 0.5f * boxDimensions.x - ucLength, _boxCol.center.y, _boxCol.center.z) + transform.localPosition;
-
-        InitializeUC(ref _umbilicalCords[1], sidePos);
-
-        sidePos = new Vector3(_boxCol.center.x + 0.5f * boxDimensions.x + ucLength, _boxCol.center.y, _boxCol.center.z) + transform.localPosition;
-
-        InitializeUC(ref _umbilicalCords[2], sidePos);
 
         OnWeakStateEnded += RegenerateUC;
     }
@@ -93,12 +71,6 @@ public class BossAI : MonoBehaviour
 
     }
 
-    void InitializeUC(ref GameObject umcord, Vector3 position)
-    {
-        umcord = Instantiate(_ucReference, position, Quaternion.identity) as GameObject;
-        umcord.GetComponentInChildren<UmbilicalCord>().GetHealth().OnDeath += CheckUC;
-        umcord.transform.SetParent(transform);
-    }
 
 
     // Update is called once per frame
@@ -109,7 +81,7 @@ public class BossAI : MonoBehaviour
         //Debug.Log(_currentBossState);
     }
 
-    void CheckUC()
+    public void CheckUC()
     {
         Debug.Log("Checking cords...");
         if (AreGOInactive())

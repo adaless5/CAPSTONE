@@ -140,6 +140,7 @@ public class ALTPlayerController : MonoBehaviour
         _controller = GetComponent<CharacterController>();
         _cameraBehaviour = GetComponent<CameraBehaviour>();
         instance = this;
+
     }
     #region Debug Functions
     public void DebugUnlockAllWeapons()
@@ -255,7 +256,7 @@ public class ALTPlayerController : MonoBehaviour
         switch (m_ControllerState)
         {
             case ControllerState.Play:
-                PlayerRotation();
+
                 PlayerMovement();
                 if (_cameraBehaviour != null)
                     _cameraBehaviour.SetIsInMenu(false);
@@ -361,6 +362,20 @@ public class ALTPlayerController : MonoBehaviour
         //Stand in death animation -LCC
         if (isDead)
             gameObject.transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(new Vector3(0, 0, 100)), Time.deltaTime * 5.0f);
+    }
+
+    private void LateUpdate()
+    {
+        switch (m_ControllerState)
+        {
+            case ControllerState.Play:
+                PlayerRotation();
+                if (_cameraBehaviour != null)
+                    _cameraBehaviour.SetIsInMenu(false);
+                break;
+
+        }
+
     }
 
     private void OnEnable()

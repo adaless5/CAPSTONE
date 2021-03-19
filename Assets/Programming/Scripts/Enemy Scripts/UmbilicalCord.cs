@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class UmbilicalCord : MonoBehaviour
 {
-    Health _health;
-    private bool isDead;
-
+    public Health _health;
+    public Animator _ucAnimator;
     private void Awake()
     {
-        _health = GetComponent<Health>();
-        _health.OnDeath += SetDead;
+        _ucAnimator = GetComponent<Animator>();
+        _health = GetComponentInChildren<Health>();
+        _health.OnDeath += PlayDeathAnimation;
     }
     // Start is called before the first frame update
     void Start()
@@ -23,11 +23,18 @@ public class UmbilicalCord : MonoBehaviour
     {
     
     }
-
-    void SetDead()
+    
+    void PlayDeathAnimation()
     {
+  
+        _ucAnimator.SetTrigger("Death");
+        Debug.Log("UC died");
+    }    
 
-        transform.parent.gameObject.SetActive(false);
+    public void SetDead()
+    {
+        gameObject.SetActive(false);
+        gameObject.GetComponentInParent<BossAI>().CheckUC();
     }
 
     public Health GetHealth()

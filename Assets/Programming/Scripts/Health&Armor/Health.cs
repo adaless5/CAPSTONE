@@ -116,8 +116,11 @@ public class Health : MonoBehaviour, ISaveable
         }
 
         isDead = true;
+
+        //Disabled Deactivation on Death to make Death Event more malleable - LCC
+
         //Destroy(gameObject);
-        gameObject.SetActive(false);
+        //gameObject.SetActive(false);
         for (int i = 0; i < transform.childCount; ++i)
         {
             transform.GetChild(i).gameObject.SetActive(false);
