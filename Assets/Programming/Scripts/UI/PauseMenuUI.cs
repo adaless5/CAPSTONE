@@ -190,7 +190,7 @@ public class PauseMenuUI : MonoBehaviour
         _canvasGroup.blocksRaycasts = false;
         ControlScheme.GetComponent<CanvasGroup>().interactable = true;
         ControlScheme.GetComponent<CanvasGroup>().blocksRaycasts = true;
-        ControlSchemeAnimator.SetBool("IsActive", true);
+        ControlSchemeAnimator.SetBool("PauseControlsActive", true);
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(defaultControlOption);
         _isOptionsActive = true;
@@ -204,7 +204,7 @@ public class PauseMenuUI : MonoBehaviour
         _canvasGroup.blocksRaycasts = true;
         ControlScheme.GetComponent<CanvasGroup>().interactable = false;
         ControlScheme.GetComponent<CanvasGroup>().blocksRaycasts = false;
-        ControlSchemeAnimator.SetBool("IsActive", false);
+        ControlSchemeAnimator.SetBool("PauseControlsActive", false);
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(pauseFirst);
         _isOptionsActive = false;
