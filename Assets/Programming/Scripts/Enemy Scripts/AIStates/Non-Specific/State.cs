@@ -30,12 +30,12 @@ public class State
     protected float _visualAngle = 90.0f;
     protected float _shootDistance = 7.0f;
     protected float _bulletRange = 300.0f;
-    protected float _maxDeviation = 350.0f;
+    protected float _maxDeviation = 90.0f;
     protected float _rotDamp = 10.0f;
 
     private Quaternion _desiredRot;
 
-    public State()
+    protected State()
     {
         _stage = EVENT.ENTER;
     }

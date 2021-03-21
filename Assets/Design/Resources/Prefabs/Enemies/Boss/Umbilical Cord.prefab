@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 587677507395950496}
   - component: {fileID: 8225754836212688674}
   - component: {fileID: 4302402684880739123}
+  - component: {fileID: 516117013306001440}
+  - component: {fileID: 7820221588310732297}
   m_Layer: 0
   m_Name: Umbilical Cord
   m_TagString: Untagged
@@ -27,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 1690388749378038222}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_LocalScale: {x: 3, y: 3, z: 5.2982683}
   m_Children:
   - {fileID: 8643927734252991220}
   m_Father: {fileID: 0}
@@ -82,6 +84,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1690388749378038222}
   m_Mesh: {fileID: -951608786083511892, guid: be17a60ef97b1f048b3ec7a82e580669, type: 3}
+--- !u!95 &516117013306001440
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1690388749378038222}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 073d9fdc6c2895b4198d1513f4d30996, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &7820221588310732297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1690388749378038222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ec5fa271f0379e498a2d60cef375b0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3272070920058034194
 GameObject:
   m_ObjectHideFlags: 0
@@ -95,7 +128,6 @@ GameObject:
   - component: {fileID: 5715840681956686237}
   - component: {fileID: 7921744828240591430}
   - component: {fileID: 567628568154749218}
-  - component: {fileID: 7497243324286471745}
   m_Layer: 0
   m_Name: WeakPoint
   m_TagString: Untagged
@@ -112,7 +144,7 @@ Transform:
   m_GameObject: {fileID: 3272070920058034194}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0.275}
-  m_LocalScale: {x: 0.21728, y: 0.21728, z: 0.21728}
+  m_LocalScale: {x: 0.36646444, y: 0.3728742, z: 0.21728}
   m_Children: []
   m_Father: {fileID: 587677507395950496}
   m_RootOrder: 0
@@ -144,7 +176,7 @@ MeshRenderer:
   m_RenderingLayerMask: 257
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4acf1a04e62f479429a269c202956ec8, type: 2}
+  - {fileID: 2100000, guid: 2ffbba99dbad1074190ab6f78558eced, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -194,15 +226,5 @@ MonoBehaviour:
   m_HP: 20
   m_IsLoadingShield: 0
   healthBar: {fileID: 0}
---- !u!114 &7497243324286471745
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3272070920058034194}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ec5fa271f0379e498a2d60cef375b0b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_compass: {fileID: 0}
+  m_marker: {fileID: 0}

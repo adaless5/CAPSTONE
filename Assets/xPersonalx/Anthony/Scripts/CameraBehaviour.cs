@@ -8,8 +8,8 @@ public class CameraBehaviour : MonoBehaviour
     public Transform cameraTransform;
 
     public float bobFrequency = 5f;
-    public float bobHorizontalAmplitude = 0.05f;
-    public float bobVerticalAmplitude = 0.1f;
+    public float bobHorizontalAmplitude = 0.01f;
+    public float bobVerticalAmplitude = 0.01f;
     [Range(0, 1)] public float headBobSmoothing = 0.1f;
 
     private bool bIsWalking = true;

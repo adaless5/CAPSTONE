@@ -10,9 +10,10 @@ public class EventBroker
     public static event Action<GameObject> OnPlayerSpawned;
     public static event Action<int> OnPickupWeapon;
     public static event Action OnPlayerDeath;
-    public static event Action<WeaponType, int> OnAmmoPickup;
-
+    public static event Action<WeaponType, int, int> OnAmmoPickup;
     public static event Action<float> OnHealthPickup;
+    public static event Action OnAmmoPickupAttempt;
+    public static event Action<bool> OnHealthPickupAttempt;
 
     public static void CallSpawnEnemy(GameObject enemyToSpawn)
     {
@@ -36,14 +37,24 @@ public class EventBroker
         OnPickupWeapon?.Invoke(weaponIndex);
     }
 
-    public static void CallOnAmmoPickup(WeaponType type, int clipAmount)
+    public static void CallOnAmmoPickup(WeaponType type, int clipAmount, int ammoCap)
     {
-        OnAmmoPickup?.Invoke(type, clipAmount);
+        OnAmmoPickup?.Invoke(type, clipAmount, ammoCap);
     }
 
     public static void CallOnHealthPickup(float healthValue)
     {
         OnHealthPickup?.Invoke(healthValue);
+    }
+
+    public static void CallOnAmmoPickupAttempt()
+    {
+        OnAmmoPickupAttempt?.Invoke();
+    }
+
+    public static void CallOnHealthPickupAttempt(bool healthFull)
+    {
+        OnHealthPickupAttempt?.Invoke(healthFull);
     }
 
     public static void CallOnPlayerDeath()

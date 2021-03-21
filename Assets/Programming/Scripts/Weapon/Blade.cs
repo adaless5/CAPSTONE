@@ -29,9 +29,13 @@ public class Blade : Equipment, ISaveable
 
         _hitbox.enabled = false;
         _hitbox.isTrigger = true;
-        GetComponent<MeshRenderer>().enabled = false;
+        MeshRenderer[] meshs = GetComponentsInChildren<MeshRenderer>();
+        foreach (MeshRenderer obj in meshs)
+        {
+            obj.enabled = false;
+        }
 
-        
+
     }
 
     void Awake()
@@ -46,12 +50,21 @@ public class Blade : Equipment, ISaveable
 
         if (bIsActive && bIsObtained)
         {
-            GetComponent<MeshRenderer>().enabled = true;
+            MeshRenderer[] meshs = GetComponentsInChildren<MeshRenderer>();
+            foreach (MeshRenderer obj in meshs)
+            {
+                obj.enabled = true;
+            }
+               
             UseTool();
         }
         else if (!bIsActive)
         {
-            GetComponent<MeshRenderer>().enabled = false;
+            MeshRenderer[] meshs = GetComponentsInChildren<MeshRenderer>();
+            foreach (MeshRenderer obj in meshs)
+            {
+                obj.enabled = false;
+            }
         }
     }
 

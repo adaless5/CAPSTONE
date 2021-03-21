@@ -267,7 +267,7 @@ public class ALTPlayerController : MonoBehaviour
         switch (m_ControllerState)
         {
             case ControllerState.Play:
-                PlayerRotation();
+
                 PlayerMovement();
                 if (_cameraBehaviour != null)
                     _cameraBehaviour.SetIsInMenu(false);
@@ -346,6 +346,20 @@ public class ALTPlayerController : MonoBehaviour
             gameObject.transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(new Vector3(0, 0, 100)), Time.deltaTime * 5.0f);
     }
 
+    private void LateUpdate()
+    {
+        switch (m_ControllerState)
+        {
+            case ControllerState.Play:
+                PlayerRotation();
+                if (_cameraBehaviour != null)
+                    _cameraBehaviour.SetIsInMenu(false);
+                break;
+
+        }
+
+    }
+
     private void OnEnable()
     {
         _controls.Enable();
@@ -353,7 +367,7 @@ public class ALTPlayerController : MonoBehaviour
 
     private void OnDisable()
     {
-        _controls.Disable();
+ 
     }
 
     private void PlayerPause()

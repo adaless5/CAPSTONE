@@ -14,11 +14,15 @@ public class AmmoController : MonoBehaviour, ISaveable
         MaxAmmoTypes
     };
 
-    int m_ammoType; 
+    int m_ammoType;
+    int newAmmoAddedTotal;
     public Animator outOfAmmoAnimator;
     protected List<int> currentAmmoList = new List<int>();
     protected List<int> overstockAmmoList = new List<int>();
     protected List<int> weaponClipList = new List<int>();
+    protected List<int> ammoCapList = new List<int>();
+    protected List<bool> ammoFullList = new List<bool>();
+    
 
     private void Awake()
     {
@@ -32,7 +36,10 @@ public class AmmoController : MonoBehaviour, ISaveable
             currentAmmoList.Add(0);
             overstockAmmoList.Add(0);
             weaponClipList.Add(0);
-        }        
+            ammoCapList.Add(0);
+            ammoFullList.Add(false);
+        }
+       
     }
 
     // Start is called before the first frame update
@@ -42,12 +49,13 @@ public class AmmoController : MonoBehaviour, ISaveable
     }
        
 
-    public void InitializeAmmo(AmmoTypes ammoType, int clipSize, int OverstockAmmo)
+    public void InitializeAmmo(AmmoTypes ammoType, int clipSize, int OverstockAmmo, int ammoCap)
     {
         m_ammoType = (int)ammoType;     
         weaponClipList[m_ammoType] = clipSize;
         currentAmmoList[m_ammoType] = weaponClipList[m_ammoType];
         overstockAmmoList[m_ammoType] = OverstockAmmo;
+        ammoCapList[m_ammoType] = ammoCap;
     }
   
 
@@ -84,20 +92,32 @@ public class AmmoController : MonoBehaviour, ISaveable
         {
             currentAmmoList[m_ammoType]++;
             overstockAmmoList[m_ammoType]--;
+            ammoFullList[m_ammoType] = false;            
         }        
     }
 
-    public void AmmoPickup(WeaponType type, int numberOfClips)
-    {
-        int weaponType = (int)type;
-        overstockAmmoList[weaponType] += (weaponClipList[weaponType] * numberOfClips);
+    public void AmmoPickup(WeaponType type, int numberOfClips, int ammoCap)
+    {       
+        int weaponType = (int)type;       
+        if(!ammoFullList[weaponType])
+        {
+            int tempOverstock = overstockAmmoList[weaponType];
+            //int ammoAddedTotal = (weaponClipList[weaponType] * numberOfClips) + overstockAmmoList[weaponType];
+            overstockAmmoList[weaponType] += (weaponClipList[weaponType] * numberOfClips);           
+            if(overstockAmmoList[weaponType] > ammoCapList[weaponType])
+            {
+                newAmmoAddedTotal = ammoCapList[weaponType] - tempOverstock;
+                overstockAmmoList[weaponType] = ammoCapList[weaponType];
+                ammoFullList[weaponType] = true;              
+            }
+        }
     }
 
     public void UseAmmo()
     {
         if(CanUseAmmo())
-        {
-            currentAmmoList[m_ammoType]--;
+        {         
+            currentAmmoList[m_ammoType]--;            
             if(OutOfAmmo())
             outOfAmmoAnimator.SetBool("bIsOut", true);
         }
@@ -118,19 +138,36 @@ public class AmmoController : MonoBehaviour, ISaveable
             return false;
     }
 
+    public int GetAmmoCap()
+    {      
+        return ammoCapList[m_ammoType];
+    }
+
     public int GetCurrentAmmo()
     {
         return currentAmmoList[m_ammoType];
     }
 
     public int GetOverallAmmo()
-    {
+    {       
         return overstockAmmoList[m_ammoType];
     }
 
     public int GetClipSize()
     {
         return weaponClipList[m_ammoType];
+    }
+
+    public int GetAmmoAdded()
+    {
+        return newAmmoAddedTotal;
+    }
+
+
+    public bool IsAmmoFull(WeaponType ammoType)
+    {
+        int weaponType = (int)ammoType;       
+        return ammoFullList[weaponType];
     }
 
     public void SetAmmoType(int type)

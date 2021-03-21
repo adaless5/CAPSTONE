@@ -40,7 +40,7 @@ public class AudioManager_Footsteps : AudioManager
     int _lastJumpLandIndex = -1;
 
     float _footSeperationWidthFromCenter = 0.2f;
-    float _distanceTillFootstepTriggered = 6f;
+    float _distanceTillFootstepTriggered = 6.5f;
 
     int _dirtTerrainLayerIndex;
     int _concreteTerrainLayerIndex;

@@ -62,7 +62,9 @@ public class HUD : MonoBehaviour
         m_pickupAnimator = gameObject.transform.GetChild(1).Find("Pickup Notification").GetComponent<Animator>();
 
         EventBroker.OnHealthPickup += NotificationText;
-        EventBroker.OnAmmoPickup += NotificationText;  
+        EventBroker.OnAmmoPickup += NotificationText;
+        EventBroker.OnAmmoPickupAttempt += NotificationText;
+        EventBroker.OnHealthPickupAttempt += NotificationText;
     }
 
     // Start is called before the first frame update
@@ -127,6 +129,18 @@ public class HUD : MonoBehaviour
         }
     }
 
+    void NotificationText()
+    {
+        m_pickupAnimator.SetTrigger("IsPicked");       
+        m_notificationText.text = "MAX AMMO REACHED";
+    }
+
+    void NotificationText(bool healthFull) 
+    {
+        m_pickupAnimator.SetTrigger("IsPicked");
+        m_notificationText.text = "MAX HEALTH REACHED";
+    }
+
     void NotificationText(float healAmount)
     {
         m_pickupAnimator.SetTrigger("IsPicked");      
@@ -137,32 +151,50 @@ public class HUD : MonoBehaviour
         m_notificationText.text = "HEALED " + percentHealed + "%";     
     }
 
-    void NotificationText(WeaponType weapon, int clipAmount)
+    void NotificationText(WeaponType weapon, int clipAmount, int ammoCap)
     {
         m_pickupAnimator.SetTrigger("IsPicked");
 
         string weaponName;
-        int clipSize = m_ammoController.GetClipSize();
-        int ammoAdded = clipAmount * clipSize;
-        
         switch (weapon)
         {
             case WeaponType.BaseWeapon:
+                m_ammoController.SetAmmoType((int)WeaponType.BaseWeapon);
                 weaponName = "ARCHEBUS";
                 break;
 
             case WeaponType.GrenadeWeapon:
+                m_ammoController.SetAmmoType((int)WeaponType.GrenadeWeapon);
                 weaponName = "GRENADES";
                 break;
 
             case WeaponType.CreatureWeapon:
+                m_ammoController.SetAmmoType((int)WeaponType.CreatureWeapon);
                 weaponName = "GLAND GUN";
                 break;
             default:
                 weaponName = "";
                 break;
         }
+
+        int clipSize = m_ammoController.GetClipSize();
+        int overallAmmo = m_ammoController.GetOverallAmmo();
+        ammoCap = m_ammoController.GetAmmoCap();
+        int ammoAdded = clipAmount * clipSize;
+        //int newTotal = overallAmmo + ammoAdded;       
         
-        m_notificationText.text = "ACQUIRED +" + ammoAdded + " AMMO FOR " + weaponName;      
+
+        //if (newTotal > ammoCap)
+        if(m_ammoController.IsAmmoFull(weapon))
+        {
+            // ammoAdded = ammoCap - overallAmmo;
+            ammoAdded = m_ammoController.GetAmmoAdded();
+            m_notificationText.text = "ACQUIRED +" + ammoAdded + " AMMO FOR " + weaponName + "\nMAX AMMO REACHED";           
+        }
+        else
+        {
+            m_notificationText.text = "ACQUIRED +" + ammoAdded + " AMMO FOR " + weaponName;      
+        }
+
     }
 }
