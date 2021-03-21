@@ -43,15 +43,38 @@ public class ALTPlayerController : MonoBehaviour
     CameraBehaviour _cameraBehaviour;
 
     public CharacterController _controller;
+
+    // == Player Movement Variables ==
     Vector3 m_Velocity;
-    float m_YVelocity;
     float m_MoveSpeed = 10.0f;
-
-    float m_SprintSpeed = 15.0f;
-    public float m_Gravity = -50.0f;
-    public float m_JumpHeight = 20.0f;
-
-    public Vector3 m_Momentum { get; private set; } = Vector3.zero;
+    const float WALK_SPEED = 10.0f;
+    const float SPRINT_SPEED = 20.0f;
+    Vector3 m_Gravity = new Vector3(0.0f, -40.0f, 0.0f);
+    Vector3 ORIGINAL_GRAVITY = new Vector3(0.0f, -40.0f, 0.0f);
+    float m_JumpHeight = 5f;
+    const float NORMAL_JUMP_HEIGHT = 5f;
+    const float GRAPPLE_JUMP_HEIGHT = 10.0f;
+    public Vector3 m_Momentum = Vector3.zero;
+    float _slopeAngle;
+    Vector3 _slopeAcceleration;
+    [SerializeField] private float _slopeForce;
+    [SerializeField] private float _slopeForceRayLength;
+    float _Acceleration = 0f;
+    bool bisGrounded;
+    Transform _groundCheck;
+    float _groundDistance = 0.3f;
+    bool bcanJump;
+    bool bDidJump;
+    bool bIsMoving;
+    Vector3 _preJumpVelocity;
+    Vector3 _lastMoveVelocity;
+    Vector3 _jumpVelocity;
+    const float IN_AIR_CONTROL = 0.9f;
+    const float MIN_SLOPE_ANGLE = 30.0f;
+    const float DECELERATION_SPEED = 10.0f;
+    float _coyoteTime = 2.1f;
+    const float MAX_COYOTE_TIME = 0.1f;
+    public bool bWasGrappling = false;
 
     public int m_UpgradeCurrencyAmount = 0;
 
@@ -69,15 +92,6 @@ public class ALTPlayerController : MonoBehaviour
     public event Action<float> OnHeal;
     public event Action OnDeath;
 
-    private Vector3 _hitNormal;
-    float _slopeLimit = 120.0f;
-    float _slopeAngle;
-    Vector3 _slopeAcceleration;
-    float _slopeSpeed = 500.0f;
-
-    [SerializeField] private float _slopeForce;
-    [SerializeField] private float _slopeForceRayLength;
-
     bool bIsInThermalView = false;
     bool bIsInDarknessVolume = false;
 
@@ -91,8 +105,6 @@ public class ALTPlayerController : MonoBehaviour
     Button[] _wepButtons;
 
     float joyAngle;
-
-    const float POST_JUMP_FALL_MULTIPLIER = 60.0f;
 
     bool isSelected = false;
 
@@ -129,9 +141,10 @@ public class ALTPlayerController : MonoBehaviour
     private bool bInvertXAxis = false;
     private bool bInvertYAxis = false;
 
+    bool bDebug = false;
+
     private void Awake()
     {
-        Debug.Log("Awake");
         OnTakeDamage += TakeDamage;
         EventBroker.OnPlayerDeath += PlayerDeath;
         _respawnPosition = gameObject.transform.position;
@@ -140,7 +153,7 @@ public class ALTPlayerController : MonoBehaviour
         _controller = GetComponent<CharacterController>();
         _cameraBehaviour = GetComponent<CameraBehaviour>();
         instance = this;
-
+        _groundCheck = GameObject.Find("GroundCheck").transform;
     }
     #region Debug Functions
     public void DebugUnlockAllWeapons()
@@ -193,7 +206,7 @@ public class ALTPlayerController : MonoBehaviour
 
     void Start()
     {
-        Debug.Log("Start");
+        //Debug.Log("Start");
         DontDestroyOnLoad(this);
         Application.targetFrameRate = 60;
         Cursor.lockState = CursorLockMode.Locked;
@@ -250,8 +263,6 @@ public class ALTPlayerController : MonoBehaviour
         Vector3 dir = _ControllerCollisionPos - transform.position;
         Vector3 downdir = new Vector3(0.0f, -1.0f, 0.0f);
         RaycastHit hit;
-
-
 
         switch (m_ControllerState)
         {
@@ -330,35 +341,6 @@ public class ALTPlayerController : MonoBehaviour
             }
         }
 
-        //Below I am calculating a vector perpendincular to the surface the player is on to determine what direction to move while sliding.
-        //Sliding activates when the angle between the surface normal and the down vector are <= 140 deg. -AD
-        int slidemask = 1 << 17;
-        if (Physics.Raycast(transform.position, dir, out hit, 100f, ~slidemask))
-        {
-            _hitNormal = hit.normal;
-
-            _slopeAngle = Vector3.Angle(downdir * dist, hit.normal);
-
-            _slopeAcceleration = transform.TransformDirection(m_Velocity);
-
-            Vector3 groundTangent = _slopeAcceleration - Vector3.Project(_slopeAcceleration, hit.normal);
-
-            groundTangent.Normalize();
-
-            _slopeAcceleration = groundTangent;
-
-            if (_controller.isGrounded && _slopeAngle <= 140.0f)
-            {
-                bOnSlope = true;
-            }
-            else
-            {
-                bOnSlope = false;
-            }
-        }
-
-        m_Velocity.y = Mathf.Clamp(m_Velocity.y, -15.0f, 1000.0f);  //Clamping the minimum y velocity to prevent rapidly falling after sliding. -AD
-
         //Stand in death animation -LCC
         if (isDead)
             gameObject.transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(new Vector3(0, 0, 100)), Time.deltaTime * 5.0f);
@@ -420,22 +402,6 @@ public class ALTPlayerController : MonoBehaviour
         }
     }
 
-    //private void ControllerCheck()
-    //{
-    //    _controllerNames = Input.GetJoystickNames();
-    //    if (_controllerNames != null)
-    //    {
-    //        if (_controllerNames.Length > 0)
-    //        {
-    //            m_ControllerType = ControllerType.Controller;
-    //        }
-    //        else
-    //        {
-    //            m_ControllerType = ControllerType.Mouse;
-    //        }
-    //    }
-    //}
-
     private void CursorVisibility()
     {
         Cursor.visible = true;
@@ -488,7 +454,6 @@ public class ALTPlayerController : MonoBehaviour
         return _bThermal;
     }
 
-
     public bool CheckForUseWeaponInput()
     {
         return _bIsShooting;
@@ -501,7 +466,6 @@ public class ALTPlayerController : MonoBehaviour
 
     public void PlayerRotation()
     {
-
         float mouseX = _look.x * Time.deltaTime * m_LookSensitivity;
         float mouseY = _look.y * Time.deltaTime * m_LookSensitivity;
 
@@ -522,74 +486,278 @@ public class ALTPlayerController : MonoBehaviour
 
     public void PlayerMovement()
     {
-        if (_movement.magnitude > 0 && !_bIsJumping)
+        int playermask = 1 << 9;
+        int triggermask = 1 << 16;
+
+        RaycastHit[] allHits;
+        allHits = Physics.SphereCastAll(transform.position, 0.5f, Vector3.down, _controller.height, ~(playermask | triggermask));
+        RaycastHit nearestHit = new RaycastHit();
+
+        //Collecting all collisions from spherecast and establishing the nearest collision as the active one.
+        if (allHits.Length > 0)
         {
-            if (_cameraBehaviour != null)
-                _cameraBehaviour.SetIsWalking(true);
+            float dist = Vector3.Distance(transform.position, allHits[0].point);
+            foreach (RaycastHit hit in allHits)
+            {
+                if (Vector3.Distance(transform.position, hit.point) <= dist)
+                {
+                    nearestHit = hit;
+                }
+            }
+
+            _slopeAngle = Mathf.Rad2Deg * Mathf.Asin(nearestHit.normal.y);
+            _slopeAcceleration = Vector3.zero;
+
+            if (_slopeAngle < MIN_SLOPE_ANGLE)
+            {
+                //This allows us to find the vector of the ground tangent that we can add to gravity to force the player down the slope.
+                Vector3 groundTangent = Vector3.Cross(nearestHit.normal, Vector3.up);
+                _slopeAcceleration = Vector3.Cross(nearestHit.normal, groundTangent);
+
+                #region Drawing Debug Rays for normal and ground tangent.
+                if (bDebug)
+                {
+                    Debug.DrawRay(nearestHit.point, nearestHit.normal, Color.cyan);
+                    Debug.DrawRay(transform.position, _slopeAcceleration, Color.green);
+                }
+                #endregion
+
+                m_Gravity += _slopeAcceleration;
+                bOnSlope = true;
+            }
+            else
+            {
+                m_Gravity = ORIGINAL_GRAVITY;
+            }
         }
         else
         {
-            if (_cameraBehaviour != null)
-                _cameraBehaviour.SetIsWalking(false);
+            m_Gravity = ORIGINAL_GRAVITY;
         }
 
+        //Checking if player is grounded
+        bisGrounded = Physics.CheckSphere(_groundCheck.position, _groundDistance,  ~(playermask | triggermask));
 
-        //Sprinting logic & use of player's stamina - VR
+        #region Vector Debugs
+        if (bDebug)
+        {
+            print("Velocity = " + m_Velocity);
+            print("Gravity = " + m_Gravity);
+            print("SlopeAcceleration = " + _slopeAcceleration);
+        }
+        #endregion
+
+        //Calculating Acceleration
+        if (_movement.magnitude > 0f)
+        {
+            _Acceleration += Time.deltaTime;
+        }
+        else
+        {
+            _Acceleration -= Time.deltaTime;
+        }
+        _Acceleration = Mathf.Clamp(_Acceleration, 0.0f, 1.0f);
+
+        //Forcing Player onto ground
+        if (bisGrounded && m_Velocity.y < 0f)
+        {
+            m_Velocity.y = 0.0f;
+
+            if(bWasGrappling)
+            {
+                bWasGrappling = false;
+            }
+        }
+
+        //Changing movement speed based on sprint input
         if (CheckForSprintInput() && m_stamina.GetCurrentStamina() > 0 && _movement.magnitude > 0)
         {
-            m_Velocity = (transform.right * _movement.x * m_SprintSpeed) + (transform.forward * _movement.y * m_SprintSpeed);
+            m_MoveSpeed = Mathf.Lerp(m_MoveSpeed, SPRINT_SPEED, Time.deltaTime);
             m_stamina.UseStamina();
-
             GetComponent<CameraBehaviour>().bobFrequency = 7.5f;
         }
         else
         {
-            m_Velocity = (transform.right * _movement.x * m_MoveSpeed) + (transform.forward * _movement.y * m_MoveSpeed);
-
+            m_MoveSpeed = Mathf.Lerp(m_MoveSpeed, WALK_SPEED, Time.deltaTime);
             GetComponent<CameraBehaviour>().bobFrequency = 5.0f;
         }
 
+        //Regenerate stamina if player isn't sprinting
         if (CheckForSprintInput() == false || (_movement.magnitude == 0 && m_stamina.bCanRegenerate))
-        {
             m_stamina.StartCoroutine(m_stamina.RegenerateStamina());
-        }
+        
+        //Using Player Input to Calculate movement vector and applying movement
+        Vector3 movement = ((transform.right * _movement.x ) + (transform.forward * _movement.y)) * _Acceleration;
 
-        if (!bOnSlope)
+        //Store the last recorded movement velocity for deceleration
+        if (movement.magnitude > Mathf.Epsilon)
         {
-            HandleJump();
+            bIsMoving = true;
+            _lastMoveVelocity = movement;
+
+            if (!_bIsJumping)
+            {
+                if (_cameraBehaviour != null)
+                    _cameraBehaviour.SetIsWalking(true);
+            }
         }
-
-        ApplyGravity();
-
-        m_Velocity += m_Momentum;
-
-        //If player is on slope apply Vector parallel to ground to movement vector. 
-        if (bOnSlope && m_PlayerState != PlayerState.Grappling)
+        else
         {
-            m_Velocity.y += m_Gravity;
-            m_Velocity = Vector3.Lerp(m_Velocity, _slopeAcceleration * _slopeSpeed, Time.deltaTime);
+            bIsMoving = false;
+            
+            if (_cameraBehaviour != null)
+                _cameraBehaviour.SetIsWalking(false);
         }
 
-        _controller.Move(m_Velocity * Time.deltaTime);
-
-        if (OnWalkableSlope())
+        if (!bDidJump)
         {
-            _controller.Move(Vector3.down * _controller.height / 2 * _slopeForce * Time.deltaTime);
+            //If Moving use input, otherwise use the last recorded movement input and decelerate to zero
+            if (bIsMoving)
+                _controller.Move(movement * Time.deltaTime * m_MoveSpeed);
+            else
+            {
+                _lastMoveVelocity = Vector3.Lerp(_lastMoveVelocity, Vector3.zero, Time.deltaTime * DECELERATION_SPEED);
+                _controller.Move(_lastMoveVelocity * Time.deltaTime * m_MoveSpeed);
+            }
         }
 
+        //Resetting After Jump
+        if (bisGrounded && !_bIsJumping || _coyoteTime < MAX_COYOTE_TIME)
+        {
+            if(!bcanJump)
+            {
+                m_Velocity = Vector3.zero;
+                _preJumpVelocity = Vector3.zero;
+                bcanJump = true;
+                bDidJump = false;
+            }
+        }
+
+        if (bcanJump)
+        {
+            if (CheckForJumpInput())
+            {
+                if (m_PlayerState != PlayerState.Grappling)
+                {
+                    if (bWasGrappling)
+                        m_JumpHeight = GRAPPLE_JUMP_HEIGHT;
+                    else
+                        m_JumpHeight = NORMAL_JUMP_HEIGHT;
+
+                    _preJumpVelocity = movement;  
+                    m_Velocity = _preJumpVelocity;
+                    _jumpVelocity.y = Mathf.Sqrt(m_JumpHeight * -2f * m_Gravity.y);
+                    m_Velocity.y = _jumpVelocity.y;
+                }
+
+                GetComponent<AudioManager_Footsteps>().TriggerJump(false);
+
+                bcanJump = false;
+                bDidJump = true;
+                _coyoteTime = MAX_COYOTE_TIME + 1f;
+            }
+        }
+
+        //Preventing you from hanging in air if you jump up into something
+        if (_controller.collisionFlags.ToString() == "Above")
+        {
+            m_Velocity.y = Mathf.Lerp(m_Velocity.y, -1f, Time.deltaTime * 20.0f);
+        }
+
+        if (!bisGrounded && bDidJump)
+        {
+            //TODO: This may need tweaking.
+            Vector3 airMovement = (_preJumpVelocity + (movement * IN_AIR_CONTROL)) * m_MoveSpeed;
+
+            if (bWasGrappling)
+            {
+                airMovement = movement * m_MoveSpeed;
+            }
+            
+            airMovement = Vector3.ClampMagnitude(airMovement, 10.0f);
+            
+            _controller.Move(airMovement * Time.deltaTime);
+
+            if (bDidJump && !CheckForJumpInput() && m_Velocity.y > 0.0f)
+            {
+                if (m_Velocity.y > 10.0f)
+                {
+                    if (m_Velocity.y > 0.01f)
+                    {
+                        m_Velocity.y *= 0.5f;
+                    }
+                    else
+                    {
+                        m_Velocity.y = 0.0f;
+                    }
+                }
+            }
+        }
+
+        if (!bisGrounded && !bDidJump && m_PlayerState != PlayerState.Grappling)
+        {
+            _coyoteTime = 0.0f;
+            _coyoteTime += Time.deltaTime;
+        }
+
+        //Calculate Gravity and Apply Grav to movement
+        if(m_PlayerState != PlayerState.Grappling)
+            m_Velocity += m_Gravity * Time.deltaTime;
+
+        m_Velocity += m_Momentum * Time.deltaTime;
+
+        //Handling Grappling Hook Momentum
+        //TODO: Reapproach momentum to make it feel more satisfying.
         if (m_Momentum.magnitude >= 0f)
         {
-            if (!_controller.isGrounded)
+            if (!bisGrounded)
             {
-                float drag = 3f;
+                float drag = 5f;
                 m_Momentum -= m_Momentum * drag * Time.deltaTime;
             }
-            else if (_controller.isGrounded)
+            else if (bisGrounded)
             {
                 m_Momentum = Vector3.zero;
             }
         }
-    }
+
+        if (bisGrounded && bOnSlope)
+        {
+            bOnSlope = false;
+            m_Gravity.x = 0.0f;
+            m_Gravity.z = 0.0f;
+            m_Velocity.x = 0.0f;
+            m_Velocity.z = 0.0f;
+            _slopeAcceleration = Vector3.zero;
+        }
+
+        //TODO: Test this for edge cases where having a gravity cap feels bad.
+        m_Velocity.y = Mathf.Clamp(m_Velocity.y, -60.0f, 20.0f);
+
+        if(bOnSlope || m_PlayerState == PlayerState.Grappling)
+        {
+            _preJumpVelocity = Vector3.zero;
+        }
+
+        _controller.Move(m_Velocity * Time.deltaTime);
+
+        //Preventing player from bouncing while walking down slope.
+        if (bisGrounded && !_bIsJumping)
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, Vector3.down, out hit, _controller.height / 2 * _slopeForceRayLength))
+                if (hit.normal != Vector3.up)
+                    _controller.Move(Vector3.down * _controller.height / 2 * _slopeForce * Time.deltaTime);
+        }
+
+        #region Grounded Debug
+        if (bDebug)
+        {
+            print("COYOTE TIME: " + _coyoteTime);
+            print("Grounded = " + bisGrounded);
+        }
+        #endregion  
+        }
 
     private bool OnWalkableSlope()
     {
@@ -602,48 +770,6 @@ public class ALTPlayerController : MonoBehaviour
             if (hit.normal != Vector3.up)
                 return true;
         return false;
-    }
-
-    void ApplyGravity()
-    {
-        m_YVelocity += m_Gravity * Time.deltaTime;
-
-        m_Velocity.y = m_YVelocity;
-    }
-
-    void HandleJump()
-    {
-        if (m_ControllerState == ControllerState.Play)
-        {
-            if (_controller.isGrounded)
-            {
-                m_YVelocity = 0f;
-
-                if (CheckForJumpInput())
-                {
-                    m_YVelocity = m_JumpHeight;
-                    GetComponent<AudioManager_Footsteps>().TriggerJump(false);
-                }
-            }
-            else if (!_controller.isGrounded)
-            {
-                if (_controller.collisionFlags.ToString() == "Above")
-                {
-                    m_YVelocity = -2.0f;
-                }
-                if (CheckForJumpInput() == false && m_YVelocity > 0.0f)
-                {
-                    if (m_YVelocity > 0.01f)
-                    {
-                        m_YVelocity *= 0.5f;
-                    }
-                    else
-                    {
-                        m_YVelocity = 0.0f;
-                    }
-                }
-            }
-        }
     }
 
     void HandleEquipmentWheel()
@@ -708,13 +834,13 @@ public class ALTPlayerController : MonoBehaviour
 
     public void ResetGravity()
     {
-        m_YVelocity = 0.0f;
+        m_Velocity.y = 0.0f;
     }
 
     public void ApplyMomentum(Vector3 direction, float speed, float grappleMultiplier, float jumpMultiplier)
     {
-        m_Momentum = direction * speed * grappleMultiplier;
-        m_Momentum += Vector3.up * jumpMultiplier;
+        m_Momentum = direction * grappleMultiplier;
+        bcanJump = true;
     }
 
     public void ChangePlayerState(PlayerState newPlayerState)
