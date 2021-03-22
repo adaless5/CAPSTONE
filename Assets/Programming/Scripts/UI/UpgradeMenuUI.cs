@@ -35,12 +35,18 @@ public class UpgradeMenuUI : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (_player.GetComponent<ALTPlayerController>().CheckForInteract() && _bInMenu == true)
+        if (_player != null)
         {
-            Deactivate();
+            if (_player.GetComponentInChildren<ALTPlayerController>().CheckForInteract() && _bInMenu == true)
+            {
+                Deactivate();
+            }
         }
-
-        DiscriptionText.text = "";
+        else
+        {
+            _player = GameObject.FindGameObjectWithTag("Player");
+        }
+      //  DiscriptionText.text = "";
         for (int i = 0; i < _buttons.Count; i++)
         {
             if (_buttons[i].GetComponent<ButtonHighlight>().IsHighlighted)
@@ -94,7 +100,7 @@ public class UpgradeMenuUI : MonoBehaviour
                     Weapon weapon = item.GetComponent<Weapon>();
                     _weapons.Add(weapon);
 
-                    if (weapon.bIsObtained )
+                    if (weapon.bIsObtained)
                     {
                         ParentsButtons[i].SetActive(true);
                         if (!set)
@@ -109,7 +115,7 @@ public class UpgradeMenuUI : MonoBehaviour
 
             //Set up buttons 
 
-            for(int i = 0; i < (int)WeaponType.NumberOfWeapons; i++)
+            for (int i = 0; i < (int)WeaponType.NumberOfWeapons; i++)
             {
                 for (int j = 0; j < (int)EUpgradeType.NumUpgrades; j++)
                 {
@@ -133,7 +139,7 @@ public class UpgradeMenuUI : MonoBehaviour
             //set up button text
             for (int i = 0; i < _buttons.Count; i++)
             {
-                if(_buttons[i].GetComponentInChildren<TMP_Text>())
+                if (_buttons[i].GetComponentInChildren<TMP_Text>())
                 {
                     _buttons[i].GetComponentInChildren<TMP_Text>().text = _upgrades[i].Title + " - Price: $" + _upgrades[i].UpgradeWorth.ToString();
                 }
@@ -166,7 +172,7 @@ public class UpgradeMenuUI : MonoBehaviour
 
     public void DisplayUpgradeButtons(int index)
     {
-        foreach(GameObject obj in Parents)
+        foreach (GameObject obj in Parents)
         {
             obj.SetActive(false);
         }

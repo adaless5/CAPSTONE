@@ -7,12 +7,12 @@ public class Blade : Equipment, ISaveable
 {
     [SerializeField] int Damage { get; } = 50;
     [SerializeField] float KnockBackForce = 1500f;
+    public float BladeDamage;
     public ALTPlayerController playerController;
-
+    public GameObject BladeObject;
     Animator _animationswing;
     BoxCollider _hitbox;
     bool _bisAttacking;
-
     // Start is called before the first frame update
     public override void Start()
     {
@@ -26,10 +26,9 @@ public class Blade : Equipment, ISaveable
         _bisAttacking = false;
         _animationswing = GetComponent<Animator>();
         _hitbox = GetComponent<BoxCollider>();
-
         _hitbox.enabled = false;
         _hitbox.isTrigger = true;
-        GetComponent<MeshRenderer>().enabled = false;
+        BladeObject.SetActive(false);
 
         
     }
@@ -42,16 +41,18 @@ public class Blade : Equipment, ISaveable
     // Update is called once per frame
     public override void Update()
     {
-        
 
         if (bIsActive && bIsObtained)
         {
-            GetComponent<MeshRenderer>().enabled = true;
+            if(!BladeObject.activeSelf)
+            BladeObject.SetActive(true);
+            //GetComponent<MeshRenderer>().enabled = true;
             UseTool();
         }
         else if (!bIsActive)
         {
-            GetComponent<MeshRenderer>().enabled = false;
+            BladeObject.SetActive(false);
+            //GetComponent<MeshRenderer>().enabled = false;
         }
     }
 
@@ -72,33 +73,14 @@ public class Blade : Equipment, ISaveable
     }
 
     private void OnTriggerEnter(Collider other)
-    {
-        if (other.GetComponentInParent<DestructibleObject>())
-        {
-            DestructibleObject obj = other.GetComponentInParent<DestructibleObject>();
-            if (obj)
-            {
-                obj.Break(gameObject.tag);
-                return;
-            }
-        }
-        ///EP ItemContainer call vvv
-        if (other.GetComponentInParent<ItemContainer>())
-        {
-            ItemContainer obj = other.GetComponentInParent<ItemContainer>();
-            if (obj)
-            {
-                obj.Break(gameObject.tag);
-                return;
-            }
-        }
-        ///EP ItemContainer call ^^^
+    {        
+        
         if (other.GetComponentInParent<Health>())
         {
             Health target = other.transform.GetComponent<Health>();
             if (target != null)
             {
-                target.TakeDamage(Damage);
+                target.TakeDamage(BladeDamage);
             }
         }
         if(other.GetComponent<Rigidbody>())
@@ -111,6 +93,38 @@ public class Blade : Equipment, ISaveable
                 target.AddForce(hitDir.normalized * -KnockBackForce);
             }
         }
+        if (other.GetComponentInParent<DestructibleObject>())
+        {
+            DestructibleObject obj = other.GetComponentInParent<DestructibleObject>();
+            if (obj)
+            {
+                obj.Break(gameObject.tag);
+                //return;
+            }
+        }
+        ///EP ItemContainer call vvv
+        if (other.GetComponentInParent<ItemContainer>())
+        {
+            ItemContainer obj = other.GetComponentInParent<ItemContainer>();
+            if (obj)
+            {
+                obj.Break(gameObject.tag);
+                //return;
+            }
+        }
+        ///EP ItemContainer call ^^^
+        ///EP eyeball call vvv
+        if (other.GetComponentInParent<EyeLight>())
+        {
+            EyeLight eyeball = other.GetComponent<EyeLight>();
+            if (eyeball)
+            {
+                eyeball.Hit();
+               // return;
+            }
+        }
+        ///EP eyeball call ^^^
+
         _hitbox.enabled = false;
     }
 

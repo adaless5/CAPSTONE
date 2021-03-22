@@ -23,6 +23,7 @@ public class SunGlow : MonoBehaviour
 
     ALTPlayerController _playerController;
 
+    GameObject playerObject;
 
     void Start()
     {
@@ -32,6 +33,7 @@ public class SunGlow : MonoBehaviour
         _originalIntensity = _light.intensity;
         _intensity = _originalIntensity; 
         _playerController = FindObjectOfType<ALTPlayerController>();
+        playerObject = GameObject.FindGameObjectWithTag("Player");
     }
 
     void Orbit()
@@ -43,8 +45,9 @@ public class SunGlow : MonoBehaviour
 
 
         float intensityIncrement = Mathf.Sin(Time.time * _PulseSpeed);
-        _lightColor = new Color(_originalLightColor.r + (intensityIncrement * 1.0f * _Brightness), _originalLightColor.g + (intensityIncrement* 0.5f * _Brightness) , _originalLightColor.b + (intensityIncrement* 0.3f * _Brightness) );
-       
+        _lightColor = new Color(_originalLightColor.r + (intensityIncrement * 0.2f * _Brightness), _originalLightColor.g + (intensityIncrement* 0.15f * _Brightness) , _originalLightColor.b + (intensityIncrement* 0.1f * _Brightness) );
+        _lightColor.r += playerObject.transform.position.x * -0.0004f;
+        _lightColor.b += playerObject.transform.position.z * -0.0004f;
         _light.color = _lightColor;
 
     }
@@ -52,7 +55,7 @@ public class SunGlow : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (_playerController != null)
+        if (_playerController != null && playerObject != null)
         {
             if (!_playerController.GetDarknessVolume())
             { Pulse(); }
@@ -61,7 +64,7 @@ public class SunGlow : MonoBehaviour
         }
         else
         {
-
+            playerObject = GameObject.FindGameObjectWithTag("Player");
             _playerController = FindObjectOfType<ALTPlayerController>();
         }
     }

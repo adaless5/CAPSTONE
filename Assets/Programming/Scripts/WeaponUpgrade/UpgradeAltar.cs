@@ -60,10 +60,10 @@ public class UpgradeAltar : MonoBehaviour
 
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
 
-            if (other.gameObject.GetComponentInChildren<UpgradeMenuUI>())
+            if (other.gameObject.GetComponentInChildren<UpgradeMenuUI>() && other.GetComponentInChildren<ALTPlayerController>().CheckForInteract())
             {
                 other.gameObject.GetComponentInChildren<UpgradeMenuUI>()._numUpgradesAllowed = NumberOfPermittedUpgrades;
                 other.gameObject.GetComponentInChildren<UpgradeMenuUI>().Activate();

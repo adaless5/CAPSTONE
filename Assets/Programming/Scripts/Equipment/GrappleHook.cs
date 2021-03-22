@@ -21,15 +21,19 @@ public class GrappleHook : Equipment, ISaveable
 
     public ALTPlayerController m_PlayerController;
     public GameObject m_GrappleMarker;
+    public GameObject m_GrappleGun;
+    public GameObject m_GrappleCable;
     MeshRenderer m_SpriteRenderer;
 
     void Awake()
     {
         LoadDataOnSceneEnter();
 
-        gameObject.GetComponentInChildren<MeshRenderer>().enabled = false;
+        //gameObject.GetComponentInChildren<MeshRenderer>().enabled = false;
         m_SpriteRenderer = m_GrappleMarker.GetComponentInChildren<MeshRenderer>();
         m_GrappleMarker.SetActive(false);
+        m_GrappleGun.SetActive(false);
+        m_GrappleCable.SetActive(false);
     }
 
     public override void Start()
@@ -41,6 +45,8 @@ public class GrappleHook : Equipment, ISaveable
     {
         if (bIsActive && bIsObtained)
         {
+
+            m_GrappleGun.SetActive(true);
             switch (m_PlayerController.m_PlayerState)
             {
                 case ALTPlayerController.PlayerState.Idle:
@@ -56,6 +62,7 @@ public class GrappleHook : Equipment, ISaveable
                     HandleGrappleHookDeployed();
                     break;
             }
+
         }
     }
 
@@ -68,18 +75,19 @@ public class GrappleHook : Equipment, ISaveable
             Vector3 camPos = m_PlayerController._camera.transform.position;
             Vector3 camForwardVec = m_PlayerController._camera.transform.forward;
 
-            int playermask = 1 << 9;
-            int triggermask = 1 << 18;
-            int terrainmask = 1 << 19;
+          //  int playermask = 1 << 9;
+          //  int triggermask = 1 << 18;
+          //  int terrainmask = 1 << 19;
 
-            if (Physics.Raycast(camPos, camForwardVec, out RaycastHit raycastHit, MAX_GRAPPLE_DIST, ~(playermask | triggermask | terrainmask)))
+            if (Physics.Raycast(camPos, camForwardVec, out RaycastHit raycastHit, MAX_GRAPPLE_DIST/*, ~(playermask | triggermask | terrainmask)*/))
             {
                 if (Vector3.Distance(raycastHit.point, camPos) >= MIN_GRAPPLE_DIST)
                 {
+                    m_GrappleCable.SetActive(true);
                     m_GrappleTarget = raycastHit.point;
                     m_GrappleHookLength = 0.0f;
-                    m_GrappleHookTransform.gameObject.SetActive(true);
-                    m_GrappleHookTransform.localScale = Vector3.zero;
+                    //m_GrappleHookTransform.gameObject.SetActive(true);
+                    //m_GrappleHookTransform.localScale = Vector3.zero;
 
                     if (raycastHit.collider.gameObject.tag == "Enemy")
                     {
@@ -98,19 +106,21 @@ public class GrappleHook : Equipment, ISaveable
                     GetComponent<AudioManager_Grapple>().TriggerShot();
                 }
             }
+
         }
     }
 
     void HandleGrappleHookDeployed()
     {
         m_GrappleMarker.SetActive(false);
-        gameObject.GetComponentInChildren<MeshRenderer>().enabled = true;
+        m_GrappleCable.SetActive(true);
+        //  gameObject.GetComponentInChildren<MeshRenderer>().enabled = true;
 
         m_GrappleHookTransform.LookAt(m_GrappleTarget);
 
         m_GrappleHookLength += m_GrappleDeploySpeed * Time.deltaTime;
 
-        m_GrappleHookTransform.localScale = new Vector3(1, 1, m_GrappleHookLength);
+        m_GrappleCable.transform.localScale = new Vector3(1, m_GrappleHookLength*0.5f, 1);
 
         if (m_GrappleHookLength >= Vector3.Distance(m_PlayerPosition.position, m_GrappleTarget))
         {
@@ -160,11 +170,11 @@ public class GrappleHook : Equipment, ISaveable
         Vector3 camForwardVec = m_PlayerController._camera.transform.forward;
         if (bIsActive && bIsObtained)
         {
-            int playermask = 1 << 9;
-            int triggermask = 1 << 11;
-            int terrainmask = 1 << 16;
+          //  int playermask = 1 << 9;
+          //  int triggermask = 1 << 11;
+          //  int terrainmask = 1 << 16;
 
-            if (Physics.Raycast(camPos, camForwardVec, out RaycastHit raycastHit, MAX_GRAPPLE_DIST, ~(playermask | triggermask | terrainmask)))
+            if (Physics.Raycast(camPos, camForwardVec, out RaycastHit raycastHit, MAX_GRAPPLE_DIST/*, ~(playermask | triggermask | terrainmask)*/))
             {
                 if (Vector3.Distance(raycastHit.point, camPos) >= MIN_GRAPPLE_DIST)
                 {
@@ -186,6 +196,10 @@ public class GrappleHook : Equipment, ISaveable
                     m_GrappleMarker.SetActive(false);
                     print(m_GrappleMarker.activeSelf);
                 }
+                if (raycastHit.collider.gameObject.tag == "NoGrapple")
+                {
+                    m_GrappleMarker.SetActive(false);
+                }
             }
             else
             {
@@ -202,15 +216,22 @@ public class GrappleHook : Equipment, ISaveable
         GetComponent<AudioManager_Grapple>().TriggerClick();
         //
 
+        //m_GrappleCable.SetActive(false);
         m_PlayerController.ResetGravity();
         m_PlayerController.ChangePlayerState(ALTPlayerController.PlayerState.Idle);
-        m_GrappleHookTransform.localScale = Vector3.zero;
-        gameObject.GetComponentInChildren<MeshRenderer>().enabled = false;
-        m_GrappleMarker.SetActive(false);
+        m_GrappleHookTransform.localEulerAngles = Vector3.zero;
+
+        m_GrappleCable.SetActive(false);
+        m_GrappleCable.transform.localScale = new Vector3(1, 1, 1);
+
+        //gameObject.GetComponentInChildren<MeshRenderer>().enabled = false;
     }
 
     public override void Deactivate()
     {
+        m_GrappleGun.SetActive(false);
+        m_GrappleCable.SetActive(false);
+        m_GrappleMarker.SetActive(false);
         base.Deactivate();
         DeactivateGrappleHook();
     }

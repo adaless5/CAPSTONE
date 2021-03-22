@@ -26,14 +26,15 @@ public class LeapingEnemyProjectile : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.transform.parent != null)
+        if (collision.gameObject.transform.parent == null)
         {
-            if (collision.gameObject.transform.parent.tag == "Player")
+            if (collision.gameObject.GetComponentInParent<ALTPlayerController>() || collision.gameObject.GetComponentInParent<WeaponBelt>() )
             {
 
-                collision.gameObject.transform.parent.GetComponent<ALTPlayerController>().CallOnTakeDamage(_ProjectileDamage);
+                FindObjectOfType<ALTPlayerController>().CallOnTakeDamage(_ProjectileDamage);
 
             }
+            Debug.Log(collision.gameObject.transform.parent.tag);
         }
         _bIsSplatting = true;
         _splatParticle.transform.position = transform.position;

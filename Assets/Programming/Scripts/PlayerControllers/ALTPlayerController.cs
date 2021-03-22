@@ -431,9 +431,15 @@ public class ALTPlayerController : MonoBehaviour
         if (m_armor.GetCurrentArmor() > 0)
         {
             m_armor.TakeDamage(damage);
+            if (m_armor.GetCurrentArmor() > 0)
+                GetComponentInChildren<VisorHitEffects>().ShieldHit();
+            else
+                GetComponentInChildren<VisorHitEffects>().ShieldBreak();
+
         }
         else
         {
+            GetComponentInChildren<VisorHitEffects>().HealthHit();
             m_health.TakeDamage(damage);
         }
     }
