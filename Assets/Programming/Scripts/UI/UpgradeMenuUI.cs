@@ -133,13 +133,21 @@ public class UpgradeMenuUI : MonoBehaviour
             //set up button text
             for (int i = 0; i < _buttons.Count; i++)
             {
-                if(_buttons[i].GetComponentInChildren<TMP_Text>())
+                TMP_Text[] txts = _buttons[i].GetComponentsInChildren<TMP_Text>();
+                foreach (TMP_Text obj in txts)
                 {
-                    _buttons[i].GetComponentInChildren<TMP_Text>().text = _upgrades[i].Title + " - Price: $" + _upgrades[i].UpgradeWorth.ToString();
+                    if (obj.name == "UpgradeName")
+                    {
+                        obj.text = _upgrades[i].Title;
+                    }
+                    else if(obj.name == "Price")
+                    {
+                        obj.text = _upgrades[i].UpgradeWorth.ToString();
+                    }
                 }
             }
 
-            CurrentCurrencyText.text = "Current currency: $" + _player.GetComponent<ALTPlayerController>().m_UpgradeCurrencyAmount.ToString();
+            CurrentCurrencyText.text = _player.GetComponent<ALTPlayerController>().m_UpgradeCurrencyAmount.ToString();
 
             hasButtonListeners = true;
 
@@ -177,7 +185,7 @@ public class UpgradeMenuUI : MonoBehaviour
     private void UpdateUI(int index)
     {
         _buttons[index].gameObject.SetActive(false);
-        CurrentCurrencyText.text = "Current currency: $" + _player.GetComponent<ALTPlayerController>().m_UpgradeCurrencyAmount.ToString();
+        CurrentCurrencyText.text = _player.GetComponent<ALTPlayerController>().m_UpgradeCurrencyAmount.ToString();
     }
 
     private bool CheckHasUpgrade(int weapon, int upgrade)
@@ -200,14 +208,14 @@ public class UpgradeMenuUI : MonoBehaviour
     {
         if (_upgrades[upgradeindex].UpgradeWorth <= _player.GetComponent<ALTPlayerController>().m_UpgradeCurrencyAmount)
         {
-            Debug.Log(_upgrades[upgradeindex].UpgradeWorth.ToString());
-            Debug.Log(_player.GetComponent<ALTPlayerController>().m_UpgradeCurrencyAmount.ToString());
-            Debug.Log("can buy");
+            //Debug.Log(_upgrades[upgradeindex].UpgradeWorth.ToString());
+            //Debug.Log(_player.GetComponent<ALTPlayerController>().m_UpgradeCurrencyAmount.ToString());
+            //Debug.Log("can buy");
             return true;
         }
-        Debug.Log(_upgrades[upgradeindex].UpgradeWorth.ToString());
-        Debug.Log(_player.GetComponent<ALTPlayerController>().m_UpgradeCurrencyAmount.ToString());
-        Debug.Log("cant buy");
+        //Debug.Log(_upgrades[upgradeindex].UpgradeWorth.ToString());
+        //Debug.Log(_player.GetComponent<ALTPlayerController>().m_UpgradeCurrencyAmount.ToString());
+        //Debug.Log("cant buy");
         return false;
     }
 
