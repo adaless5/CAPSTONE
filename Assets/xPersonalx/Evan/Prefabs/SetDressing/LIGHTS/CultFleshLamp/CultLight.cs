@@ -9,7 +9,12 @@ public class CultLight : MonoBehaviour
     public GameObject Lamp;
     public GameObject Armor;
 
-    public float floatingOffset;
+    public float BobLength;
+    public float BobSpeed;
+    public float BodySpinSpeed;
+    public float BladeSpinSpeed;
+
+    float floatingOffset;
     Vector3 OriginalPosition;
     void Start()
     {
@@ -21,8 +26,8 @@ public class CultLight : MonoBehaviour
 
     void Float()
     {
-        transform.position = new Vector3(OriginalPosition.x,OriginalPosition.y + (2  * Mathf.Sin(floatingOffset)), OriginalPosition.z);
-        floatingOffset += Time.deltaTime;
+        transform.position = new Vector3(OriginalPosition.x,OriginalPosition.y + (BobLength * Mathf.Sin(floatingOffset)), OriginalPosition.z);
+        floatingOffset += Time.deltaTime * BobSpeed;
         if(floatingOffset>6.32f)
         {
             floatingOffset = 0.0f;
@@ -31,8 +36,8 @@ public class CultLight : MonoBehaviour
 
     void RotateArmor()
     {
-        Armor.transform.Rotate(0.0f, 0.0f, 10.0f * Time.deltaTime);
-        Lamp.transform.Rotate(0.0f, 0.0f, -10.0f * Time.deltaTime);
+        Armor.transform.Rotate(0.0f, 0.0f, BladeSpinSpeed * Time.deltaTime);
+        Lamp.transform.Rotate(0.0f, 0.0f, -BodySpinSpeed * Time.deltaTime);
     }
 
     // Update is called once per frame

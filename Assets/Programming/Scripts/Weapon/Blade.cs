@@ -12,6 +12,7 @@ public class Blade : Equipment, ISaveable
     Animator _animationswing;
     BoxCollider _hitbox;
     bool _bisAttacking;
+    public float BladeDamage;
 
     // Start is called before the first frame update
     public override void Start()
@@ -106,12 +107,23 @@ public class Blade : Equipment, ISaveable
             }
         }
         ///EP ItemContainer call ^^^
+        ///EP Eyelight call vvv
+        if (other.GetComponentInParent<EyeLight>())
+        {
+            EyeLight obj = other.GetComponentInParent<EyeLight>();
+            if (obj)
+            {
+                obj.Hit();
+                return;
+            }
+        }
+        ///EP EYelight call ^^^
         if (other.GetComponentInParent<Health>())
         {
             Health target = other.transform.GetComponent<Health>();
             if (target != null)
             {
-                target.TakeDamage(Damage);
+                target.TakeDamage(BladeDamage);
             }
         }
         if(other.GetComponent<Rigidbody>())
