@@ -127,14 +127,15 @@ public class Blade : Equipment, ISaveable
             {
                 target.TakeDamage(Damage);
             }
+
             if (other.GetComponent<Rigidbody>())
             {
-                Rigidbody target = other.transform.GetComponent<Rigidbody>();
+                Rigidbody bodytarget = other.transform.GetComponent<Rigidbody>();
 
-                if (target != null)
+                if (bodytarget != null)
                 {
-                    Vector3 hitDir = playerController.transform.position - target.transform.position;
-                    target.AddForce(hitDir.normalized * -KnockBackForce);
+                    Vector3 hitDir = playerController.transform.position - bodytarget.transform.position;
+                    bodytarget.AddForce(hitDir.normalized * -KnockBackForce);
                 }
             }
         }
