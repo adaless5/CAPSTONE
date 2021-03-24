@@ -107,15 +107,25 @@ public class Blade : Equipment, ISaveable
                     return;
                 }
             }
-            ///EP ItemContainer call ^^^
-            if (other.GetComponentInParent<Health>())
+        }
+        ///EP ItemContainer call ^^^
+        ///EP Eyelight call vvv
+        if (other.GetComponentInParent<EyeLight>())
+        {
+            EyeLight obj = other.GetComponentInParent<EyeLight>();
+            if (obj)
             {
-                Health target = other.transform.GetComponent<Health>();
-                if (target != null)
-                {
-                    if (target.tag != "Player")
-                        target.TakeDamage(Damage);
-                }
+                obj.Hit();
+                return;
+            }
+        }
+        ///EP EYelight call ^^^
+        if (other.GetComponentInParent<Health>())
+        {
+            Health target = other.transform.GetComponent<Health>();
+            if (target != null)
+            {
+                target.TakeDamage(Damage);
             }
             if (other.GetComponent<Rigidbody>())
             {
