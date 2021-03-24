@@ -346,20 +346,6 @@ public class ALTPlayerController : MonoBehaviour
             gameObject.transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(new Vector3(0, 0, 100)), Time.deltaTime * 5.0f);
     }
 
-    //private void LateUpdate()
-    //{
-    //    switch (m_ControllerState)
-    //    {
-    //        case ControllerState.Play:
-    //            PlayerRotation();
-    //            if (_cameraBehaviour != null)
-    //                _cameraBehaviour.SetIsInMenu(false);
-    //            break;
-
-    //    }
-
-    //}
-
     private void OnEnable()
     {
         _controls.Enable();
@@ -601,18 +587,20 @@ public class ALTPlayerController : MonoBehaviour
             bIsMoving = true;
             _lastMoveVelocity = movement;
 
-            if (!_bIsJumping)
-            {
-                if (_cameraBehaviour != null)
-                    _cameraBehaviour.SetIsWalking(true);
-            }
+            //TODO: Figure out Why Camera behaviour is bugging out.
+            //if (!_bIsJumping)
+            //{
+            //    if (_cameraBehaviour != null)
+            //        _cameraBehaviour.SetIsWalking(true);
+            //}
         }
         else
         {
             bIsMoving = false;
 
-            if (_cameraBehaviour != null)
-                _cameraBehaviour.SetIsWalking(false);
+            //TODO: Figure out Why Camera behaviour is bugging out.
+            //if (_cameraBehaviour != null)
+            //    _cameraBehaviour.SetIsWalking(false);
         }
 
         if (!bDidJump)
@@ -764,7 +752,7 @@ public class ALTPlayerController : MonoBehaviour
         }
         #endregion
     }
-
+    
     private bool OnWalkableSlope()
     {
         if (_bIsJumping)
