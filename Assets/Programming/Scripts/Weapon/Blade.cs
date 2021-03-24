@@ -5,14 +5,14 @@ using UnityEngine;
 
 public class Blade : Equipment, ISaveable
 {
-    [SerializeField] int Damage { get; } = 50;
+    [SerializeField] int Damage { get; } = 25;
     [SerializeField] float KnockBackForce = 1500f;
     public ALTPlayerController playerController;
 
     Animator _animationswing;
     BoxCollider _hitbox;
     bool _bisAttacking;
-    public float BladeDamage;
+    GameObject prevHit;
 
     // Start is called before the first frame update
     public override void Start()
@@ -71,39 +71,41 @@ public class Blade : Equipment, ISaveable
 
     public override void UseTool()
     {
-        if (playerController.CheckForUseEquipmentInput() && _bisAttacking == false)
+        if(playerController.CheckForUseEquipmentInput() && _animationswing.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
         {
-            _animationswing.SetTrigger("Swing");
-            _hitbox.enabled = true;
-            _bisAttacking = true;
+            _animationswing.SetBool("attacking", true);
         }
-        else if (playerController.CheckForUseEquipmentInput() == false && _bisAttacking == true)
+        if(_animationswing.GetCurrentAnimatorStateInfo(0).IsName("BladeAttacking"))
         {
-            _hitbox.enabled = false;
-            _bisAttacking = false;
+            _animationswing.SetBool("attacking", false);
         }
 
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.GetComponentInParent<DestructibleObject>())
+        Debug.Log(other.gameObject.name);
+        if (prevHit != other.gameObject && other.tag != "Player")
         {
-            DestructibleObject obj = other.GetComponentInParent<DestructibleObject>();
-            if (obj)
+            prevHit = other.gameObject;
+            if (other.GetComponentInParent<DestructibleObject>())
             {
-                obj.Break(gameObject.tag);
-                return;
+                DestructibleObject obj = other.GetComponentInParent<DestructibleObject>();
+                if (obj)
+                {
+                    obj.Break(gameObject.tag);
+                    return;
+                }
             }
-        }
-        ///EP ItemContainer call vvv
-        if (other.GetComponentInParent<ItemContainer>())
-        {
-            ItemContainer obj = other.GetComponentInParent<ItemContainer>();
-            if (obj)
+            ///EP ItemContainer call vvv
+            if (other.GetComponentInParent<ItemContainer>())
             {
-                obj.Break(gameObject.tag);
-                return;
+                ItemContainer obj = other.GetComponentInParent<ItemContainer>();
+                if (obj)
+                {
+                    obj.Break(gameObject.tag);
+                    return;
+                }
             }
         }
         ///EP ItemContainer call ^^^
@@ -123,20 +125,19 @@ public class Blade : Equipment, ISaveable
             Health target = other.transform.GetComponent<Health>();
             if (target != null)
             {
-                target.TakeDamage(BladeDamage);
+                target.TakeDamage(Damage);
             }
-        }
-        if(other.GetComponent<Rigidbody>())
-        {
-            Rigidbody target = other.transform.GetComponent<Rigidbody>();
-
-            if (target != null)
+            if (other.GetComponent<Rigidbody>())
             {
-                Vector3 hitDir = playerController.transform.position - target.transform.position;
-                target.AddForce(hitDir.normalized * -KnockBackForce);
+                Rigidbody target = other.transform.GetComponent<Rigidbody>();
+
+                if (target != null)
+                {
+                    Vector3 hitDir = playerController.transform.position - target.transform.position;
+                    target.AddForce(hitDir.normalized * -KnockBackForce);
+                }
             }
         }
-        _hitbox.enabled = false;
     }
 
     public void LoadDataOnSceneEnter()

@@ -64,6 +64,11 @@ public class ItemContainer : MonoBehaviour
         CheckPlayerEquipment();
         AmmoController ammoController = GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<AmmoController>();
 
+        if (PossiblePickupsTags.Count <= 0) //Edge case: when player has nothing but the blade it wouldnt have anything in the array. NG
+        {
+            PossiblePickupsTags.Add(" ");
+        }
+
         int randint = Random.Range(0, PossiblePickupsTags.Count);
 
         if (PossiblePickupsTags[randint] == "Player_Weapon"/* && !ammoController.IsAmmoFullOfType("Player_Weapon")*/ )
@@ -100,6 +105,7 @@ public class ItemContainer : MonoBehaviour
             pickup.isStatic = false;
             pickup.SetActive(true);
         }
+
     }
     public void Break(string tag)
     {
