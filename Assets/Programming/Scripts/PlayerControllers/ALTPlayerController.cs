@@ -346,20 +346,6 @@ public class ALTPlayerController : MonoBehaviour
             gameObject.transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(new Vector3(0, 0, 100)), Time.deltaTime * 5.0f);
     }
 
-    //private void LateUpdate()
-    //{
-    //    switch (m_ControllerState)
-    //    {
-    //        case ControllerState.Play:
-    //            PlayerRotation();
-    //            //if (_cameraBehaviour != null)
-    //            //    _cameraBehaviour.SetIsInMenu(false);
-    //            break;
-
-    //    }
-
-    //}
-
     private void OnEnable()
     {
         _controls.Enable();
@@ -367,7 +353,7 @@ public class ALTPlayerController : MonoBehaviour
 
     private void OnDisable()
     {
- 
+
     }
 
     private void PlayerPause()
@@ -412,9 +398,15 @@ public class ALTPlayerController : MonoBehaviour
         if (m_armor.GetCurrentArmor() > 0)
         {
             m_armor.TakeDamage(damage);
+            if (m_armor.GetCurrentArmor() > 0)
+                GetComponentInChildren<VisorHitEffects>().ShieldHit();
+            else
+                GetComponentInChildren<VisorHitEffects>().ShieldBreak();
+
         }
         else
         {
+            GetComponentInChildren<VisorHitEffects>().HealthHit();
             m_health.TakeDamage(damage);
         }
     }
@@ -760,14 +752,7 @@ public class ALTPlayerController : MonoBehaviour
         }
         #endregion
     }
-
-    //public void PlayerMovement()
-    //{
-    //    //Using Player Input to Calculate movement vector and applying movement
-    //    Vector3 movement = ((transform.right * _movement.x) + (transform.forward * _movement.y));
-
-    //    _controller.SimpleMove(movement * Time.deltaTime * m_MoveSpeed);
-    //}
+    
     private bool OnWalkableSlope()
     {
         if (_bIsJumping)

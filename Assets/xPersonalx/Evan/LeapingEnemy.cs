@@ -19,7 +19,6 @@ public class LeapingEnemy : MonoBehaviour
 
     Rigidbody _rigidBody;
 
-
     public float _TouchDamage;
 
     public float _AttackJumpSpeed;
@@ -71,9 +70,9 @@ public class LeapingEnemy : MonoBehaviour
             {
                 _behaviourState = BehaviourState.Wander;
             }
-            else
+            else if (IsGrounded())
             {
-                Leap(_AttackJumpSpeed);
+                Leap(_WanderJumpSpeed);
                 _currentGoHomeJumpTime = Random.Range(_fullGoHomeJumpTimeRange.x, _fullGoHomeJumpTimeRange.y);
             }
         }
@@ -130,7 +129,6 @@ public class LeapingEnemy : MonoBehaviour
         _rigidBody = GetComponent<Rigidbody>();
         _currentIdleTime = Random.Range(_fullIdleTimeRange.x, _fullIdleTimeRange.y);
         _LeapingEnemyProjectile.gameObject.SetActive(false);
-
         _currentFollowJumpTime = Random.Range(_fullFollowJumpTimeRange.x, _fullFollowJumpTimeRange.y);
         _currentGoHomeJumpTime = Random.Range(_fullGoHomeJumpTimeRange.x, _fullGoHomeJumpTimeRange.y);
     }
@@ -151,7 +149,7 @@ public class LeapingEnemy : MonoBehaviour
     bool IsGrounded()
     {
         //Debug.DrawRay(transform.position, -Vector3.up * 1.1f);
-        return Physics.Raycast(transform.position, -Vector3.up, 1.0f + 0.3f);
+        return Physics.Raycast(transform.position, -Vector3.up, 1.0f);
     
     }
     void Leap(float baseSpeed)
