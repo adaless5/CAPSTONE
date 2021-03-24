@@ -34,7 +34,7 @@ public class LeapingEnemyProjectile : MonoBehaviour
                 FindObjectOfType<ALTPlayerController>().CallOnTakeDamage(_ProjectileDamage);
 
             }
-            Debug.Log(collision.gameObject.transform.parent.tag);
+           // Debug.Log(collision.gameObject.transform.parent.tag);
         }
         _bIsSplatting = true;
         _splatParticle.transform.position = transform.position;
