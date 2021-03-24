@@ -47,8 +47,6 @@ public class Blade : Equipment, ISaveable
     // Update is called once per frame
     public override void Update()
     {
-        
-
         if (bIsActive && bIsObtained)
         {
             MeshRenderer[] meshs = GetComponentsInChildren<MeshRenderer>();
@@ -79,7 +77,6 @@ public class Blade : Equipment, ISaveable
         {
             _animationswing.SetBool("attacking", false);
         }
-
     }
 
     private void OnTriggerEnter(Collider other)
