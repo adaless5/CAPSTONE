@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class HealthPickup : MonoBehaviour
 {
     public float m_healAmount = 20f;
-    Pickup m_healthPickup;
 
     public Compass m_compass;
     public CompassMarkers m_marker;
@@ -27,7 +26,7 @@ public class HealthPickup : MonoBehaviour
     {
         try
         {
-            m_healthPickup = GetComponent<Pickup>();
+           // m_healthPickup = GetComponent<Pickup>();
             m_compass = FindObjectOfType<Compass>();
             m_marker = GetComponent<CompassMarkers>();
             if (m_marker != null)
@@ -42,7 +41,7 @@ public class HealthPickup : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         Health playerHP = other.GetComponent<Health>();
-        if (playerHP && m_healthPickup != null)
+        if (playerHP)
         {
             if (!playerHP.IsAtFullHealth())
             {

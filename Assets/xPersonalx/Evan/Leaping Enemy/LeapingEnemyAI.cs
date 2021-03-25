@@ -56,6 +56,12 @@ public class LeapingEnemyAI : MonoBehaviour
         {
             _currentState = _currentState.Process();
         }
+        else
+        {
+            _playerReference = GameObject.FindGameObjectWithTag("Player");
+            if(_playerReference)
+            _currentState = new LeapingEnemyWanderState(gameObject, gameObject.GetComponent<LeapingEnemyAI>(), _playerReference.transform);
+        }
         MoveEyes();
     }
     void MoveEyes()

@@ -30,7 +30,9 @@ public class UpgradeMenuUI : MonoBehaviour
     {
         _weapons = new List<Weapon>();
         _buttons = new List<Button>();
-        EventBroker.OnPlayerSpawned += PlayerSpawned;
+        //EventBroker.OnPlayerSpawned += PlayerSpawned; this was misbehaving so added the line below EP
+
+        _player = GameObject.FindGameObjectWithTag("Player");
     }
 
     void PlayerSpawned(GameObject player)
@@ -40,10 +42,18 @@ public class UpgradeMenuUI : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (_player.GetComponent<ALTPlayerController>().CheckForInteract() && _bInMenu == true)
+        if (_player != null)
         {
-            Deactivate();
+            if (_player.GetComponentInChildren<ALTPlayerController>().CheckForInteract() && _bInMenu == true)
+            {
+                Deactivate();
+            }
         }
+        else
+        {
+            _player = GameObject.FindGameObjectWithTag("Player");
+        }
+
 
         if (DiscriptionText != null)
         {
@@ -63,7 +73,7 @@ public class UpgradeMenuUI : MonoBehaviour
     {
         if (upgradeamt <= _numUpgradesAllowed)
         {
-            UpgradeMenu.SetActive(true);
+           // UpgradeMenu.SetActive(true);
             _bInMenu = true;
             Time.timeScale = 0f;
             Cursor.lockState = CursorLockMode.None;
@@ -75,7 +85,7 @@ public class UpgradeMenuUI : MonoBehaviour
 
     public void Deactivate()
     {
-        UpgradeMenu.SetActive(false);
+        //UpgradeMenu.SetActive(false);
         _bInMenu = false;
         Time.timeScale = 1f;
         Cursor.lockState = CursorLockMode.Locked;
