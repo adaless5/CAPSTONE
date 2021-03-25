@@ -48,12 +48,21 @@ ModelImporter:
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
     importConstraints: 0
-    animationCompression: 1
+    animationCompression: 3
     animationRotationError: 0.5
     animationPositionError: 0.5
     animationScaleError: 0.5
     animationWrapMode: 0
-    extraExposedTransformPaths: []
+    extraExposedTransformPaths:
+    - Blade
+    - FaceMask
+    - Foot
+    - LowerLeg
+    - PelvicGuard
+    - Pelvis
+    - UpperBody
+    - UpperLeg
+    - WaistBand
     extraUserProperties: []
     clipAnimations: []
     isReadable: 0
@@ -102,7 +111,57 @@ ModelImporter:
   humanDescription:
     serializedVersion: 3
     human: []
-    skeleton: []
+    skeleton:
+    - name: RoamingEnemy(Clone)
+      parentName: 
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: UpperBody
+      parentName: RoamingEnemy(Clone)
+      position: {x: -0.0000000047683715, y: 0, z: 0}
+      rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071068}
+      scale: {x: 1, y: 1, z: 1}
+    - name: WaistBand
+      parentName: RoamingEnemy(Clone)
+      position: {x: 0.048094362, y: 1.2237892, z: -0.13476449}
+      rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071068}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Pelvis
+      parentName: RoamingEnemy(Clone)
+      position: {x: -0, y: 0.87685, z: -0.027159896}
+      rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071068}
+      scale: {x: 1, y: 1, z: 1}
+    - name: PelvicGuard
+      parentName: RoamingEnemy(Clone)
+      position: {x: -0, y: 0.81553936, z: 0.044876363}
+      rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071068}
+      scale: {x: 1, y: 1, z: 1}
+    - name: UpperLeg
+      parentName: RoamingEnemy(Clone)
+      position: {x: 0.0000000047683715, y: 0.7888203, z: -0.051626395}
+      rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071068}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Blade
+      parentName: RoamingEnemy(Clone)
+      position: {x: 0.51961106, y: 1.3048446, z: 0.07694266}
+      rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071068}
+      scale: {x: 1, y: 1, z: 1}
+    - name: FaceMask
+      parentName: RoamingEnemy(Clone)
+      position: {x: -0, y: 1.5770651, z: 0.066872016}
+      rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071068}
+      scale: {x: 1, y: 1, z: 1}
+    - name: LowerLeg
+      parentName: RoamingEnemy(Clone)
+      position: {x: -0, y: 0.54882044, z: -0.0954264}
+      rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071068}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Foot
+      parentName: RoamingEnemy(Clone)
+      position: {x: 1.8977454e-10, y: 0.07337364, z: -0.011592359}
+      rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071068}
+      scale: {x: 1, y: 1, z: 1}
     armTwist: 0.5
     foreArmTwist: 0.5
     upperLegTwist: 0.5
@@ -113,7 +172,7 @@ ModelImporter:
     globalScale: 1
     rootMotionBoneName: Foot
     hasTranslationDoF: 0
-    hasExtraRoot: 0
+    hasExtraRoot: 1
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   autoGenerateAvatarMappingIfUnspecified: 1
