@@ -5,17 +5,17 @@ using UnityEngine;
 public class LeapingEnemyAttackBox : MonoBehaviour
 {
     // Start is called before the first frame update
-    LeapingEnemy _owningEnemy;
+    LeapingEnemyAI _owningEnemy;
     // Start is called before the first frame update
     void Start()
     {
-        _owningEnemy = transform.parent.gameObject.GetComponent<LeapingEnemy>();
+        _owningEnemy = transform.parent.gameObject.GetComponent<LeapingEnemyAI>();
     }
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Player")
         {
-            _owningEnemy._behaviourState = LeapingEnemy.BehaviourState.Attack;
+            _owningEnemy._playerDistance = LeapingEnemyAI.PlayerDistance.attack;
         }
     }
     private void OnTriggerExit(Collider other)
@@ -23,7 +23,7 @@ public class LeapingEnemyAttackBox : MonoBehaviour
 
         if (other.gameObject.tag == "Player")
         {
-            _owningEnemy._behaviourState = LeapingEnemy.BehaviourState.Follow;
+            _owningEnemy._playerDistance = LeapingEnemyAI.PlayerDistance.follow;
         }
     }
     // Update is called once per frame
@@ -31,7 +31,7 @@ public class LeapingEnemyAttackBox : MonoBehaviour
     {
         if (_owningEnemy == null)
         {
-            _owningEnemy = transform.parent.gameObject.GetComponent<LeapingEnemy>();
+            _owningEnemy = transform.parent.gameObject.GetComponent<LeapingEnemyAI>();
         }
     }
 }

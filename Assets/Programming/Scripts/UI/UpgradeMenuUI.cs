@@ -30,7 +30,12 @@ public class UpgradeMenuUI : MonoBehaviour
     {
         _weapons = new List<Weapon>();
         _buttons = new List<Button>();
-        _player = GameObject.FindGameObjectWithTag("Player");
+        EventBroker.OnPlayerSpawned += PlayerSpawned;
+    }
+
+    void PlayerSpawned(GameObject player)
+    {
+        _player = player;
     }
 
     private void LateUpdate()
@@ -40,13 +45,16 @@ public class UpgradeMenuUI : MonoBehaviour
             Deactivate();
         }
 
-        DiscriptionText.text = "";
-        for (int i = 0; i < _buttons.Count; i++)
+        if (DiscriptionText != null)
         {
-            if (_buttons[i].GetComponent<ButtonHighlight>().IsHighlighted)
+            DiscriptionText.text = "";
+            for (int i = 0; i < _buttons.Count; i++)
             {
-                DiscriptionText.text = _upgrades[i].Discription;
-                break;
+                if (_buttons[i].GetComponent<ButtonHighlight>().IsHighlighted)
+                {
+                    DiscriptionText.text = _upgrades[i].Discription;
+                    break;
+                }
             }
         }
     }
