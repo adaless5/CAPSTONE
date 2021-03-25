@@ -53,7 +53,7 @@ public class DroneAttack : DroneState
         _shootTimer -= Time.deltaTime;
         Vector3 bulletDeviation = Random.insideUnitCircle * _maxDeviation;
         Quaternion rot = Quaternion.LookRotation(Vector3.forward * _bulletRange + bulletDeviation);
-        Vector3 finalFowardVector = _currentEnemy.transform.rotation * rot * Vector3.forward;
+        Vector3 finalFowardVector = _currentEnemy.transform.rotation * Vector3.forward;
         //Vector3 finalFowardVector = _currentEnemy.transform.rotation * Vector3.forward;
         finalFowardVector += _currentEnemy.transform.position;
         RaycastHit hit;
@@ -62,21 +62,21 @@ public class DroneAttack : DroneState
         Debug.DrawRay(_currentEnemy.transform.forward, playerDir * _shootDistance, Color.green);
         if (_shootTimer <= 0)
         {
-            //if (Physics.Raycast(finalFowardVector, playerDir * _shootDistance, out hit, _shootDistance))
-            //{
-            //    if (hit.transform.tag == "Player")
-            //    {
-            //        Debug.Log("Player hit");
-            //        _playerPos.gameObject.GetComponent<ALTPlayerController>().CallOnTakeDamage(_enemyDamage);
-            //    }
-            //    else
-            //    {
-            //        Debug.Log("Player not hit");
-            //    }
-            //}
-
-            GameObject tempbullet = GameObject.Instantiate(_droneProjectile, playerDir, Quaternion.identity, _currentEnemy.transform);
-            tempbullet.GetComponent<Rigidbody>().AddForce(playerDir * _shootDistance, ForceMode.Impulse);
+            if (Physics.Raycast(finalFowardVector, playerDir * _shootDistance, out hit, _shootDistance))
+            {
+                if (hit.transform.tag == "Player")
+                {
+                    Debug.Log("Player hit");
+                    _playerPos.gameObject.GetComponent<ALTPlayerController>().CallOnTakeDamage(_enemyDamage);
+                }
+                else
+                {
+                    Debug.Log("Player not hit");
+                }
+            }
+            //Debug.Log("Spawn Bullet");
+            //GameObject tempbullet = GameObject.Instantiate(_droneProjectile, finalFowardVector, Quaternion.identity, _currentEnemy.transform);
+            //tempbullet.GetComponent<Rigidbody>().AddForce(playerDir * _shootDistance, ForceMode.Impulse);
             _shootTimer = 0.5f;
         }
     }
