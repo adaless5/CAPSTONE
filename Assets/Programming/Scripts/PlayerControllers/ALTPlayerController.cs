@@ -267,7 +267,7 @@ public class ALTPlayerController : MonoBehaviour
         switch (m_ControllerState)
         {
             case ControllerState.Play:
-
+                PlayerRotation();
                 PlayerMovement();
                 if (_cameraBehaviour != null)
                     _cameraBehaviour.SetIsInMenu(false);
@@ -346,20 +346,6 @@ public class ALTPlayerController : MonoBehaviour
             gameObject.transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(new Vector3(0, 0, 100)), Time.deltaTime * 5.0f);
     }
 
-    private void LateUpdate()
-    {
-        switch (m_ControllerState)
-        {
-            case ControllerState.Play:
-                PlayerRotation();
-                if (_cameraBehaviour != null)
-                    _cameraBehaviour.SetIsInMenu(false);
-                break;
-
-        }
-
-    }
-
     private void OnEnable()
     {
         _controls.Enable();
@@ -367,7 +353,7 @@ public class ALTPlayerController : MonoBehaviour
 
     private void OnDisable()
     {
- 
+
     }
 
     private void PlayerPause()
@@ -412,9 +398,15 @@ public class ALTPlayerController : MonoBehaviour
         if (m_armor.GetCurrentArmor() > 0)
         {
             m_armor.TakeDamage(damage);
+            if (m_armor.GetCurrentArmor() > 0)
+                GetComponentInChildren<VisorHitEffects>().ShieldHit();
+            else
+                GetComponentInChildren<VisorHitEffects>().ShieldBreak();
+
         }
         else
         {
+            GetComponentInChildren<VisorHitEffects>().HealthHit();
             m_health.TakeDamage(damage);
         }
     }
@@ -536,7 +528,7 @@ public class ALTPlayerController : MonoBehaviour
         }
 
         //Checking if player is grounded
-        bisGrounded = Physics.CheckSphere(_groundCheck.position, _groundDistance,  ~(playermask | triggermask));
+        bisGrounded = Physics.CheckSphere(_groundCheck.position, _groundDistance, ~(playermask | triggermask));
 
         #region Vector Debugs
         if (bDebug)
@@ -563,7 +555,7 @@ public class ALTPlayerController : MonoBehaviour
         {
             m_Velocity.y = 0.0f;
 
-            if(bWasGrappling)
+            if (bWasGrappling)
             {
                 bWasGrappling = false;
             }
@@ -585,9 +577,9 @@ public class ALTPlayerController : MonoBehaviour
         //Regenerate stamina if player isn't sprinting
         if (CheckForSprintInput() == false || (_movement.magnitude == 0 && m_stamina.bCanRegenerate))
             m_stamina.StartCoroutine(m_stamina.RegenerateStamina());
-        
+
         //Using Player Input to Calculate movement vector and applying movement
-        Vector3 movement = ((transform.right * _movement.x ) + (transform.forward * _movement.y)) * _Acceleration;
+        Vector3 movement = ((transform.right * _movement.x) + (transform.forward * _movement.y)) * _Acceleration;
 
         //Store the last recorded movement velocity for deceleration
         if (movement.magnitude > Mathf.Epsilon)
@@ -595,18 +587,20 @@ public class ALTPlayerController : MonoBehaviour
             bIsMoving = true;
             _lastMoveVelocity = movement;
 
-            if (!_bIsJumping)
-            {
-                if (_cameraBehaviour != null)
-                    _cameraBehaviour.SetIsWalking(true);
-            }
+            //TODO: Figure out Why Camera behaviour is bugging out.
+            //if (!_bIsJumping)
+            //{
+            //    if (_cameraBehaviour != null)
+            //        _cameraBehaviour.SetIsWalking(true);
+            //}
         }
         else
         {
             bIsMoving = false;
-            
-            if (_cameraBehaviour != null)
-                _cameraBehaviour.SetIsWalking(false);
+
+            //TODO: Figure out Why Camera behaviour is bugging out.
+            //if (_cameraBehaviour != null)
+            //    _cameraBehaviour.SetIsWalking(false);
         }
 
         if (!bDidJump)
@@ -624,7 +618,7 @@ public class ALTPlayerController : MonoBehaviour
         //Resetting After Jump
         if (bisGrounded && !_bIsJumping || _coyoteTime < MAX_COYOTE_TIME)
         {
-            if(!bcanJump)
+            if (!bcanJump)
             {
                 m_Velocity = Vector3.zero;
                 _preJumpVelocity = Vector3.zero;
@@ -644,7 +638,7 @@ public class ALTPlayerController : MonoBehaviour
                     else
                         m_JumpHeight = NORMAL_JUMP_HEIGHT;
 
-                    _preJumpVelocity = movement;  
+                    _preJumpVelocity = movement;
                     m_Velocity = _preJumpVelocity;
                     _jumpVelocity.y = Mathf.Sqrt(m_JumpHeight * -2f * m_Gravity.y);
                     m_Velocity.y = _jumpVelocity.y;
@@ -673,9 +667,9 @@ public class ALTPlayerController : MonoBehaviour
             {
                 airMovement = movement * m_MoveSpeed;
             }
-            
+
             airMovement = Vector3.ClampMagnitude(airMovement, 10.0f);
-            
+
             _controller.Move(airMovement * Time.deltaTime);
 
             if (bDidJump && !CheckForJumpInput() && m_Velocity.y > 0.0f)
@@ -701,7 +695,7 @@ public class ALTPlayerController : MonoBehaviour
         }
 
         //Calculate Gravity and Apply Grav to movement
-        if(m_PlayerState != PlayerState.Grappling)
+        if (m_PlayerState != PlayerState.Grappling)
             m_Velocity += m_Gravity * Time.deltaTime;
 
         m_Velocity += m_Momentum * Time.deltaTime;
@@ -734,7 +728,7 @@ public class ALTPlayerController : MonoBehaviour
         //TODO: Test this for edge cases where having a gravity cap feels bad.
         m_Velocity.y = Mathf.Clamp(m_Velocity.y, -60.0f, 20.0f);
 
-        if(bOnSlope || m_PlayerState == PlayerState.Grappling)
+        if (bOnSlope || m_PlayerState == PlayerState.Grappling)
         {
             _preJumpVelocity = Vector3.zero;
         }
@@ -756,9 +750,9 @@ public class ALTPlayerController : MonoBehaviour
             print("COYOTE TIME: " + _coyoteTime);
             print("Grounded = " + bisGrounded);
         }
-        #endregion  
-        }
-
+        #endregion
+    }
+    
     private bool OnWalkableSlope()
     {
         if (_bIsJumping)

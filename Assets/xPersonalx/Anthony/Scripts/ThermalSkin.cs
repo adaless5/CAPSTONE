@@ -5,27 +5,24 @@ using UnityEngine;
 public class ThermalSkin : MonoBehaviour
 {
     public Material m_ThermalViewMaterial;
-    Material m_NormalViewMaterial;
+    List<Material> m_NormalViewMaterials;
     public MeshRenderer[] m_MeshRenderers;
     public MeshRenderer m_MeshRenderer;
 
     // Start is called before the first frame update
     void Start()
     {
-        if (GetComponent<MeshRenderer>() != null)
-        {
-            m_MeshRenderer = GetComponent<MeshRenderer>();
-            m_NormalViewMaterial = m_MeshRenderer.material;
-        }
-
         if (GetComponentsInChildren<MeshRenderer>() != null)
         {
             m_MeshRenderers = GetComponentsInChildren<MeshRenderer>();
+
+            m_NormalViewMaterials = new List<Material>();
+
+            foreach (MeshRenderer m in m_MeshRenderers)
+            {
+                m_NormalViewMaterials.Add(m.material);
+            }
         }
-
-
-
-
     }
 
     // Update is called once per frame
@@ -40,15 +37,15 @@ public class ThermalSkin : MonoBehaviour
         {
             m.material = m_ThermalViewMaterial;
         }
-        m_MeshRenderer.material = m_ThermalViewMaterial;
     }
 
     public void ChangeToNormalSkin()
     {
+        int i = 0;
         foreach (MeshRenderer m in m_MeshRenderers)
         {
-            m.material = m_NormalViewMaterial;
+            m.material = m_NormalViewMaterials[i];
+            i++;
         }
-        m_MeshRenderer.material = m_NormalViewMaterial;
     }
 }
