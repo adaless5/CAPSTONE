@@ -18,13 +18,13 @@ public class UCState : BossState
         _randomState[0] = new BossHomingAttack(_currentEnemy);
         _randomState[1] = new BossProjAttack(_currentEnemy);
         _bossStateNum = Random.Range(0, _randomState.Length);
-        Debug.Log("Random State chosen is " + _bossStateNum);
+        //Debug.Log("Random State chosen is " + _bossStateNum);
     }
 
     public override void Update()
     {
         base.Update();
-        _nextState = _randomState[_bossStateNum];
+        _nextState = _randomState[0];
         _stage = EVENT.EXIT;
     }
 

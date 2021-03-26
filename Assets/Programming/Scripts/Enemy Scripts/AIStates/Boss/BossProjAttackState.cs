@@ -16,13 +16,13 @@ public class BossProjAttack : BossState
         base.Enter();
         _drone = GameObject.Instantiate(Resources.Load("Prefabs/Enemies/Drone/DroneEnemy") as GameObject, _currentEnemy.transform.position, Quaternion.identity);
         _drone.GetComponent<DroneAI>().SetCurrentDroneState(new DroneBossAttack(_drone));
-        _droneTimer = 3.0f;
+        _droneTimer = 7.0f;
     }
 
     public override void Update()
     {
         base.Update();
-        Debug.Log("Currently in Projectile State");
+        //Debug.Log("Currently in Projectile State");
         _droneTimer -= Time.deltaTime;
 
         if (_droneTimer <= 0)
