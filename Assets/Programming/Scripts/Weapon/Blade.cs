@@ -9,6 +9,8 @@ public class Blade : Equipment, ISaveable
     [SerializeField] float KnockBackForce = 1500f;
     public ALTPlayerController playerController;
 
+    bool bHasHit;
+    public float _bladeDamage;
     Animator _animationswing;
     BoxCollider _hitbox;
     bool _bisAttacking;
@@ -19,7 +21,7 @@ public class Blade : Equipment, ISaveable
     {
         //base.Start(); 
 
-        if(playerController == null)
+        if (playerController == null)
         {
             playerController = FindObjectOfType<ALTPlayerController>();
         }
@@ -54,7 +56,9 @@ public class Blade : Equipment, ISaveable
             {
                 obj.enabled = true;
             }
-               
+
+            _hitbox.enabled = true;
+
             UseTool();
         }
         else if (!bIsActive)
@@ -64,75 +68,86 @@ public class Blade : Equipment, ISaveable
             {
                 obj.enabled = false;
             }
+
+            _hitbox.enabled = false;
         }
     }
 
     public override void UseTool()
     {
-        if(playerController.CheckForUseEquipmentInput() && _animationswing.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+        if (playerController.CheckForUseEquipmentInput() && _animationswing.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
         {
             _animationswing.SetBool("attacking", true);
+            _hitbox.enabled = true;
+            bHasHit = false;
         }
-        if(_animationswing.GetCurrentAnimatorStateInfo(0).IsName("BladeAttacking"))
+        if (_animationswing.GetCurrentAnimatorStateInfo(0).IsName("BladeAttacking"))
         {
             _animationswing.SetBool("attacking", false);
+            _hitbox.enabled = false;
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.gameObject.name);
-        if (prevHit != other.gameObject && other.tag != "Player")
+      //  if (!other.isTrigger)
         {
-            prevHit = other.gameObject;
-            if (other.GetComponentInParent<DestructibleObject>())
+            //_hitbox.enabled = false;
+            Debug.Log(other.gameObject.name);
+            if (prevHit != other.gameObject && other.tag != "Player")
             {
-                DestructibleObject obj = other.GetComponentInParent<DestructibleObject>();
-                if (obj)
+                prevHit = other.gameObject;                
+                if ( other.GetComponentInParent<Health>())
                 {
-                    obj.Break(gameObject.tag);
-                    return;
-                }
-            }
-            ///EP ItemContainer call vvv
-            if (other.GetComponentInParent<ItemContainer>())
-            {
-                ItemContainer obj = other.GetComponentInParent<ItemContainer>();
-                if (obj)
-                {
-                    obj.Break(gameObject.tag);
-                    return;
-                }
-            }
-        }
-        ///EP ItemContainer call ^^^
-        ///EP Eyelight call vvv
-        if (other.GetComponentInParent<EyeLight>())
-        {
-            EyeLight obj = other.GetComponentInParent<EyeLight>();
-            if (obj)
-            {
-                obj.Hit();
-                return;
-            }
-        }
-        ///EP EYelight call ^^^
-        if (other.GetComponentInParent<Health>())
-        {
-            Health target = other.transform.GetComponent<Health>();
-            if (target != null)
-            {
-                target.TakeDamage(Damage);
-            }
+                    Health target = other.transform.GetComponent<Health>();
+                    if (target != null)
+                    {
+                        target.TakeDamage(_bladeDamage);
+                        bHasHit = true;
+                    }
 
-            if (other.GetComponent<Rigidbody>())
-            {
-                Rigidbody bodytarget = other.transform.GetComponent<Rigidbody>();
+                    if (other.GetComponent<Rigidbody>())
+                    {
+                        Rigidbody bodytarget = other.transform.GetComponent<Rigidbody>();
 
-                if (bodytarget != null)
+                        if (bodytarget != null)
+                        {
+                            Vector3 hitDir = playerController.transform.position - bodytarget.transform.position;
+                            bodytarget.AddForce(hitDir.normalized * -KnockBackForce);
+                        }
+                    }
+                }
+                if (!bHasHit && other.GetComponentInParent<DestructibleObject>())
                 {
-                    Vector3 hitDir = playerController.transform.position - bodytarget.transform.position;
-                    bodytarget.AddForce(hitDir.normalized * -KnockBackForce);
+                    DestructibleObject obj = other.GetComponentInParent<DestructibleObject>();
+                    if (obj)
+                    {
+                        obj.Break(gameObject.tag);
+                        bHasHit = true;
+                        return;
+                    }
+                }
+                if (other.GetComponentInParent<EyeLight>())
+                {
+                    EyeLight obj = other.GetComponentInParent<EyeLight>();
+                    if (obj)
+                    {
+                        obj.Hit();
+                        return;
+                    }
+                }
+
+
+                if (other.GetComponentInParent<ItemContainer>())
+                {
+                    ItemContainer obj = other.GetComponentInParent<ItemContainer>();
+                    if (obj)
+                    {
+                        obj.Break(gameObject.tag);
+                        bHasHit = true;
+                        return;
+
+                    }
                 }
             }
         }

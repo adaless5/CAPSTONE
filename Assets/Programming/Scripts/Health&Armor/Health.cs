@@ -78,6 +78,7 @@ public class Health : MonoBehaviour, ISaveable
         if (healthBar != null && gameObject.tag == "Player")
             healthBar.LoseHealth(m_HP, damage, m_MaxHealth);
 
+        EnemyHitEffects hitEffect = GetComponentInChildren<EnemyHitEffects>(); 
 
         if (m_HP <= 0.0f)
         {
@@ -88,6 +89,17 @@ public class Health : MonoBehaviour, ISaveable
             else
             {
                 Die();
+                if(hitEffect)
+                {
+                    hitEffect.Death();
+                }
+            }
+        }
+        else
+        {
+            if (hitEffect)
+            {
+                hitEffect.Hit();
             }
         }
 
@@ -124,7 +136,10 @@ public class Health : MonoBehaviour, ISaveable
         gameObject.SetActive(false);
         for (int i = 0; i < transform.childCount; ++i)
         {
-            transform.GetChild(i).gameObject.SetActive(false);
+            if (!transform.GetChild(i).gameObject.GetComponent<EnemyHitEffects>())
+            {
+                transform.GetChild(i).gameObject.SetActive(false);
+            }
         }
         //transform.DetachChildren();
         CallOnDeath();
