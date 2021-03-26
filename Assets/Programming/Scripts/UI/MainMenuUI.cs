@@ -21,7 +21,11 @@ public class MainMenuUI : MonoBehaviour
     public CanvasGroup _quitGroup;
 
     public static bool bNewGame = true;
-
+    private void Awake()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
     public void Continue()
     {
         Time.timeScale = 1f;

@@ -45,9 +45,10 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
     }
 
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         Debug.Log("Triggered");
+        if(FindObjectOfType<ALTPlayerController>() != null && FindObjectOfType<ALTPlayerController>().CheckForInteract())
         if (!isUsed)
         {
             Debug.Log("Isn't used");
