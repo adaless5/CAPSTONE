@@ -85,5 +85,9 @@ public class TeleportingEnemyAnimation : MonoBehaviour
             ArmMovement(_SlowArmSpeed);
             BodySpin(_SlowBodySpeed);
         }
+        if(_RotatingJet!=null)
+        {
+            _RotatingJet.transform.eulerAngles = new Vector3(-90,0,0);
+        }
     }
 }

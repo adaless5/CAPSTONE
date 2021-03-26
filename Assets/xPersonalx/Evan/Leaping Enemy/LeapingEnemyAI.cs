@@ -6,51 +6,56 @@ using UnityEngine.AI;
 public class LeapingEnemyAI : MonoBehaviour
 {
     // Start is called before the first frame update
-    public State _currentState;
-    GameObject _playerReference;
-    public GameObject[] _eyes;
-    public GameObject _jumpTarget;
-    public GameObject _homeObject;
-    public GameObject _jumpDirectionObject;
-    public GameObject _ProjectileSpawnPoint;
-    public Collider _body;
-    public LeapingEnemyProjectile _LeapingEnemyProjectile;
+    public State _currentState;                             // current state of this enemy
 
-    Rigidbody _rigidBody;
+    GameObject _playerReference;                            //reference to the player as a GameObject
+    public GameObject[] _eyes;                              // the two eyes attacked to the leaper, as GameObjects
+    public GameObject _jumpTarget;                          // the target that the leaper will jump towards, as a GameObject
+    public GameObject _homeObject;                          // the area that the leaper will stay within when not chasing the player, and will return to if it loses the player
+    public GameObject _jumpDirectionObject;                 //The object that the leaper orients and checks when leaping to determine the direction to jump
+    public GameObject _ProjectileSpawnPoint;                // the position that the leaper's projectiles will be spawned in at.
+    public Collider _body;                                  // the main collidere attached to this enemy that is used as its body/hit detection
 
-    public float _TouchDamage;
+    public LeapingEnemyProjectile _LeapingEnemyProjectile;  // the projectile that the leaper will fire at the player when in attack state
 
-    public float _AttackJumpSpeed;
-    public float _WanderJumpSpeed;
-    public float _ProjectileBaseSpeed;
+    Rigidbody _rigidBody;                                   // the rigid body used by the enemy for body physics stuff
 
-    public enum PlayerDistance {far,follow,attack};
-    public PlayerDistance _playerDistance;
-    public Vector2 _fullIdleTimeRange;
-    public Vector2 _fullFollowJumpTimeRange;
-    public Vector2 _fullGoHomeJumpTimeRange;
+    public float _TouchDamage;                              // the amount of damage the leaper should deal to the player when the player makes contact with it
+
+    public float _AttackJumpSpeed;                          // the force used for the leaper's jump when the leaper is in its attack state
+    public float _WanderJumpSpeed;                          // the force used for the leaper's jump when the leaper is in its wander state or go home state
+    public float _ProjectileBaseSpeed;                      // the force that the leaper's projectile is spawned in with
+
+    public enum PlayerDistance { far, follow, attack };         // possible distance levels the leaper can consider for the player, used by the detection objects attached to the leaping enemy prefab to determine whether to change leaper state.
+    public PlayerDistance _playerDistance;                  // local variable to store the current distance level the player is at, used by the detection objects attached to the leaping enemy prefab to determine whether to change leaper state.
+
+    public Vector2 _fullIdleTimeRange;                      // the range of time that the leaper might take between jumps when in its idle state
+    public Vector2 _fullFollowJumpTimeRange;                // the range of time that the leaper might take between jumps when in its follow state
+    public Vector2 _fullGoHomeJumpTimeRange;                // the range of time that the leaper might take between jumps when in its go home state
 
     private void Awake()
     {
         EventBroker.OnPlayerSpawned += EventStart;
     }
+
     private void Start()
     {
         _LeapingEnemyProjectile.gameObject.SetActive(false);
         _rigidBody = GetComponent<Rigidbody>();
     }
+
     private void EventStart(GameObject player)
     {
         try
         {
-            _currentState = new LeapingEnemyWanderState(gameObject,gameObject.GetComponent<LeapingEnemyAI>() ,player.transform);
+            _currentState = new LeapingEnemyWanderState(gameObject, gameObject.GetComponent<LeapingEnemyAI>(), player.transform);
             _playerReference = player;
 
         }
         catch { }
     }
 
-        void Update()
+    void Update()
     {
         if (_currentState != null)
         {
@@ -59,18 +64,20 @@ public class LeapingEnemyAI : MonoBehaviour
         else
         {
             _playerReference = GameObject.FindGameObjectWithTag("Player");
-            if(_playerReference)
-            _currentState = new LeapingEnemyWanderState(gameObject, gameObject.GetComponent<LeapingEnemyAI>(), _playerReference.transform);
+            if (_playerReference)
+                _currentState = new LeapingEnemyWanderState(gameObject, gameObject.GetComponent<LeapingEnemyAI>(), _playerReference.transform);
         }
         MoveEyes();
     }
+
     void MoveEyes()
     {
-            foreach (GameObject eye in _eyes)
-            {
-                LookTowards(eye.transform, _jumpTarget.transform.position, 10.0f);
-            }
+        foreach (GameObject eye in _eyes)
+        {
+            LookTowards(eye.transform, _jumpTarget.transform.position, 10.0f);
+        }
     }
+
     public void LookTowards(Transform thisTransform, Vector3 target, float turnspeed)
     {
 
@@ -89,6 +96,7 @@ public class LeapingEnemyAI : MonoBehaviour
     {
         return Physics.Raycast(transform.position, -Vector3.up, 1.5f);
     }
+
     public void Leap(float baseSpeed)
     {
         _rigidBody.velocity = (_jumpDirectionObject.transform.forward) * (baseSpeed);// * Vector3.Distance(transform.position, _jumpTarget.transform.position) );

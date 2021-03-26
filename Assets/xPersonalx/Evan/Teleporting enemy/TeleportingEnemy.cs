@@ -20,7 +20,7 @@ public class TeleportingEnemy : MonoBehaviour
     float reappearTime;
     Vector3 TeleportLocation;
     GameObject player;
-    bool bIsFollowing;
+    bool bPlayerClose;
     bool bHasDisappeared;
     public BehaviourState _behaviourState;
     void Start()
@@ -55,34 +55,41 @@ public class TeleportingEnemy : MonoBehaviour
         }
         else
         {
-        teleporterTime -= Time.deltaTime;
+            teleporterTime -= Time.deltaTime;
         }
     }
     void Teleport()
     {
 
-        if (reappearTime<0.0f)
+        if (reappearTime < 0.0f)
         {
             RaycastHit hit;
             if (Vector3.Distance(player.transform.position, LocalTeleportParticles.transform.position) < _AcceptiblePlayerDistance)
             {
-            TeleportLocation = player.transform.position + (Random.insideUnitSphere * 10.0f);
-            TeleportLocation.y = player.transform.position.y + 2.0f;
+                TeleportLocation = player.transform.position + (Random.insideUnitSphere * 10.0f);
+                TeleportLocation.y = player.transform.position.y + 2.0f;
+                bPlayerClose = true;
             }
             else
             {
-                TeleportLocation = (LocalTeleportParticles.transform.position + (transform.forward * _TeleportDistance)) + (Random.insideUnitSphere * 5.0f);
+                TeleportLocation = (LocalTeleportParticles.transform.position + (transform.forward * _AcceptiblePlayerDistance)) + (Random.insideUnitSphere * 5.0f);
                 TeleportLocation.y = player.transform.position.y + 2.0f;
+                bPlayerClose = false;
             }
             if (Physics.SphereCast(TeleportLocation, 2.0f, Vector3.down, out hit, 2.0f))
             {
                 transform.position = TeleportLocation;
                 TargetTeleportParticles.transform.position = TeleportLocation;
                 TargetTeleportParticles.Play();
-                teleporterTime = Random.Range(_TeleportTimeRange.x, _TeleportTimeRange.y);
+
+                if (bPlayerClose)
+                { teleporterTime = Random.Range(_TeleportTimeRange.x, _TeleportTimeRange.y); }
+                else
+                { teleporterTime = _TeleportTimeRange.x; }
+
                 reappearTime = _ReappearTime;
                 bHasDisappeared = false;
-            } 
+            }
         }
         else
         {
