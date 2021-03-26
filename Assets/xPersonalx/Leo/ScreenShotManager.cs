@@ -14,11 +14,11 @@ public class ScreenShotManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Keyboard.current.fKey.IsPressed())
-        {
-            Debug.Log("Screenshot Captured");
-            ScreenCapture.CaptureScreenshot("PreviewShot" + ssIndex + ".jpeg");
-            ssIndex++;
-        }
+        //if (Keyboard.current.fKey.IsPressed())
+        //{
+        //    Debug.Log("Screenshot Captured");
+        //    ScreenCapture.CaptureScreenshot("PreviewShot" + ssIndex + ".jpeg");
+        //    ssIndex++;
+        //}
     }
 }

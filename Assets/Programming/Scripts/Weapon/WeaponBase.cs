@@ -212,6 +212,15 @@ public class WeaponBase : Weapon, ISaveable
                     container.Break(gameObject.tag);
                 }
                 /// Evan's Item container call ^^^
+
+                /// Evan's Eyeball call vvv
+                EyeLight eye = hitInfo.transform.GetComponentInParent<EyeLight>();
+                if (eye)
+                {
+                    eye.Hit();
+                }
+                /// Evan's Eyeball call ^^^
+
                 /// 
                 //Force of impact on hit
                 if (hitInfo.rigidbody != null)

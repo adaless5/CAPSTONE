@@ -267,7 +267,7 @@ public class ALTPlayerController : MonoBehaviour
         switch (m_ControllerState)
         {
             case ControllerState.Play:
-
+                PlayerRotation();
                 PlayerMovement();
                 if (_cameraBehaviour != null)
                     _cameraBehaviour.SetIsInMenu(false);
@@ -349,20 +349,6 @@ public class ALTPlayerController : MonoBehaviour
 
     }
 
-    private void LateUpdate()
-    {
-        switch (m_ControllerState)
-        {
-            case ControllerState.Play:
-                PlayerRotation();
-                if (_cameraBehaviour != null)
-                    _cameraBehaviour.SetIsInMenu(false);
-                break;
-
-        }
-
-    }
-
     private void OnEnable()
     {
         _controls.Enable();
@@ -427,9 +413,15 @@ public class ALTPlayerController : MonoBehaviour
         if (m_armor.GetCurrentArmor() > 0)
         {
             m_armor.TakeDamage(damage);
+            if (m_armor.GetCurrentArmor() > 0)
+                GetComponentInChildren<VisorHitEffects>().ShieldHit();
+            else
+                GetComponentInChildren<VisorHitEffects>().ShieldBreak();
+
         }
         else
         {
+            GetComponentInChildren<VisorHitEffects>().HealthHit();
             m_health.TakeDamage(damage);
         }
     }
@@ -610,18 +602,20 @@ public class ALTPlayerController : MonoBehaviour
             bIsMoving = true;
             _lastMoveVelocity = movement;
 
-            if (!_bIsJumping)
-            {
-                if (_cameraBehaviour != null)
-                    _cameraBehaviour.SetIsWalking(true);
-            }
+            //TODO: Figure out Why Camera behaviour is bugging out.
+            //if (!_bIsJumping)
+            //{
+            //    if (_cameraBehaviour != null)
+            //        _cameraBehaviour.SetIsWalking(true);
+            //}
         }
         else
         {
             bIsMoving = false;
 
-            if (_cameraBehaviour != null)
-                _cameraBehaviour.SetIsWalking(false);
+            //TODO: Figure out Why Camera behaviour is bugging out.
+            //if (_cameraBehaviour != null)
+            //    _cameraBehaviour.SetIsWalking(false);
         }
 
         if (!bDidJump)
@@ -774,6 +768,7 @@ public class ALTPlayerController : MonoBehaviour
         #endregion
     }
 
+    
     private bool OnWalkableSlope()
     {
         if (_bIsJumping)
