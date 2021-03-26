@@ -14,10 +14,15 @@ public class EventBroker
     public static event Action<float> OnHealthPickup;
     public static event Action OnAmmoPickupAttempt;
     public static event Action<bool> OnHealthPickupAttempt;
-
+    public static event Action OnGameEnd;
     public static void CallSpawnEnemy(GameObject enemyToSpawn)
     {
         SpawnEnemy?.Invoke(enemyToSpawn);
+    }
+
+    public static void CallOnGameEnd()
+    {
+        OnGameEnd?.Invoke();
     }
 
     public static void CallOnPlayerSpawned(GameObject player)

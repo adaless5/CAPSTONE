@@ -341,9 +341,12 @@ public class ALTPlayerController : MonoBehaviour
             }
         }
 
-        //Stand in death animation -LCC
-        if (isDead)
-            gameObject.transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(new Vector3(0, 0, 100)), Time.deltaTime * 5.0f);
+
+        if (Keyboard.current.gKey.wasPressedThisFrame)
+        {
+            m_health.TakeDamage(9999999999999999);
+        }
+
     }
 
     private void OnEnable()
@@ -378,6 +381,7 @@ public class ALTPlayerController : MonoBehaviour
     void PlayerDeath()
     {
         isDead = true;
+        StartCoroutine(DeathAnimation());
         m_ControllerState = ControllerState.Menu;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
@@ -386,6 +390,17 @@ public class ALTPlayerController : MonoBehaviour
             Debug.Log("Controller vibe passed");
             _controller.enabled = false;
         }
+    }
+
+    public IEnumerator DeathAnimation()
+    {
+        Quaternion deathRotation = Quaternion.Euler(new Vector3(0, 0, 100));
+        while (gameObject.transform.rotation != deathRotation)
+        {
+            gameObject.transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(new Vector3(0, 0, 100)), Time.deltaTime * 5.0f);
+            yield return new WaitForSeconds(0.03f * Time.deltaTime);
+        }
+        yield return null;
     }
 
     private void CursorVisibility()
@@ -752,6 +767,7 @@ public class ALTPlayerController : MonoBehaviour
         }
         #endregion
     }
+
     
     private bool OnWalkableSlope()
     {
