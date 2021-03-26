@@ -28,6 +28,7 @@ public class EnemyHitEffects : MonoBehaviour
     }
     public void Death()
     {
+        Instantiate(DeathParticles, transform.position, transform.rotation);
         DeathParticles.Play();
     }
     // Update is called once per frame

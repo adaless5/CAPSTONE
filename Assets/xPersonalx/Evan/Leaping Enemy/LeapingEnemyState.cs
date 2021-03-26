@@ -6,10 +6,6 @@ using UnityEngine.AI;
 
 public class LeapingEnemyState : State
 {
-    protected float _shootTimer = 0.5f;
-    protected float _enemySpeed = 2f;
-    protected Transform[] _patrolPoints;
-    protected float _enemyDamage = 20.0f;
     protected LeapingEnemyAI _thisLeapingEnemy;
     protected GameObject _thisEnemyObject;
 

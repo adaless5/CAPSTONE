@@ -136,10 +136,7 @@ public class Health : MonoBehaviour, ISaveable
         gameObject.SetActive(false);
         for (int i = 0; i < transform.childCount; ++i)
         {
-            if (!transform.GetChild(i).gameObject.GetComponent<EnemyHitEffects>())
-            {
                 transform.GetChild(i).gameObject.SetActive(false);
-            }
         }
         //transform.DetachChildren();
         CallOnDeath();
