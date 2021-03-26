@@ -13,7 +13,6 @@ public class ReturnToMenu : MonoBehaviour
 
     public void LoadMainMenu()
     {
-        Cursor.lockState = CursorLockMode.None;
         for (int i = 0; i < SceneManager.sceneCount; i++)
         {
             SceneManager.UnloadSceneAsync(SceneManager.GetSceneAt(i));
