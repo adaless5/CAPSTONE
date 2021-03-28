@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.7308098, g: 0.20969468, b: 0.11078559, a: 1}
+  m_IndirectSpecularColor: {r: 0.7305325, g: 0.20959696, b: 0.110712126, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -123,24 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 23800000, guid: c65c57c07bc32ec428ebb9f9c068d22c, type: 2}
---- !u!1 &54016902 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 498938ef273678f4e8e66bfaf81e061a,
-    type: 3}
-  m_PrefabInstance: {fileID: 441199077}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &54016903
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 54016902}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 382f38558e316ea4997e7fb519b24e43, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &151689776
 GameObject:
   m_ObjectHideFlags: 0
@@ -278,7 +260,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 498938ef273678f4e8e66bfaf81e061a,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.057
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 498938ef273678f4e8e66bfaf81e061a,
         type: 3}
@@ -888,7 +870,7 @@ GameObject:
   - component: {fileID: 1213001283}
   m_Layer: 0
   m_Name: AnimatedRoamer
-  m_TagString: Untagged
+  m_TagString: Roamer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -981,6 +963,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HP: 50
   m_IsLoadingShield: 0
+  isDead: 0
   healthBar: {fileID: 0}
   m_compass: {fileID: 0}
   m_marker: {fileID: 0}
@@ -1049,23 +1032,23 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 44819129, guid: 1651baf7980c8be4e85feb3177ec71d8, type: 3}
       propertyPath: m_AspectRatio
-      value: 1.7784115
+      value: 1.4772376
       objectReference: {fileID: 0}
     - target: {fileID: 126170714, guid: 1651baf7980c8be4e85feb3177ec71d8, type: 3}
       propertyPath: m_AspectRatio
-      value: 1.7558069
+      value: 1.4626325
       objectReference: {fileID: 0}
     - target: {fileID: 408777896, guid: 1651baf7980c8be4e85feb3177ec71d8, type: 3}
       propertyPath: m_AspectRatio
-      value: 21.415394
+      value: 17.797384
       objectReference: {fileID: 0}
     - target: {fileID: 411728297, guid: 1651baf7980c8be4e85feb3177ec71d8, type: 3}
       propertyPath: m_AspectRatio
-      value: 1.7434646
+      value: 1.4415426
       objectReference: {fileID: 0}
     - target: {fileID: 1133244492, guid: 1651baf7980c8be4e85feb3177ec71d8, type: 3}
       propertyPath: m_AspectRatio
-      value: 11.8059
+      value: 9.766612
       objectReference: {fileID: 0}
     - target: {fileID: 1151589845, guid: 1651baf7980c8be4e85feb3177ec71d8, type: 3}
       propertyPath: m_AnchorMax.x
@@ -1085,15 +1068,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1519743030, guid: 1651baf7980c8be4e85feb3177ec71d8, type: 3}
       propertyPath: m_AspectRatio
-      value: 1.0202128
+      value: 0.8483989
       objectReference: {fileID: 0}
     - target: {fileID: 1812851586, guid: 1651baf7980c8be4e85feb3177ec71d8, type: 3}
       propertyPath: m_AspectRatio
-      value: 11.805899
+      value: 9.766611
       objectReference: {fileID: 0}
     - target: {fileID: 1831535030, guid: 1651baf7980c8be4e85feb3177ec71d8, type: 3}
       propertyPath: m_AspectRatio
-      value: 5.654125
+      value: 4.6920047
       objectReference: {fileID: 0}
     - target: {fileID: 496014468107801626, guid: 1651baf7980c8be4e85feb3177ec71d8,
         type: 3}
@@ -1188,7 +1171,7 @@ PrefabInstance:
     - target: {fileID: 7115843362055500529, guid: 1651baf7980c8be4e85feb3177ec71d8,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -2.1051025
+      value: -2.1049805
       objectReference: {fileID: 0}
     - target: {fileID: 7275997945850394448, guid: 1651baf7980c8be4e85feb3177ec71d8,
         type: 3}

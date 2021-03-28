@@ -22,7 +22,7 @@ public class RoamerAI : MonoBehaviour
         _roamerAnimator = GetComponentInChildren<Animator>();
         _roamerHealth = GetComponent<Health>();
         _roamerHealth.OnTakeDamage += TakingDamage;
-        _roamerHealth.OnDeath += Death;
+        //_roamerHealth.OnDeath += Death;
         
     }
 
@@ -76,19 +76,15 @@ public class RoamerAI : MonoBehaviour
         }
         _roamerAnimator.SetTrigger("IsHit");
         Stun();
+        if(_roamerHealth.isDead)
+        {
+            _currentState.Exit();
+            _currentState = new RoamerDeath(gameObject, _patrolPoints, _playerReference.transform, _navMeshAgent);
+            _roamerAnimator.SetTrigger("IsDying");
+        }
 
     }
-
-    //private void OnAnimatorMove()
-    //{
-    //    _navMeshAgent.speed = (_roamerAnimator.deltaPosition / Time.deltaTime).magnitude;
-    //}
-
-    public void Death()
-    {
-        Debug.Log("HE DEAD");
-        _roamerAnimator.SetTrigger("IsDead");
-    }
+   
 
     public void CheckAnimationState()
     {
@@ -98,7 +94,6 @@ public class RoamerAI : MonoBehaviour
         }
         else if (_currentState._stateName == State.STATENAME.PATROL)
         {
-
             _roamerAnimator.SetTrigger("IsPatrolling");
         }
         else if (_currentState._stateName == State.STATENAME.FOLLOW)
@@ -109,5 +104,6 @@ public class RoamerAI : MonoBehaviour
         {
             _roamerAnimator.SetTrigger("IsAttacking");
         }
+
     }
 }

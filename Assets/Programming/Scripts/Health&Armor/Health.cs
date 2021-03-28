@@ -22,7 +22,7 @@ public class Health : MonoBehaviour, ISaveable
     public event Action<float> OnHeal;
     public event Action OnDeath;
 
-    bool isDead = false;
+    public bool isDead = false;
     bool isMarkerCreated;
 
     public HealthBarUI healthBar;
@@ -103,31 +103,34 @@ public class Health : MonoBehaviour, ISaveable
 
     void Die()
     {
-        if (m_marker != null)
-        {
-            m_compass.RemoveMarker(m_marker);
-        }
-
-        //Temporary Spawning Stuff - Anthony
-        Spawner spawner = GetComponent<Spawner>();
-        if (spawner != null)
-        {
-            spawner.Spawn();
-        }
-
         isDead = true;
-
-        //Disabled Deactivation on Death to make Death Event more malleable - LCC
-        
-        //Destroy(gameObject);
-        if(gameObject.tag != "Player")
-        gameObject.SetActive(false);
-        for (int i = 0; i < transform.childCount; ++i)
+        if(gameObject.tag != "Roamer")
         {
-            transform.GetChild(i).gameObject.SetActive(false);
+            if (m_marker != null)
+            {
+                m_compass.RemoveMarker(m_marker);
+            }
+
+            //Temporary Spawning Stuff - Anthony
+            Spawner spawner = GetComponent<Spawner>();
+            if (spawner != null)
+            {
+                spawner.Spawn();
+            }
+
+
+            //Disabled Deactivation on Death to make Death Event more malleable - LCC
+        
+            //Destroy(gameObject);
+            if(gameObject.tag != "Player")
+            gameObject.SetActive(false);
+            for (int i = 0; i < transform.childCount; ++i)
+            {
+                transform.GetChild(i).gameObject.SetActive(false);
+            }
+            CallOnDeath();
+            //transform.DetachChildren();
         }
-        CallOnDeath();
-        //transform.DetachChildren();
     }
 
     void PlayerDeath()
