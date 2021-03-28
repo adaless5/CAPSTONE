@@ -5,6 +5,7 @@ using UnityEngine.AI;
 
 public class RoamerWanderState : RoamerState
 {
+    //Vector3 _wanderSphere = 
     public RoamerWanderState(GameObject enemy, Transform[] pp, Transform playerposition, NavMeshAgent nav) : base(enemy, pp, playerposition, nav)
     {
         _stateName = STATENAME.WANDER;

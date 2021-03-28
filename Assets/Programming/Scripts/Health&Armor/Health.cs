@@ -18,7 +18,7 @@ public class Health : MonoBehaviour, ISaveable
     [SerializeField]
     private bool m_IsLoadingShield = false;
 
-    public event Action<float> OnTakeHealthDamage;
+    public event Action OnTakeDamage;
     public event Action<float> OnHeal;
     public event Action OnDeath;
 
@@ -67,7 +67,6 @@ public class Health : MonoBehaviour, ISaveable
     {
         LoadDataOnSceneEnter();
         EventBroker.OnPlayerSpawned += PlayerSpawned;
-        OnTakeHealthDamage += TakeDamage;
         //if (isDead) GetComponent<MeshRenderer>().enabled = false;
         //else GetComponent<MeshRenderer>().enabled = true;
     }
@@ -93,7 +92,8 @@ public class Health : MonoBehaviour, ISaveable
 
         //Clamp values -LCC
         m_HP = Mathf.Clamp(m_HP, 0, m_MaxHealth);
-
+        
+        CallOnTakeDamage();
     }
 
     public float GetMaxHealth()
@@ -118,7 +118,7 @@ public class Health : MonoBehaviour, ISaveable
         isDead = true;
 
         //Disabled Deactivation on Death to make Death Event more malleable - LCC
-
+        
         //Destroy(gameObject);
         if(gameObject.tag != "Player")
         gameObject.SetActive(false);
@@ -126,8 +126,8 @@ public class Health : MonoBehaviour, ISaveable
         {
             transform.GetChild(i).gameObject.SetActive(false);
         }
-        //transform.DetachChildren();
         CallOnDeath();
+        //transform.DetachChildren();
     }
 
     void PlayerDeath()
@@ -140,9 +140,9 @@ public class Health : MonoBehaviour, ISaveable
 
     }
 
-    public void CallOnTakeHealthDamage(float damageToTake)
+    public void CallOnTakeDamage()
     {
-        OnTakeHealthDamage?.Invoke(damageToTake);
+        OnTakeDamage?.Invoke();
     }
 
     public void CallOnDeath()

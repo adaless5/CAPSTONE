@@ -17,6 +17,7 @@ public class RoamerAttackState : RoamerState
     public override void Enter()
     {
         base.Enter();
+        Debug.Log("Enemy Attacking");
     }
 
     // Update is called once per frame
@@ -24,7 +25,7 @@ public class RoamerAttackState : RoamerState
     {
         base.Update();
 
-        if (Vector3.Distance(_currentEnemy.transform.position, _playerPos.transform.position) > 5.0f)
+        if (Vector3.Distance(_currentEnemy.transform.position, _playerPos.transform.position) > 2.5f)
         {
             _navMeshAgent.ResetPath();
             _nextState = new RoamerPursueState(_currentEnemy, _patrolPoints, _playerPos, _navMeshAgent);
@@ -32,8 +33,7 @@ public class RoamerAttackState : RoamerState
         }
 
         Attack();
-
-        Debug.Log("Enemy Attacking");
+       
     }
 
     void Attack()
@@ -53,7 +53,7 @@ public class RoamerAttackState : RoamerState
             LookAt(_playerPos.transform);
             _AttackTimer += Time.deltaTime;
 
-            if (_AttackTimer >= 0.5f)
+            if (_AttackTimer >= 2.5f)
             {
                 bCanAttack = true;
             }

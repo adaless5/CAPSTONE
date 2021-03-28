@@ -15,7 +15,7 @@ public class RoamerState : State
         _patrolPoints = pp;
         _playerPos = playerposition;
         _navMeshAgent = nav;
-        _stage = EVENT.ENTER; 
+        _stage = EVENT.ENTER;        
     }
 
 }

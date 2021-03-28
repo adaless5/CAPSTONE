@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class ArmorBarUI : MonoBehaviour
 {
-    private float m_lowestScaleAmount = 0.30f;
+    //private float m_lowestScaleAmount = 0.30f;
 
     public Slider slider;
     float m_sliderSpeed = 3;
