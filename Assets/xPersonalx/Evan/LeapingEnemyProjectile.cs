@@ -26,31 +26,34 @@ public class LeapingEnemyProjectile : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.transform.parent == null)
+        if (!collision.collider.isTrigger)
         {
-            if (collision.gameObject.GetComponentInParent<ALTPlayerController>() || collision.gameObject.GetComponentInParent<WeaponBelt>() )
+
+            if (collision.gameObject.GetComponentInParent<ALTPlayerController>() != null || collision.gameObject.GetComponentInParent<Tool>() != null)
             {
 
                 FindObjectOfType<ALTPlayerController>().CallOnTakeDamage(_ProjectileDamage);
+                GetComponent<MeshRenderer>().enabled = false;
+                GetComponent<Collider>().enabled = false;
 
             }
-           // Debug.Log(collision.gameObject.transform.parent.tag);
+            // Debug.Log(collision.gameObject.transform.parent.tag);
+
+            _bIsSplatting = true;
+            _splatParticle.transform.position = transform.position;
         }
-        _bIsSplatting = true;
-        _splatParticle.transform.position = transform.position;
-       // Debug.Log(collision.gameObject.transform.name);
+        // Debug.Log(collision.gameObject.transform.name);
     }
 
     void Splat()
     {
-        GetComponent<MeshRenderer>().enabled = false;
         _rigidBody.velocity = new Vector3();
         _rigidBody.angularVelocity = new Vector3();
         if (!_splatParticle.isPlaying)
         { _splatParticle.Play(); }
 
 
-        if(_currentSplatTime > 0.0f)
+        if (_currentSplatTime > 0.0f)
         {
             _currentSplatTime -= Time.deltaTime;
         }
@@ -61,16 +64,16 @@ public class LeapingEnemyProjectile : MonoBehaviour
             _bIsSplatting = false;
             gameObject.SetActive(false);
         }
-        
+
     }
     // Update is called once per frame
     void Update()
     {
-        if(_bIsSplatting)
+        if (_bIsSplatting)
         {
             Splat();
         }
-        if(gameObject.activeSelf == true)
+        if (gameObject.activeSelf == true)
         {
             if (_LifeTimer > 0.0f)
             {
@@ -88,6 +91,7 @@ public class LeapingEnemyProjectile : MonoBehaviour
         _currentSplatTime = _splatTime;
         _bIsSplatting = false;
         GetComponent<MeshRenderer>().enabled = true;
+        GetComponent<Collider>().enabled = true;
         _LifeTimer = _FullLifeTimer;
     }
 }

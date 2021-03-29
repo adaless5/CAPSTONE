@@ -4,31 +4,33 @@ using UnityEngine;
 
 public class BossHomingAttack : BossState
 {
-    GameObject _haRef;
-    GameObject _homingAttack;
+    float _haTimeLimit = 4.0f;
+    float _haTimer = 0;
     public BossHomingAttack(GameObject boss) : base(boss)
     {
         Debug.Log("Homing State Initiated");
         _currentEnemy = boss;
-        _haRef = (GameObject)Resources.Load("Prefabs/Enemies/Boss/HA");
-        _homingAttack = new GameObject();
+        _haTimer = _haTimeLimit;
     }
 
     public override void Enter()
     {
         base.Enter();
-        _homingAttack = GameObject.Instantiate(_haRef, _currentEnemy.transform.position + Vector3.up, Quaternion.identity);
+        HomingAttackManager.instance.SpawnHomingAttack(_currentEnemy.transform.position);
     }
 
     public override void Update()
     {
         base.Update();
-
-        if (_homingAttack == null)
+        _haTimer -= Time.deltaTime;
+        if (_haTimer <= 0)
         {
+            _haTimer = _haTimeLimit;
             _stage = EVENT.EXIT;
             _nextState = new UCState(_currentEnemy);
+
         }
+
     }
 
     public override void Exit()

@@ -20,6 +20,7 @@ public class LeapingEnemyAttackState : LeapingEnemyState
     public override void Update()
     {
         base.Update();
+        if(GameObject.FindGameObjectWithTag("Player") != null)
         _thisLeapingEnemy._jumpTarget.transform.position = GameObject.FindGameObjectWithTag("Player").transform.position;
         _thisLeapingEnemy.LookTowards(_thisLeapingEnemy.transform, _thisLeapingEnemy._jumpTarget.transform.position, 8.0f);
 

@@ -46,7 +46,7 @@ public class WeaponPickup : MonoBehaviour, ITippable
         {
             player = playerref.GetComponent<ALTPlayerController>();
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             Debug.Log(e);
         }
@@ -63,20 +63,21 @@ public class WeaponPickup : MonoBehaviour, ITippable
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
-        if (!isUsed)
-        {
-            if (other.gameObject.tag == "Player")
+        if (FindObjectOfType<ALTPlayerController>() != null && FindObjectOfType<ALTPlayerController>().CheckForInteract())
+            if (!isUsed)
             {
-                EventBroker.CallOnPickupWeapon(weaponNum);
-                isUsed = true;
-                GetComponent<MeshRenderer>().enabled = false;
-                GetComponent<Collider>().enabled = false;
+                if (other.gameObject.tag == "Player")
+                {
+                    EventBroker.CallOnPickupWeapon(weaponNum);
+                    isUsed = true;
+                    GetComponent<MeshRenderer>().enabled = false;
+                    GetComponent<Collider>().enabled = false;
 
-                CreateTip("Sprites/Messages/" + _tipName[weaponNum]);
+                    CreateTip("Sprites/Messages/" + _tipName[weaponNum]);
+                }
             }
-        }
     }
 
     public void SaveDataOnSceneChange()
@@ -138,7 +139,7 @@ public class WeaponPickup : MonoBehaviour, ITippable
                 Destroy(obj);
             }
         }
-        
+
         _imageObject = null;
     }
 }

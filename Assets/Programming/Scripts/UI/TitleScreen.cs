@@ -8,6 +8,7 @@ public class TitleScreen : MonoBehaviour
 {
     private void Update()
     {
+
         if (Gamepad.current != null)
         {
             if (Gamepad.current.IsPressed())
@@ -24,7 +25,7 @@ public class TitleScreen : MonoBehaviour
         }
         if (Mouse.current != null)
         {
-            if (Mouse.current.IsPressed())
+            if (Mouse.current.rightButton.isPressed || Mouse.current.leftButton.isPressed)
             {
                 SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
             }

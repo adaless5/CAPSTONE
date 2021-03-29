@@ -55,6 +55,7 @@ public class BossAI : MonoBehaviour
         {
             transform.GetChild(i).gameObject.SetActive(false);
         }
+        EventBroker.CallOnGameEnd();
     }
 
     void RegenerateUC()
