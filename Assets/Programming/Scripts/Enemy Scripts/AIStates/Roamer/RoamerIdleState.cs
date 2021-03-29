@@ -27,7 +27,12 @@ public class RoamerIdleState : RoamerState
 
         _IdleTimer -= Time.deltaTime;
 
-        if (_IdleTimer <= 0.0f)
+        if (CanSeePlayer())
+        {
+            _nextState = new RoamerPursueState(_currentEnemy, _patrolPoints, _playerPos, _navMeshAgent);
+            _stage = EVENT.EXIT;
+        }
+        else if (_IdleTimer <= 0.0f)
         {
             //_navMeshAgent.ResetPath();
             //if(Vector3.Distance(_currentEnemy.transform.position, _playerPos.position) >= 15.0f)
@@ -38,12 +43,6 @@ public class RoamerIdleState : RoamerState
             //_navMeshAgent.speed = 2.0f;
             _nextState = new RoamerPatrolState(_currentEnemy, _patrolPoints, _playerPos, _navMeshAgent);
             _stage = EVENT.EXIT;
-        }
-        else if (CanSeePlayer())
-        {
-            _nextState = new RoamerPursueState(_currentEnemy, _patrolPoints, _playerPos, _navMeshAgent);
-            _stage = EVENT.EXIT;
-
         }
 
     }

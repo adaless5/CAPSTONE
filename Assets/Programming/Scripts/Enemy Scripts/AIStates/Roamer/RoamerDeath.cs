@@ -27,7 +27,7 @@ public class RoamerDeath : RoamerState
         _deathTimer -= Time.deltaTime;
         if(_deathTimer <= 0)
         {
-            //_navMeshAgent.isStopped = false;
+            _navMeshAgent.isStopped = false;
             _currentEnemy.SetActive(false);
             for (int i = 0; i < _currentEnemy.transform.childCount; ++i)
             {

@@ -7,7 +7,7 @@ public class RoamerAttackState : RoamerState
 {
     float _Damage = 5.0f;
     float _AttackTimer = 0.0f;
-    bool bCanAttack = true;
+    bool bCanAttack = false;
 
     public RoamerAttackState(GameObject enemy, Transform[] pp, Transform playerposition, NavMeshAgent nav) : base(enemy, pp, playerposition, nav)
     {
@@ -18,6 +18,7 @@ public class RoamerAttackState : RoamerState
     {
         base.Enter();
         Debug.Log("Enemy Attacking");
+        _AttackTimer = 0.4f;
     }
 
     // Update is called once per frame
@@ -28,6 +29,7 @@ public class RoamerAttackState : RoamerState
         if (Vector3.Distance(_currentEnemy.transform.position, _playerPos.transform.position) > 2.5f)
         {
             _navMeshAgent.ResetPath();
+            _AttackTimer = 0f;
             _nextState = new RoamerPursueState(_currentEnemy, _patrolPoints, _playerPos, _navMeshAgent);
             _stage = EVENT.EXIT;
         }
@@ -44,7 +46,6 @@ public class RoamerAttackState : RoamerState
             {
                 _playerPos.GetComponent<ALTPlayerController>().CallOnTakeDamage(_Damage);
             }
-
             bCanAttack = false;
             _AttackTimer = 0.0f;
         }
@@ -53,7 +54,7 @@ public class RoamerAttackState : RoamerState
             LookAt(_playerPos.transform);
             _AttackTimer += Time.deltaTime;
 
-            if (_AttackTimer >= 0.935f)
+            if (_AttackTimer >= 0.933f)
             {
                 bCanAttack = true;
             }

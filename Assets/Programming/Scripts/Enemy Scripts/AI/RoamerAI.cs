@@ -51,9 +51,7 @@ public class RoamerAI : MonoBehaviour
         if (_currentState != null)
             _currentState = _currentState.Process();
         CheckAnimationState();
-        //_roamerAnimator.SetFloat("IsWalking", _navMeshAgent.speed);
-
-        
+        //_roamerAnimator.SetFloat("IsWalking", _navMeshAgent.speed);        
 
     }
 
@@ -89,24 +87,36 @@ public class RoamerAI : MonoBehaviour
 
     public void CheckAnimationState()
     {
-        if (_currentState._stateName == State.STATENAME.IDLE)
+        switch (_currentState._stateName)
         {
-            _roamerAnimator.SetTrigger("IsIdle");
+            case State.STATENAME.IDLE:
+                _roamerAnimator.SetTrigger("IsIdle");
+                break;
+            case State.STATENAME.PATROL:
+                _roamerAnimator.SetTrigger("IsPatrolling");
+                break;
+            case State.STATENAME.FOLLOW:
+                _roamerAnimator.SetTrigger("IsChasing");
+                break;
+            case State.STATENAME.ATTACK:
+                _roamerAnimator.SetTrigger("IsAttacking");
+                break;
         }
-        else if (_currentState._stateName == State.STATENAME.PATROL)
-        {
-            _roamerAnimator.SetTrigger("IsPatrolling");
-        }
-        else if (_currentState._stateName == State.STATENAME.FOLLOW)
-        {
-            _roamerAnimator.SetTrigger("IsChasing");
-        }
-        else if (_currentState._stateName == State.STATENAME.ATTACK)
-        {
-            _roamerAnimator.SetTrigger("IsAttacking");
-        }
-
-    }
-
-    
+        //if (_currentState._stateName == State.STATENAME.IDLE)
+        //{
+        //    _roamerAnimator.SetTrigger("IsIdle");
+        //}
+        //else if (_currentState._stateName == State.STATENAME.PATROL)
+        //{
+        //    _roamerAnimator.SetTrigger("IsPatrolling");
+        //}
+        //else if (_currentState._stateName == State.STATENAME.FOLLOW)
+        //{
+        //    _roamerAnimator.SetTrigger("IsChasing");
+        //}
+        //else if (_currentState._stateName == State.STATENAME.ATTACK)
+        //{
+        //    _roamerAnimator.SetTrigger("IsAttacking");
+        //}
+    }    
 }

@@ -22,13 +22,13 @@ public class RoamerPursueState : RoamerState
         _LungeChance = Random.Range(0, 4);
         bCanLunge = true;
         Debug.Log("Enemy Pursuing");
-        _navMeshAgent.speed = 3.5f;
+        _navMeshAgent.speed = 3f;
     }
 
     public override void Exit()
     {
         base.Exit();
-        _navMeshAgent.speed = 1.4f;
+        _navMeshAgent.speed = 1.3f;
     }
 
     public override void Update()

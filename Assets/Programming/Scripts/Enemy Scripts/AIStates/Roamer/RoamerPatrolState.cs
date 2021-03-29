@@ -27,7 +27,7 @@ public class RoamerPatrolState : RoamerState
     public override void Update()
     {
         base.Update();
-        if (!_navMeshAgent.pathPending && _navMeshAgent.remainingDistance < 0.1f)
+        if (!_navMeshAgent.pathPending && _navMeshAgent.remainingDistance < 0.9f)
         {
             //MoveToNextPoint();
             _nextState = new RoamerIdleState(_currentEnemy, _patrolPoints, _playerPos, _navMeshAgent);
