@@ -53,7 +53,7 @@ public class RoamerAttackState : RoamerState
             LookAt(_playerPos.transform);
             _AttackTimer += Time.deltaTime;
 
-            if (_AttackTimer >= 2.5f)
+            if (_AttackTimer >= 0.935f)
             {
                 bCanAttack = true;
             }
