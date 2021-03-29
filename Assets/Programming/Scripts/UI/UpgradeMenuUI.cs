@@ -7,7 +7,6 @@ using TMPro;
 
 public class UpgradeMenuUI : MonoBehaviour
 {
-    // Start is called before the first frame update
     public GameObject UpgradeMenu;
 
     public List<GameObject> Parents;
@@ -26,12 +25,12 @@ public class UpgradeMenuUI : MonoBehaviour
     List<Button> _buttons;
 
     bool hasButtonListeners = false;
+
     void Start()
     {
         _weapons = new List<Weapon>();
         _buttons = new List<Button>();
         EventBroker.OnPlayerSpawned += PlayerSpawned;
-        //_player = ALTPlayerController.instance.gameObject;
     }
 
     void PlayerSpawned(GameObject player)
@@ -49,12 +48,15 @@ public class UpgradeMenuUI : MonoBehaviour
         if (DiscriptionText != null)
         {
             DiscriptionText.text = "";
-            for (int i = 0; i < _buttons.Count; i++)
+            if (_buttons != null)
             {
-                if (_buttons[i].GetComponent<ButtonHighlight>().IsHighlighted)
+                for (int i = 0; i < _buttons.Count; i++)
                 {
-                    DiscriptionText.text = _upgrades[i].Discription;
-                    break;
+                    if (_buttons[i].GetComponent<ButtonHighlight>().IsHighlighted)
+                    {
+                        DiscriptionText.text = _upgrades[i].Discription;
+                        break;
+                    }
                 }
             }
         }
@@ -217,14 +219,8 @@ public class UpgradeMenuUI : MonoBehaviour
     {
         if (_upgrades[upgradeindex].UpgradeWorth <= ALTPlayerController.instance.m_UpgradeCurrencyAmount)
         {
-            //Debug.Log(_upgrades[upgradeindex].UpgradeWorth.ToString());
-            //Debug.Log(_player.GetComponent<ALTPlayerController>().m_UpgradeCurrencyAmount.ToString());
-            //Debug.Log("can buy");
             return true;
         }
-        //Debug.Log(_upgrades[upgradeindex].UpgradeWorth.ToString());
-        //Debug.Log(_player.GetComponent<ALTPlayerController>().m_UpgradeCurrencyAmount.ToString());
-        //Debug.Log("cant buy");
         return false;
     }
 

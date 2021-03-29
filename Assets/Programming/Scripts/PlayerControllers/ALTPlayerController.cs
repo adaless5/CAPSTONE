@@ -341,12 +341,6 @@ public class ALTPlayerController : MonoBehaviour
             }
         }
 
-
-        if (Keyboard.current.gKey.wasPressedThisFrame)
-        {
-            m_health.TakeDamage(9999999999999999);
-        }
-
     }
 
     private void OnEnable()
