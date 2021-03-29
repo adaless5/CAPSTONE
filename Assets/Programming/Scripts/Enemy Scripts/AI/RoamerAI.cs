@@ -80,9 +80,10 @@ public class RoamerAI : MonoBehaviour
         {
             _currentState.Exit();
             _currentState = new RoamerDeath(gameObject, _patrolPoints, _playerReference.transform, _navMeshAgent);
+            int deathRandomize = Random.Range(0, 2);
+            _roamerAnimator.SetInteger("RandomDeath", deathRandomize);
             _roamerAnimator.SetTrigger("IsDying");
         }
-
     }
    
 
@@ -106,4 +107,6 @@ public class RoamerAI : MonoBehaviour
         }
 
     }
+
+    
 }
