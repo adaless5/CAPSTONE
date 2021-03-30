@@ -75,7 +75,6 @@ public class AmmoPickup : MonoBehaviour
     {             
         if(m_ammoController==null)
         {
-
             m_ammoController = FindObjectOfType<AmmoController>();
         }
        if (other.tag == "Player" && isPickedUp == false && m_ammoController.IsAmmoFull(ammoType) == false)

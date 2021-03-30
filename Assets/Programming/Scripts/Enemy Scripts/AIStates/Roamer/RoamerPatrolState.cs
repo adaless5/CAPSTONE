@@ -17,27 +17,24 @@ public class RoamerPatrolState : RoamerState
     public override void Enter()
     {
         base.Enter();
-
+        
         bFirstPatrol = true;
         MoveToNextPoint();
-        Debug.Log("Enemy Patrolling");
-        //_navMeshAgent.speed = 2.0f;
+        Debug.Log("Enemy Patrolling");       
     }
 
     public override void Update()
     {
         base.Update();
         if (!_navMeshAgent.pathPending && _navMeshAgent.remainingDistance < 0.9f)
-        {
-            //MoveToNextPoint();
+        {            
             _nextState = new RoamerIdleState(_currentEnemy, _patrolPoints, _playerPos, _navMeshAgent);
             _stage = EVENT.EXIT;
         }
 
         if (Vector3.Distance(_currentEnemy.transform.position, _playerPos.transform.position) < 15.0f)
         {
-            _navMeshAgent.ResetPath();
-            //_navMeshAgent.speed = 4.0f;
+            _navMeshAgent.ResetPath();            
             _nextState = new RoamerPursueState(_currentEnemy, _patrolPoints, _playerPos, _navMeshAgent);
             _stage = EVENT.EXIT;
         }
@@ -46,8 +43,7 @@ public class RoamerPatrolState : RoamerState
     void MoveToNextPoint()
     {
         if (bFirstPatrol)
-        {
-            //_patrolIndex = Random.Range(0, _patrolPoints.Length);
+        {           
             for(int i =0; i < _patrolPoints.Length; i++)
             {
                 if(Vector3.Distance(_currentEnemy.transform.position, _patrolPoints[i].position) > 2f)
