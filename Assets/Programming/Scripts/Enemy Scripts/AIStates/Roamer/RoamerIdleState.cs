@@ -10,8 +10,7 @@ public class RoamerIdleState : RoamerState
     public RoamerIdleState(GameObject enemy, Transform[] pp, Transform playerposition, NavMeshAgent nav) : base(enemy, pp, playerposition, nav)
     {
         _stateName = STATENAME.IDLE;
-        _IdleTimer = Random.Range(7.0f, 10.0f);
-        //_navMeshAgent.speed = 0f;
+        _IdleTimer = Random.Range(7.0f, 10.0f);       
     }
 
     public override void Enter()
@@ -33,15 +32,17 @@ public class RoamerIdleState : RoamerState
             _stage = EVENT.EXIT;
         }
         else if (_IdleTimer <= 0.0f)
-        {
-            //_navMeshAgent.ResetPath();
-            //if(Vector3.Distance(_currentEnemy.transform.position, _playerPos.position) >= 15.0f)
-            //{
-            //    _nextState = new RoamerPatrolState(_currentEnemy, _patrolPoints, _playerPos, _navMeshAgent);
-            //    _stage = EVENT.EXIT;
-            //}
-            //_navMeshAgent.speed = 2.0f;
-            _nextState = new RoamerPatrolState(_currentEnemy, _patrolPoints, _playerPos, _navMeshAgent);
+        {    
+            if(_currentEnemy.GetComponent<RoamerAI>().bShouldWanderRandomly)
+            {
+                _nextState = new RoamerWanderState(_currentEnemy, _patrolPoints, _playerPos, _navMeshAgent, _currentEnemy.GetComponent<RoamerAI>()._wanderRadius);
+
+            }
+            else
+            {
+                _nextState = new RoamerPatrolState(_currentEnemy, _patrolPoints, _playerPos, _navMeshAgent);
+
+            }
             _stage = EVENT.EXIT;
         }
 

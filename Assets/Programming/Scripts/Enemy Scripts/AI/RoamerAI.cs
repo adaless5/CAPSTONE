@@ -12,8 +12,8 @@ public class RoamerAI : MonoBehaviour
     public Animator _roamerAnimator;
     public Health _roamerHealth;
     public bool bShouldWanderRandomly = false;
-   
-
+    public GameObject _wanderSphere;
+    public float _wanderRadius;
     private void Awake()
     {
         EventBroker.OnPlayerSpawned += EventStart;
@@ -36,7 +36,7 @@ public class RoamerAI : MonoBehaviour
         if (this != null)
         {
             if (bShouldWanderRandomly)
-                _currentState = new RoamerWanderState(gameObject, _patrolPoints, player.transform, _navMeshAgent);
+                _currentState = new RoamerWanderState(gameObject, _patrolPoints, player.transform, _navMeshAgent, _wanderRadius);
 
             else if (!bShouldWanderRandomly)
                 _currentState = new RoamerIdleState(gameObject, _patrolPoints, player.transform, _navMeshAgent); 
@@ -65,6 +65,11 @@ public class RoamerAI : MonoBehaviour
         _currentState = new Stun(0.7f, savedState);
     }
 
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(transform.position, _wanderRadius);
+    }
+
     public void TakingDamage()
     {
         //If AI is attacked in idle, switch to chasing state even when not in line of sight
@@ -83,6 +88,8 @@ public class RoamerAI : MonoBehaviour
             _roamerAnimator.SetTrigger("IsDying");
         }
     }
+
+  
    
 
     public void CheckAnimationState()
@@ -101,22 +108,9 @@ public class RoamerAI : MonoBehaviour
             case State.STATENAME.ATTACK:
                 _roamerAnimator.SetTrigger("IsAttacking");
                 break;
-        }
-        //if (_currentState._stateName == State.STATENAME.IDLE)
-        //{
-        //    _roamerAnimator.SetTrigger("IsIdle");
-        //}
-        //else if (_currentState._stateName == State.STATENAME.PATROL)
-        //{
-        //    _roamerAnimator.SetTrigger("IsPatrolling");
-        //}
-        //else if (_currentState._stateName == State.STATENAME.FOLLOW)
-        //{
-        //    _roamerAnimator.SetTrigger("IsChasing");
-        //}
-        //else if (_currentState._stateName == State.STATENAME.ATTACK)
-        //{
-        //    _roamerAnimator.SetTrigger("IsAttacking");
-        //}
+            case State.STATENAME.WANDER:
+                _roamerAnimator.SetTrigger("IsPatrolling");
+                break;
+        }     
     }    
 }

@@ -17,5 +17,4 @@ public class RoamerState : State
         _navMeshAgent = nav;
         _stage = EVENT.ENTER;        
     }
-
 }

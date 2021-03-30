@@ -15,7 +15,6 @@ GameObject:
   - component: {fileID: 6687430423300233070}
   - component: {fileID: 6687430423300233071}
   - component: {fileID: 6687430423300233068}
-  - component: {fileID: 6687430423300233069}
   - component: {fileID: 6687430423300233066}
   m_Layer: 0
   m_Name: AnimatedRoamer
@@ -78,7 +77,9 @@ MonoBehaviour:
   - {fileID: 0}
   _roamerAnimator: {fileID: 0}
   _roamerHealth: {fileID: 0}
-  bShouldWanderRandomly: 0
+  bShouldWanderRandomly: 1
+  _wanderSphere: {fileID: 0}
+  _wanderRadius: 20
 --- !u!114 &6687430423300233057
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -107,7 +108,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01dfb7d86835dc749b42ade1c715bbec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_HP: 50
+  m_HP: 40
   m_IsLoadingShield: 0
   isDead: 0
   healthBar: {fileID: 0}
@@ -143,19 +144,6 @@ CapsuleCollider:
   m_Height: 1.803791
   m_Direction: 1
   m_Center: {x: 0.010375738, y: 0.8660879, z: -0.018057346}
---- !u!135 &6687430423300233069
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6687430423300233064}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Radius: 0.2505157
-  m_Center: {x: 0, y: 0.20593864, z: 0}
 --- !u!54 &6687430423300233066
 Rigidbody:
   m_ObjectHideFlags: 0
