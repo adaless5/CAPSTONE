@@ -21,6 +21,14 @@ public class RoamerPursueState : RoamerState
 
         _LungeChance = Random.Range(0, 4);
         bCanLunge = true;
+        Debug.Log("Enemy Pursuing");
+        _navMeshAgent.speed = 3f;
+    }
+
+    public override void Exit()
+    {
+        base.Exit();
+        _navMeshAgent.speed = 1.3f;
     }
 
     public override void Update()
@@ -44,19 +52,19 @@ public class RoamerPursueState : RoamerState
             }
         }
 
-        if (Vector3.Distance(_currentEnemy.gameObject.transform.position, _playerPos.position) <= 2.0f)
+        if (Vector3.Distance(_currentEnemy.gameObject.transform.position, _playerPos.position) <= 2.5f)
         {
             _navMeshAgent.ResetPath();
             _nextState = new RoamerAttackState(_currentEnemy, _patrolPoints, _playerPos, _navMeshAgent);
             _stage = EVENT.EXIT;
         }
-        else if (_navMeshAgent.remainingDistance < 10.0f && bCanLunge && _LungeChance == 3 && bIsFacingPlayer)
-        {
-            //TODO: Figure out why enemy won't leave the ground despite adding an up vector with forward vector when applying impulse -AD
-            _nextState = new RoamerLungeState(_currentEnemy, _patrolPoints, _playerPos, _navMeshAgent);
-            _stage = EVENT.EXIT;
-
-        }
+        //else if (_navMeshAgent.remainingDistance < 10.0f && bCanLunge && _LungeChance == 3 && bIsFacingPlayer)
+        //{
+        //    //TODO: Figure out why enemy won't leave the ground despite adding an up vector with forward vector when applying impulse -AD
+        //    _nextState = new RoamerLungeState(_currentEnemy, _patrolPoints, _playerPos, _navMeshAgent);
+        //    _stage = EVENT.EXIT;
+        //    Debug.Log("AttemptedLunge");
+        //}
         else if (_navMeshAgent.remainingDistance >= 15.0f)
         {
             _navMeshAgent.ResetPath();
@@ -64,7 +72,7 @@ public class RoamerPursueState : RoamerState
             _stage = EVENT.EXIT;
         }
 
-        Debug.Log("Enemy Pursuing");
+        
     }
 
     void MoveToPlayer()

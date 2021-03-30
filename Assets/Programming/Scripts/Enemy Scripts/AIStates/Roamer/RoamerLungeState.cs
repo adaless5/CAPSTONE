@@ -23,14 +23,14 @@ public class RoamerLungeState : RoamerState
 
         if(bCanLunge)
         {
-            Vector3 jumpDir = _currentEnemy.gameObject.transform.forward * 10.0f + _currentEnemy.gameObject.transform.up * 10.0f;
+            Vector3 jumpDir = _currentEnemy.gameObject.transform.forward * 5.0f + _currentEnemy.gameObject.transform.up * 5.0f;
             _currentEnemy.gameObject.GetComponent<Rigidbody>().AddForce(jumpDir, ForceMode.Impulse);
 
             bCanLunge = false;
         }
         else if(!bCanLunge)
         {
-            _nextState = new RoamerIdleState(_currentEnemy, _patrolPoints, _playerPos, _navMeshAgent);
+            _nextState = new RoamerPursueState(_currentEnemy, _patrolPoints, _playerPos, _navMeshAgent);
             _stage = EVENT.EXIT;
         }
     }

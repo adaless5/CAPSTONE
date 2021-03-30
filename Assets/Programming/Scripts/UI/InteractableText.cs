@@ -33,6 +33,7 @@ public class InteractableText : MonoBehaviour
         m_TagsToIgnore.Add("Untagged");
         m_TagsToIgnore.Add("Enemy");
         m_TagsToIgnore.Add("Player_Blade");
+        m_TagsToIgnore.Add("Roamer");
     }
 
     // Update is called once per frame

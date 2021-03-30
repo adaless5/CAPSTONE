@@ -6,17 +6,17 @@ using UnityEngine.AI;
 public class RoamerIdleState : RoamerState
 {
     float _IdleTimer = 0.0f;
-    float _IdleTime = 0.0f;
-
+    State _previousState;
     public RoamerIdleState(GameObject enemy, Transform[] pp, Transform playerposition, NavMeshAgent nav) : base(enemy, pp, playerposition, nav)
     {
         _stateName = STATENAME.IDLE;
-        _IdleTime = Random.Range(2.0f, 5.0f);
+        _IdleTimer = Random.Range(7.0f, 10.0f);       
     }
 
     public override void Enter()
     {
         base.Enter();
+        Debug.Log("Enemy Idle");
     }
 
     // Update is called once per frame
@@ -24,23 +24,27 @@ public class RoamerIdleState : RoamerState
     {
         base.Update();
 
-        _IdleTimer += Time.deltaTime;
+        _IdleTimer -= Time.deltaTime;
 
-        if(_IdleTimer > 2.0f)
+        if (CanSeePlayer())
         {
-            //_navMeshAgent.ResetPath();
-            if(Vector3.Distance(_currentEnemy.transform.position, _playerPos.position) >= 15.0f)
+            _nextState = new RoamerPursueState(_currentEnemy, _patrolPoints, _playerPos, _navMeshAgent);
+            _stage = EVENT.EXIT;
+        }
+        else if (_IdleTimer <= 0.0f)
+        {    
+            if(_currentEnemy.GetComponent<RoamerAI>().bShouldWanderRandomly)
             {
-                _nextState = new RoamerPatrolState(_currentEnemy, _patrolPoints, _playerPos, _navMeshAgent);
-                _stage = EVENT.EXIT;
+                _nextState = new RoamerWanderState(_currentEnemy, _patrolPoints, _playerPos, _navMeshAgent, _currentEnemy.GetComponent<RoamerAI>()._wanderRadius);
+
             }
             else
             {
-                _nextState = new RoamerPursueState(_currentEnemy, _patrolPoints, _playerPos, _navMeshAgent);
-                _stage = EVENT.EXIT;
+                _nextState = new RoamerPatrolState(_currentEnemy, _patrolPoints, _playerPos, _navMeshAgent);
+
             }
+            _stage = EVENT.EXIT;
         }
 
-        Debug.Log("Enemy Idle");
     }
 }
