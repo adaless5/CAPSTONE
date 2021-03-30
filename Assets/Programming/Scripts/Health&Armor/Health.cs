@@ -18,11 +18,11 @@ public class Health : MonoBehaviour, ISaveable
     [SerializeField]
     private bool m_IsLoadingShield = false;
 
-    public event Action<float> OnTakeHealthDamage;
+    public event Action OnTakeDamage;
     public event Action<float> OnHeal;
     public event Action OnDeath;
 
-    bool isDead = false;
+    public bool isDead = false;
     bool isMarkerCreated;
 
     public HealthBarUI healthBar;
@@ -67,7 +67,6 @@ public class Health : MonoBehaviour, ISaveable
     {
         LoadDataOnSceneEnter();
         EventBroker.OnPlayerSpawned += PlayerSpawned;
-        OnTakeHealthDamage += TakeDamage;
         //if (isDead) GetComponent<MeshRenderer>().enabled = false;
         //else GetComponent<MeshRenderer>().enabled = true;
     }
@@ -78,7 +77,6 @@ public class Health : MonoBehaviour, ISaveable
         if (healthBar != null && gameObject.tag == "Player")
             healthBar.LoseHealth(m_HP, damage, m_MaxHealth);
 
-        EnemyHitEffects hitEffect = GetComponentInChildren<EnemyHitEffects>(); 
 
         if (m_HP <= 0.0f)
         {
@@ -89,23 +87,13 @@ public class Health : MonoBehaviour, ISaveable
             else
             {
                 Die();
-                if(hitEffect)
-                {
-                    hitEffect.Death();
-                }
-            }
-        }
-        else
-        {
-            if (hitEffect)
-            {
-                hitEffect.Hit();
             }
         }
 
         //Clamp values -LCC
         m_HP = Mathf.Clamp(m_HP, 0, m_MaxHealth);
-
+        
+        CallOnTakeDamage();
     }
 
     public float GetMaxHealth()
@@ -115,31 +103,34 @@ public class Health : MonoBehaviour, ISaveable
 
     void Die()
     {
-        if (m_marker != null)
-        {
-            m_compass.RemoveMarker(m_marker);
-        }
-
-        //Temporary Spawning Stuff - Anthony
-        Spawner spawner = GetComponent<Spawner>();
-        if (spawner != null)
-        {
-            spawner.Spawn();
-        }
-
         isDead = true;
-
-        //Disabled Deactivation on Death to make Death Event more malleable - LCC
-
-        //Destroy(gameObject);
-        if(gameObject.tag != "Player")
-        gameObject.SetActive(false);
-        for (int i = 0; i < transform.childCount; ++i)
+        if(gameObject.tag != "Roamer")
         {
+            if (m_marker != null)
+            {
+                m_compass.RemoveMarker(m_marker);
+            }
+
+            //Temporary Spawning Stuff - Anthony
+            Spawner spawner = GetComponent<Spawner>();
+            if (spawner != null)
+            {
+                spawner.Spawn();
+            }
+
+
+            //Disabled Deactivation on Death to make Death Event more malleable - LCC
+        
+            //Destroy(gameObject);
+            if(gameObject.tag != "Player")
+            gameObject.SetActive(false);
+            for (int i = 0; i < transform.childCount; ++i)
+            {
                 transform.GetChild(i).gameObject.SetActive(false);
+            }
+            CallOnDeath();
+            //transform.DetachChildren();
         }
-        //transform.DetachChildren();
-        CallOnDeath();
     }
 
     void PlayerDeath()
@@ -152,9 +143,9 @@ public class Health : MonoBehaviour, ISaveable
 
     }
 
-    public void CallOnTakeHealthDamage(float damageToTake)
+    public void CallOnTakeDamage()
     {
-        OnTakeHealthDamage?.Invoke(damageToTake);
+        OnTakeDamage?.Invoke();
     }
 
     public void CallOnDeath()

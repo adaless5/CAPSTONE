@@ -6,12 +6,12 @@ using UnityEngine.AI;
 public class Stun : State
 {
     float _stunTime = 3.0f;
-    Vector3 _spinningVector = new Vector3(0, 180.0f, 0);
+    //Vector3 _spinningVector = new Vector3(0, 180.0f, 0);
     State _resumeState;
     public Stun(float stuntime, State resumestate) 
     {
         _currentEnemy = resumestate.GetCurrentEnemy();
-        _stateName = STATENAME.IDLE;
+        _stateName = STATENAME.STUN;
         _stunTime = stuntime;
         _resumeState = resumestate;
         Debug.Log("Stunned");
@@ -26,16 +26,17 @@ public class Stun : State
     {
         base.Update();
         _stunTime -= Time.deltaTime;
-        _currentEnemy.transform.Rotate(_spinningVector * Time.deltaTime);
+        //_currentEnemy.transform.Rotate(_spinningVector * Time.deltaTime);
         if (_stunTime <= 0)
         {
-            _nextState = _resumeState;
             _stage = EVENT.EXIT;
         }
     }
 
     public override void Exit()
     {
+        _currentEnemy.GetComponent<NavMeshAgent>().isStopped = false;
+        _nextState = _resumeState;
         base.Exit();
     }
 }
