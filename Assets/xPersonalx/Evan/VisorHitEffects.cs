@@ -25,7 +25,7 @@ public class VisorHitEffects : MonoBehaviour
     {
         for (int i = 0; i < HealthHitImages.Length; i++)
         {
-            HealthHitImageAlpha.Add(1.0f);
+            HealthHitImageAlpha.Add(0.1f);
             bHealthHitImageActive.Add(true);
             Color col = HealthHitImages[i].GetComponent<MeshRenderer>().material.color;
             col.a = 0.0f;
@@ -34,7 +34,7 @@ public class VisorHitEffects : MonoBehaviour
         for (int i = 0; i < ShieldHitImages.Length; i++)
         {
             bShieldHitImageActive.Add(true);
-            ShieldHitImageAlpha.Add(1.0f);
+            ShieldHitImageAlpha.Add(0.1f);
             Color col = ShieldHitImages[i].GetComponent<MeshRenderer>().material.color;
             col.a = 0.0f;
             ShieldHitImages[i].GetComponent<MeshRenderer>().material.color = col;
@@ -42,7 +42,7 @@ public class VisorHitEffects : MonoBehaviour
         for (int i = 0; i < ShieldBreakImages.Length; i++)
         {
             bShieldBreakImageActive.Add(true);
-            ShieldBreakImageAlpha.Add(1.0f);
+            ShieldBreakImageAlpha.Add(0.1f);
             Color col = ShieldBreakImages[i].GetComponent<MeshRenderer>().material.color;
             col.a = 0.0f;
             ShieldBreakImages[i].GetComponent<MeshRenderer>().material.color = col;
