@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7267059165500695546}
   - component: {fileID: 7087564461341407268}
   - component: {fileID: 5954505552678452061}
+  - component: {fileID: 5778676985403491586}
   m_Layer: 0
   m_Name: LeapEye2
   m_TagString: Untagged
@@ -81,6 +82,22 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &5778676985403491586
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 131554106005709799}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12204abbb49e55040bf3191c4490c9d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ThermalViewMaterial: {fileID: 2100000, guid: 211f1b39820a1824a831e6ee1b1b6e32,
+    type: 2}
+  m_MeshRenderers: []
+  m_MeshRenderer: {fileID: 0}
 --- !u!1 &977401896139285840
 GameObject:
   m_ObjectHideFlags: 0
@@ -340,6 +357,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HP: 50
   m_IsLoadingShield: 0
+  isDead: 0
   healthBar: {fileID: 0}
   m_compass: {fileID: 0}
   m_marker: {fileID: 0}
@@ -5316,6 +5334,22 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!114 &5762184933907685215
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3488179258834645519}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12204abbb49e55040bf3191c4490c9d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ThermalViewMaterial: {fileID: 2100000, guid: 211f1b39820a1824a831e6ee1b1b6e32,
+    type: 2}
+  m_MeshRenderers: []
+  m_MeshRenderer: {fileID: 0}
 --- !u!1 &3690626301711970132
 GameObject:
   m_ObjectHideFlags: 0
@@ -5426,6 +5460,7 @@ GameObject:
   - component: {fileID: 6555702883475603085}
   - component: {fileID: 9064521469926358332}
   - component: {fileID: 5755818919109258472}
+  - component: {fileID: 1563610139463438090}
   m_Layer: 0
   m_Name: LeapEye1
   m_TagString: Untagged
@@ -5496,6 +5531,22 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &1563610139463438090
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8642293096191688554}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12204abbb49e55040bf3191c4490c9d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ThermalViewMaterial: {fileID: 2100000, guid: 211f1b39820a1824a831e6ee1b1b6e32,
+    type: 2}
+  m_MeshRenderers: []
+  m_MeshRenderer: {fileID: 0}
 --- !u!1001 &906112100915929448
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5607,7 +5658,7 @@ PrefabInstance:
     - target: {fileID: 8399576428632677680, guid: be70ec99bba11c7459f86b9361fe65a4,
         type: 3}
       propertyPath: _ProjectileDamage
-      value: 15
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8399576428632677681, guid: be70ec99bba11c7459f86b9361fe65a4,
         type: 3}
@@ -5778,6 +5829,12 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 707e9572178388b44b4e92fa54c6df1c, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e6c9288b6d956b446a2d8ef9c5775a17, type: 3}
+--- !u!1 &3488179258834645519 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5349720144130839750, guid: e6c9288b6d956b446a2d8ef9c5775a17,
+    type: 3}
+  m_PrefabInstance: {fileID: 8815381404739364553}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4261337781949245621 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4716912081995812476, guid: e6c9288b6d956b446a2d8ef9c5775a17,

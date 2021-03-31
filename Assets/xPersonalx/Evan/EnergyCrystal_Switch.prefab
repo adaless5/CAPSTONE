@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 368740790304955098}
   - component: {fileID: 6253571741865808461}
   - component: {fileID: 742278023263819321}
+  - component: {fileID: 6086259737495859110}
   m_Layer: 0
   m_Name: Point Light
   m_TagString: Untagged
@@ -43,8 +44,8 @@ Light:
   serializedVersion: 10
   m_Type: 2
   m_Shape: 0
-  m_Color: {r: 0.592826, g: 0.4672481, b: 0.7924528, a: 1}
-  m_Intensity: 3.7136166
+  m_Color: {r: 0.30745175, g: 0.15566039, b: 1, a: 1}
+  m_Intensity: 45.81546
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -114,7 +115,7 @@ MonoBehaviour:
   m_PointlightHDType: 0
   m_SpotLightShape: 0
   m_AreaLightShape: 0
-  m_Intensity: 46.666683
+  m_Intensity: 575.7341
   m_EnableSpotReflector: 0
   m_LuxAtDistance: 1
   m_InnerSpotPercent: 0
@@ -216,6 +217,21 @@ MonoBehaviour:
   m_AreaLightEmissiveMeshShadowCastingMode: 0
   m_AreaLightEmissiveMeshMotionVectorGenerationMode: 0
   m_AreaLightEmissiveMeshLayer: -1
+--- !u!114 &6086259737495859110
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 514519135349043949}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d234a7c9b5bb6124487c0282eb3cf77e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pulseHigh: 25
+  pulseLow: 5
+  pulseTime: 0.5
 --- !u!1 &791844286104440674
 GameObject:
   m_ObjectHideFlags: 0
@@ -15201,6 +15217,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HP: 50
   m_IsLoadingShield: 0
+  isDead: 0
   healthBar: {fileID: 0}
   m_compass: {fileID: 0}
   m_marker: {fileID: 0}

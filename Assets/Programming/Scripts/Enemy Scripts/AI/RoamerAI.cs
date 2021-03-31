@@ -72,20 +72,23 @@ public class RoamerAI : MonoBehaviour
 
     public void TakingDamage()
     {
-        //If AI is attacked in idle, switch to chasing state even when not in line of sight
-        if(_currentState._stateName == State.STATENAME.IDLE)
+        if (_currentState._stateName != State.STATENAME.DEAD)
         {
-            _currentState = new RoamerPursueState(gameObject, _patrolPoints, _playerReference.transform, _navMeshAgent);
-        }
-        _roamerAnimator.SetTrigger("IsHit");
-        Stun();
-        if(_roamerHealth.isDead)
-        {
-            _currentState.Exit();
-            _currentState = new RoamerDeath(gameObject, _patrolPoints, _playerReference.transform, _navMeshAgent);
-            int deathRandomize = Random.Range(0, 2);
-            _roamerAnimator.SetInteger("RandomDeath", deathRandomize);
-            _roamerAnimator.SetTrigger("IsDying");
+            //If AI is attacked in idle, switch to chasing state even when not in line of sight
+            if (_currentState._stateName == State.STATENAME.IDLE)
+            {
+                _currentState = new RoamerPursueState(gameObject, _patrolPoints, _playerReference.transform, _navMeshAgent);
+            }
+            _roamerAnimator.SetTrigger("IsHit");
+            Stun();
+            if (_roamerHealth.isDead)
+            {
+                _currentState.Exit();
+                _currentState = new RoamerDeath(gameObject, _patrolPoints, _playerReference.transform, _navMeshAgent);
+                int deathRandomize = Random.Range(0, 2);
+                _roamerAnimator.SetInteger("RandomDeath", deathRandomize);
+                _roamerAnimator.SetTrigger("IsDying");
+            }
         }
     }
 
@@ -94,6 +97,7 @@ public class RoamerAI : MonoBehaviour
 
     public void CheckAnimationState()
     {
+        if(_currentState != null)
         switch (_currentState._stateName)
         {
             case State.STATENAME.IDLE:

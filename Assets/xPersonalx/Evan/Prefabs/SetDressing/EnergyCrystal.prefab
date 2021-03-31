@@ -211,6 +211,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HP: 50
   m_IsLoadingShield: 0
+  isDead: 0
   healthBar: {fileID: 0}
   m_compass: {fileID: 0}
   m_marker: {fileID: 0}
@@ -5029,7 +5030,7 @@ GameObject:
   - component: {fileID: 1929639095170157848}
   - component: {fileID: 2883530994794339455}
   m_Layer: 2
-  m_Name: EnergyCrystal_Switch
+  m_Name: EnergyCrystal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20121,6 +20122,7 @@ GameObject:
   - component: {fileID: 7757336249491046634}
   - component: {fileID: 4066954621651454077}
   - component: {fileID: 7274586763182869513}
+  - component: {fileID: 7433164143131983245}
   m_Layer: 0
   m_Name: Point Light
   m_TagString: Untagged
@@ -20326,6 +20328,21 @@ MonoBehaviour:
   m_AreaLightEmissiveMeshShadowCastingMode: 0
   m_AreaLightEmissiveMeshMotionVectorGenerationMode: 0
   m_AreaLightEmissiveMeshLayer: -1
+--- !u!114 &7433164143131983245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7609517249000433885}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d234a7c9b5bb6124487c0282eb3cf77e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pulseHigh: 20
+  pulseLow: 5
+  pulseTime: 0.5
 --- !u!1 &8520300301171153279
 GameObject:
   m_ObjectHideFlags: 0

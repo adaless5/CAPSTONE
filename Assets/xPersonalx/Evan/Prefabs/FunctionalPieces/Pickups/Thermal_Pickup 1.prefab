@@ -9,10 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2193028360770026410}
-  - component: {fileID: 2193028360770026414}
-  - component: {fileID: 2193028360770026415}
   - component: {fileID: 2193028360770026408}
   - component: {fileID: 2193028360770026409}
+  - component: {fileID: 7916038252946469149}
   m_Layer: 0
   m_Name: Thermal_Pickup 1
   m_TagString: Interactable
@@ -35,56 +34,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
---- !u!33 &2193028360770026414
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2193028360770026411}
-  m_Mesh: {fileID: 5060444177187149915, guid: c0bb376f826205047a3caab635236990, type: 3}
---- !u!23 &2193028360770026415
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2193028360770026411}
-  m_Enabled: 0
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 1898689eacc8aa64fb1da6420730bccf, type: 2}
-  - {fileID: 2100000, guid: e0df9312489b3da4b9d93c0fd71a0221, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!135 &2193028360770026408
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -96,7 +45,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 1
+  m_Radius: 2
   m_Center: {x: 0, y: 0.3, z: 0}
 --- !u!114 &2193028360770026409
 MonoBehaviour:
@@ -112,7 +61,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _CorrespondingEquipmentBeltIndex: 2
   isUsed: 0
+  _modelObj: {fileID: 3572831855322559599}
   _player: {fileID: 0}
+--- !u!135 &7916038252946469149
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2193028360770026411}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5662701394794382898
 GameObject:
   m_ObjectHideFlags: 0
@@ -398,6 +361,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 62d129ba2333b6b4285c9006b4d046f5, type: 3}
+--- !u!1 &3572831855322559599 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3873039072405848822, guid: 62d129ba2333b6b4285c9006b4d046f5,
+    type: 3}
+  m_PrefabInstance: {fileID: 300319646442518169}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4242090716937006805 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4536281685029148748, guid: 62d129ba2333b6b4285c9006b4d046f5,

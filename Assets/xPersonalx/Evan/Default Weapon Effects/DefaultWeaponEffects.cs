@@ -47,7 +47,7 @@ public class DefaultWeaponEffects : MonoBehaviour
         SetMuzzlePieces();
         transform.position = _gunMuzzlePoint.transform.position;
         _muzzleEffects.transform.forward = -fireAngle;
-        _muzzleFireSpiral.transform.forward = -fireAngle;
+        _muzzleFireSpiral.transform.forward = fireAngle;
         _isFiring = true;
         _hitLandedEffects.transform.localScale = new Vector3(1, 1, 1);
         _muzzleEffects.transform.localScale = new Vector3(1, 1, 1);
