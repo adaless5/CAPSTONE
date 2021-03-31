@@ -31,6 +31,8 @@ public class Health : MonoBehaviour, ISaveable
     public Compass m_compass;
     public CompassMarkers m_marker;
 
+    EnemyHitEffects hitEffects;
+
 
     void Start()
     {
@@ -67,6 +69,7 @@ public class Health : MonoBehaviour, ISaveable
     {
         LoadDataOnSceneEnter();
         EventBroker.OnPlayerSpawned += PlayerSpawned;
+        hitEffects = GetComponentInChildren<EnemyHitEffects>();
         //if (isDead) GetComponent<MeshRenderer>().enabled = false;
         //else GetComponent<MeshRenderer>().enabled = true;
     }
@@ -76,10 +79,17 @@ public class Health : MonoBehaviour, ISaveable
         m_HP -= damage;
         if (healthBar != null && gameObject.tag == "Player")
             healthBar.LoseHealth(m_HP, damage, m_MaxHealth);
-
+        if(hitEffects != null)
+        {
+            hitEffects.Hit();
+        }
 
         if (m_HP <= 0.0f)
         {
+            if (hitEffects != null)
+            {
+                hitEffects.Hit();
+            }
             if (gameObject.tag == "Player")
             {
                 PlayerDeath();
@@ -104,7 +114,12 @@ public class Health : MonoBehaviour, ISaveable
     void Die()
     {
         isDead = true;
-        if(gameObject.tag != "Roamer")
+
+        if (hitEffects != null)
+        {
+            hitEffects.Death();
+        }
+        if (gameObject.tag != "Roamer")
         {
             if (m_marker != null)
             {

@@ -16,6 +16,7 @@ public class MineSpawner : Weapon, ISaveable
     //public float Damage = 50;
 
     public GameObject minePrefab;
+    public GameObject grenadeInHand;
     public ALTPlayerController m_playerController;
 
     bool m_bCanThrow = true;
@@ -56,9 +57,18 @@ public class MineSpawner : Weapon, ISaveable
     // Update is called once per frame
     public override void Update()
     {
-        if(bIsActive && m_playerController.m_ControllerState == ALTPlayerController.ControllerState.Play)
+        if(bIsActive)
         {
+            if(m_playerController.m_ControllerState == ALTPlayerController.ControllerState.Play)
             UseTool();
+            if(m_bCanThrow)
+            {
+                grenadeInHand.SetActive(true);
+            }
+        }
+        else
+        {
+            grenadeInHand.SetActive(false);
         }
     }
 
@@ -81,6 +91,7 @@ public class MineSpawner : Weapon, ISaveable
                 m_bCanThrow = false;
                 m_timer = m_fireRate;
                 ThrowMine();
+                grenadeInHand.SetActive(false);
                 //Debug.Log("THROWN");
             }
         }
@@ -93,6 +104,7 @@ public class MineSpawner : Weapon, ISaveable
             if (m_timer <= 0f)
             {
                 m_bCanThrow = true;
+                grenadeInHand.SetActive(true);
                 //Debug.Log("RESET");
             }
         }

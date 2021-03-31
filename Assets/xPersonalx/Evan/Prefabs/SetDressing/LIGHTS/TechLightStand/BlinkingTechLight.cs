@@ -11,6 +11,7 @@ public class BlinkingTechLight : MonoBehaviour
     public float FlickerLength;
     public float FlickerTimer;
     public bool Flickering;
+    public bool doesGlow;
 
     float[] glowModifier;
     bool[] bGlowModifier;
@@ -91,7 +92,8 @@ public class BlinkingTechLight : MonoBehaviour
         }
         else
         {
-            Glow();
+            if (doesGlow)
+            { Glow(); }
             FlickerTimer -= Time.deltaTime;
             if (FlickerTimer < 0.0f)
             {

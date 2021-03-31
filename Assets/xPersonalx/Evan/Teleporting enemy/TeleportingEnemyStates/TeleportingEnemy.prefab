@@ -116,8 +116,8 @@ MonoBehaviour:
   _teleportTarget: {x: 0, y: 0, z: 0}
   _enemyModelObject: {fileID: 7732015289531612027}
   _attack: {fileID: 164036493910374684}
-  _followDistance: 50
-  _attackDistance: 15
+  _followDistance: 25
+  _attackDistance: 13
   _attackTimeRange: {x: 1, y: 2}
   _hasDisappeared: 0
   _attackTeleportTimeRange: {x: 4, y: 8}
@@ -140,6 +140,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HP: 60
   m_IsLoadingShield: 0
+  isDead: 0
   healthBar: {fileID: 0}
   m_compass: {fileID: 0}
   m_marker: {fileID: 0}

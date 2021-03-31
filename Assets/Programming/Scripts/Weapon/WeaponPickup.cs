@@ -9,8 +9,8 @@ public class WeaponPickup : MonoBehaviour, ITippable
     public WeaponType _pickUpWeapon;
     int weaponNum;
     bool isUsed = false;
-
-    GameObject _imageObject = null;
+    public GameObject _modelObj;
+    GameObject _imageObject;
 
     string[] _tipName = { "EQUIPMENT_DEFAULT_GUN", "EQUIPMENT_GRENADE", "EQUIPMENT_GLANDGUN" };
 
@@ -32,10 +32,16 @@ public class WeaponPickup : MonoBehaviour, ITippable
                 weaponNum = 2;
                 break;
         }
-
-        if (isUsed) GetComponent<MeshRenderer>().enabled = false;
-        else GetComponent<MeshRenderer>().enabled = true;
-
+        if (GetComponent<MeshRenderer>() != null)
+        {
+            if (isUsed) GetComponent<MeshRenderer>().enabled = false;
+            else GetComponent<MeshRenderer>().enabled = true;
+        }
+        if (_imageObject != null)
+        {
+            if (isUsed) _modelObj.SetActive(false);
+            else _modelObj.SetActive(true);
+        }
 
         EventBroker.OnPlayerSpawned += PlayerSpawn;
     }
@@ -71,8 +77,15 @@ public class WeaponPickup : MonoBehaviour, ITippable
                 if (other.gameObject.tag == "Player")
                 {
                     EventBroker.CallOnPickupWeapon(weaponNum);
-                    isUsed = true;
-                    GetComponent<MeshRenderer>().enabled = false;
+                    isUsed = true; 
+                    if (GetComponent<MeshRenderer>() != null)
+                    {
+                        GetComponent<MeshRenderer>().enabled = false;
+                    }
+                    if (_modelObj != null)
+                    {
+                        _modelObj.SetActive(false);
+                    }
                     GetComponent<Collider>().enabled = false;
 
                     CreateTip("Sprites/Messages/" + _tipName[weaponNum]);

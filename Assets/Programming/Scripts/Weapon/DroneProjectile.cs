@@ -19,20 +19,18 @@ public class DroneProjectile : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Player")
+        if (collision.gameObject.GetComponentInParent<ALTPlayerController>() != null || collision.gameObject.GetComponentInParent<Tool>() != null)
         {
             //Debug.Log("Player found");
-            ALTPlayerController tempplayer = collision.gameObject.GetComponent<ALTPlayerController>();
+            ALTPlayerController tempplayer = collision.gameObject.GetComponentInParent<ALTPlayerController>();
             if (tempplayer != null)
             {
                 tempplayer.CallOnTakeDamage(_bulletDamage);
-                Destroy(this);
             }
+                Destroy(this);
         }
-        else
-        {
-            //Debug.Log("nah");
+        
             Destroy(gameObject);
-        }
+        
     }
 }

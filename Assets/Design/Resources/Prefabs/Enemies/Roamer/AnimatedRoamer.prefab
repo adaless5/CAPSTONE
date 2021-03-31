@@ -56,7 +56,7 @@ NavMeshAgent:
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
-  m_Height: 1.6
+  m_Height: 0.5
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
@@ -75,8 +75,8 @@ MonoBehaviour:
   _patrolPoints:
   - {fileID: 0}
   - {fileID: 0}
-  _roamerAnimator: {fileID: 0}
-  _roamerHealth: {fileID: 0}
+  _roamerAnimator: {fileID: 982931648732671325}
+  _roamerHealth: {fileID: 6687430423300233070}
   bShouldWanderRandomly: 1
   _wanderSphere: {fileID: 0}
   _wanderRadius: 20
@@ -242,6 +242,12 @@ PrefabInstance:
 --- !u!4 &6576451677171152679 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 498938ef273678f4e8e66bfaf81e061a,
+    type: 3}
+  m_PrefabInstance: {fileID: 6687430421991624908}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &982931648732671325 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 498938ef273678f4e8e66bfaf81e061a,
     type: 3}
   m_PrefabInstance: {fileID: 6687430421991624908}
   m_PrefabAsset: {fileID: 0}

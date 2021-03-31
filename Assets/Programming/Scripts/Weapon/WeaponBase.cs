@@ -20,12 +20,12 @@ public class WeaponBase : Weapon, ISaveable
     float m_lerpDuration = 3f;
 
     bool _bPlayedNewShellSound;
-
+    GameObject muzzlePoint;
     void Awake()
     {
         base.Awake();        
         LoadDataOnSceneEnter();
-
+        muzzlePoint = GameObject.Find("DefaultWeaponMuzzlePoint");
         //TODO: Readd Save implementation
         //SaveSystem.SaveEvent += SaveDataOnSceneChange;
 
@@ -172,7 +172,6 @@ public class WeaponBase : Weapon, ISaveable
         //Play Recoil animation
         gunAnimator.SetTrigger("OnRecoil");      
         muzzleFlash.Play();
-
         if (bIsActive)
         {
             //Gun Shot Sounds
@@ -184,8 +183,11 @@ public class WeaponBase : Weapon, ISaveable
         if (!m_bHasActionUpgrade)
         {
             RaycastHit hitInfo;
+            FindObjectOfType<DefaultWeaponEffects>().Fire(muzzlePoint.transform.forward);
+            UpgradedFire();
             if (Physics.Raycast(gunCamera.transform.position, gunCamera.transform.forward, out hitInfo, m_weaponRange))
             {
+            FindObjectOfType<DefaultWeaponEffects>().Fire(hitInfo.point, hitInfo.normal);
                 //Only damages if asset has "Health" script
                 Health target = hitInfo.transform.GetComponent<Health>();
                 if (target != null && target.gameObject.tag != "Player")
@@ -292,8 +294,10 @@ public class WeaponBase : Weapon, ISaveable
         for (int i = -1; i < 2; i++)
         {
             RaycastHit hitInfo;
+            FindObjectOfType<DefaultWeaponEffects>().Fire(muzzlePoint.transform.forward);
             if (Physics.Raycast(gunCamera.transform.position, Quaternion.Euler(0, 15f * i, 0) * gunCamera.transform.forward, out hitInfo, m_weaponRange))
             {
+                FindObjectOfType<DefaultWeaponEffects>().Fire(hitInfo.point, hitInfo.normal);
                 //Only damages if asset has "Health" script
                 Health target = hitInfo.transform.GetComponent<Health>();
                 if (target != null && target.gameObject.tag != "Player")
