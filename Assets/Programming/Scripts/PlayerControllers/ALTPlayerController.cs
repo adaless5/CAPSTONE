@@ -487,8 +487,8 @@ public class ALTPlayerController : MonoBehaviour
 
     public void PlayerMovement()
     {
+        int triggermask = 1 << 2;
         int playermask = 1 << 9;
-        int triggermask = 1 << 16;
 
         RaycastHit[] allHits;
         allHits = Physics.SphereCastAll(transform.position, 0.5f, Vector3.down, _controller.height, ~(playermask | triggermask));
