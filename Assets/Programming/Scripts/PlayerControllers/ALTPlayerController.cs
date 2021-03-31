@@ -176,6 +176,11 @@ public class ALTPlayerController : MonoBehaviour
     {
         m_UpgradeCurrencyAmount += 10;
     }
+
+    public void DebugGodMode()
+    {
+        m_health.bCanBeDamaged = false;
+    }
     #endregion
 
     void InitializeControls()

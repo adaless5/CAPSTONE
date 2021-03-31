@@ -22,6 +22,7 @@ public class Health : MonoBehaviour, ISaveable
     public event Action<float> OnHeal;
     public event Action OnDeath;
 
+    public bool bCanBeDamaged = true;
     public bool isDead = false;
     bool isMarkerCreated;
 
@@ -36,14 +37,12 @@ public class Health : MonoBehaviour, ISaveable
 
     void Start()
     {
-
         healthBar = FindObjectOfType<HealthBarUI>();
 
         if (healthBar != null)
             healthBar.SetMaxHealth(m_MaxHealth);
 
         isMarkerCreated = false;
-
     }
 
     void PlayerSpawned(GameObject playerReference)
@@ -76,34 +75,37 @@ public class Health : MonoBehaviour, ISaveable
 
     public void TakeDamage(float damage)
     {
-        m_HP -= damage;
-        if (healthBar != null && gameObject.tag == "Player")
-            healthBar.LoseHealth(m_HP, damage, m_MaxHealth);
-        if(hitEffects != null)
+        if (bCanBeDamaged)
         {
-            hitEffects.Hit();
-        }
-
-        if (m_HP <= 0.0f)
-        {
+            m_HP -= damage;
+            if (healthBar != null && gameObject.tag == "Player")
+                healthBar.LoseHealth(m_HP, damage, m_MaxHealth);
             if (hitEffects != null)
             {
                 hitEffects.Hit();
             }
-            if (gameObject.tag == "Player")
-            {
-                PlayerDeath();
-            }
-            else
-            {
-                Die();
-            }
-        }
 
-        //Clamp values -LCC
-        m_HP = Mathf.Clamp(m_HP, 0, m_MaxHealth);
-        
-        CallOnTakeDamage();
+            if (m_HP <= 0.0f)
+            {
+                if (hitEffects != null)
+                {
+                    hitEffects.Hit();
+                }
+                if (gameObject.tag == "Player")
+                {
+                    PlayerDeath();
+                }
+                else
+                {
+                    Die();
+                }
+            }
+
+            //Clamp values -LCC
+            m_HP = Mathf.Clamp(m_HP, 0, m_MaxHealth);
+
+            CallOnTakeDamage();
+        }
     }
 
     public float GetMaxHealth()
