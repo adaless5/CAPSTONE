@@ -15,6 +15,7 @@ public class DebugController : MonoBehaviour
     public static DebugCommand ALL_WEAPONS;
     public static DebugCommand ALL_TOOLS;
     public static DebugCommand ADD_MONEY;
+    public static DebugCommand GOD_MODE;
     public List<DebugCommandBase> commandList;
 
     const float BUFFER = 5.0f;
@@ -36,11 +37,17 @@ public class DebugController : MonoBehaviour
             ALTPlayerController.instance.DebugGainCurrency();
         });
 
+        GOD_MODE = new DebugCommand("god_mode", "Makes player invincible.", "god_mode", () =>
+        {
+            ALTPlayerController.instance.DebugGodMode();
+        });
+
         commandList = new List<DebugCommandBase>
         {
             ALL_WEAPONS,
             ALL_TOOLS,
-            ADD_MONEY
+            ADD_MONEY,
+            GOD_MODE,
         };
     }
 
