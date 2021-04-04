@@ -71,6 +71,7 @@ public abstract class Weapon : Tool
 
     protected void Awake()
     {
+        LoadDataOnSceneEnter();
         EventBroker.OnPlayerSpawned += InitializePlayer;
         m_currentupgrades = new List<EUpgradeType>();
         m_upgradestats.SetToDefault();
@@ -171,7 +172,6 @@ public struct WeaponUpgrade
 
         return a;
     }
-
-
+    
 }
 

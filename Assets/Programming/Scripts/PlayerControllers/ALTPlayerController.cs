@@ -901,7 +901,10 @@ public class ALTPlayerController : MonoBehaviour
     {
         return m_Velocity;
     }
-
+    public Vector3 GetLastMoveVelocity()
+    {
+        return _lastMoveVelocity;
+    }
     public void SetXAxisInvert()
     {
         bInvertXAxis = !bInvertXAxis;
