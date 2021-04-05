@@ -47,28 +47,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   NumberOfPermittedUpgrades: 99
   DeafaultUpgrade1:
-    Damage: 1
-    ClipSize: 2
+    Damage: 10
+    ClipSize: 0
     AmmoReserveSize: 0
-    ReloadTime: 3
-    FireRate: 4
-    ImpactForce: 5
-    Range: 6
+    ReloadTime: 0
+    FireRate: 0
+    ImpactForce: 20
+    Range: 10
     FuzeTime: 0
     BlastRadius: 0
     ProjectileForce: 0
     DamageTime: 0
     HasAction: 0
     Type: 0
-    Title: TEST
-    Discription: TESSSSSST
-    UpgradeWorth: 1
+    Title: Hypemass Rounds
+    Discription: Uses atomic compression to drastically increase the mass of projectiles.
+      Increases hit damage and fire range.
+    UpgradeWorth: 2
   DeafaultUpgrade2:
     Damage: 0
     ClipSize: 0
     AmmoReserveSize: 0
-    ReloadTime: 0
-    FireRate: 0
+    ReloadTime: 0.6
+    FireRate: 0.6
     ImpactForce: 0
     Range: 0
     FuzeTime: 0
@@ -77,13 +78,14 @@ MonoBehaviour:
     DamageTime: 0
     HasAction: 0
     Type: 1
-    Title: bro
-    Discription: no
-    UpgradeWorth: 0
+    Title: Sophisticated Mechanisms
+    Discription: These well crafted parts allow the weapon to operate with increased
+      usability. Increases reload speed and fire rate.
+    UpgradeWorth: 2
   DeafaultUpgrade3:
     Damage: 0
-    ClipSize: 0
-    AmmoReserveSize: 0
+    ClipSize: 2
+    AmmoReserveSize: 20
     ReloadTime: 0
     FireRate: 0
     ImpactForce: 0
@@ -93,10 +95,11 @@ MonoBehaviour:
     ProjectileForce: 0
     DamageTime: 0
     HasAction: 0
-    Type: 0
-    Title: 
-    Discription: 
-    UpgradeWorth: 0
+    Type: 2
+    Title: Advanced Magazines
+    Discription: A refined design for the magazine allows room for more rounds. Increases
+      clip size and ammo reserve size.
+    UpgradeWorth: 2
   DeafaultUpgrade4:
     Damage: 0
     ClipSize: 0
@@ -109,45 +112,48 @@ MonoBehaviour:
     BlastRadius: 0
     ProjectileForce: 0
     DamageTime: 0
-    HasAction: 0
-    Type: 0
-    Title: 
-    Discription: 
-    UpgradeWorth: 0
+    HasAction: 1
+    Type: 3
+    Title: Fission Shot
+    Discription: 'Generates quasipartical doppelgangers of each round fired. Fire
+      two additional shots simultaneously. '
+    UpgradeWorth: 3
   ExplosiveUpgrade1:
-    Damage: 0
+    Damage: 20
     ClipSize: 0
     AmmoReserveSize: 0
     ReloadTime: 0
     FireRate: 0
-    ImpactForce: 0
+    ImpactForce: 20
     Range: 0
     FuzeTime: 0
-    BlastRadius: 0
-    ProjectileForce: 0
+    BlastRadius: 10
+    ProjectileForce: 20
     DamageTime: 0
     HasAction: 0
-    Type: 2
-    Title: bromore
-    Discription: haha
-    UpgradeWorth: 0
+    Type: 0
+    Title: Hyper-reactive Charge
+    Discription: A more volatile active ingredient produces a more deadly result.
+      Increases damage and hit range.
+    UpgradeWorth: 2
   ExplosiveUpgrade2:
     Damage: 0
     ClipSize: 0
-    AmmoReserveSize: 0
-    ReloadTime: 0
+    AmmoReserveSize: 15
+    ReloadTime: 0.5
     FireRate: 0
-    ImpactForce: 0
+    ImpactForce: 30
     Range: 0
     FuzeTime: 0
     BlastRadius: 0
-    ProjectileForce: 0
+    ProjectileForce: 30
     DamageTime: 0
     HasAction: 0
-    Type: 0
-    Title: 
-    Discription: 
-    UpgradeWorth: 0
+    Type: 1
+    Title: Ergonomic Interface
+    Discription: A more user-friendly design to the casing design increases ease
+      of use. Increases ammos reserve size and increases reload speed.
+    UpgradeWorth: 2
   ExplosiveUpgrade3:
     Damage: 0
     ClipSize: 0
@@ -156,15 +162,16 @@ MonoBehaviour:
     FireRate: 0
     ImpactForce: 0
     Range: 0
-    FuzeTime: 0
+    FuzeTime: 0.5
     BlastRadius: 0
-    ProjectileForce: 0
+    ProjectileForce: 20
     DamageTime: 0
     HasAction: 0
-    Type: 0
-    Title: 
-    Discription: 
-    UpgradeWorth: 0
+    Type: 2
+    Title: Hacked Fuse
+    Discription: A modified fuse timer intended for fast-paced skirmishes. Decreases
+      fuse time.
+    UpgradeWorth: 2
   ExplosiveUpgrade4:
     Damage: 0
     ClipSize: 0
@@ -177,50 +184,53 @@ MonoBehaviour:
     BlastRadius: 0
     ProjectileForce: 0
     DamageTime: 0
-    HasAction: 0
-    Type: 0
-    Title: 
-    Discription: 
-    UpgradeWorth: 0
+    HasAction: 1
+    Type: 3
+    Title: GRENADE ACTION UPGRADE
+    Discription: EFFECTS TBD I THINK
+    UpgradeWorth: 3
   CreatureUpgrade1:
-    Damage: 0
+    Damage: 5
     ClipSize: 0
     AmmoReserveSize: 0
     ReloadTime: 0
     FireRate: 0
-    ImpactForce: 0
+    ImpactForce: 10
     Range: 0
     FuzeTime: 0
     BlastRadius: 0
-    ProjectileForce: 0
-    DamageTime: 0
+    ProjectileForce: 10
+    DamageTime: 0.5
     HasAction: 0
     Type: 0
-    Title: 
-    Discription: 
-    UpgradeWorth: 0
+    Title: Aggression Hormones
+    Discription: Administering these proteins to the gland gun's organ will cause
+      it to produce more volatile bile-sacks. Increases projectiles' damage over
+      time.
+    UpgradeWorth: 2
   CreatureUpgrade2:
     Damage: 0
-    ClipSize: 0
+    ClipSize: 4
     AmmoReserveSize: 0
     ReloadTime: 0
-    FireRate: 0
-    ImpactForce: 0
+    FireRate: 0.5
+    ImpactForce: 10
     Range: 0
     FuzeTime: 0
     BlastRadius: 0
-    ProjectileForce: 0
+    ProjectileForce: 5
     DamageTime: 0
     HasAction: 0
-    Type: 0
-    Title: 
-    Discription: 
-    UpgradeWorth: 0
+    Type: 1
+    Title: Synthetic Adrenaline
+    Discription: 'A more concentrated, artificial substitute to stimulate the gland
+      gun''s organ. Increases clip size and fire rate. '
+    UpgradeWorth: 2
   CreatureUpgrade3:
     Damage: 0
     ClipSize: 0
-    AmmoReserveSize: 0
-    ReloadTime: 0
+    AmmoReserveSize: 15
+    ReloadTime: 0.5
     FireRate: 0
     ImpactForce: 0
     Range: 0
@@ -229,10 +239,11 @@ MonoBehaviour:
     ProjectileForce: 0
     DamageTime: 0
     HasAction: 0
-    Type: 0
-    Title: 
-    Discription: 
-    UpgradeWorth: 0
+    Type: 2
+    Title: Durable Canisters
+    Discription: A more robust design to safely store the gland gun's volatile provisions.
+      Increases reload speed and ammo reserve size.
+    UpgradeWorth: 2
   CreatureUpgrade4:
     Damage: 0
     ClipSize: 0
@@ -245,11 +256,11 @@ MonoBehaviour:
     BlastRadius: 0
     ProjectileForce: 0
     DamageTime: 0
-    HasAction: 0
-    Type: 0
-    Title: 
-    Discription: 
-    UpgradeWorth: 0
+    HasAction: 1
+    Type: 3
+    Title: GLANDGUN ACTION UPGRADE
+    Discription: EFFECTS TBD I THINK
+    UpgradeWorth: 3
 --- !u!65 &946741684399925180
 BoxCollider:
   m_ObjectHideFlags: 0

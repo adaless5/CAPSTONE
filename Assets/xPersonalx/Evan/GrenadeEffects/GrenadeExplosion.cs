@@ -8,7 +8,7 @@ public class GrenadeExplosion : MonoBehaviour
     public GameObject ImplosionWaveObject;
     public GameObject[] ShockwaveObjects;
     Light ExplosionLight;
-    float Lifetime;
+    public float Lifetime;
     public bool bDontDie;
     float lightIntensity;
 
@@ -16,7 +16,6 @@ public class GrenadeExplosion : MonoBehaviour
     void Awake()
     {
         bDontDie = false;
-        Lifetime = 0.6f;
         ExplosionLight = GetComponent<Light>();
         lightIntensity = ExplosionLight.intensity;
         for (int i = 0; i < ShockwaveObjects.Length;i++)
