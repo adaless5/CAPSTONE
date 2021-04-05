@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Blade : Equipment
 {
@@ -11,7 +12,7 @@ public class Blade : Equipment
 
     bool bHasHit;
     public float _bladeDamage;
-    Animator _animationswing;
+    Animator _animator;
     BoxCollider _hitbox;
     bool _bisAttacking;
     GameObject prevHit;
@@ -27,9 +28,10 @@ public class Blade : Equipment
         }
 
         _bisAttacking = false;
-        _animationswing = GetComponent<Animator>();
+        _animator = GetComponentInChildren<Animator>();
         _hitbox = GetComponent<BoxCollider>();
 
+        _animator.enabled = false;
         _hitbox.enabled = false;
         _hitbox.isTrigger = true;
         MeshRenderer[] meshs = GetComponentsInChildren<MeshRenderer>();
@@ -37,18 +39,22 @@ public class Blade : Equipment
         {
             obj.enabled = false;
         }
-
-
     }
 
     void Awake()
     {
         LoadDataOnSceneEnter();
+        MeshRenderer[] meshs = GetComponentsInChildren<MeshRenderer>();
+        foreach (MeshRenderer obj in meshs)
+        {
+            obj.enabled = false;
+        }
     }
 
     // Update is called once per frame
     public override void Update()
     {
+
         if (bIsActive && bIsObtained)
         {
             MeshRenderer[] meshs = GetComponentsInChildren<MeshRenderer>();
@@ -56,41 +62,70 @@ public class Blade : Equipment
             {
                 obj.enabled = true;
             }
+            _animator.enabled = true;
+            _animator.SetBool("IsOut", true);
 
-            _hitbox.enabled = true;
 
             UseTool();
         }
         else if (!bIsActive)
         {
+            _animator.SetBool("IsOut", false);
+            if (_animator.GetCurrentAnimatorStateInfo(0).IsName("SwapOut") && _animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= .90f)
+            {
+            _animator.enabled = false;
             MeshRenderer[] meshs = GetComponentsInChildren<MeshRenderer>();
             foreach (MeshRenderer obj in meshs)
             {
                 obj.enabled = false;
             }
-
             _hitbox.enabled = false;
+            }
+        }
+
+        if (ALTPlayerController.instance.GetIsWalking() && ALTPlayerController.instance.CheckForSprintInput() == false)
+        {
+            _animator.SetTrigger("IsWalking");
+        }
+        else if (ALTPlayerController.instance.CheckForSprintInput() == true)
+        {
+            _animator.SetTrigger("IsSprinting");
+
+        }
+        else
+        {
+            _animator.SetTrigger("IsIdle");
         }
     }
 
     public override void UseTool()
     {
-        if (playerController.CheckForUseEquipmentInput() && _animationswing.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+        //if (playerController.CheckForUseEquipmentInput() && _animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+        //{
+        //    _animator.SetBool("attacking", true);
+        //    _hitbox.enabled = true;
+        //    bHasHit = false;
+        //}
+        //if (_animator.GetCurrentAnimatorStateInfo(0).IsName("BladeAttacking"))
+        //{
+        //    _animator.SetBool("attacking", false);
+        //    _hitbox.enabled = false;
+        //}
+        if (ALTPlayerController.instance.CheckForUseEquipmentInput())
         {
-            _animationswing.SetBool("attacking", true);
-            _hitbox.enabled = true;
-            bHasHit = false;
-        }
-        if (_animationswing.GetCurrentAnimatorStateInfo(0).IsName("BladeAttacking"))
-        {
-            _animationswing.SetBool("attacking", false);
-            _hitbox.enabled = false;
+            if (!_animator.GetCurrentAnimatorStateInfo(0).IsName("Attack1") && !_animator.GetCurrentAnimatorStateInfo(0).IsName("Attack2"))
+            {
+                Debug.Log("Attack");
+                int rand = Random.Range(1, 3);
+                _animator.SetTrigger("Attack" + rand.ToString());
+                _hitbox.enabled = true;
+                bHasHit = false;
+            }
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.gameObject.name);
         if (other.tag != "Player")
         {
 
