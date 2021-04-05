@@ -35,7 +35,9 @@ public class CreditObject : MonoBehaviour
         //_currentAlpha = image.GetComponent<MeshRenderer>().material.color.a;
         _currentAlpha += Time.deltaTime * _fadeSpeed;
         if (_currentAlpha > 1)
-        { _currentAlpha = 1; _isVisible = true;}
+        { _currentAlpha = 1; _isVisible = true;
+            gameObject.layer = 0;
+        }
         image.GetComponent<MeshRenderer>().material.color = new Color(1, 1, 1, _currentAlpha);
     }
 
@@ -56,6 +58,7 @@ public class CreditObject : MonoBehaviour
         _hitImage.SetActive(false);
         StartFadeOut();
         _hitEffects.Stop();
+        gameObject.layer = 2;
     }
 
     public void Hit(Vector3 Position)
@@ -67,7 +70,6 @@ public class CreditObject : MonoBehaviour
             _startImage.SetActive(false);
             _hitImage.SetActive(true);
             _isHit = true;
-            gameObject.layer = 2;
         }
     }
 

@@ -9,19 +9,47 @@ public class GrenadeExplosion : MonoBehaviour
     public GameObject[] ShockwaveObjects;
     Light ExplosionLight;
     float Lifetime;
+    public bool bDontDie;
+    float lightIntensity;
 
     // Start is called before the first frame update
     void Awake()
     {
-        Lifetime = 4.0f;
+        bDontDie = false;
+        Lifetime = 0.6f;
         ExplosionLight = GetComponent<Light>();
-        for(int i = 0; i < ShockwaveObjects.Length;i++)
+        lightIntensity = ExplosionLight.intensity;
+        for (int i = 0; i < ShockwaveObjects.Length;i++)
         {
             ShockwaveObjects[i].transform.localEulerAngles = new Vector3( Random.Range(-90.0f,90.0f), Random.Range(-90.0f, 90.0f),  0.0f);
             if(i>0)
             {
                 ShockwaveObjects[i].transform.localScale *= (float)(i + 1);
             }
+        }
+    }
+
+    void ResetExplosion()
+    {
+        ExplosionLight.intensity = lightIntensity;
+        Lifetime = 0.6f;
+        GameObject.Find("LightningExplosionParticles").GetComponent<ParticleSystem>().Play();
+        for (int i = 0; i < ShockwaveObjects.Length; i++)
+        {
+            ShockwaveObjects[i].transform.localEulerAngles = new Vector3(Random.Range(-90.0f, 90.0f), Random.Range(-90.0f, 90.0f), 0.0f);
+            if (i > 0)
+            {
+                ShockwaveObjects[i].transform.localScale = new Vector3((i + 1), (i + 1) * 0.33f, (i + 1));
+            }
+        }
+        ImplosionWaveObject.transform.localScale = new Vector3(10, 10, 10);
+        foreach (GameObject shockwave in ShockwaveObjects)
+        {
+            Material mat = shockwave.GetComponent<MeshRenderer>().material;
+            Color newColor = mat.color;
+            newColor.a = 1;
+            mat.color = newColor;
+            shockwave.GetComponent<MeshRenderer>().material = mat;
         }
     }
 
@@ -35,7 +63,14 @@ public class GrenadeExplosion : MonoBehaviour
         Shockwave();
 
         if (Lifetime < 0.0f)
-        {Destroy(gameObject);}
+        {
+            if(bDontDie)
+            {
+                ResetExplosion();
+            }
+            else
+            Destroy(gameObject);
+        }
 
 
     }
@@ -43,7 +78,7 @@ public class GrenadeExplosion : MonoBehaviour
     {
         if (ImplosionWaveObject.transform.localScale.x > 0.0f)
         {
-            ImplosionWaveObject.transform.localScale -= new Vector3(1.0f, 1.0f, 1.0f) * 0.5f;
+            ImplosionWaveObject.transform.localScale -= new Vector3(1.0f, 1.0f, 1.0f) * 0.7f;
         }
         else 
         {
@@ -58,7 +93,7 @@ public class GrenadeExplosion : MonoBehaviour
 
             foreach (GameObject shockwave in ShockwaveObjects)
             {
-                shockwave.transform.localScale *= 1.5f;
+                shockwave.transform.localScale *= 1.1f;
 
                 Material mat = shockwave.GetComponent<MeshRenderer>().material;
                 if (mat.color.a > 0.01f)
@@ -70,7 +105,10 @@ public class GrenadeExplosion : MonoBehaviour
                 }
                 else
                 {
-                    Destroy(shockwave);
+                    Color newColor = mat.color;
+                    newColor.a = 0;
+                    mat.color = newColor;
+                    shockwave.GetComponent<MeshRenderer>().material = mat;
                 }
             }
 
