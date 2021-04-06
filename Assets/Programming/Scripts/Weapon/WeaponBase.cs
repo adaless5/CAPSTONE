@@ -3,8 +3,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.Rendering;
 
-
-public class WeaponBase : Weapon
+public class WeaponBase : Weapon, ISaveable
 {
 
     [Header("UI Elements - ParticleFX and Reticule")]
@@ -67,6 +66,8 @@ public class WeaponBase : Weapon
         _ammoController = FindObjectOfType<AmmoUI>().GetComponent<AmmoController>();
         _ammoController.InitializeAmmo(AmmoController.AmmoTypes.Default, m_weaponClipSize, m_weaponClipSize, m_ammoCapAmount);
         transform.GetChild(0).gameObject.SetActive(false);
+
+
     }
 
     void OnEnable()
@@ -178,6 +179,7 @@ public class WeaponBase : Weapon
     IEnumerator OnReload()
     {
         _DGAnimator.SetReloadAnimationSpeed(m_reloadTime);
+
         if (bIsActive)
         {
             //Reload Sounds
@@ -185,17 +187,18 @@ public class WeaponBase : Weapon
             StartCoroutine(TriggerReloadEndSound());
             //
         }
+
         bIsReloading = true;
-        
+
         //Needs to be reworked with new animations - VR
         //gunAnimator.speed = 1 / m_upgradestats.ReloadTime; // adjusts for reload time upgrades
 
         _DGAnimator.TriggerReloadAnimation();
         //gunAnimator.SetBool("bIsReloading", true);
-
         yield return new WaitForSeconds(m_reloadTime);
         _ammoController.Reload();
         bIsReloading = false;
+
     }
 
     void OnShoot()
@@ -203,7 +206,6 @@ public class WeaponBase : Weapon
         //Play Recoil animation
         //gunAnimator.SetTrigger("OnRecoil");   
         _DGAnimator._defaultGunAnimator.SetTrigger("Fired");
-
         muzzleFlash.Play();
         if (bIsActive)
         {
@@ -252,53 +254,20 @@ public class WeaponBase : Weapon
                 EyeLight eye = hitInfo.transform.GetComponentInParent<EyeLight>();
                 if (eye)
                 {
-                    FindObjectOfType<DefaultWeaponEffects>().Fire(hitInfo.point, hitInfo.normal);
-                    //Only damages if asset has "Health" script
-                    Health target = hitInfo.transform.GetComponent<Health>();
-                    if (target != null && target.gameObject.tag != "Player")
-                    {
-                        target.TakeDamage(m_damageAmount);
-                        reticuleAnimator.SetTrigger("isTargetted");
-                    }
-                    else
-                    {
-                        reticuleAnimator.SetTrigger("isTargetted");
-                    }
-
-                    //checks if breakable wall
-                    DestructibleObject wall = hitInfo.transform.GetComponentInParent<DestructibleObject>();
-                    if (wall)
-                    {
-                        wall.Break(gameObject.tag);
-                    }
-
-                    /// Evan's Item container call vvv
-                    ItemContainer container = hitInfo.transform.GetComponentInParent<ItemContainer>();
-                    if (container)
-                    {
-                        container.Break(gameObject.tag);
-                    }
-                    /// Evan's Item container call ^^^
-
-                    /// Evan's Eyeball call vvv
-                    EyeLight eye = hitInfo.transform.GetComponentInParent<EyeLight>();
-                    if (eye)
-                    {
-                        eye.Hit();
-                    }
-                    /// Evan's Eyeball call ^^^
-
-                    /// 
-                    //Force of impact on hit
-                    if (hitInfo.rigidbody != null)
-                    {
-                        hitInfo.rigidbody.AddForce(-hitInfo.normal * m_hitImpact);
-                    }
-
-                    //Particle effects on hit
-                    GameObject hitImpact = Instantiate(impactFX, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
-                    Destroy(hitImpact, 2.0f);
+                    eye.Hit();
                 }
+                /// Evan's Eyeball call ^^^
+
+                /// 
+                //Force of impact on hit
+                if (hitInfo.rigidbody != null)
+                {
+                    hitInfo.rigidbody.AddForce(-hitInfo.normal * m_hitImpact);
+                }
+
+                //Particle effects on hit
+                GameObject hitImpact = Instantiate(impactFX, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
+                Destroy(hitImpact, 2.0f);
             }
         }
         else
@@ -376,38 +345,39 @@ public class WeaponBase : Weapon
                 }
                 else
                 {
-                    FindObjectOfType<DefaultWeaponEffects>().Fire(hitInfo.point, hitInfo.normal);
-                    //Only damages if asset has "Health" script
-                    Health target = hitInfo.transform.GetComponent<Health>();
-                    if (target != null && target.gameObject.tag != "Player")
-                    {
-                        target.TakeDamage(m_damageAmount);
-                        reticuleAnimator.SetTrigger("isTargetted");
-                    }
-                    else
-                    {
-                        reticuleAnimator.SetTrigger("isTargetted");
-                    }
-
-                    //checks if breakable wall
-                    DestructibleObject wall = hitInfo.transform.GetComponentInParent<DestructibleObject>();
-                    if (wall)
-                    {
-                        wall.Break(gameObject.tag);
-                    }
-
-                    //Force of impact on hit
-                    if (hitInfo.rigidbody != null)
-                    {
-                        hitInfo.rigidbody.AddForce(-hitInfo.normal * m_hitImpact);
-                    }
-
-                    //Particle effects on hit
-                    GameObject hitImpact = Instantiate(impactFX, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
-                    Destroy(hitImpact, 2.0f);
+                    reticuleAnimator.SetTrigger("isTargetted");
                 }
+
+                //checks if breakable wall
+                DestructibleObject wall = hitInfo.transform.GetComponentInParent<DestructibleObject>();
+                if (wall)
+                {
+                    wall.Break(gameObject.tag);
+                }
+
+                //Force of impact on hit
+                if (hitInfo.rigidbody != null)
+                {
+                    hitInfo.rigidbody.AddForce(-hitInfo.normal * m_hitImpact);
+                }
+
+                //Particle effects on hit
+                GameObject hitImpact = Instantiate(impactFX, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
+                Destroy(hitImpact, 2.0f);
             }
         }
+    }
+
+    public void SaveDataOnSceneChange()
+    {
+        SaveSystem.Save(gameObject.name, "bIsActive", gameObject.scene.name, bIsActive);
+        SaveSystem.Save(gameObject.name, "bIsObtained", gameObject.scene.name, bIsObtained);
+    }
+
+    public void LoadDataOnSceneEnter()
+    {
+        bIsActive = SaveSystem.LoadBool(gameObject.name, "bIsActive", gameObject.scene.name);
+        bIsObtained = SaveSystem.LoadBool(gameObject.name, "bIsObtained", gameObject.scene.name);
     }
 
     IEnumerator TriggerNewShellSound()

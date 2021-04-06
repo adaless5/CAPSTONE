@@ -39,11 +39,11 @@ public class DefaultRefillStation : MonoBehaviour
             {
                 itsAllOn = false;
             }
-            if (m_ammoController.IsAmmoFull(WeaponType.CreatureWeapon) == false && GameObject.FindObjectOfType<CreatureWeapon>().bIsObtained)
+            if (m_ammoController.IsAmmoFull(WeaponType.BaseWeapon) == false && GameObject.FindObjectOfType<WeaponBase>().bIsObtained)
             {
                 itsAllOn = false;
             }
-            if (m_ammoController.IsAmmoFull(WeaponType.GrenadeWeapon) == false && GameObject.FindObjectOfType<MineSpawner>().bIsObtained)
+            if (m_ammoController.IsAmmoFull(WeaponType.BaseWeapon) == false && GameObject.FindObjectOfType<WeaponBase>().bIsObtained)
             {
                 itsAllOn = false;
             }

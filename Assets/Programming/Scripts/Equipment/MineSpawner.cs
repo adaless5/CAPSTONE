@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MineSpawner : Weapon
+public class MineSpawner : Weapon, ISaveable
 {
     //[Header("Spawner Settings")]
     //public float Force = 800f;
@@ -23,12 +23,15 @@ public class MineSpawner : Weapon
     float m_timer;
     public override void Start()
     {
-        base.Start();
         m_weaponClipSize = 1;
         m_startingOverstockAmmo = 12;        
         m_reloadTime = 0.5f;
         _ammoController = FindObjectOfType<AmmoUI>().GetComponent<AmmoController>();
         _ammoController.InitializeAmmo(AmmoController.AmmoTypes.Explosive, m_weaponClipSize, m_startingOverstockAmmo, m_ammoCapAmount);
+
+       
+        bIsActive = false;
+        bIsObtained = false;
     }
 
     void Awake()
@@ -58,7 +61,7 @@ public class MineSpawner : Weapon
         {
             if(m_playerController.m_ControllerState == ALTPlayerController.ControllerState.Play)
             UseTool();
-            if(m_bCanThrow && _ammoController.CanUseAmmo())
+            if(m_bCanThrow)
             {
                 grenadeInHand.SetActive(true);
             }
@@ -101,8 +104,7 @@ public class MineSpawner : Weapon
             if (m_timer <= 0f)
             {
                 m_bCanThrow = true;
-                if (_ammoController.CanUseAmmo())
-                { grenadeInHand.SetActive(true); }
+                grenadeInHand.SetActive(true);
                 //Debug.Log("RESET");
             }
         }
@@ -166,4 +168,8 @@ public class MineSpawner : Weapon
         amg.TriggerGrenadeExplode();
     }
 
+    public void LoadDataOnSceneEnter()
+    {
+        bIsObtained = SaveSystem.LoadBool(gameObject.name, "bIsObtained", "Equipment");
+    }
 }
