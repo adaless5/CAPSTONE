@@ -41,7 +41,13 @@ public class DG_Animations : MonoBehaviour
         _defaultGunAnimator.SetFloat("WalkSpeed", _playerSpeed);
 
         if(_player.m_stamina.GetCurrentStamina() > 0)
-        _defaultGunAnimator.SetBool("IsSprinting", bIsSprinting);       
+        {
+            _defaultGunAnimator.SetBool("IsSprinting", bIsSprinting); 
+        }
+        else if(_player.m_stamina.GetCurrentStamina() <= 0)
+        {
+            _defaultGunAnimator.SetBool("IsSprinting", false);
+        }
     }
 
     public void WeaponSwapOut()
@@ -58,18 +64,17 @@ public class DG_Animations : MonoBehaviour
     //Sets a speed multiplier for both firing and reloading animations
     //Had to set animation clip length manually since can't get through code unless state is active
     //Please avoid touching animation length in editor, instead use the fire rate and reload rate, the rate is a delay i.e a reload rate of 2f, the gun takes 2 seconds to reload
-    //public void SetFireAnimationSpeed(float fireRate)
-    //{
-    //    float rate = _fireAnimClipLength / fireRate;
-    //    _defaultGunAnimator.SetFloat("FireRate", 1);
-    //    Debug.Log("Fire Rate is " + rate);
-    //}
-
     public void SetReloadAnimationSpeed(float reloadRate)
     {
         float rate = _reloadAnimClipLength / reloadRate;
         _defaultGunAnimator.SetFloat("ReloadRate", rate);
         Debug.Log("Reload Rate is " + rate);
     }    
+    //public void SetFireAnimationSpeed(float fireRate)
+    //{
+    //    float rate = _fireAnimClipLength / fireRate;
+    //    _defaultGunAnimator.SetFloat("FireRate", 1);
+    //    Debug.Log("Fire Rate is " + rate);
+    //}
        
 }
