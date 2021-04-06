@@ -18,6 +18,7 @@ public class ThermalEquipment : Equipment
     // Start is called before the first frame update
     public override void Start()
     {
+        base.Start();
         _playerController = FindObjectOfType<ALTPlayerController>();
 
         Light[] lightarray = FindObjectsOfType<Light>();
@@ -39,6 +40,10 @@ public class ThermalEquipment : Equipment
         //_particleSystemPrefab.SetActive(false);
     }
 
+    void Awake()
+    {
+        LoadDataOnSceneEnter();
+    }
     // Update is called once per frame
     public override void Update()
     {
@@ -116,7 +121,6 @@ public class ThermalEquipment : Equipment
         _playerController.SetThermalView(bIsInThermalView);
     }
     /// EVAN ADDED ^^^
-
 
     /// OG CODE VVVV
 
