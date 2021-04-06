@@ -15,6 +15,8 @@ public class EventBroker
     public static event Action OnAmmoPickupAttempt;
     public static event Action<bool> OnHealthPickupAttempt;
     public static event Action OnGameEnd;
+    public static event Action OnWeaponSwap;
+
     public static void CallSpawnEnemy(GameObject enemyToSpawn)
     {
         SpawnEnemy?.Invoke(enemyToSpawn);
@@ -65,6 +67,11 @@ public class EventBroker
     public static void CallOnPlayerDeath()
     {
         OnPlayerDeath?.Invoke();
+    }
+
+    public static void CallOnWeaponSwap()
+    {
+        OnWeaponSwap?.Invoke();
     }
 
 }

@@ -4,26 +4,29 @@ using System.Collections;
 using UnityEngine.Rendering;
 
 public class WeaponBase : Weapon, ISaveable
-{ 
+{
 
     [Header("UI Elements - ParticleFX and Reticule")]
     public ParticleSystem muzzleFlash;
     public GameObject impactFX;
-    public Animator reticuleAnimator;  
+    public Animator reticuleAnimator;
     [SerializeField]
-    Animator gunAnimator;
+    //Animator gunAnimator;
+
 
     [Header("Camera Settings")]
     public Camera gunCamera;
-    
+
     float m_timeElapsed;
     float m_lerpDuration = 3f;
 
     bool _bPlayedNewShellSound;
     GameObject muzzlePoint;
+    DG_Animations _DGAnimator;
+
     void Awake()
     {
-        base.Awake();        
+        base.Awake();
         LoadDataOnSceneEnter();
         muzzlePoint = GameObject.Find("DefaultWeaponMuzzlePoint");
         //TODO: Readd Save implementation
@@ -31,16 +34,22 @@ public class WeaponBase : Weapon, ISaveable
 
         m_weaponClipSize = 6 * (int)m_upgradestats.ClipSize;
         m_reloadTime = 2.0f * m_upgradestats.ReloadTime;
-        m_fireRate = 1.5f * m_upgradestats.FireRate; //Default Gun shoots every 1.25 seconds, can be adjusted in editor - VR
+        m_fireRate = 0.85f * m_upgradestats.FireRate; //Default Gun shoots every 1.25 seconds, can be adjusted in editor - VR
         m_hitImpact = 50.0f * m_upgradestats.ImpactForce;
         m_weaponRange = 50.0f * m_upgradestats.Range;
-        m_fireStart = 0.0f;       
+        m_fireStart = 0.0f;
 
         EventBroker.OnPlayerSpawned += InitWeaponControls;
-        gunAnimator = GetComponent<Animator>();
+        EventBroker.OnWeaponSwap += WeaponSwapOut;
+        //gunAnimator = GetComponent<Animator>();
+        _DGAnimator = GetComponent<DG_Animations>();
 
         _bPlayedNewShellSound = false;
+
+      
     }
+
+    
 
     public void InitWeaponControls(GameObject player)
     {
@@ -51,21 +60,20 @@ public class WeaponBase : Weapon, ISaveable
     }
 
     public override void Start()
-    { 
+    {
         gunCamera = GameObject.FindObjectOfType<Camera>();
 
         _ammoController = FindObjectOfType<AmmoUI>().GetComponent<AmmoController>();
         _ammoController.InitializeAmmo(AmmoController.AmmoTypes.Default, m_weaponClipSize, m_weaponClipSize, m_ammoCapAmount);
-        GetComponent<MeshRenderer>().enabled = true;
-        //bIsActive = true;
-        //bIsObtained = true;
+        transform.GetChild(0).gameObject.SetActive(false);
+
 
     }
 
     void OnEnable()
     {
 
-        bIsReloading = false;       
+        bIsReloading = false;
     }
 
 
@@ -82,15 +90,39 @@ public class WeaponBase : Weapon, ISaveable
         {
             if (bIsActive && _playerController.m_ControllerState == ALTPlayerController.ControllerState.Play)
             {
-                GetComponent<MeshRenderer>().enabled = true;
+                // GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;
+                transform.GetChild(0).gameObject.SetActive(true);
+
+                //_DGAnimator.SetFireAnimationSpeed(m_fireRate);
+                //DGAnimator.SetReloadAnimationSpeed(m_reloadTime);
+
                 UseTool();
-                OnTarget();                
+                OnTarget();
             }
-            else if (!bIsActive)
-            {               
-                GetComponent<MeshRenderer>().enabled = false;
-            }
+            //else if (!bIsActive)
+            //{
+            //    WeaponSwapOut();
+
+            //}
         }
+      
+    }
+
+    public IEnumerator SwapOutLogic()
+    {
+        //Waits for default gun swap out animation to play before setting inactive
+        yield return new WaitForSeconds(1.133f);
+        if (!bIsActive)
+            transform.GetChild(0).gameObject.SetActive(false);
+        else
+        {
+            transform.GetChild(0).gameObject.SetActive(true);
+        }
+    }
+
+    public void WeaponSwapOut()
+    {
+        StartCoroutine(SwapOutLogic());
     }
 
     public override void UseTool()
@@ -101,27 +133,25 @@ public class WeaponBase : Weapon, ISaveable
         }
 
         //Reloads automatically at 0 or if player users reload input "R"        
-        if(_ammoController.NeedsReload())
+        if (_ammoController.NeedsReload())
         {
             StartCoroutine(OnReload());
             return;
-        }       
+        }
 
         if (_playerController.CheckForUseWeaponInput() && Time.time >= m_fireStart)
         {
-            m_fireStart = Time.time + 1.0f / m_fireRate;           
-           if(_ammoController.CanUseAmmo())
+            m_fireStart = Time.time + 1.0f / m_fireRate;
+            if (_ammoController.CanUseAmmo())
             {
-                OnShoot();                
+                OnShoot();
             }
             else
             {
                 //_ammoController.OutOfAmmo();
-                           
+
             }
         }
-
-
     }
 
     public void TryShoot()
@@ -129,13 +159,13 @@ public class WeaponBase : Weapon, ISaveable
         //If gun is empty and player attempts to shoot. trigger empty gun sound
         if (!_ammoController.CanUseAmmo())
         {
-            if(bIsActive)
+            if (bIsActive)
             {
                 GetComponent<AudioManager_Archebus>().TriggerEmpty();
             }
 
         }
-        
+
     }
 
     private void Reload()
@@ -148,7 +178,9 @@ public class WeaponBase : Weapon, ISaveable
 
     IEnumerator OnReload()
     {
-        if(bIsActive)
+        _DGAnimator.SetReloadAnimationSpeed(m_reloadTime);
+
+        if (bIsActive)
         {
             //Reload Sounds
             GetComponent<AudioManager_Archebus>().TriggerReloadStart();
@@ -157,20 +189,23 @@ public class WeaponBase : Weapon, ISaveable
         }
 
         bIsReloading = true;
-        gunAnimator.speed = 1 / m_upgradestats.ReloadTime; // adjusts for reload time upgrades
-        gunAnimator.SetBool("bIsReloading", true);
-        yield return new WaitForSeconds(m_reloadTime);        
-        _ammoController.Reload();      
+
+        //Needs to be reworked with new animations - VR
+        //gunAnimator.speed = 1 / m_upgradestats.ReloadTime; // adjusts for reload time upgrades
+
+        _DGAnimator.TriggerReloadAnimation();
+        //gunAnimator.SetBool("bIsReloading", true);
+        yield return new WaitForSeconds(m_reloadTime);
+        _ammoController.Reload();
         bIsReloading = false;
 
-        //Play reload and ammo animations      
-        gunAnimator.SetBool("bIsReloading", false);          
     }
 
     void OnShoot()
     {
         //Play Recoil animation
-        gunAnimator.SetTrigger("OnRecoil");      
+        //gunAnimator.SetTrigger("OnRecoil");   
+        _DGAnimator._defaultGunAnimator.SetTrigger("Fired");
         muzzleFlash.Play();
         if (bIsActive)
         {
@@ -183,11 +218,11 @@ public class WeaponBase : Weapon, ISaveable
         if (!m_bHasActionUpgrade)
         {
             RaycastHit hitInfo;
-            FindObjectOfType<DefaultWeaponEffects>().Fire(muzzlePoint.transform.forward);
+            //FindObjectOfType<DefaultWeaponEffects>().Fire(muzzlePoint.transform.forward);
             UpgradedFire();
             if (Physics.Raycast(gunCamera.transform.position, gunCamera.transform.forward, out hitInfo, m_weaponRange))
             {
-            FindObjectOfType<DefaultWeaponEffects>().Fire(hitInfo.point, hitInfo.normal);
+                //FindObjectOfType<DefaultWeaponEffects>().Fire(hitInfo.point, hitInfo.normal);
                 //Only damages if asset has "Health" script
                 Health target = hitInfo.transform.GetComponent<Health>();
                 if (target != null && target.gameObject.tag != "Player")
@@ -276,6 +311,9 @@ public class WeaponBase : Weapon, ISaveable
         if (upgrade.HasAction) m_bHasActionUpgrade = true;
 
         m_currentupgrades.Add(upgrade.Type);
+
+        //Update reload rate for "DG_Animations" script       
+        _DGAnimator.SetReloadAnimationSpeed(m_reloadTime);
     }
 
     //todo: get this figured out
@@ -294,10 +332,10 @@ public class WeaponBase : Weapon, ISaveable
         for (int i = -1; i < 2; i++)
         {
             RaycastHit hitInfo;
-            FindObjectOfType<DefaultWeaponEffects>().Fire(muzzlePoint.transform.forward);
+            //FindObjectOfType<DefaultWeaponEffects>().Fire(muzzlePoint.transform.forward);
             if (Physics.Raycast(gunCamera.transform.position, Quaternion.Euler(0, 15f * i, 0) * gunCamera.transform.forward, out hitInfo, m_weaponRange))
             {
-                FindObjectOfType<DefaultWeaponEffects>().Fire(hitInfo.point, hitInfo.normal);
+                //FindObjectOfType<DefaultWeaponEffects>().Fire(hitInfo.point, hitInfo.normal);
                 //Only damages if asset has "Health" script
                 Health target = hitInfo.transform.GetComponent<Health>();
                 if (target != null && target.gameObject.tag != "Player")
