@@ -14,11 +14,11 @@ public class DG_Animations : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _defaultGunAnimator = GetComponentInChildren<Animator>();
     }
 
     private void Awake()
     {
+        _defaultGunAnimator = GetComponentInChildren<Animator>();
         
         EventBroker.OnPlayerSpawned += OnPlayerLoaded;
         EventBroker.OnWeaponSwap += WeaponSwapOut;
