@@ -11,12 +11,13 @@ public class GrenadeExplosion : MonoBehaviour
     public float Lifetime;
     public bool bDontDie;
     float lightIntensity;
+    float ogLifetime;
 
     // Start is called before the first frame update
     void Awake()
     {
-        bDontDie = false;
-        ExplosionLight = GetComponent<Light>();
+        ogLifetime = Lifetime;
+         ExplosionLight = GetComponent<Light>();
         lightIntensity = ExplosionLight.intensity;
         for (int i = 0; i < ShockwaveObjects.Length;i++)
         {
@@ -31,7 +32,11 @@ public class GrenadeExplosion : MonoBehaviour
     void ResetExplosion()
     {
         ExplosionLight.intensity = lightIntensity;
-        Lifetime = 0.6f;
+        ogLifetime -= 0.2f;
+        if (ogLifetime > 0.25)
+        { Lifetime = ogLifetime; }
+        else
+        { Lifetime = 0.25f; }
         GameObject.Find("LightningExplosionParticles").GetComponent<ParticleSystem>().Play();
         for (int i = 0; i < ShockwaveObjects.Length; i++)
         {
