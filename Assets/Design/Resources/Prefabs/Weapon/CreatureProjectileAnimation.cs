@@ -9,6 +9,8 @@ public class CreatureProjectileAnimation : MonoBehaviour
     Vector3 _firingOrganSize;
     Vector3 _currentScale;
     public GameObject _globObject;
+    public float _pulseScale;
+    public bool bGrow;
     void Awake()
     {
         _firingOrganSize = transform.localScale;
@@ -22,11 +24,16 @@ public class CreatureProjectileAnimation : MonoBehaviour
     {
         _pulseTime += Time.deltaTime * 3; 
         _globObject.transform.Rotate(Time.deltaTime*10, Time.deltaTime * 20, Time.deltaTime * 30);
-         _currentScale = new Vector3(Mathf.Sin(_pulseTime) * 0.1f, Mathf.Cos(_pulseTime) * 0.1f, Mathf.Cos(_pulseTime) * 0.1f);
+         _currentScale = new Vector3(Mathf.Sin(_pulseTime) * 0.1f * _pulseScale, Mathf.Cos(_pulseTime) * 0.1f * _pulseScale, Mathf.Cos(_pulseTime) * 0.1f * _pulseScale);
         transform.localScale = _firingOrganSize + _currentScale;
         if (_pulseTime > 360)
         {
             _pulseTime = 0.0f;
+        }
+
+        if (bGrow)
+        {
+            _pulseScale += Time.deltaTime;
         }
     }
 }
