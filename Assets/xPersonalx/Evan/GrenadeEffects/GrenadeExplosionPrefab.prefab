@@ -53,6 +53,7 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: ff60d7c726327f345be14bb5c06a7045, type: 2}
+  - {fileID: 2100000, guid: 1557e011ae4d9ac44b536a3e21984eb3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4009,7 +4010,7 @@ ParticleSystem:
         m_RotationOrder: 4
     maxLights: 20
   TrailModule:
-    enabled: 0
+    enabled: 1
     mode: 0
     ratio: 1
     lifetime:
@@ -4957,6 +4958,8 @@ MonoBehaviour:
   ShockwaveObjects:
   - {fileID: 8367253471637120246}
   - {fileID: 8750329842768223936}
+  Lifetime: 2.5
+  bDontDie: 0
 --- !u!108 &4063791428764601650
 Light:
   m_ObjectHideFlags: 0

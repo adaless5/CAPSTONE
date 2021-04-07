@@ -46,6 +46,7 @@ public class ALTPlayerController : MonoBehaviour
 
     // == Player Movement Variables ==
     Vector3 m_Velocity;
+    Vector3 m_CurrentVelocity;
     float m_MoveSpeed = 10.0f;
     const float WALK_SPEED = 10.0f;
     const float SPRINT_SPEED = 20.0f;
@@ -87,6 +88,8 @@ public class ALTPlayerController : MonoBehaviour
 
     public Canvas EquipmentWheel;
     public Canvas WeaponWheel;
+
+    UpgradeMenuUI _upgradeMenu;
 
     public event Action<float> OnTakeDamage;
     public event Action<float> OnHeal;
@@ -142,7 +145,7 @@ public class ALTPlayerController : MonoBehaviour
     private bool bInvertYAxis = false;
 
     bool bDebug = false;
-
+    public bool _bIsCredits;
     private void Awake()
     {
         OnTakeDamage += TakeDamage;
@@ -154,6 +157,7 @@ public class ALTPlayerController : MonoBehaviour
         _cameraBehaviour = GetComponent<CameraBehaviour>();
         instance = this;
         _groundCheck = GameObject.Find("GroundCheck").transform;
+        _bIsCredits = false;
     }
     #region Debug Functions
     public void DebugUnlockAllWeapons()
@@ -225,6 +229,7 @@ public class ALTPlayerController : MonoBehaviour
         _equipmentBelt = FindObjectOfType<EquipmentBelt>();
         _weaponBelt = FindObjectOfType<WeaponBelt>();
         _pauseMenu = FindObjectOfType<PauseMenuUI>();
+        _upgradeMenu = FindObjectOfType<UpgradeMenuUI>();
         isDead = false;
 
         Canvas[] wheelsInScene;
@@ -360,8 +365,8 @@ public class ALTPlayerController : MonoBehaviour
 
     private void PlayerPause()
     {
-        m_ControllerState = ControllerState.Menu;
         _pauseMenu.Pause();
+        _upgradeMenu.Deactivate();
     }
 
     //Death and Respawn functionality -LCC
@@ -595,12 +600,12 @@ public class ALTPlayerController : MonoBehaviour
         //Using Player Input to Calculate movement vector and applying movement
         Vector3 movement = ((transform.right * _movement.x) + (transform.forward * _movement.y)) * _Acceleration;
 
+        
         //Store the last recorded movement velocity for deceleration
         if (movement.magnitude > Mathf.Epsilon)
         {
             bIsMoving = true;
             _lastMoveVelocity = movement;
-
             //TODO: Figure out Why Camera behaviour is bugging out.
             //if (!_bIsJumping)
             //{
@@ -757,7 +762,7 @@ public class ALTPlayerController : MonoBehaviour
                 if (hit.normal != Vector3.up)
                     _controller.Move(Vector3.down * _controller.height / 2 * _slopeForce * Time.deltaTime);
         }
-
+        m_CurrentVelocity = movement;
         #region Grounded Debug
         if (bDebug)
         {
@@ -783,7 +788,7 @@ public class ALTPlayerController : MonoBehaviour
 
     void HandleEquipmentWheel()
     {
-        if (WeaponWheel.enabled == false)
+        if (WeaponWheel.enabled == false && _bIsCredits == false && m_ControllerState != ControllerState.Menu)
         {
             if (_bEquipWheel)
             {
@@ -813,7 +818,7 @@ public class ALTPlayerController : MonoBehaviour
 
     public void HandleWeaponWheel()
     {
-        if (EquipmentWheel.enabled == false)
+        if (EquipmentWheel.enabled == false && _bIsCredits == false && m_ControllerState != ControllerState.Menu)
         {
             if (_bWepWheel)
             {
@@ -895,6 +900,11 @@ public class ALTPlayerController : MonoBehaviour
     public ControllerState GetControllerState()
     {
         return m_ControllerState;
+    }
+
+    public bool GetIsWalking()
+    {
+        return m_CurrentVelocity != Vector3.zero;
     }
 
     public Vector3 GetVelocity()
