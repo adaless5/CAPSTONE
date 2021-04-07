@@ -40,10 +40,10 @@ public class UpgradeMenuUI : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (ALTPlayerController.instance.CheckForInteract() && _bInMenu == true)
-        {
-            Deactivate();
-        }
+        //if (ALTPlayerController.instance.CheckForInteract() && ALTPlayerController.instance.m_ControllerState == ALTPlayerController.ControllerState.Menu)
+        //{
+        //    Deactivate();
+        //}
 
         if (DiscriptionText != null)
         {
@@ -73,18 +73,25 @@ public class UpgradeMenuUI : MonoBehaviour
             Cursor.visible = true;
             ALTPlayerController pc = ALTPlayerController.instance;
             pc.m_ControllerState = ALTPlayerController.ControllerState.Menu;
+            //Debug.Log("Upgrade menu state: " + ALTPlayerController.instance.m_ControllerState);
         }
+
     }
 
     public void Deactivate()
     {
-        UpgradeMenu.SetActive(false);
-        _bInMenu = false;
-        Time.timeScale = 1f;
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-        ALTPlayerController pc = ALTPlayerController.instance;
-        pc.m_ControllerState = ALTPlayerController.ControllerState.Play;
+        if (_bInMenu)
+        {
+            UpgradeMenu.SetActive(false);
+            _bInMenu = false;
+            Time.timeScale = 1f;
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            ALTPlayerController pc = ALTPlayerController.instance;
+            pc.m_ControllerState = ALTPlayerController.ControllerState.Play;
+            //Debug.Log("Upgrade menu state: " + ALTPlayerController.instance.m_ControllerState);
+        }
+
     }
 
     public void InitUpgradeMenu(List<WeaponUpgrade> list)

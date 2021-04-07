@@ -89,6 +89,8 @@ public class ALTPlayerController : MonoBehaviour
     public Canvas EquipmentWheel;
     public Canvas WeaponWheel;
 
+    UpgradeMenuUI _upgradeMenu;
+
     public event Action<float> OnTakeDamage;
     public event Action<float> OnHeal;
     public event Action OnDeath;
@@ -227,6 +229,7 @@ public class ALTPlayerController : MonoBehaviour
         _equipmentBelt = FindObjectOfType<EquipmentBelt>();
         _weaponBelt = FindObjectOfType<WeaponBelt>();
         _pauseMenu = FindObjectOfType<PauseMenuUI>();
+        _upgradeMenu = FindObjectOfType<UpgradeMenuUI>();
         isDead = false;
 
         Canvas[] wheelsInScene;
@@ -362,8 +365,8 @@ public class ALTPlayerController : MonoBehaviour
 
     private void PlayerPause()
     {
-        m_ControllerState = ControllerState.Menu;
         _pauseMenu.Pause();
+        _upgradeMenu.Deactivate();
     }
 
     //Death and Respawn functionality -LCC
@@ -785,7 +788,7 @@ public class ALTPlayerController : MonoBehaviour
 
     void HandleEquipmentWheel()
     {
-        if (WeaponWheel.enabled == false && _bIsCredits == false)
+        if (WeaponWheel.enabled == false && _bIsCredits == false && m_ControllerState != ControllerState.Menu)
         {
             if (_bEquipWheel)
             {
@@ -815,7 +818,7 @@ public class ALTPlayerController : MonoBehaviour
 
     public void HandleWeaponWheel()
     {
-        if (EquipmentWheel.enabled == false && _bIsCredits == false)
+        if (EquipmentWheel.enabled == false && _bIsCredits == false && m_ControllerState != ControllerState.Menu)
         {
             if (_bWepWheel)
             {
