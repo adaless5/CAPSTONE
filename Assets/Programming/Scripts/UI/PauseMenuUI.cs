@@ -60,18 +60,21 @@ public class PauseMenuUI : MonoBehaviour
             //pc.enabled = true;
             pc.m_ControllerState = ALTPlayerController.ControllerState.Play;
             PauseMenu.SetActive(false);
+            //Debug.Log("Pause menu state: " + ALTPlayerController.instance.m_ControllerState);
         }
     }
 
     public void Pause()
     {
-        EventSystem.current.SetSelectedGameObject(null);
         if (GameIsPaused)
         {
             Unpause();
         }
-        else
+        else if (ALTPlayerController.instance.m_ControllerState != ALTPlayerController.ControllerState.Menu)
         {
+            EventSystem.current.SetSelectedGameObject(null);
+
+            
             EventSystem.current.SetSelectedGameObject(pauseFirst);
             Time.timeScale = 0f;
             enabled = true;
@@ -82,6 +85,8 @@ public class PauseMenuUI : MonoBehaviour
             ALTPlayerController pc = Player.GetComponent<ALTPlayerController>();
             //pc.enabled = false;
             pc.m_ControllerState = ALTPlayerController.ControllerState.Menu;
+            
+            //Debug.Log("Pause menu state: " + ALTPlayerController.instance.m_ControllerState);
         }
     }
 
