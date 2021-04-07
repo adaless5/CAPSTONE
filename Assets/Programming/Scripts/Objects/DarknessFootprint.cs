@@ -28,7 +28,7 @@ public class DarknessFootprint : MonoBehaviour
     {
         //make footsteps
 
-        if (_PC.GetVelocity().x != 0 || _PC.GetVelocity().z != 0)
+        if (ALTPlayerController.instance.GetIsWalking())
         {
             _stepTime -= Time.deltaTime;
             if (_stepTime <= 0)
