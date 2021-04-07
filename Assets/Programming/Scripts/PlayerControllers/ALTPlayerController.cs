@@ -142,7 +142,7 @@ public class ALTPlayerController : MonoBehaviour
     private bool bInvertYAxis = false;
 
     bool bDebug = false;
-
+    public bool _bIsCredits;
     private void Awake()
     {
         OnTakeDamage += TakeDamage;
@@ -154,6 +154,7 @@ public class ALTPlayerController : MonoBehaviour
         _cameraBehaviour = GetComponent<CameraBehaviour>();
         instance = this;
         _groundCheck = GameObject.Find("GroundCheck").transform;
+        _bIsCredits = false;
     }
     #region Debug Functions
     public void DebugUnlockAllWeapons()
@@ -789,7 +790,7 @@ public class ALTPlayerController : MonoBehaviour
 
     void HandleEquipmentWheel()
     {
-        if (WeaponWheel.enabled == false)
+        if (WeaponWheel.enabled == false && _bIsCredits == false)
         {
             if (_bEquipWheel)
             {
@@ -819,7 +820,7 @@ public class ALTPlayerController : MonoBehaviour
 
     public void HandleWeaponWheel()
     {
-        if (EquipmentWheel.enabled == false)
+        if (EquipmentWheel.enabled == false && _bIsCredits == false)
         {
             if (_bWepWheel)
             {
