@@ -181,6 +181,12 @@ public class ALTPlayerController : MonoBehaviour
     {
         m_health.bCanBeDamaged = false;
     }
+
+    public void DebugDie()
+    {
+        m_health.TakeDamage(9999);
+    }
+
     #endregion
 
     void InitializeControls()

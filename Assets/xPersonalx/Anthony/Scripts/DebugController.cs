@@ -16,6 +16,7 @@ public class DebugController : MonoBehaviour
     public static DebugCommand ALL_TOOLS;
     public static DebugCommand ADD_MONEY;
     public static DebugCommand GOD_MODE;
+    public static DebugCommand DIE;
     public List<DebugCommandBase> commandList;
 
     const float BUFFER = 5.0f;
@@ -42,12 +43,18 @@ public class DebugController : MonoBehaviour
             ALTPlayerController.instance.DebugGodMode();
         });
 
+        DIE = new DebugCommand("die", "kills player.", "die", () =>
+        {
+            ALTPlayerController.instance.DebugDie();
+        });
+
         commandList = new List<DebugCommandBase>
         {
             ALL_WEAPONS,
             ALL_TOOLS,
             ADD_MONEY,
             GOD_MODE,
+            DIE,
         };
     }
 
