@@ -30,9 +30,6 @@ public class ALTPlayerController : MonoBehaviour
         Debug
     }
 
-    public PlayerState m_PlayerState { get; private set; }
-    public ControllerState m_ControllerState;
-    public ControllerType m_ControllerType;
 
     public PauseMenuUI _pauseMenu;
 
@@ -43,22 +40,20 @@ public class ALTPlayerController : MonoBehaviour
     CameraBehaviour _cameraBehaviour;
 
     public CharacterController _controller;
+    public PlayerState m_PlayerState { get; private set; }
+    public ControllerState m_ControllerState;
+    public ControllerType m_ControllerType;
 
     // == Player Movement Variables ==
+    public Vector3 m_Momentum { get; set; }
     Vector3 m_Velocity;
     float m_MoveSpeed = 10.0f;
-    const float WALK_SPEED = 10.0f;
-    const float SPRINT_SPEED = 20.0f;
     Vector3 m_Gravity = new Vector3(0.0f, -40.0f, 0.0f);
-    Vector3 ORIGINAL_GRAVITY = new Vector3(0.0f, -40.0f, 0.0f);
     float m_JumpHeight = 5f;
-    const float NORMAL_JUMP_HEIGHT = 5f;
-    const float GRAPPLE_JUMP_HEIGHT = 10.0f;
-    public Vector3 m_Momentum = Vector3.zero;
     float _slopeAngle;
     Vector3 _slopeAcceleration;
-    [SerializeField] private float _slopeForce;
-    [SerializeField] private float _slopeForceRayLength;
+    private float _slopeForce;
+    private float _slopeForceRayLength;
     float _Acceleration = 0f;
     bool bisGrounded;
     Transform _groundCheck;
@@ -69,11 +64,21 @@ public class ALTPlayerController : MonoBehaviour
     Vector3 _preJumpVelocity;
     Vector3 _lastMoveVelocity;
     Vector3 _jumpVelocity;
-    const float IN_AIR_CONTROL = 0.9f;
     const float MIN_SLOPE_ANGLE = 30.0f;
-    const float DECELERATION_SPEED = 10.0f;
     float _coyoteTime = 2.1f;
-    const float MAX_COYOTE_TIME = 0.1f;
+
+    //== Accessible Movement Methods / Members ==
+    [Header("Player Movement Variables")]
+    [SerializeField] float WALK_SPEED = 10.0f;
+    [SerializeField] float SPRINT_SPEED = 20.0f;
+    [SerializeField] Vector3 ORIGINAL_GRAVITY = new Vector3(0.0f, -40.0f, 0.0f);
+    [SerializeField] float NORMAL_JUMP_HEIGHT = 5f;
+    [SerializeField] float GRAPPLE_JUMP_HEIGHT = 10.0f;
+    [SerializeField] float IN_AIR_CONTROL = 0.8f;
+    [SerializeField] float DECELERATION_SPEED = 10.0f;
+    [SerializeField] float MAX_COYOTE_TIME = 0.1f;
+
+    [Header("Other Public Variables")]
     public bool bWasGrappling = false;
 
     public int m_UpgradeCurrencyAmount = 0;
@@ -111,8 +116,6 @@ public class ALTPlayerController : MonoBehaviour
     bool bOnSlope = false;
     Vector3 _ControllerCollisionPos = Vector3.zero;
 
-    //bool bHasEnteredDarkness = false;
-
     //Death mechanic stuff
     public bool isDead = false;
     Vector3 _respawnPosition;
@@ -143,6 +146,7 @@ public class ALTPlayerController : MonoBehaviour
 
     bool bDebug = false;
     public bool _bIsCredits;
+
     private void Awake()
     {
         OnTakeDamage += TakeDamage;
@@ -260,7 +264,6 @@ public class ALTPlayerController : MonoBehaviour
         Debug.Log("Scene Changed");
         if (this != null)
             EventBroker.CallOnPlayerSpawned(gameObject);
-
     }
 
     void Update()
@@ -347,6 +350,10 @@ public class ALTPlayerController : MonoBehaviour
             }
         }
 
+        if (!_bEquipWheel && !_bWepWheel)
+        {
+            _bWheelCanBePressed = true;
+        }
     }
 
     private void OnEnable()
@@ -561,7 +568,7 @@ public class ALTPlayerController : MonoBehaviour
         }
         else
         {
-            _Acceleration -= Time.deltaTime;
+            _Acceleration -= Time.deltaTime * 5.0f;
         }
         _Acceleration = Mathf.Clamp(_Acceleration, 0.0f, 1.0f);
 
@@ -667,16 +674,18 @@ public class ALTPlayerController : MonoBehaviour
             }
         }
 
+        //Removed this because I felt that the hang time was less annoying than the difficulty platforming when you bump your head, IMO feels much better now.
         //Preventing you from hanging in air if you jump up into something
-        if (_controller.collisionFlags.ToString() == "Above")
-        {
-            m_Velocity.y = Mathf.Lerp(m_Velocity.y, -1f, Time.deltaTime * 20.0f);
-        }
+        //if (_controller.collisionFlags.ToString() == "Above")
+        //{
+        //    m_Velocity.y = Mathf.Lerp(m_Velocity.y, -1f, Time.deltaTime * 20.0f);
+        //}
 
         if (!bisGrounded && bDidJump)
         {
+            _preJumpVelocity = _lastMoveVelocity;
             //TODO: This may need tweaking.
-            Vector3 airMovement = (_preJumpVelocity + (movement * IN_AIR_CONTROL)) * m_MoveSpeed;
+            Vector3 airMovement = ((_preJumpVelocity * 0.75f) + (movement * IN_AIR_CONTROL)) * m_MoveSpeed * _Acceleration;
 
             if (bWasGrappling)
             {
@@ -795,6 +804,7 @@ public class ALTPlayerController : MonoBehaviour
                 EquipmentWheel.GetComponent<CanvasGroup>().blocksRaycasts = true;
                 Cursor.lockState = CursorLockMode.None;
                 m_ControllerState = ControllerState.Wheel;
+                _bWheelCanBePressed = false;
                 return;
             }
 
@@ -825,6 +835,7 @@ public class ALTPlayerController : MonoBehaviour
                 WeaponWheel.GetComponent<CanvasGroup>().blocksRaycasts = true;
                 Cursor.lockState = CursorLockMode.None;
                 m_ControllerState = ControllerState.Wheel;
+                _bWheelCanBePressed = false;
                 return;
             }
 
