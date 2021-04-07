@@ -16,7 +16,7 @@ public class RoamerWanderState : RoamerState
     {
         _stateName = STATENAME.WANDER;
         _wanderRadius = wanderrad;
-        Debug.Log("Enter Wander State");
+        //Debug.Log("Enter Wander State");
     }
 
     public override void Enter()
@@ -58,7 +58,7 @@ public class RoamerWanderState : RoamerState
         NavMeshHit hit;
         NavMesh.SamplePosition(randDir, out hit, _wanderRadius, 1);
         finalPos = hit.position;       
-        Debug.Log("Point set to" + finalPos);
+        //Debug.Log("Point set to" + finalPos);
         _navMeshAgent.SetDestination(finalPos);
         _ChangeToIdleChance = Random.Range(0, 3);
 

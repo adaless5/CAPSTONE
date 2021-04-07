@@ -595,7 +595,7 @@ public class ALTPlayerController : MonoBehaviour
             GetComponent<CameraBehaviour>().bobFrequency = 7.5f;
         }
         else
-        {
+        {            
             m_MoveSpeed = Mathf.Lerp(m_MoveSpeed, WALK_SPEED, Time.deltaTime);
             GetComponent<CameraBehaviour>().bobFrequency = 5.0f;
         }
@@ -922,10 +922,7 @@ public class ALTPlayerController : MonoBehaviour
     {
         return m_Velocity;
     }
-    public Vector3 GetLastMoveVelocity()
-    {
-        return _lastMoveVelocity;
-    }
+
     public void SetXAxisInvert()
     {
         bInvertXAxis = !bInvertXAxis;
@@ -934,5 +931,10 @@ public class ALTPlayerController : MonoBehaviour
     public void SetYAxisInvert()
     {
         bInvertYAxis = !bInvertYAxis;
-    }
+    }   
+
+    public float GetMovementSpeed()
+    {
+        return _movement.magnitude;
+    }    
 }
