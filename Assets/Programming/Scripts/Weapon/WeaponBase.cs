@@ -216,6 +216,14 @@ public class WeaponBase : Weapon
                         container.Break(gameObject.tag);
                     }
                     /// Evan's Item container call ^^^
+                    /// 
+                    /// Evan's Credits call vvv
+                    CreditObject credit = hitInfo.transform.GetComponentInParent<CreditObject>();
+                    if (credit)
+                    {
+                        credit.Hit(hitInfo.point);
+                    }
+                    /// Evan's Credits call ^^^
 
                     /// Evan's Eyeball call vvv
                     EyeLight eye = hitInfo.transform.GetComponentInParent<EyeLight>();
