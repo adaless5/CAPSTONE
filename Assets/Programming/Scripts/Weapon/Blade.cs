@@ -29,7 +29,7 @@ public class Blade : Equipment
 
         _bisAttacking = false;
         _animator = GetComponentInChildren<Animator>();
-        _hitbox = GetComponent<BoxCollider>();
+        _hitbox = GetComponentInChildren<BoxCollider>();
 
         _animator.enabled = false;
         _hitbox.enabled = false;
@@ -39,6 +39,8 @@ public class Blade : Equipment
         {
             obj.enabled = false;
         }
+        SkinnedMeshRenderer arm = GetComponentInChildren<SkinnedMeshRenderer>();
+        arm.enabled = false;
     }
 
     void Awake()
@@ -62,6 +64,9 @@ public class Blade : Equipment
             {
                 obj.enabled = true;
             }
+            SkinnedMeshRenderer arm = GetComponentInChildren<SkinnedMeshRenderer>();
+            arm.enabled = true;
+
             _animator.enabled = true;
             _animator.SetBool("IsOut", true);
 
@@ -79,22 +84,30 @@ public class Blade : Equipment
             {
                 obj.enabled = false;
             }
-            _hitbox.enabled = false;
+                SkinnedMeshRenderer arm = GetComponentInChildren<SkinnedMeshRenderer>();
+                arm.enabled = false;
+                _hitbox.enabled = false;
             }
         }
 
         if (ALTPlayerController.instance.GetIsWalking() && ALTPlayerController.instance.CheckForSprintInput() == false)
         {
-            _animator.SetTrigger("IsWalking");
+            _animator.SetBool("IsWalking", true);
+            _animator.SetBool("IsSprinting", false);
+            _animator.SetBool("IsIdle", false);
+
         }
         else if (ALTPlayerController.instance.CheckForSprintInput() == true)
         {
-            _animator.SetTrigger("IsSprinting");
-
+            _animator.SetBool("IsWalking", false);
+            _animator.SetBool("IsSprinting", true);
+            _animator.SetBool("IsIdle", false);
         }
         else
         {
-            _animator.SetTrigger("IsIdle");
+            _animator.SetBool("IsWalking", false);
+            _animator.SetBool("IsSprinting", false);
+            _animator.SetBool("IsIdle", true);
         }
     }
 
@@ -117,10 +130,15 @@ public class Blade : Equipment
             {
                 Debug.Log("Attack");
                 int rand = Random.Range(1, 3);
-                _animator.SetTrigger("Attack" + rand.ToString());
+                _animator.SetBool("Attack" + rand.ToString(), true);
                 _hitbox.enabled = true;
                 bHasHit = false;
             }
+        }
+        else 
+        {
+            _animator.SetBool("Attack1", false);
+            _animator.SetBool("Attack2", false);
         }
     }
 
