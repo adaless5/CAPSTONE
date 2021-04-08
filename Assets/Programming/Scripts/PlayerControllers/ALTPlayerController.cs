@@ -135,6 +135,8 @@ public class ALTPlayerController : MonoBehaviour
     //Special case: These guys needed some re-routing to make sure they didn't collude with the Pause logic 
     bool _bEquipWheel = true;
     bool _bWepWheel = true;
+    public bool bCanOpenWheel { get; set; }
+
 
     bool _bEquipment;
     bool _bThermal;
@@ -162,6 +164,7 @@ public class ALTPlayerController : MonoBehaviour
         instance = this;
         _groundCheck = GameObject.Find("GroundCheck").transform;
         _bIsCredits = false;
+        bCanOpenWheel = true;
     }
     #region Debug Functions
     public void DebugUnlockAllWeapons()
@@ -359,10 +362,53 @@ public class ALTPlayerController : MonoBehaviour
                 }
             }
         }
-
-        if (!_bEquipWheel && !_bWepWheel)
+        
+        //Solution Until I can come up with a better one. 
+        //Prevents the Wheels from inverting or opening while grappling.
+        if (Gamepad.current != null)
         {
-            _bWheelCanBePressed = true;
+            if (Gamepad.current.rightShoulder.IsActuated() || Gamepad.current.leftShoulder.IsActuated())
+            {
+                if (Gamepad.current.rightShoulder.isPressed && Gamepad.current.leftShoulder.isPressed)
+                {
+                    DisableWheel(EquipmentWheel, ref _bEquipWheel);
+                    DisableWheel(WeaponWheel, ref _bWepWheel);
+                    bCanOpenWheel = false;
+                }
+                else if (!Gamepad.current.rightShoulder.isPressed && !Gamepad.current.leftShoulder.isPressed)
+                {
+                    if (m_PlayerState == PlayerState.Idle)
+                        bCanOpenWheel = true;
+                }
+            }
+            else
+            {
+                if ((Keyboard.current.qKey.isPressed && Keyboard.current.tabKey.isPressed))
+                {
+                    DisableWheel(EquipmentWheel, ref _bEquipWheel);
+                    DisableWheel(WeaponWheel, ref _bWepWheel);
+                    bCanOpenWheel = false;
+                }
+                else if ((!Keyboard.current.qKey.isPressed && !Keyboard.current.tabKey.isPressed))
+                {
+                    if (m_PlayerState == PlayerState.Idle)
+                        bCanOpenWheel = true;
+                }
+            }
+        }
+        else
+        {
+            if ((Keyboard.current.qKey.isPressed && Keyboard.current.tabKey.isPressed))
+            {
+                DisableWheel(EquipmentWheel, ref _bEquipWheel);
+                DisableWheel(WeaponWheel, ref _bWepWheel);
+                bCanOpenWheel = false;
+            }
+            else if ((!Keyboard.current.qKey.isPressed && !Keyboard.current.tabKey.isPressed))
+            {
+                if (m_PlayerState == PlayerState.Idle)
+                    bCanOpenWheel = true;
+            }
         }
     }
 
@@ -601,7 +647,7 @@ public class ALTPlayerController : MonoBehaviour
             GetComponent<CameraBehaviour>().bobFrequency = 7.5f;
         }
         else
-        {
+        {            
             m_MoveSpeed = Mathf.Lerp(m_MoveSpeed, WALK_SPEED, Time.deltaTime);
             GetComponent<CameraBehaviour>().bobFrequency = 5.0f;
         }
@@ -787,7 +833,6 @@ public class ALTPlayerController : MonoBehaviour
         #endregion
     }
 
-    
     private bool OnWalkableSlope()
     {
         if (_bIsJumping)
@@ -803,64 +848,66 @@ public class ALTPlayerController : MonoBehaviour
 
     void HandleEquipmentWheel()
     {
-        if (WeaponWheel.enabled == false && _bIsCredits == false && m_ControllerState != ControllerState.Menu)
+        if (bCanOpenWheel && m_PlayerState == PlayerState.Idle)
         {
-            if (_bEquipWheel)
+            if (_bIsCredits == false && m_ControllerState != ControllerState.Menu)
             {
-                _bEquipWheel = false;
-                EquipmentWheel.enabled = true;
-                Time.timeScale = 0.3f;
-                EquipmentWheel.GetComponent<CanvasGroup>().interactable = true;
-                EquipmentWheel.GetComponent<CanvasGroup>().blocksRaycasts = true;
-                Cursor.lockState = CursorLockMode.None;
-                m_ControllerState = ControllerState.Wheel;
-                _bWheelCanBePressed = false;
-                return;
-            }
+                if (_bEquipWheel)
+                {
+                    EnableWheel(EquipmentWheel, ref _bEquipWheel);
+                    return;
+                }
 
-            if (_bEquipWheel == false)
-            {
-                _bEquipWheel = true;
-                EquipmentWheel.enabled = false;
-                Time.timeScale = 1;
-                EquipmentWheel.GetComponent<CanvasGroup>().interactable = false;
-                EquipmentWheel.GetComponent<CanvasGroup>().blocksRaycasts = false;
-                Cursor.lockState = CursorLockMode.Locked;
-                m_ControllerState = ControllerState.Play;
-                return;
+                if (!_bEquipWheel)
+                {
+                    DisableWheel(EquipmentWheel, ref _bEquipWheel);
+                    return;
+                }   
             }
         }
     }
 
     public void HandleWeaponWheel()
     {
-        if (EquipmentWheel.enabled == false && _bIsCredits == false && m_ControllerState != ControllerState.Menu)
+        if (bCanOpenWheel && m_PlayerState == PlayerState.Idle)
         {
-            if (_bWepWheel)
+            if (_bIsCredits == false && m_ControllerState != ControllerState.Menu)
             {
-                _bWepWheel = false;
-                WeaponWheel.enabled = true;
-                Time.timeScale = 0.3f;
-                WeaponWheel.GetComponent<CanvasGroup>().interactable = true;
-                WeaponWheel.GetComponent<CanvasGroup>().blocksRaycasts = true;
-                Cursor.lockState = CursorLockMode.None;
-                m_ControllerState = ControllerState.Wheel;
-                _bWheelCanBePressed = false;
-                return;
-            }
+                if (_bWepWheel)
+                {
+                    EnableWheel(WeaponWheel, ref _bWepWheel);
+                    return;
+                }
 
-            if (_bWepWheel == false)
-            {
-                _bWepWheel = true;
-                WeaponWheel.enabled = false;
-                Time.timeScale = 1;
-                WeaponWheel.GetComponent<CanvasGroup>().interactable = false;
-                WeaponWheel.GetComponent<CanvasGroup>().blocksRaycasts = false;
-                Cursor.lockState = CursorLockMode.Locked;
-                m_ControllerState = ControllerState.Play;
-                return;
+                if (!_bWepWheel)
+                {
+                    DisableWheel(WeaponWheel, ref _bWepWheel);
+                    return;
+                }
             }
         }
+    }
+
+    void EnableWheel(Canvas wheel, ref bool inUse)
+    {
+        inUse = false;
+        wheel.enabled = true;
+        Time.timeScale = 0.3f;
+        wheel.GetComponent<CanvasGroup>().interactable = true;
+        wheel.GetComponent<CanvasGroup>().blocksRaycasts = true;
+        Cursor.lockState = CursorLockMode.None;
+        m_ControllerState = ControllerState.Wheel;
+    }
+
+    void DisableWheel(Canvas wheel, ref bool inUse)
+    {
+        inUse = true;
+        wheel.enabled = false;
+        Time.timeScale = 1;
+        wheel.GetComponent<CanvasGroup>().interactable = false;
+        wheel.GetComponent<CanvasGroup>().blocksRaycasts = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        m_ControllerState = ControllerState.Play;
     }
 
     public void ResetGravity()
@@ -928,10 +975,7 @@ public class ALTPlayerController : MonoBehaviour
     {
         return m_Velocity;
     }
-    public Vector3 GetLastMoveVelocity()
-    {
-        return _lastMoveVelocity;
-    }
+
     public void SetXAxisInvert()
     {
         bInvertXAxis = !bInvertXAxis;
@@ -940,5 +984,10 @@ public class ALTPlayerController : MonoBehaviour
     public void SetYAxisInvert()
     {
         bInvertYAxis = !bInvertYAxis;
-    }
+    }   
+
+    public float GetMovementSpeed()
+    {
+        return _movement.magnitude;
+    }    
 }
