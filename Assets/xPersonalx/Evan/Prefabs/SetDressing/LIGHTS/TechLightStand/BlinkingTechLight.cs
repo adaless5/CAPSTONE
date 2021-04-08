@@ -8,16 +8,19 @@ public class BlinkingTechLight : MonoBehaviour
 
     public Light[] Lights;
 
-    public float FlickerLength;
-    public float FlickerTimer;
-    public bool Flickering;
+    public Vector2 FlickerLengthRange = new Vector2(0.5f, 2.0f);
+    public Vector2 FlickerOccuranceRange = new Vector2(2.0f, 30.0f);
+
+    float FlickerLength;
+    float FlickerTimer;
+    bool Flickering;
     public bool doesGlow;
 
     float[] glowModifier;
     bool[] bGlowModifier;
 
 
-    public float OriginalIntensity;
+     float OriginalIntensity;
     void Start()
     {
         glowModifier = new float[Lights.Length];
@@ -27,8 +30,8 @@ public class BlinkingTechLight : MonoBehaviour
             glowModifier[i] = (1.0f / Lights.Length) * i;
         }
         OriginalIntensity = Lights[0].intensity;
-        FlickerLength = Random.Range(0.5f, 2.0f);
-        FlickerTimer = Random.Range(2.0f, 30.0f);
+        FlickerLength = Random.Range(FlickerLengthRange.x, FlickerLengthRange.y);
+        FlickerTimer = Random.Range(FlickerOccuranceRange.x, FlickerOccuranceRange.y);
     }
     void Glow()
     {
@@ -65,7 +68,7 @@ public class BlinkingTechLight : MonoBehaviour
         if (FlickerLength > 0.0f)
         {
             FlickerLength -= Time.deltaTime;
-            float randomIntensity = Random.Range(0.0f, OriginalIntensity);
+            float randomIntensity = Random.Range(OriginalIntensity * 0.1f, OriginalIntensity);
             for (int i = 0; i < Lights.Length; i++)
             {
                 Lights[i].intensity = randomIntensity;
@@ -73,8 +76,8 @@ public class BlinkingTechLight : MonoBehaviour
         }
         else
         {
-            FlickerLength = Random.Range(0.5f, 2.0f);
-            FlickerTimer = Random.Range(2.0f, 30.0f);
+            FlickerLength = Random.Range(FlickerLengthRange.x, FlickerLengthRange.y);
+            FlickerTimer = Random.Range(FlickerOccuranceRange.x, FlickerOccuranceRange.y);
             Flickering = false;
             for (int i = 0; i < Lights.Length; i++)
             {
