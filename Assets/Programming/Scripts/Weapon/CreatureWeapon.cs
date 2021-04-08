@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using UnityEngine;
 
-public class CreatureWeapon : Weapon, ISaveable
+public class CreatureWeapon : Weapon
 {
     public Camera _camera;
     public ParticleSystem _spreadEffect;
     public Animator reticuleAnimator;
-    public GG_Animations _GGAnimator;
     GameObject _creatureProjectile;
+    public GG_Animations _GGAnimator;
 
     //vvv EP model stuff
     public GameObject _gunObject;
@@ -19,12 +19,18 @@ public class CreatureWeapon : Weapon, ISaveable
     Vector3 _firingOrganSize;
     Vector3 _internalOrganSize;
     public float _pulseScale;
+    public float _numberOfGlobsShot;
+    public float _globuleFireSpeed;
+    public float _fireAngleRange;
+    public Vector2 _globSizeRange;
     float _pulseTime;
     Vector3 _currentScale;
+    public GameObject _muzzlePointObject;
     //^^^ EP model stuff
     private void Awake()
     {
         base.Awake();
+        LoadDataOnSceneEnter();
         _creatureProjectile = (GameObject)Resources.Load("Prefabs/Weapon/Creature Projectile");
         m_weaponClipSize = 8;
         m_reloadTime = 3.0f;
@@ -54,13 +60,12 @@ public class CreatureWeapon : Weapon, ISaveable
     // Start is called before the first frame update
     public override void Start()
     {
+        base.Start();
         //Initializing Ammo Controller
         _ammoController = FindObjectOfType<AmmoUI>().GetComponent<AmmoController>();
         _ammoController.InitializeAmmo(AmmoController.AmmoTypes.Creature, m_weaponClipSize, m_weaponClipSize, m_ammoCapAmount);
 
         _camera = FindObjectOfType<Camera>();
-        bIsActive = false;
-        bIsObtained = false;
 
         m_fireRate = 0.5f * m_upgradestats.FireRate;
         m_hitImpact = 10.0f * m_upgradestats.ImpactForce;
@@ -127,31 +132,47 @@ public class CreatureWeapon : Weapon, ISaveable
     void OnShoot()
     {
         _GGAnimator._glandGunAnimator.SetTrigger("HasFired");
-        
         //Play shot
         AudioManager_CreatureWeapon amc = GetComponent<AudioManager_CreatureWeapon>();
         amc.TriggerShootCreatureWeapon();
 
-        for (int i = 0; i < m_weaponClipSize; i++)
+        for (int i = 0; i < _numberOfGlobsShot; i++)
         {
-            Vector3 bulletDeviation = UnityEngine.Random.insideUnitCircle * 300.0f;
-            Quaternion rot = Quaternion.LookRotation(Vector3.forward * 200.0f + bulletDeviation);
-            Vector3 finalFowardVector = transform.rotation * rot * Vector3.forward;
-            finalFowardVector += transform.position;
+            //Vector3 bulletDeviation = UnityEngine.Random.insideUnitCircle * 300.0f;
+            //Quaternion rot = Quaternion.LookRotation(Vector3.forward * 200.0f + bulletDeviation);
+            //Vector3 finalFowardVector = transform.rotation * rot * Vector3.forward;
+            //finalFowardVector += transform.position;
 
             //GameObject creatureProjectile = Instantiate(_creatureProjectile, finalFowardVector, Quaternion.identity);
+            //if (ObjectPool.Instance != null)
+            //{
+            //    GameObject creatureProjectile = ObjectPool.Instance.SpawnFromPool("Creature", _creatureProjectile, finalFowardVector, Quaternion.identity);
+            //    float randomfloat = UnityEngine.Random.Range(0.1f, 0.5f);
+            //    Vector3 randomSize = new Vector3(randomfloat, randomfloat, randomfloat);
+            //    creatureProjectile.transform.localScale = randomSize;
+            //    creatureProjectile.GetComponent<Rigidbody>().AddForce(transform.forward * m_hitImpact, ForceMode.Impulse);
+            //    creatureProjectile.GetComponent<CreatureProjectile>().InitCreatureProjectile(m_maxDamageTime, m_projectileLifeTime, m_damageAmount, m_bHasActionUpgrade);
+            //    creatureProjectile.GetComponent<CreatureProjectile>().LinkAudioManager(amc);
+
+            //}
+
+            //vvv Evan's adjustments
             if (ObjectPool.Instance != null)
             {
-
-                GameObject creatureProjectile = ObjectPool.Instance.SpawnFromPool("Creature", _creatureProjectile, finalFowardVector, Quaternion.identity);
-                float randomfloat = UnityEngine.Random.Range(0.1f, 0.5f);
+                
+                GameObject creatureProjectile = ObjectPool.Instance.SpawnFromPool("Creature", _creatureProjectile, _muzzlePointObject.transform.position, _muzzlePointObject.transform.rotation);
+                float randomfloat = UnityEngine.Random.Range(_globSizeRange.x,_globSizeRange.y);
                 Vector3 randomSize = new Vector3(randomfloat, randomfloat, randomfloat);
                 creatureProjectile.transform.localScale = randomSize;
-                creatureProjectile.GetComponent<Rigidbody>().AddForce(transform.forward * m_hitImpact, ForceMode.Impulse);
+                Vector3 randomRot = new Vector3(UnityEngine.Random.Range(-_fireAngleRange, _fireAngleRange),UnityEngine.Random.Range(-_fireAngleRange, _fireAngleRange),0.0f);
+                creatureProjectile.transform.Rotate(randomRot);
+                creatureProjectile.GetComponent<Rigidbody>().AddForce(creatureProjectile.transform.forward * _globuleFireSpeed, ForceMode.Impulse);
                 creatureProjectile.GetComponent<CreatureProjectile>().InitCreatureProjectile(m_maxDamageTime, m_projectileLifeTime, m_damageAmount, m_bHasActionUpgrade);
                 creatureProjectile.GetComponent<CreatureProjectile>().LinkAudioManager(amc);
 
             }
+            //^^^ Evan's adjustments
+
             else
             {
                 Debug.LogError("Object Pool not initialized! Create an Object Pool prefab");
