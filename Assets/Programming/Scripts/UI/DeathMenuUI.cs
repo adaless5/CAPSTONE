@@ -83,14 +83,15 @@ public class DeathMenuUI : MonoBehaviour
             StartCoroutine(LoadAsyncScene(data.sceneName));
 
 
-            if (_player != null)
+            if (_playerController != null)
             {
-                _player.transform.rotation = data.rot;
+                _playerController.PlayerRespawn();
                 _player.transform.position = data.pos;
+                //_player.transform.rotation = data.rot;
             }
         }
-        _playerController.PlayerRespawn();
-        StartCoroutine(FadeTo(0.0f, 1.0f));
+
+        //StartCoroutine(FadeTo(0.0f, 1.0f));
     }
 
     IEnumerator LoadAsyncScene(int sceneIndex)
