@@ -659,26 +659,27 @@ public class ALTPlayerController : MonoBehaviour
         //Using Player Input to Calculate movement vector and applying movement
         Vector3 movement = ((transform.right * _movement.x) + (transform.forward * _movement.y)) * _Acceleration;
 
-        
+
         //Store the last recorded movement velocity for deceleration
         if (movement.magnitude > Mathf.Epsilon)
         {
             bIsMoving = true;
             _lastMoveVelocity = movement;
+
             //TODO: Figure out Why Camera behaviour is bugging out.
-            //if (!_bIsJumping)
-            //{
-            //    if (_cameraBehaviour != null)
-            //        _cameraBehaviour.SetIsWalking(true);
-            //}
+            if (!_bIsJumping)
+            {
+                if (_cameraBehaviour != null)
+                    _cameraBehaviour.SetIsWalking(true);
+            }
         }
         else
         {
             bIsMoving = false;
 
             //TODO: Figure out Why Camera behaviour is bugging out.
-            //if (_cameraBehaviour != null)
-            //    _cameraBehaviour.SetIsWalking(false);
+            if (_cameraBehaviour != null)
+                _cameraBehaviour.SetIsWalking(false);
         }
 
         if (!bDidJump)
