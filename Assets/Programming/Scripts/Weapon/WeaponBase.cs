@@ -21,8 +21,10 @@ public class WeaponBase : Weapon, ISaveable
     float m_lerpDuration = 3f;
 
     bool _bPlayedNewShellSound;
+    bool _bcoroutineOutIsRunning = false;
+    bool _bcoroutineInIsRunning = false;
     GameObject muzzlePoint;
-    DG_Animations _DGAnimator;
+    Weapon_Animations _DGAnimator;
 
     void Awake()
     {
@@ -41,6 +43,7 @@ public class WeaponBase : Weapon, ISaveable
 
         EventBroker.OnPlayerSpawned += InitWeaponControls;
         EventBroker.OnWeaponSwap += WeaponSwapOut;
+        EventBroker.OnWeaponSwapIn += DGWeaponSwapIn;
         //gunAnimator = GetComponent<Animator>();
         _DGAnimator = GetComponent<DG_Animations>();
 
@@ -91,7 +94,7 @@ public class WeaponBase : Weapon, ISaveable
             if (bIsActive && _playerController.m_ControllerState == ALTPlayerController.ControllerState.Play)
             {
                 // GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;
-                transform.GetChild(0).gameObject.SetActive(true);
+                //transform.GetChild(0).gameObject.SetActive(true);
 
                 //_DGAnimator.SetFireAnimationSpeed(m_fireRate);
                 //DGAnimator.SetReloadAnimationSpeed(m_reloadTime);
@@ -110,19 +113,48 @@ public class WeaponBase : Weapon, ISaveable
 
     public IEnumerator SwapOutLogic()
     {
+        _bcoroutineOutIsRunning = true;
+        Debug.Log("Started DG SwapOutCoroutine at timestamp: " + Time.time);
         //Waits for default gun swap out animation to play before setting inactive
-        yield return new WaitForSeconds(1.133f);
+        //yield return new WaitForSeconds(1.133f);
+        yield return new WaitForSeconds(1.2f);
         if (!bIsActive)
             transform.GetChild(0).gameObject.SetActive(false);
         else
         {
             transform.GetChild(0).gameObject.SetActive(true);
         }
+        Debug.Log("Finished DG SwapOutCoroutine at timestamp: " + Time.time);
+        _bcoroutineOutIsRunning = false;
+    }
+
+    public IEnumerator SwapInLogic()
+    {
+        _bcoroutineInIsRunning = true;
+        Debug.Log("Started DG SwapInCoroutine at timestamp: " + Time.time);
+        //Waits for other equipped weapon to swap out before playing swap in animation, currently only gland gun timing (0.667f) seconds
+        //yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1.2f);
+        if (bIsActive)
+            transform.GetChild(0).gameObject.SetActive(true);
+        else
+        {
+            transform.GetChild(0).gameObject.SetActive(false);
+        }
+        Debug.Log("Finished DG SwapInCoroutine at timestamp: " + Time.time);
+        _bcoroutineInIsRunning = false;
     }
 
     public void WeaponSwapOut()
     {
+        if(!_bcoroutineOutIsRunning && !bIsActive)
         StartCoroutine(SwapOutLogic());
+    }
+
+    public void DGWeaponSwapIn()
+    {
+        if(!_bcoroutineInIsRunning && bIsActive)
+        StartCoroutine(SwapInLogic());
     }
 
     public override void UseTool()
@@ -205,7 +237,7 @@ public class WeaponBase : Weapon, ISaveable
     {
         //Play Recoil animation
         //gunAnimator.SetTrigger("OnRecoil");   
-        _DGAnimator._defaultGunAnimator.SetTrigger("Fired");
+        _DGAnimator._weaponAnimator.SetTrigger("Fired");
         muzzleFlash.Play();
         if (bIsActive)
         {
