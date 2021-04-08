@@ -30,9 +30,6 @@ public class ALTPlayerController : MonoBehaviour
         Debug
     }
 
-    public PlayerState m_PlayerState { get; private set; }
-    public ControllerState m_ControllerState;
-    public ControllerType m_ControllerType;
 
     public PauseMenuUI _pauseMenu;
 
@@ -43,22 +40,21 @@ public class ALTPlayerController : MonoBehaviour
     CameraBehaviour _cameraBehaviour;
 
     public CharacterController _controller;
+    public PlayerState m_PlayerState { get; private set; }
+    public ControllerState m_ControllerState;
+    public ControllerType m_ControllerType;
 
     // == Player Movement Variables ==
+    public Vector3 m_Momentum { get; set; }
     Vector3 m_Velocity;
+    Vector3 m_CurrentVelocity;
     float m_MoveSpeed = 10.0f;
-    const float WALK_SPEED = 10.0f;
-    const float SPRINT_SPEED = 20.0f;
     Vector3 m_Gravity = new Vector3(0.0f, -40.0f, 0.0f);
-    Vector3 ORIGINAL_GRAVITY = new Vector3(0.0f, -40.0f, 0.0f);
     float m_JumpHeight = 5f;
-    const float NORMAL_JUMP_HEIGHT = 5f;
-    const float GRAPPLE_JUMP_HEIGHT = 10.0f;
-    public Vector3 m_Momentum = Vector3.zero;
     float _slopeAngle;
     Vector3 _slopeAcceleration;
-    [SerializeField] private float _slopeForce;
-    [SerializeField] private float _slopeForceRayLength;
+    private float _slopeForce;
+    private float _slopeForceRayLength;
     float _Acceleration = 0f;
     bool bisGrounded;
     Transform _groundCheck;
@@ -69,11 +65,21 @@ public class ALTPlayerController : MonoBehaviour
     Vector3 _preJumpVelocity;
     Vector3 _lastMoveVelocity;
     Vector3 _jumpVelocity;
-    const float IN_AIR_CONTROL = 0.9f;
     const float MIN_SLOPE_ANGLE = 30.0f;
-    const float DECELERATION_SPEED = 10.0f;
     float _coyoteTime = 2.1f;
-    const float MAX_COYOTE_TIME = 0.1f;
+
+    //== Accessible Movement Methods / Members ==
+    [Header("Player Movement Variables")]
+    [SerializeField] float WALK_SPEED = 10.0f;
+    [SerializeField] float SPRINT_SPEED = 20.0f;
+    [SerializeField] Vector3 ORIGINAL_GRAVITY = new Vector3(0.0f, -40.0f, 0.0f);
+    [SerializeField] float NORMAL_JUMP_HEIGHT = 5f;
+    [SerializeField] float GRAPPLE_JUMP_HEIGHT = 10.0f;
+    [SerializeField] float IN_AIR_CONTROL = 0.8f;
+    [SerializeField] float DECELERATION_SPEED = 10.0f;
+    [SerializeField] float MAX_COYOTE_TIME = 0.1f;
+
+    [Header("Other Public Variables")]
     public bool bWasGrappling = false;
 
     public int m_UpgradeCurrencyAmount = 0;
@@ -87,6 +93,8 @@ public class ALTPlayerController : MonoBehaviour
 
     public Canvas EquipmentWheel;
     public Canvas WeaponWheel;
+
+    UpgradeMenuUI _upgradeMenu;
 
     public event Action<float> OnTakeDamage;
     public event Action<float> OnHeal;
@@ -111,8 +119,6 @@ public class ALTPlayerController : MonoBehaviour
     bool bOnSlope = false;
     Vector3 _ControllerCollisionPos = Vector3.zero;
 
-    //bool bHasEnteredDarkness = false;
-
     //Death mechanic stuff
     public bool isDead = false;
     Vector3 _respawnPosition;
@@ -129,6 +135,8 @@ public class ALTPlayerController : MonoBehaviour
     //Special case: These guys needed some re-routing to make sure they didn't collude with the Pause logic 
     bool _bEquipWheel = true;
     bool _bWepWheel = true;
+    public bool bCanOpenWheel { get; set; }
+
 
     bool _bEquipment;
     bool _bThermal;
@@ -143,6 +151,7 @@ public class ALTPlayerController : MonoBehaviour
 
     bool bDebug = false;
     public bool _bIsCredits;
+
     private void Awake()
     {
         OnTakeDamage += TakeDamage;
@@ -155,6 +164,7 @@ public class ALTPlayerController : MonoBehaviour
         instance = this;
         _groundCheck = GameObject.Find("GroundCheck").transform;
         _bIsCredits = false;
+        bCanOpenWheel = true;
     }
     #region Debug Functions
     public void DebugUnlockAllWeapons()
@@ -226,6 +236,7 @@ public class ALTPlayerController : MonoBehaviour
         _equipmentBelt = FindObjectOfType<EquipmentBelt>();
         _weaponBelt = FindObjectOfType<WeaponBelt>();
         _pauseMenu = FindObjectOfType<PauseMenuUI>();
+        _upgradeMenu = FindObjectOfType<UpgradeMenuUI>();
         isDead = false;
 
         Canvas[] wheelsInScene;
@@ -260,7 +271,6 @@ public class ALTPlayerController : MonoBehaviour
         Debug.Log("Scene Changed");
         if (this != null)
             EventBroker.CallOnPlayerSpawned(gameObject);
-
     }
 
     void Update()
@@ -346,7 +356,54 @@ public class ALTPlayerController : MonoBehaviour
                 }
             }
         }
-
+        
+        //Solution Until I can come up with a better one. 
+        //Prevents the Wheels from inverting or opening while grappling.
+        if (Gamepad.current != null)
+        {
+            if (Gamepad.current.rightShoulder.IsActuated() || Gamepad.current.leftShoulder.IsActuated())
+            {
+                if (Gamepad.current.rightShoulder.isPressed && Gamepad.current.leftShoulder.isPressed)
+                {
+                    DisableWheel(EquipmentWheel, ref _bEquipWheel);
+                    DisableWheel(WeaponWheel, ref _bWepWheel);
+                    bCanOpenWheel = false;
+                }
+                else if (!Gamepad.current.rightShoulder.isPressed && !Gamepad.current.leftShoulder.isPressed)
+                {
+                    if (m_PlayerState == PlayerState.Idle)
+                        bCanOpenWheel = true;
+                }
+            }
+            else
+            {
+                if ((Keyboard.current.qKey.isPressed && Keyboard.current.tabKey.isPressed))
+                {
+                    DisableWheel(EquipmentWheel, ref _bEquipWheel);
+                    DisableWheel(WeaponWheel, ref _bWepWheel);
+                    bCanOpenWheel = false;
+                }
+                else if ((!Keyboard.current.qKey.isPressed && !Keyboard.current.tabKey.isPressed))
+                {
+                    if (m_PlayerState == PlayerState.Idle)
+                        bCanOpenWheel = true;
+                }
+            }
+        }
+        else
+        {
+            if ((Keyboard.current.qKey.isPressed && Keyboard.current.tabKey.isPressed))
+            {
+                DisableWheel(EquipmentWheel, ref _bEquipWheel);
+                DisableWheel(WeaponWheel, ref _bWepWheel);
+                bCanOpenWheel = false;
+            }
+            else if ((!Keyboard.current.qKey.isPressed && !Keyboard.current.tabKey.isPressed))
+            {
+                if (m_PlayerState == PlayerState.Idle)
+                    bCanOpenWheel = true;
+            }
+        }
     }
 
     private void OnEnable()
@@ -361,8 +418,8 @@ public class ALTPlayerController : MonoBehaviour
 
     private void PlayerPause()
     {
-        m_ControllerState = ControllerState.Menu;
         _pauseMenu.Pause();
+        _upgradeMenu.Deactivate();
     }
 
     //Death and Respawn functionality -LCC
@@ -561,7 +618,7 @@ public class ALTPlayerController : MonoBehaviour
         }
         else
         {
-            _Acceleration -= Time.deltaTime;
+            _Acceleration -= Time.deltaTime * 5.0f;
         }
         _Acceleration = Mathf.Clamp(_Acceleration, 0.0f, 1.0f);
 
@@ -584,7 +641,7 @@ public class ALTPlayerController : MonoBehaviour
             GetComponent<CameraBehaviour>().bobFrequency = 7.5f;
         }
         else
-        {
+        {            
             m_MoveSpeed = Mathf.Lerp(m_MoveSpeed, WALK_SPEED, Time.deltaTime);
             GetComponent<CameraBehaviour>().bobFrequency = 5.0f;
         }
@@ -596,6 +653,7 @@ public class ALTPlayerController : MonoBehaviour
         //Using Player Input to Calculate movement vector and applying movement
         Vector3 movement = ((transform.right * _movement.x) + (transform.forward * _movement.y)) * _Acceleration;
 
+
         //Store the last recorded movement velocity for deceleration
         if (movement.magnitude > Mathf.Epsilon)
         {
@@ -603,19 +661,19 @@ public class ALTPlayerController : MonoBehaviour
             _lastMoveVelocity = movement;
 
             //TODO: Figure out Why Camera behaviour is bugging out.
-            //if (!_bIsJumping)
-            //{
-            //    if (_cameraBehaviour != null)
-            //        _cameraBehaviour.SetIsWalking(true);
-            //}
+            if (!_bIsJumping)
+            {
+                if (_cameraBehaviour != null)
+                    _cameraBehaviour.SetIsWalking(true);
+            }
         }
         else
         {
             bIsMoving = false;
 
             //TODO: Figure out Why Camera behaviour is bugging out.
-            //if (_cameraBehaviour != null)
-            //    _cameraBehaviour.SetIsWalking(false);
+            if (_cameraBehaviour != null)
+                _cameraBehaviour.SetIsWalking(false);
         }
 
         if (!bDidJump)
@@ -667,16 +725,18 @@ public class ALTPlayerController : MonoBehaviour
             }
         }
 
+        //Removed this because I felt that the hang time was less annoying than the difficulty platforming when you bump your head, IMO feels much better now.
         //Preventing you from hanging in air if you jump up into something
-        if (_controller.collisionFlags.ToString() == "Above")
-        {
-            m_Velocity.y = Mathf.Lerp(m_Velocity.y, -1f, Time.deltaTime * 20.0f);
-        }
+        //if (_controller.collisionFlags.ToString() == "Above")
+        //{
+        //    m_Velocity.y = Mathf.Lerp(m_Velocity.y, -1f, Time.deltaTime * 20.0f);
+        //}
 
         if (!bisGrounded && bDidJump)
         {
+            _preJumpVelocity = _lastMoveVelocity;
             //TODO: This may need tweaking.
-            Vector3 airMovement = (_preJumpVelocity + (movement * IN_AIR_CONTROL)) * m_MoveSpeed;
+            Vector3 airMovement = ((_preJumpVelocity * 0.75f) + (movement * IN_AIR_CONTROL)) * m_MoveSpeed * _Acceleration;
 
             if (bWasGrappling)
             {
@@ -758,7 +818,7 @@ public class ALTPlayerController : MonoBehaviour
                 if (hit.normal != Vector3.up)
                     _controller.Move(Vector3.down * _controller.height / 2 * _slopeForce * Time.deltaTime);
         }
-
+        m_CurrentVelocity = movement;
         #region Grounded Debug
         if (bDebug)
         {
@@ -768,7 +828,6 @@ public class ALTPlayerController : MonoBehaviour
         #endregion
     }
 
-    
     private bool OnWalkableSlope()
     {
         if (_bIsJumping)
@@ -784,62 +843,66 @@ public class ALTPlayerController : MonoBehaviour
 
     void HandleEquipmentWheel()
     {
-        if (WeaponWheel.enabled == false && _bIsCredits == false)
+        if (bCanOpenWheel && m_PlayerState == PlayerState.Idle)
         {
-            if (_bEquipWheel)
+            if (_bIsCredits == false && m_ControllerState != ControllerState.Menu)
             {
-                _bEquipWheel = false;
-                EquipmentWheel.enabled = true;
-                Time.timeScale = 0.3f;
-                EquipmentWheel.GetComponent<CanvasGroup>().interactable = true;
-                EquipmentWheel.GetComponent<CanvasGroup>().blocksRaycasts = true;
-                Cursor.lockState = CursorLockMode.None;
-                m_ControllerState = ControllerState.Wheel;
-                return;
-            }
+                if (_bEquipWheel)
+                {
+                    EnableWheel(EquipmentWheel, ref _bEquipWheel);
+                    return;
+                }
 
-            if (_bEquipWheel == false)
-            {
-                _bEquipWheel = true;
-                EquipmentWheel.enabled = false;
-                Time.timeScale = 1;
-                EquipmentWheel.GetComponent<CanvasGroup>().interactable = false;
-                EquipmentWheel.GetComponent<CanvasGroup>().blocksRaycasts = false;
-                Cursor.lockState = CursorLockMode.Locked;
-                m_ControllerState = ControllerState.Play;
-                return;
+                if (!_bEquipWheel)
+                {
+                    DisableWheel(EquipmentWheel, ref _bEquipWheel);
+                    return;
+                }   
             }
         }
     }
 
     public void HandleWeaponWheel()
     {
-        if (EquipmentWheel.enabled == false && _bIsCredits == false)
+        if (bCanOpenWheel && m_PlayerState == PlayerState.Idle)
         {
-            if (_bWepWheel)
+            if (_bIsCredits == false && m_ControllerState != ControllerState.Menu)
             {
-                _bWepWheel = false;
-                WeaponWheel.enabled = true;
-                Time.timeScale = 0.3f;
-                WeaponWheel.GetComponent<CanvasGroup>().interactable = true;
-                WeaponWheel.GetComponent<CanvasGroup>().blocksRaycasts = true;
-                Cursor.lockState = CursorLockMode.None;
-                m_ControllerState = ControllerState.Wheel;
-                return;
-            }
+                if (_bWepWheel)
+                {
+                    EnableWheel(WeaponWheel, ref _bWepWheel);
+                    return;
+                }
 
-            if (_bWepWheel == false)
-            {
-                _bWepWheel = true;
-                WeaponWheel.enabled = false;
-                Time.timeScale = 1;
-                WeaponWheel.GetComponent<CanvasGroup>().interactable = false;
-                WeaponWheel.GetComponent<CanvasGroup>().blocksRaycasts = false;
-                Cursor.lockState = CursorLockMode.Locked;
-                m_ControllerState = ControllerState.Play;
-                return;
+                if (!_bWepWheel)
+                {
+                    DisableWheel(WeaponWheel, ref _bWepWheel);
+                    return;
+                }
             }
         }
+    }
+
+    void EnableWheel(Canvas wheel, ref bool inUse)
+    {
+        inUse = false;
+        wheel.enabled = true;
+        Time.timeScale = 0.3f;
+        wheel.GetComponent<CanvasGroup>().interactable = true;
+        wheel.GetComponent<CanvasGroup>().blocksRaycasts = true;
+        Cursor.lockState = CursorLockMode.None;
+        m_ControllerState = ControllerState.Wheel;
+    }
+
+    void DisableWheel(Canvas wheel, ref bool inUse)
+    {
+        inUse = true;
+        wheel.enabled = false;
+        Time.timeScale = 1;
+        wheel.GetComponent<CanvasGroup>().interactable = false;
+        wheel.GetComponent<CanvasGroup>().blocksRaycasts = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        m_ControllerState = ControllerState.Play;
     }
 
     public void ResetGravity()
@@ -898,14 +961,16 @@ public class ALTPlayerController : MonoBehaviour
         return m_ControllerState;
     }
 
+    public bool GetIsWalking()
+    {
+        return m_CurrentVelocity != Vector3.zero;
+    }
+
     public Vector3 GetVelocity()
     {
         return m_Velocity;
     }
-    public Vector3 GetLastMoveVelocity()
-    {
-        return _lastMoveVelocity;
-    }
+
     public void SetXAxisInvert()
     {
         bInvertXAxis = !bInvertXAxis;
@@ -914,5 +979,10 @@ public class ALTPlayerController : MonoBehaviour
     public void SetYAxisInvert()
     {
         bInvertYAxis = !bInvertYAxis;
-    }
+    }   
+
+    public float GetMovementSpeed()
+    {
+        return _movement.magnitude;
+    }    
 }

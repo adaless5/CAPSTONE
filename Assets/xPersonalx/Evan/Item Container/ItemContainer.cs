@@ -13,7 +13,6 @@ public class ItemContainer : MonoBehaviour
     public GameObject _HealthPickup;
     public GameObject _Jumper;
 
-    AmmoController _ammoController;
 
     string[] Tags = { "Creature_Weapon", "Player_Weapon", "Player_Blade", "Player_Mine" };
     List<string> PossiblePickupsTags = new List<string>();
@@ -22,7 +21,7 @@ public class ItemContainer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _ammoController = FindObjectOfType<AmmoController>();
+
     }
 
     // Update is called once per frame
@@ -33,30 +32,26 @@ public class ItemContainer : MonoBehaviour
     void CheckPlayerEquipment()
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
-        if (_ammoController == null)
-        {
-            _ammoController = FindObjectOfType<AmmoController>();
-        }
         if (player)
         {
             WeaponBase playerWeapon = player.GetComponentInChildren<WeaponBase>();
-            if (playerWeapon.bIsObtained && !_ammoController.IsAmmoFull(WeaponType.BaseWeapon))
+            if (playerWeapon.bIsObtained)
             {
                 PossiblePickupsTags.Add("Player_Weapon");
             }
-
             CreatureWeapon creatureWeapon = player.GetComponentInChildren<CreatureWeapon>();
-            if (creatureWeapon.bIsObtained && !_ammoController.IsAmmoFull(WeaponType.CreatureWeapon))
+            if (creatureWeapon.bIsObtained)
             {
                 PossiblePickupsTags.Add("Creature_Weapon");
-            }
 
+            }
             MineSpawner mineSpawner = player.GetComponentInChildren<MineSpawner>();
-            if (mineSpawner.bIsObtained && !_ammoController.IsAmmoFull(WeaponType.GrenadeWeapon))
+            if (mineSpawner.bIsObtained)
             {
-                PossiblePickupsTags.Add("Player_Mine");
-            }
 
+                PossiblePickupsTags.Add("Player_Mine");
+
+            }
             Health health = player.GetComponentInChildren<Health>();
             if (!health.IsAtFullHealth())
             {
@@ -68,50 +63,49 @@ public class ItemContainer : MonoBehaviour
     {
         CheckPlayerEquipment();
         AmmoController ammoController = GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<AmmoController>();
-        if (_ammoController == null)
+
+        if (PossiblePickupsTags.Count <= 0) //Edge case: when player has nothing but the blade it wouldnt have anything in the array. NG
         {
-            _ammoController = FindObjectOfType<AmmoController>();
+            PossiblePickupsTags.Add(" ");
         }
 
-        if (PossiblePickupsTags.Count > 0)
+        int randint = Random.Range(0, PossiblePickupsTags.Count);
+
+        if (PossiblePickupsTags[randint] == "Player_Weapon"/* && !ammoController.IsAmmoFullOfType("Player_Weapon")*/ )
         {
-            int randint = Random.Range(0, PossiblePickupsTags.Count);
-
-            if (PossiblePickupsTags[randint] == "Player_Weapon")
-            {
-                GameObject pickup = Instantiate(_DefaultAmmoPickup, transform.position, transform.rotation, transform);
-                pickup.isStatic = false;
-                pickup.SetActive(true);
-            }
-
-            else if (PossiblePickupsTags[randint] == "Player_Mine")
-            {
-                GameObject pickup = Instantiate(_GrenadePickup, transform.position, transform.rotation, transform);
-                pickup.isStatic = false;
-                pickup.SetActive(true);
-            }
-
-            else if (PossiblePickupsTags[randint] == "Creature_Weapon")
-            {
-                GameObject pickup = Instantiate(_CreaturePickup, transform.position, transform.rotation, transform);
-                pickup.isStatic = false;
-                pickup.SetActive(true);
-            }
-
-            else if (PossiblePickupsTags[randint] == "Health_Pickup")
-            {
-                GameObject pickup = Instantiate(_HealthPickup, transform.position, transform.rotation, transform);
-                pickup.isStatic = false;
-                pickup.SetActive(true);
-            }
-
+            GameObject pickup = Instantiate(_DefaultAmmoPickup, transform.position, transform.rotation, transform);
+            pickup.isStatic = false;
+            pickup.SetActive(true);
         }
+
+        else if (PossiblePickupsTags[randint] == "Player_Mine"/* && !ammoController.IsAmmoFullOfType("Player_Mine")*/)
+        {
+            GameObject pickup = Instantiate(_GrenadePickup, transform.position, transform.rotation, transform);
+            pickup.isStatic = false;
+            pickup.SetActive(true);
+        }
+
+        else if (PossiblePickupsTags[randint] == "Creature_Weapon"/* && !ammoController.IsAmmoFullOfType("Creature_Weapon")*/)
+        {
+            GameObject pickup = Instantiate(_CreaturePickup, transform.position, transform.rotation, transform);
+            pickup.isStatic = false;
+            pickup.SetActive(true);
+        }
+
+        else if (PossiblePickupsTags[randint] == "Health_Pickup")
+        {
+            GameObject pickup = Instantiate(_HealthPickup, transform.position, transform.rotation, transform);
+            pickup.isStatic = false;
+            pickup.SetActive(true);
+        }
+
         else
         {
             GameObject pickup = Instantiate(_Jumper, transform.position, transform.rotation, transform);
             pickup.isStatic = false;
             pickup.SetActive(true);
         }
+
     }
     public void Break(string tag)
     {

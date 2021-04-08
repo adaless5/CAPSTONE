@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
 {
@@ -15,6 +16,7 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
 
     public ALTPlayerController _player;
 
+    bool bCanDestroyMessage = false;
 
     void Awake()
     {
@@ -44,14 +46,33 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
     {
         if (_player != null)
         {
-            if (_player.CheckForInteract())
+            //Prevents player from being able to hold the interact button and dismiss the notification
+            if (!bCanDestroyMessage)
             {
-                DestroyTip();
+                if (Gamepad.current != null)
+                {
+                    if (Gamepad.current.xButton.IsActuated())
+                    {
+                        if (!Gamepad.current.xButton.isPressed)
+                            bCanDestroyMessage = true;
+                    }
+                    else if (!Keyboard.current.eKey.isPressed)
+                        bCanDestroyMessage = true;
+                }
+                else if (!Keyboard.current.eKey.isPressed)
+                    bCanDestroyMessage = true;
+
             }
 
+            if(bCanDestroyMessage)
+            {
+                if (_player.CheckForInteract())
+                {
+                    DestroyTip();
+                }
+            }
         }
     }
-
 
     private void OnTriggerStay(Collider other)
     {
@@ -106,7 +127,7 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
             if (canvas != null)
             {
                 DestroyTip();
-
+                bCanDestroyMessage = false;
                 _imageObject = new GameObject("testTip");
                 _imageObject.tag = "Tip";
 

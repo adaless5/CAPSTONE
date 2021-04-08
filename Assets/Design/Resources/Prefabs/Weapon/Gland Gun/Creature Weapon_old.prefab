@@ -1,0 +1,178 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8213569626656308496
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8842719609228961706}
+  - component: {fileID: 4230699164344157372}
+  m_Layer: 9
+  m_Name: Creature Weapon
+  m_TagString: Player_Creature
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8842719609228961706
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8213569626656308496}
+  m_LocalRotation: {x: 0, y: 0, z: 0.078459114, w: 0.99691737}
+  m_LocalPosition: {x: -0.271, y: 0.55322, z: 0.78733}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 6224016075928499690}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 9}
+--- !u!114 &4230699164344157372
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8213569626656308496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e55c2cc0b58ccbe4cbcac2b459281788, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bIsActive: 0
+  bIsObtained: 0
+  _weapon: 2
+  m_damageAmount: 10
+  m_weaponClipSize: 6
+  m_ammoCapAmount: 20
+  m_reloadTime: 2
+  m_fireRate: 30
+  m_hitImpact: 50
+  m_weaponRange: 50
+  m_projectileLifeTime: 3
+  m_blastradius: 10
+  m_blastforce: 2000
+  m_projectileforce: 800
+  m_maxDamageTime: 0
+  m_currentupgrades: 
+  _ammoController: {fileID: 0}
+  _camera: {fileID: 0}
+  _spreadEffect: {fileID: 0}
+  reticuleAnimator: {fileID: 0}
+  _gunObject: {fileID: 3779099261996027713}
+  _firingOrganObject: {fileID: 7942446185199126675}
+  _internalOrganObject: {fileID: 8709577882869577898}
+  _pulseScale: 0
+--- !u!1001 &5308171142756959114
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 8842719609228961706}
+    m_Modifications:
+    - target: {fileID: 2290727073025357408, guid: 817bb73d217bc78419bc718abd293c82,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2290727073025357408, guid: 817bb73d217bc78419bc718abd293c82,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.5253
+      objectReference: {fileID: 0}
+    - target: {fileID: 2290727073025357408, guid: 817bb73d217bc78419bc718abd293c82,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.5253
+      objectReference: {fileID: 0}
+    - target: {fileID: 2290727073025357408, guid: 817bb73d217bc78419bc718abd293c82,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.5253
+      objectReference: {fileID: 0}
+    - target: {fileID: 2290727073025357408, guid: 817bb73d217bc78419bc718abd293c82,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2290727073025357408, guid: 817bb73d217bc78419bc718abd293c82,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.191
+      objectReference: {fileID: 0}
+    - target: {fileID: 2290727073025357408, guid: 817bb73d217bc78419bc718abd293c82,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.178
+      objectReference: {fileID: 0}
+    - target: {fileID: 2290727073025357408, guid: 817bb73d217bc78419bc718abd293c82,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2290727073025357408, guid: 817bb73d217bc78419bc718abd293c82,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2290727073025357408, guid: 817bb73d217bc78419bc718abd293c82,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2290727073025357408, guid: 817bb73d217bc78419bc718abd293c82,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2290727073025357408, guid: 817bb73d217bc78419bc718abd293c82,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2290727073025357408, guid: 817bb73d217bc78419bc718abd293c82,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 2290727073025357408, guid: 817bb73d217bc78419bc718abd293c82,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3135124238044781479, guid: 817bb73d217bc78419bc718abd293c82,
+        type: 3}
+      propertyPath: m_Name
+      value: CreatureWeaponModel
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 817bb73d217bc78419bc718abd293c82, type: 3}
+--- !u!4 &6224016075928499690 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2290727073025357408, guid: 817bb73d217bc78419bc718abd293c82,
+    type: 3}
+  m_PrefabInstance: {fileID: 5308171142756959114}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3779099261996027713 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9068111401418280139, guid: 817bb73d217bc78419bc718abd293c82,
+    type: 3}
+  m_PrefabInstance: {fileID: 5308171142756959114}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7942446185199126675 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2851716716909644569, guid: 817bb73d217bc78419bc718abd293c82,
+    type: 3}
+  m_PrefabInstance: {fileID: 5308171142756959114}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8709577882869577898 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3563696919920786208, guid: 817bb73d217bc78419bc718abd293c82,
+    type: 3}
+  m_PrefabInstance: {fileID: 5308171142756959114}
+  m_PrefabAsset: {fileID: 0}

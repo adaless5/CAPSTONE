@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GrappleHook : Equipment
+public class GrappleHook : Equipment, ISaveable
 {
     public Transform m_GrappleHookTransform;
     public Transform m_PlayerPosition;
@@ -118,7 +118,7 @@ public class GrappleHook : Equipment
 
     void HandleGrappleHookDeployed()
     {
-
+        m_PlayerController.bCanOpenWheel = false;
         m_GrappleMarker.SetActive(false);
         m_GrappleCable.SetActive(true);
 
@@ -227,4 +227,10 @@ public class GrappleHook : Equipment
         DeactivateGrappleHook();
         //gameObject.GetComponentInChildren<MeshRenderer>().enabled = false;
     }
+
+    public void LoadDataOnSceneEnter()
+    {
+        bIsObtained = SaveSystem.LoadBool(gameObject.name, "bIsObtained", "Equipment");
+    }
+
 }

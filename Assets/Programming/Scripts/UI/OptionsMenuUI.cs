@@ -31,17 +31,22 @@ public class OptionsMenuUI : MonoBehaviour
     {
         //resolutions = Screen.resolutions;
         resolutions = Screen.resolutions.Select(resolution => new Resolution { width = resolution.width, height = resolution.height }).Distinct().ToArray();
-
         resolutionMenu.ClearOptions();
+        string[] validRes = { "1024 x 576", "1152 x 648", "1280 x 720", "1280 x 800", "1366 x 768", "1600 x 900", "1920 x 1080", "1920 x 1200", "1440 x 900", "2560 x 1440", "2560 x 1600", "3840 x 2160" };
 
         List<string> data = new List<string>();
         int index = 0;
 
         for (int i = 0; i < resolutions.Length; i++)
         {
-            string resData = resolutions[i].width + " x " + resolutions[i].height;
-            data.Add(resData);
-
+            string resData = resolutions[i].width.ToString() + " x " + resolutions[i].height.ToString();
+            foreach(string obj in validRes)
+            {
+                if(obj == resData)
+                {
+                    data.Add(resData);
+                }
+            }
             if (resolutions[i].width == Screen.currentResolution.width)
             {
                 if (resolutions[i].height == Screen.currentResolution.height)
@@ -49,6 +54,7 @@ public class OptionsMenuUI : MonoBehaviour
                     index = i;
                 }
             }
+
         }
 
         resolutionMenu.AddOptions(data);

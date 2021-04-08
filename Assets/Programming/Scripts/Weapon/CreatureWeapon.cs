@@ -10,6 +10,10 @@ public class CreatureWeapon : Weapon
     public ParticleSystem _spreadEffect;
     public Animator reticuleAnimator;
     GameObject _creatureProjectile;
+    //public GG_Animations _GGAnimator;
+    public Weapon_Animations _GGAnimator;
+    bool _bcoroutineOutIsRunning = false;
+    bool _bcoroutineInIsRunning = false;
 
     //vvv EP model stuff
     public GameObject _gunObject;
@@ -37,6 +41,11 @@ public class CreatureWeapon : Weapon
         _internalOrganSize = _internalOrganObject.transform.localScale;
 
         EventBroker.OnPlayerSpawned += InitWeaponControls;
+        EventBroker.OnWeaponSwap += WeaponSwapOut;
+        EventBroker.OnWeaponSwapIn += GGWeaponSwapIn;
+
+        _GGAnimator = GetComponent<GG_Animations>();
+       
     }
 
     void OrganPulse()
@@ -70,6 +79,8 @@ public class CreatureWeapon : Weapon
         m_damageAmount = 5.0f * m_upgradestats.Damage;
         m_maxDamageTime = 1f * m_upgradestats.DamageTime;
         m_projectileLifeTime = 6.0f * m_upgradestats.FuzeTime;
+
+        _gunObject.SetActive(false);
     }
 
 
@@ -97,6 +108,50 @@ public class CreatureWeapon : Weapon
         }
     }
 
+    //For animations, swapping out weapons
+    public IEnumerator SwapOutLogic()
+    {
+        _bcoroutineOutIsRunning = true;
+        Debug.Log("Started GG SwapOutCoroutine at timestamp: " + Time.time);
+        //Waits for default gun swap out animation to play before setting inactive
+        //yield return new WaitForSeconds(0.667f);
+        yield return new WaitForSeconds(1.2f);
+        if (!bIsActive)
+            _gunObject.SetActive(false);
+        else
+        {
+            _gunObject.SetActive(true);
+        }
+        Debug.Log("Finished GG SwapOutCoroutine at timestamp: " + Time.time);
+        _bcoroutineOutIsRunning = false;
+    }
+    public IEnumerator GGSwapInLogic()
+    {
+        _bcoroutineInIsRunning = true;
+        Debug.Log("Started GG SwapInCoroutine at timestamp: " + Time.time);
+        //Waits for other weapon to finish swapping out before swapping in, currently only default gun at 1.133 seconds
+        yield return new WaitForSeconds(1.2f);
+        if (bIsActive)
+            _gunObject.SetActive(true);
+        else
+        {
+            _gunObject.SetActive(false);
+        }
+        Debug.Log("Finished GG SwapInCoroutine at timestamp: " + Time.time);
+        _bcoroutineInIsRunning = false;
+    }
+    public void WeaponSwapOut()
+    {
+        if(!_bcoroutineOutIsRunning && !bIsActive)
+        StartCoroutine(SwapOutLogic());
+    }
+
+    public void GGWeaponSwapIn()
+    {
+        if(!_bcoroutineInIsRunning && bIsActive)
+        StartCoroutine(GGSwapInLogic());
+    }
+
     private void Reload()
     {
         if (_ammoController.CanReload())
@@ -111,24 +166,25 @@ public class CreatureWeapon : Weapon
         {
             if (bIsActive && _playerController.m_ControllerState == ALTPlayerController.ControllerState.Play)
             {
-                _gunObject.SetActive(true);
-                _firingOrganObject.SetActive(true);
-                _internalOrganObject.SetActive(true);
+                //_gunObject.SetActive(true);
+                //_firingOrganObject.SetActive(true);
+                //_internalOrganObject.SetActive(true);
                 UseTool();
                 OnTarget();
                 OrganPulse();
             }
-            else if (!bIsActive)
-            {
-                _gunObject.SetActive(false);
-                _firingOrganObject.SetActive(false);
-                _internalOrganObject.SetActive(false);
-            }
+            //else if (!bIsActive)
+            //{
+            //    _gunObject.SetActive(false);
+            //    _firingOrganObject.SetActive(false);
+            //    _internalOrganObject.SetActive(false);
+            //}
         }
     }
 
     void OnShoot()
     {
+        _GGAnimator._weaponAnimator.SetTrigger("HasFired");
         //Play shot
         AudioManager_CreatureWeapon amc = GetComponent<AudioManager_CreatureWeapon>();
         amc.TriggerShootCreatureWeapon();
@@ -182,6 +238,8 @@ public class CreatureWeapon : Weapon
 
     IEnumerator OnReload()
     {
+        _GGAnimator.SetReloadAnimationSpeed(m_reloadTime);
+
         if (bIsActive)
         {
             //Play Reload Sound
@@ -191,7 +249,7 @@ public class CreatureWeapon : Weapon
 
         bIsReloading = true;
         // gunAnimator.SetBool("bIsReloading", true);
-
+        _GGAnimator.TriggerReloadAnimation();
         yield return new WaitForSeconds(m_reloadTime);
         _ammoController.Reload();
         bIsReloading = false;
@@ -211,6 +269,7 @@ public class CreatureWeapon : Weapon
         if (upgrade.HasAction) m_bHasActionUpgrade = true;
 
         m_currentupgrades.Add(upgrade.Type);
+        _GGAnimator.SetReloadAnimationSpeed(m_reloadTime);
     }
 
     private void OnTarget()

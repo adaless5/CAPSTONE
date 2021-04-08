@@ -29,7 +29,7 @@ public class DroneAttack : DroneState
         base.Update();
         if (CanSeePlayer())
         {
-
+            
             LookAt(_playerPos);
 
             if (Vector3.Distance(_currentEnemy.transform.position, _playerPos.position) < _shootDistance)

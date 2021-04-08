@@ -18,7 +18,7 @@ public class ActivateButton : MonoBehaviour, IPointerEnterHandler
         canvas = GetComponentInParent<Canvas>();
         _button = GetComponent<Button>();
         //_button.onClick.AddListener(EquipToolAtCorrespondingToolIndex); 
-        
+
         _button.interactable = false;
 
         if (IsToolActive())
@@ -41,17 +41,26 @@ public class ActivateButton : MonoBehaviour, IPointerEnterHandler
 
 
 
+
     public void OnPointerEnter(PointerEventData eventData)
     {
-        EquipToolAtCorrespondingToolIndex();
+        if (!_Belt._items[_CorrespondingToolIndex].bIsActive)
+        {
+            EquipToolAtCorrespondingToolIndex();
+            Debug.Log("Pointer Enter");
+
+        }
     }
+
 
     bool IsToolObtained()
     {
-        try{
+        try
+        {
             return _Belt._items[_CorrespondingToolIndex].GetComponentInChildren<Tool>().bIsObtained;
         }
-        catch{
+        catch
+        {
             return false;
         }
     }
@@ -62,7 +71,7 @@ public class ActivateButton : MonoBehaviour, IPointerEnterHandler
         {
             return _Belt._items[_CorrespondingToolIndex].GetComponentInChildren<Tool>().bIsActive;
         }
-        catch{return false;}
+        catch { return false; }
     }
 
     void EquipToolAtCorrespondingToolIndex()
@@ -72,6 +81,6 @@ public class ActivateButton : MonoBehaviour, IPointerEnterHandler
 
     public void SetCorrespondingToolIndex(int index)
     {
-        _CorrespondingToolIndex = index; 
+        _CorrespondingToolIndex = index;
     }
 }

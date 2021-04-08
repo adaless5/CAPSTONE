@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Tool : MonoBehaviour, ISaveable
+public abstract class Tool : MonoBehaviour
 {
     public bool bIsActive = false;
     public bool bIsObtained = false;
@@ -13,10 +13,6 @@ public abstract class Tool : MonoBehaviour, ISaveable
         //bIsActive = false;
         //bIsObtained = false;
     }
-    public virtual void Awake()
-    {
-        LoadDataOnSceneEnter();
-    }
 
     public abstract void Update();
     public abstract void UseTool();
@@ -24,11 +20,13 @@ public abstract class Tool : MonoBehaviour, ISaveable
     public virtual void Activate()
     {
         bIsActive = true;
+        EventBroker.CallOnWeaponSwapIn();
     }
 
     public virtual void Deactivate()
     {
         bIsActive = false;
+        EventBroker.CallOnWeaponSwapOut();
     }
 
     public void ObtainEquipment()
@@ -36,10 +34,4 @@ public abstract class Tool : MonoBehaviour, ISaveable
         bIsObtained = true;
         SaveSystem.Save(gameObject.name, "bIsObtained", "Equipment", bIsObtained, SaveSystem.SaveType.EQUIPMENT);
     }
-
-    public void LoadDataOnSceneEnter()
-    {
-        bIsObtained = SaveSystem.LoadBool(gameObject.name, "bIsObtained", "Equipment");
-    }
-
 }

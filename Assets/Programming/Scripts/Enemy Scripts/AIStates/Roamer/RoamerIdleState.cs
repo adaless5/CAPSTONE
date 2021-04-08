@@ -16,7 +16,7 @@ public class RoamerIdleState : RoamerState
     public override void Enter()
     {
         base.Enter();
-        Debug.Log("Enemy Idle");
+        //Debug.Log("Enemy Idle");
     }
 
     // Update is called once per frame
