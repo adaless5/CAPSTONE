@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: -2520724472504314659}
   - component: {fileID: 6716644895399880396}
   - component: {fileID: 7019995701905680234}
+  - component: {fileID: 4953833111924471308}
   m_Layer: 10
   m_Name: MineTest
   m_TagString: Player_Mine
@@ -117,7 +118,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!114 &401094466865097803
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -328,3 +329,17 @@ MonoBehaviour:
   m_AreaLightEmissiveMeshShadowCastingMode: 0
   m_AreaLightEmissiveMeshMotionVectorGenerationMode: 0
   m_AreaLightEmissiveMeshLayer: -1
+--- !u!136 &4953833111924471308
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 401094466865097797}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.06
+  m_Height: 0.3
+  m_Direction: 2
+  m_Center: {x: -0.01315576, y: -0.0000000018626451, z: 0.09394205}

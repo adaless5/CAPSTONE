@@ -97,7 +97,8 @@ MonoBehaviour:
   m_ThermalViewMaterial: {fileID: 2100000, guid: 211f1b39820a1824a831e6ee1b1b6e32,
     type: 2}
   m_MeshRenderers: []
-  m_MeshRenderer: {fileID: 0}
+  m_skinnedMeshRenderers: []
+  m_skinnedMeshRenderer: {fileID: 0}
 --- !u!1 &977401896139285840
 GameObject:
   m_ObjectHideFlags: 0
@@ -357,6 +358,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HP: 50
   m_IsLoadingShield: 0
+  bCanBeDamaged: 1
   isDead: 0
   healthBar: {fileID: 0}
   m_compass: {fileID: 0}
@@ -5349,7 +5351,8 @@ MonoBehaviour:
   m_ThermalViewMaterial: {fileID: 2100000, guid: 211f1b39820a1824a831e6ee1b1b6e32,
     type: 2}
   m_MeshRenderers: []
-  m_MeshRenderer: {fileID: 0}
+  m_skinnedMeshRenderers: []
+  m_skinnedMeshRenderer: {fileID: 0}
 --- !u!1 &3690626301711970132
 GameObject:
   m_ObjectHideFlags: 0
@@ -5546,7 +5549,8 @@ MonoBehaviour:
   m_ThermalViewMaterial: {fileID: 2100000, guid: 211f1b39820a1824a831e6ee1b1b6e32,
     type: 2}
   m_MeshRenderers: []
-  m_MeshRenderer: {fileID: 0}
+  m_skinnedMeshRenderers: []
+  m_skinnedMeshRenderer: {fileID: 0}
 --- !u!1001 &906112100915929448
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5826,7 +5830,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 707e9572178388b44b4e92fa54c6df1c, type: 2}
+      objectReference: {fileID: 2100000, guid: dbd2ee2e84d289841b4fe1e8acaa8095, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e6c9288b6d956b446a2d8ef9c5775a17, type: 3}
 --- !u!1 &3488179258834645519 stripped

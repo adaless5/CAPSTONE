@@ -8,7 +8,6 @@ public class ThermalSkin : MonoBehaviour, ISaveable
     List<Material> m_NormalViewMaterials;
     List<Material> m_skinnedNormalViewMaterials;
     public MeshRenderer[] m_MeshRenderers;
-    public MeshRenderer m_MeshRenderer;
     public SkinnedMeshRenderer[] m_skinnedMeshRenderers;
     public SkinnedMeshRenderer m_skinnedMeshRenderer;
     ThermalEquipment m_ThermalEquipment;
@@ -79,12 +78,14 @@ public class ThermalSkin : MonoBehaviour, ISaveable
         int i = 0;
         foreach (MeshRenderer m in m_MeshRenderers)
         {
+            if(m_NormalViewMaterials[i])
             m.material = m_NormalViewMaterials[i];
             i++;
         }
         int j = 0;
         foreach (SkinnedMeshRenderer m in m_skinnedMeshRenderers)
         {
+            if(m_skinnedNormalViewMaterials[j])
             m.material = m_skinnedNormalViewMaterials[j];
             j++;
         }

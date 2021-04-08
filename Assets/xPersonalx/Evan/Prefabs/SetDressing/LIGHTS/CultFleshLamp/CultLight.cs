@@ -6,13 +6,13 @@ public class CultLight : MonoBehaviour
 {
 
     // Start is called before the first frame update
-    public GameObject Lamp;
-    public GameObject Armor;
+    public GameObject pieceOne;
+    public GameObject pieceTwo;
 
     public float BobLength;
     public float BobSpeed;
-    public float BodySpinSpeed;
-    public float BladeSpinSpeed;
+    public float pieceOneSpinSpeed;
+    public float pieceTwoSpinSpeed;
 
     float floatingOffset;
     Vector3 OriginalPosition;
@@ -20,15 +20,18 @@ public class CultLight : MonoBehaviour
     {
         floatingOffset = Random.Range(0.0f, 6.32f);
         OriginalPosition = transform.position;
-        Armor.transform.Rotate(0.0f, 0.0f, Random.Range(0.0f,90.0f));
-        Lamp.transform.Rotate(0.0f, 0.0f, Random.Range(0.0f, 90.0f));
+
+        if (pieceOne)
+            pieceOne.transform.Rotate(0.0f, 0.0f, Random.Range(0.0f, 90.0f));
+        if (pieceTwo)
+            pieceTwo.transform.Rotate(0.0f, 0.0f, Random.Range(0.0f, 90.0f));
     }
 
     void Float()
     {
-        transform.position = new Vector3(OriginalPosition.x,OriginalPosition.y + (BobLength * Mathf.Sin(floatingOffset)), OriginalPosition.z);
+        transform.position = new Vector3(OriginalPosition.x, OriginalPosition.y + (BobLength * Mathf.Sin(floatingOffset)), OriginalPosition.z);
         floatingOffset += Time.deltaTime * BobSpeed;
-        if(floatingOffset>6.32f)
+        if (floatingOffset > 6.32f)
         {
             floatingOffset = 0.0f;
         }
@@ -36,8 +39,10 @@ public class CultLight : MonoBehaviour
 
     void RotateArmor()
     {
-        Armor.transform.Rotate(0.0f, 0.0f, BladeSpinSpeed * Time.deltaTime);
-        Lamp.transform.Rotate(0.0f, 0.0f, -BodySpinSpeed * Time.deltaTime);
+        if (pieceOne)
+            pieceOne.transform.Rotate(0.0f, 0.0f, -pieceOneSpinSpeed * Time.deltaTime);
+        if (pieceTwo)
+            pieceTwo.transform.Rotate(0.0f, 0.0f, pieceTwoSpinSpeed * Time.deltaTime);
     }
 
     // Update is called once per frame
