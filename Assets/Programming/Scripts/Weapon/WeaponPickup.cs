@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 public class WeaponPickup : MonoBehaviour, ITippable
 {
@@ -15,6 +16,8 @@ public class WeaponPickup : MonoBehaviour, ITippable
     string[] _tipName = { "EQUIPMENT_DEFAULT_GUN", "EQUIPMENT_GRENADE", "EQUIPMENT_GLANDGUN" };
 
     ALTPlayerController player;
+
+    bool bCanDestroyMessage = false;
 
     void Awake()
     {
@@ -62,9 +65,29 @@ public class WeaponPickup : MonoBehaviour, ITippable
     {
         if (player != null)
         {
-            if (player.CheckForInteract())
+            //Prevents player from being able to hold the interact button and dismiss the notification
+            if (!bCanDestroyMessage)
             {
-                DestroyTip();
+                if (Gamepad.current != null)
+                {
+                    if (Gamepad.current.xButton.IsActuated())
+                    {
+                        if (!Gamepad.current.xButton.isPressed)
+                            bCanDestroyMessage = true;
+                    }
+                    else if (!Keyboard.current.eKey.isPressed)
+                        bCanDestroyMessage = true;
+                }
+                else if (!Keyboard.current.eKey.isPressed)
+                    bCanDestroyMessage = true;
+            }
+
+            if (bCanDestroyMessage)
+            {
+                if (player.CheckForInteract())
+                {
+                    DestroyTip();
+                }
             }
         }
     }
@@ -114,7 +137,7 @@ public class WeaponPickup : MonoBehaviour, ITippable
             if (canvas != null)
             {
                 DestroyTip();
-
+                bCanDestroyMessage = false;
                 _imageObject = new GameObject("testTip");
                 _imageObject.tag = "Tip";
 
