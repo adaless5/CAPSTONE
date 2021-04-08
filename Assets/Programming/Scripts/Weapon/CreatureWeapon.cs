@@ -4,12 +4,16 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using UnityEngine;
 
-public class CreatureWeapon : Weapon, ISaveable
+public class CreatureWeapon : Weapon
 {
     public Camera _camera;
     public ParticleSystem _spreadEffect;
     public Animator reticuleAnimator;
     GameObject _creatureProjectile;
+    //public GG_Animations _GGAnimator;
+    public Weapon_Animations _GGAnimator;
+    bool _bcoroutineOutIsRunning = false;
+    bool _bcoroutineInIsRunning = false;
 
     //vvv EP model stuff
     public GameObject _gunObject;
@@ -18,12 +22,18 @@ public class CreatureWeapon : Weapon, ISaveable
     Vector3 _firingOrganSize;
     Vector3 _internalOrganSize;
     public float _pulseScale;
+    public float _numberOfGlobsShot;
+    public float _globuleFireSpeed;
+    public float _fireAngleRange;
+    public Vector2 _globSizeRange;
     float _pulseTime;
     Vector3 _currentScale;
+    public GameObject _muzzlePointObject;
     //^^^ EP model stuff
     private void Awake()
     {
         base.Awake();
+        LoadDataOnSceneEnter();
         _creatureProjectile = (GameObject)Resources.Load("Prefabs/Weapon/Creature Projectile");
         m_weaponClipSize = 8;
         m_reloadTime = 3.0f;
@@ -31,6 +41,11 @@ public class CreatureWeapon : Weapon, ISaveable
         _internalOrganSize = _internalOrganObject.transform.localScale;
 
         EventBroker.OnPlayerSpawned += InitWeaponControls;
+        EventBroker.OnWeaponSwap += WeaponSwapOut;
+        EventBroker.OnWeaponSwapIn += GGWeaponSwapIn;
+
+        _GGAnimator = GetComponent<GG_Animations>();
+       
     }
 
     void OrganPulse()
@@ -52,19 +67,20 @@ public class CreatureWeapon : Weapon, ISaveable
     // Start is called before the first frame update
     public override void Start()
     {
+        base.Start();
         //Initializing Ammo Controller
         _ammoController = FindObjectOfType<AmmoUI>().GetComponent<AmmoController>();
         _ammoController.InitializeAmmo(AmmoController.AmmoTypes.Creature, m_weaponClipSize, m_weaponClipSize, m_ammoCapAmount);
 
         _camera = FindObjectOfType<Camera>();
-        bIsActive = false;
-        bIsObtained = false;
 
         m_fireRate = 0.5f * m_upgradestats.FireRate;
         m_hitImpact = 10.0f * m_upgradestats.ImpactForce;
         m_damageAmount = 5.0f * m_upgradestats.Damage;
         m_maxDamageTime = 1f * m_upgradestats.DamageTime;
         m_projectileLifeTime = 6.0f * m_upgradestats.FuzeTime;
+
+        _gunObject.SetActive(false);
     }
 
 
@@ -92,6 +108,50 @@ public class CreatureWeapon : Weapon, ISaveable
         }
     }
 
+    //For animations, swapping out weapons
+    public IEnumerator SwapOutLogic()
+    {
+        _bcoroutineOutIsRunning = true;
+        Debug.Log("Started GG SwapOutCoroutine at timestamp: " + Time.time);
+        //Waits for default gun swap out animation to play before setting inactive
+        //yield return new WaitForSeconds(0.667f);
+        yield return new WaitForSeconds(1.2f);
+        if (!bIsActive)
+            _gunObject.SetActive(false);
+        else
+        {
+            _gunObject.SetActive(true);
+        }
+        Debug.Log("Finished GG SwapOutCoroutine at timestamp: " + Time.time);
+        _bcoroutineOutIsRunning = false;
+    }
+    public IEnumerator GGSwapInLogic()
+    {
+        _bcoroutineInIsRunning = true;
+        Debug.Log("Started GG SwapInCoroutine at timestamp: " + Time.time);
+        //Waits for other weapon to finish swapping out before swapping in, currently only default gun at 1.133 seconds
+        yield return new WaitForSeconds(1.2f);
+        if (bIsActive)
+            _gunObject.SetActive(true);
+        else
+        {
+            _gunObject.SetActive(false);
+        }
+        Debug.Log("Finished GG SwapInCoroutine at timestamp: " + Time.time);
+        _bcoroutineInIsRunning = false;
+    }
+    public void WeaponSwapOut()
+    {
+        if(!_bcoroutineOutIsRunning && !bIsActive)
+        StartCoroutine(SwapOutLogic());
+    }
+
+    public void GGWeaponSwapIn()
+    {
+        if(!_bcoroutineInIsRunning && bIsActive)
+        StartCoroutine(GGSwapInLogic());
+    }
+
     private void Reload()
     {
         if (_ammoController.CanReload())
@@ -106,48 +166,66 @@ public class CreatureWeapon : Weapon, ISaveable
         {
             if (bIsActive && _playerController.m_ControllerState == ALTPlayerController.ControllerState.Play)
             {
-                _gunObject.SetActive(true);
-                _firingOrganObject.SetActive(true);
-                _internalOrganObject.SetActive(true);
+                //_gunObject.SetActive(true);
+                //_firingOrganObject.SetActive(true);
+                //_internalOrganObject.SetActive(true);
                 UseTool();
                 OnTarget();
                 OrganPulse();
             }
-            else if (!bIsActive)
-            {
-                _gunObject.SetActive(false);
-                _firingOrganObject.SetActive(false);
-                _internalOrganObject.SetActive(false);
-            }
+            //else if (!bIsActive)
+            //{
+            //    _gunObject.SetActive(false);
+            //    _firingOrganObject.SetActive(false);
+            //    _internalOrganObject.SetActive(false);
+            //}
         }
     }
 
     void OnShoot()
     {
+        _GGAnimator._weaponAnimator.SetTrigger("HasFired");
         //Play shot
         AudioManager_CreatureWeapon amc = GetComponent<AudioManager_CreatureWeapon>();
         amc.TriggerShootCreatureWeapon();
 
-        for (int i = 0; i < m_weaponClipSize; i++)
+        for (int i = 0; i < _numberOfGlobsShot; i++)
         {
-            Vector3 bulletDeviation = UnityEngine.Random.insideUnitCircle * 300.0f;
-            Quaternion rot = Quaternion.LookRotation(Vector3.forward * 200.0f + bulletDeviation);
-            Vector3 finalFowardVector = transform.rotation * rot * Vector3.forward;
-            finalFowardVector += transform.position;
+            //Vector3 bulletDeviation = UnityEngine.Random.insideUnitCircle * 300.0f;
+            //Quaternion rot = Quaternion.LookRotation(Vector3.forward * 200.0f + bulletDeviation);
+            //Vector3 finalFowardVector = transform.rotation * rot * Vector3.forward;
+            //finalFowardVector += transform.position;
 
             //GameObject creatureProjectile = Instantiate(_creatureProjectile, finalFowardVector, Quaternion.identity);
+            //if (ObjectPool.Instance != null)
+            //{
+            //    GameObject creatureProjectile = ObjectPool.Instance.SpawnFromPool("Creature", _creatureProjectile, finalFowardVector, Quaternion.identity);
+            //    float randomfloat = UnityEngine.Random.Range(0.1f, 0.5f);
+            //    Vector3 randomSize = new Vector3(randomfloat, randomfloat, randomfloat);
+            //    creatureProjectile.transform.localScale = randomSize;
+            //    creatureProjectile.GetComponent<Rigidbody>().AddForce(transform.forward * m_hitImpact, ForceMode.Impulse);
+            //    creatureProjectile.GetComponent<CreatureProjectile>().InitCreatureProjectile(m_maxDamageTime, m_projectileLifeTime, m_damageAmount, m_bHasActionUpgrade);
+            //    creatureProjectile.GetComponent<CreatureProjectile>().LinkAudioManager(amc);
+
+            //}
+
+            //vvv Evan's adjustments
             if (ObjectPool.Instance != null)
             {
-
-                GameObject creatureProjectile = ObjectPool.Instance.SpawnFromPool("Creature", _creatureProjectile, finalFowardVector, Quaternion.identity);
-                float randomfloat = UnityEngine.Random.Range(0.1f, 0.5f);
+                
+                GameObject creatureProjectile = ObjectPool.Instance.SpawnFromPool("Creature", _creatureProjectile, _muzzlePointObject.transform.position, _muzzlePointObject.transform.rotation);
+                float randomfloat = UnityEngine.Random.Range(_globSizeRange.x,_globSizeRange.y);
                 Vector3 randomSize = new Vector3(randomfloat, randomfloat, randomfloat);
                 creatureProjectile.transform.localScale = randomSize;
-                creatureProjectile.GetComponent<Rigidbody>().AddForce(transform.forward * m_hitImpact, ForceMode.Impulse);
+                Vector3 randomRot = new Vector3(UnityEngine.Random.Range(-_fireAngleRange, _fireAngleRange),UnityEngine.Random.Range(-_fireAngleRange, _fireAngleRange),0.0f);
+                creatureProjectile.transform.Rotate(randomRot);
+                creatureProjectile.GetComponent<Rigidbody>().AddForce(creatureProjectile.transform.forward * _globuleFireSpeed, ForceMode.Impulse);
                 creatureProjectile.GetComponent<CreatureProjectile>().InitCreatureProjectile(m_maxDamageTime, m_projectileLifeTime, m_damageAmount, m_bHasActionUpgrade);
                 creatureProjectile.GetComponent<CreatureProjectile>().LinkAudioManager(amc);
 
             }
+            //^^^ Evan's adjustments
+
             else
             {
                 Debug.LogError("Object Pool not initialized! Create an Object Pool prefab");
@@ -160,6 +238,8 @@ public class CreatureWeapon : Weapon, ISaveable
 
     IEnumerator OnReload()
     {
+        _GGAnimator.SetReloadAnimationSpeed(m_reloadTime);
+
         if (bIsActive)
         {
             //Play Reload Sound
@@ -169,7 +249,7 @@ public class CreatureWeapon : Weapon, ISaveable
 
         bIsReloading = true;
         // gunAnimator.SetBool("bIsReloading", true);
-
+        _GGAnimator.TriggerReloadAnimation();
         yield return new WaitForSeconds(m_reloadTime);
         _ammoController.Reload();
         bIsReloading = false;
@@ -189,6 +269,7 @@ public class CreatureWeapon : Weapon, ISaveable
         if (upgrade.HasAction) m_bHasActionUpgrade = true;
 
         m_currentupgrades.Add(upgrade.Type);
+        _GGAnimator.SetReloadAnimationSpeed(m_reloadTime);
     }
 
     private void OnTarget()
