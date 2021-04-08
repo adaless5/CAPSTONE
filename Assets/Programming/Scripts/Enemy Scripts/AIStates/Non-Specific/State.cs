@@ -62,12 +62,11 @@ public class State
     }
     public bool CanSeePlayer()
     {
-        Vector3 direction = _playerPos.position - _currentEnemy.transform.position;
+        Vector3 direction = _playerPos.position - _currentEnemy.transform.position; 
         float angle = Vector3.Angle(direction, _currentEnemy.transform.forward);
 
-
         RaycastHit hit;
-        if (Physics.Raycast(_playerPos.position, direction, out hit, _visualDistance))
+        if (Physics.Raycast(_currentEnemy.transform.position, direction, out hit, _visualDistance))
         {
             if (direction.magnitude < _visualDistance && angle < _visualAngle)
             {
