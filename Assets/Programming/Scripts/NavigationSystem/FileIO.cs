@@ -8,8 +8,9 @@ public static class FileIO
 {
     static bool buildMode = true;
 
+
     const string _testPath = "Assets/Design/Resources/Data/GameSave/";
-    const string _path = "GameSave/";
+    const string _path = "Abyssian_Data/StreamingAssets/GameSave/";
 
 
     public enum WriteMode
@@ -123,7 +124,7 @@ public static class FileIO
 
     public static string LoadConnectorFromFile(string scene, string connectorName)
     {
-        string path = (buildMode) ? "ConnectorData/" : "Assets/Design/Resources/Data/ConnectorData/";
+        string path = (buildMode) ? "Abyssian_Data/StreamingAssets/ConnectorData/" : "Assets/Design/Resources/Data/ConnectorData/";
 
         try
         {
@@ -248,7 +249,7 @@ public static class FileIO
 
     public static void ClearAllSavedData()
     {
-        string path = (buildMode) ? "GameSave" : "Assets/Design/Resources/Data/GameSave";
+        string path = (buildMode) ? "Abyssian_Data/StreamingAssets/GameSave" : "Assets/Design/Resources/Data/GameSave";
         DirectoryInfo SaveDir = new DirectoryInfo(path);
 
         foreach (FileInfo file in SaveDir.GetFiles())

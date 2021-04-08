@@ -63,7 +63,7 @@ public class DeathMenuUI : MonoBehaviour
         _deathMenuCanvas.blocksRaycasts = false;
 
         //MainMenuUI..Continue()
-        Destroy(GameObject.FindGameObjectWithTag("Player"));
+        //Destroy(GameObject.FindGameObjectWithTag("Player"));
         Time.timeScale = 1f;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -83,14 +83,14 @@ public class DeathMenuUI : MonoBehaviour
             StartCoroutine(LoadAsyncScene(data.sceneName));
 
 
-            //if (_player != null)
-            //{
-            //    _player.transform.rotation = data.rot;
-            //    _player.transform.position = data.pos;
-            //}
+            if (_player != null)
+            {
+                _player.transform.rotation = data.rot;
+                _player.transform.position = data.pos;
+            }
         }
-        //_playerController.PlayerRespawn();
-        //StartCoroutine(FadeTo(0.0f, 1.0f));
+        _playerController.PlayerRespawn();
+        StartCoroutine(FadeTo(0.0f, 1.0f));
     }
 
     IEnumerator LoadAsyncScene(int sceneIndex)
