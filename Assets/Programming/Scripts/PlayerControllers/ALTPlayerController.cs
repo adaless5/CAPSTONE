@@ -356,7 +356,7 @@ public class ALTPlayerController : MonoBehaviour
 
         if (!_bEquipWheel && !_bWepWheel)
         {
-            _bWheelCanBePressed = true;
+            //_bWheelCanBePressed = true;
         }
     }
 
@@ -808,7 +808,7 @@ public class ALTPlayerController : MonoBehaviour
                 EquipmentWheel.GetComponent<CanvasGroup>().blocksRaycasts = true;
                 Cursor.lockState = CursorLockMode.None;
                 m_ControllerState = ControllerState.Wheel;
-                _bWheelCanBePressed = false;
+                //_bWheelCanBePressed = false;
                 return;
             }
 
@@ -839,7 +839,7 @@ public class ALTPlayerController : MonoBehaviour
                 WeaponWheel.GetComponent<CanvasGroup>().blocksRaycasts = true;
                 Cursor.lockState = CursorLockMode.None;
                 m_ControllerState = ControllerState.Wheel;
-                _bWheelCanBePressed = false;
+                //_bWheelCanBePressed = false;
                 return;
             }
 

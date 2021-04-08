@@ -9,6 +9,7 @@ public class CreatureWeapon : Weapon, ISaveable
     public Camera _camera;
     public ParticleSystem _spreadEffect;
     public Animator reticuleAnimator;
+    public GG_Animations _GGAnimator;
     GameObject _creatureProjectile;
 
     //vvv EP model stuff
@@ -31,6 +32,7 @@ public class CreatureWeapon : Weapon, ISaveable
         _internalOrganSize = _internalOrganObject.transform.localScale;
 
         EventBroker.OnPlayerSpawned += InitWeaponControls;
+        _GGAnimator = GetComponent<GG_Animations>();
     }
 
     void OrganPulse()
@@ -124,6 +126,8 @@ public class CreatureWeapon : Weapon, ISaveable
 
     void OnShoot()
     {
+        _GGAnimator._glandGunAnimator.SetTrigger("HasFired");
+        
         //Play shot
         AudioManager_CreatureWeapon amc = GetComponent<AudioManager_CreatureWeapon>();
         amc.TriggerShootCreatureWeapon();
@@ -160,6 +164,8 @@ public class CreatureWeapon : Weapon, ISaveable
 
     IEnumerator OnReload()
     {
+        _GGAnimator.SetReloadAnimationSpeed(m_reloadTime);
+
         if (bIsActive)
         {
             //Play Reload Sound
@@ -169,7 +175,7 @@ public class CreatureWeapon : Weapon, ISaveable
 
         bIsReloading = true;
         // gunAnimator.SetBool("bIsReloading", true);
-
+        _GGAnimator.TriggerReloadAnimation();
         yield return new WaitForSeconds(m_reloadTime);
         _ammoController.Reload();
         bIsReloading = false;
@@ -189,6 +195,7 @@ public class CreatureWeapon : Weapon, ISaveable
         if (upgrade.HasAction) m_bHasActionUpgrade = true;
 
         m_currentupgrades.Add(upgrade.Type);
+        _GGAnimator.SetReloadAnimationSpeed(m_reloadTime);
     }
 
     private void OnTarget()
