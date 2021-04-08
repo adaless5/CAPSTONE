@@ -39,6 +39,20 @@ public class DeathMenuUI : MonoBehaviour
         {
         }
     }
+
+    void HideDeathMenu()
+    {
+        try
+        {
+            _deathMenuCanvas.interactable = false;
+            _deathMenuCanvas.blocksRaycasts = false;
+            _deathMenuCanvas.alpha = 0;
+        }
+        catch
+        {
+
+        }
+    }
     IEnumerator FadeTo(float aValue, float aTime)
     {
         float alpha = _deathMenuCanvas.alpha;
@@ -90,7 +104,8 @@ public class DeathMenuUI : MonoBehaviour
                 //_player.transform.rotation = data.rot;
             }
         }
-
+            HideDeathMenu();
+        //_playerController.PlayerRespawn();
         //StartCoroutine(FadeTo(0.0f, 1.0f));
     }
 
