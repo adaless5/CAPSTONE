@@ -118,7 +118,7 @@ public class GrappleHook : Equipment, ISaveable
 
     void HandleGrappleHookDeployed()
     {
-
+        m_PlayerController.bCanOpenWheel = false;
         m_GrappleMarker.SetActive(false);
         m_GrappleCable.SetActive(true);
 
