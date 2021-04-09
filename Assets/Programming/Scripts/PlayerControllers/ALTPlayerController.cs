@@ -209,8 +209,7 @@ public class ALTPlayerController : MonoBehaviour
         _controls.Player.Camera.canceled += ctx => _look = Vector2.zero;
         _controls.Player.Shoot.performed += ctx => _bIsShooting = true;
         _controls.Player.Shoot.canceled += ctx => _bIsShooting = false;
-        _controls.Player.Sprint.performed += ctx => _bIsRunning = true;
-        _controls.Player.Sprint.canceled += ctx => _bIsRunning = false;
+
         _controls.Player.Pause.performed += ctx => PlayerPause();
         _controls.Player.Jump.performed += ctx => _bIsJumping = true;
         _controls.Player.Jump.canceled += ctx => _bIsJumping = false;
@@ -331,6 +330,12 @@ public class ALTPlayerController : MonoBehaviour
                 }
             }
 
+            if (_controls.Player.Sprint.triggered || (_bIsRunning && _movement.magnitude <= Mathf.Epsilon))
+            {
+                _bIsRunning = !_bIsRunning;
+            }
+   
+
             if (WeaponWheel.enabled == true)
             {
                 //EventSystem.current.SetSelectedGameObject(null);
@@ -340,7 +345,8 @@ public class ALTPlayerController : MonoBehaviour
                 {
                     if (Gamepad.current != null)
                     {
-                        if (Gamepad.current.rightStick.IsActuated())
+                        Debug.Log(Gamepad.current.rightStick.ReadValue().magnitude);
+                        if (Gamepad.current.rightStick.ReadValue().magnitude > 0)
                         {
                             joyAngle = Mathf.Atan2(joyX, joyY) * Mathf.Rad2Deg;
                             Debug.Log(joyAngle);
@@ -365,7 +371,6 @@ public class ALTPlayerController : MonoBehaviour
                 }
             }
 
-            Debug.Log(m_ControllerState);
 
             //Solution Until I can come up with a better one. 
             //Prevents the Wheels from inverting or opening while grappling.

@@ -83,14 +83,7 @@ public class DeathMenuUI : MonoBehaviour
         Cursor.visible = false;
         MainMenuUI.bNewGame = false;
         HideDeathMenu();
-        for (int i = 1; i < SceneManager.sceneCount; i++)
-        {
-  
-            if (SceneManager.GetSceneAt(i).name != SceneManager.GetSceneByBuildIndex(3).name)
-            {
-                SceneManager.UnloadSceneAsync(SceneManager.GetSceneAt(i).name);
-            }
-        }
+
         SceneManager.LoadScene(2, LoadSceneMode.Additive);
         
         //SaveSystem.RespawnInfo_Data data = new SaveSystem.RespawnInfo_Data();
