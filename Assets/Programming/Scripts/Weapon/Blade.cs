@@ -7,13 +7,12 @@ using Random = UnityEngine.Random;
 public class Blade : Equipment
 {
     [SerializeField] int Damage { get; } = 25;
-    [SerializeField] float KnockBackForce = 1500f;
+    [SerializeField] float KnockBackForce = 250f;
     public ALTPlayerController playerController;
 
     bool bHasHit;
     public float _bladeDamage;
     Animator _animator;
-    BoxCollider _hitbox;
     bool _bisAttacking;
     GameObject prevHit;
 
@@ -29,11 +28,9 @@ public class Blade : Equipment
 
         _bisAttacking = false;
         _animator = GetComponentInChildren<Animator>();
-        _hitbox = GetComponentInChildren<BoxCollider>();
 
         _animator.enabled = false;
-        _hitbox.enabled = false;
-        _hitbox.isTrigger = true;
+
         MeshRenderer[] meshs = GetComponentsInChildren<MeshRenderer>();
         foreach (MeshRenderer obj in meshs)
         {
@@ -41,6 +38,7 @@ public class Blade : Equipment
         }
         SkinnedMeshRenderer arm = GetComponentInChildren<SkinnedMeshRenderer>();
         arm.enabled = false;
+
     }
 
     void Awake()
@@ -51,12 +49,13 @@ public class Blade : Equipment
         {
             obj.enabled = false;
         }
+        SkinnedMeshRenderer arm = GetComponentInChildren<SkinnedMeshRenderer>();
+        arm.enabled = false;
     }
 
     // Update is called once per frame
     public override void Update()
     {
-
         if (bIsActive && bIsObtained)
         {
             MeshRenderer[] meshs = GetComponentsInChildren<MeshRenderer>();
@@ -66,10 +65,8 @@ public class Blade : Equipment
             }
             SkinnedMeshRenderer arm = GetComponentInChildren<SkinnedMeshRenderer>();
             arm.enabled = true;
-
             _animator.enabled = true;
             _animator.SetBool("IsOut", true);
-
 
             UseTool();
         }
@@ -78,15 +75,14 @@ public class Blade : Equipment
             _animator.SetBool("IsOut", false);
             if (_animator.GetCurrentAnimatorStateInfo(0).IsName("SwapOut") && _animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= .90f)
             {
-            _animator.enabled = false;
-            MeshRenderer[] meshs = GetComponentsInChildren<MeshRenderer>();
-            foreach (MeshRenderer obj in meshs)
-            {
-                obj.enabled = false;
-            }
+                _animator.enabled = false;
+                MeshRenderer[] meshs = GetComponentsInChildren<MeshRenderer>();
+                foreach (MeshRenderer obj in meshs)
+                {
+                    obj.enabled = false;
+                }
                 SkinnedMeshRenderer arm = GetComponentInChildren<SkinnedMeshRenderer>();
                 arm.enabled = false;
-                _hitbox.enabled = false;
             }
         }
 
@@ -113,93 +109,106 @@ public class Blade : Equipment
 
     public override void UseTool()
     {
-        //if (playerController.CheckForUseEquipmentInput() && _animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
-        //{
-        //    _animator.SetBool("attacking", true);
-        //    _hitbox.enabled = true;
-        //    bHasHit = false;
-        //}
-        //if (_animator.GetCurrentAnimatorStateInfo(0).IsName("BladeAttacking"))
-        //{
-        //    _animator.SetBool("attacking", false);
-        //    _hitbox.enabled = false;
-        //}
         if (ALTPlayerController.instance.CheckForUseEquipmentInput())
         {
             if (!_animator.GetCurrentAnimatorStateInfo(0).IsName("Attack1") && !_animator.GetCurrentAnimatorStateInfo(0).IsName("Attack2"))
             {
-                Debug.Log("Attack");
                 int rand = Random.Range(1, 3);
                 _animator.SetBool("Attack" + rand.ToString(), true);
-                _hitbox.enabled = true;
                 bHasHit = false;
+                StartCoroutine(OnAttack());
             }
         }
-        else 
+        else
         {
             _animator.SetBool("Attack1", false);
             _animator.SetBool("Attack2", false);
         }
+
     }
 
-    private void OnTriggerEnter(Collider other)
+    IEnumerator OnAttack()
     {
-        if (other.tag != "Player")
+        yield return new WaitForSeconds(0.5f);
+
+        Vector3 pos = ALTPlayerController.instance.GetComponentInChildren<Camera>().gameObject.transform.position;
+        RaycastHit[] hit = null;
+        hit = Physics.SphereCastAll(pos, 1f, transform.forward, 2f);
+
+        if (_animator.GetCurrentAnimatorStateInfo(0).IsName("Attack1") || _animator.GetCurrentAnimatorStateInfo(0).IsName("Attack2"))
         {
-
-            if (other.GetComponentInParent<Health>())
+            for (int i = 0; i < hit.Length; i++)
             {
-                Health target = other.transform.GetComponent<Health>();
-                if (target != null)
+                Collider other = hit[i].collider;
+                if (other)
                 {
-                    target.TakeDamage(_bladeDamage);
-                    bHasHit = true;
-                }
-
-                if (other.GetComponent<Rigidbody>())
-                {
-                    Rigidbody bodytarget = other.transform.GetComponent<Rigidbody>();
-
-                    if (bodytarget != null)
+                    if (other.tag != "Player")
                     {
-                        Vector3 hitDir = playerController.transform.position - bodytarget.transform.position;
-                        bodytarget.AddForce(hitDir.normalized * -KnockBackForce);
+
+                        if (other.GetComponentInParent<Health>())
+                        {
+                            Health target = other.transform.GetComponent<Health>();
+                            if (target != null)
+                            {
+                                target.TakeDamage(_bladeDamage);
+                                bHasHit = true;
+                            }
+
+                            if (other.GetComponent<Rigidbody>())
+                            {
+                                Rigidbody bodytarget = other.transform.GetComponent<Rigidbody>();
+
+                                if (bodytarget != null)
+                                {
+                                    Vector3 hitDir = playerController.transform.position - bodytarget.transform.position;
+                                    bodytarget.AddForce(hitDir.normalized * -KnockBackForce);
+                                }
+                            }
+                        }
+                        if (!bHasHit && other.GetComponentInParent<DestructibleObject>())
+                        {
+                            DestructibleObject obj = other.GetComponentInParent<DestructibleObject>();
+                            if (obj)
+                            {
+                                obj.Break(gameObject.tag);
+                                bHasHit = true;
+                                continue;
+                            }
+                        }
+                        if (other.GetComponentInParent<EyeLight>())
+                        {
+                            EyeLight obj = other.GetComponentInParent<EyeLight>();
+                            if (obj)
+                            {
+                                obj.Hit();
+                                continue;
+                            }
+                        }
+
+
+                        if (other.GetComponentInParent<ItemContainer>())
+                        {
+                            ItemContainer obj = other.GetComponentInParent<ItemContainer>();
+                            if (obj)
+                            {
+                                obj.Break(gameObject.tag);
+                                bHasHit = true;
+                                continue;
+
+                            }
+                        }
                     }
                 }
             }
-            if (!bHasHit && other.GetComponentInParent<DestructibleObject>())
-            {
-                DestructibleObject obj = other.GetComponentInParent<DestructibleObject>();
-                if (obj)
-                {
-                    obj.Break(gameObject.tag);
-                    bHasHit = true;
-                    return;
-                }
-            }
-            if (other.GetComponentInParent<EyeLight>())
-            {
-                EyeLight obj = other.GetComponentInParent<EyeLight>();
-                if (obj)
-                {
-                    obj.Hit();
-                    return;
-                }
-            }
-
-
-            if (other.GetComponentInParent<ItemContainer>())
-            {
-                ItemContainer obj = other.GetComponentInParent<ItemContainer>();
-                if (obj)
-                {
-                    obj.Break(gameObject.tag);
-                    bHasHit = true;
-                    return;
-
-                }
-            }
-            _hitbox.enabled = false;
         }
     }
+
+    
+//    private void OnDrawGizmos()
+//    {
+//        Gizmos.color = Color.yellow;
+//        Vector3 pos = ALTPlayerController.instance.GetComponentInChildren<Camera>().gameObject.transform.position;
+//        Gizmos.DrawRay(pos, transform.forward * 1f);
+//        Gizmos.DrawWireSphere(pos + transform.forward * 1f, 0.5f);
+//    }
 }
