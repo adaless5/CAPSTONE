@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MineSpawner : Weapon, ISaveable
+public class MineSpawner : Weapon
 {
     //[Header("Spawner Settings")]
     //public float Force = 800f;
@@ -23,6 +23,8 @@ public class MineSpawner : Weapon, ISaveable
     float m_timer;
     public override void Start()
     {
+
+        base.Start();
         m_weaponClipSize = 1;
         m_startingOverstockAmmo = 12;        
         m_reloadTime = 0.5f;
