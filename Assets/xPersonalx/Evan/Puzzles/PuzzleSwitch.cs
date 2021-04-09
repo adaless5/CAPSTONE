@@ -204,6 +204,7 @@ public class PuzzleSwitch : MonoBehaviour, ISaveable
     {
         if (other.gameObject.tag == "Player")
         {
+            other.gameObject.GetComponent<ALTPlayerController>().bWithinInteractVolume = true;
             bPlayerInRange = true;
             if (_PlayerInteractType == Switch_PlayerInteract_Type.Proximity)
             {
@@ -215,6 +216,7 @@ public class PuzzleSwitch : MonoBehaviour, ISaveable
 
     void OnTriggerExit(Collider other)
     {
+        other.gameObject.GetComponent<ALTPlayerController>().bWithinInteractVolume = false;
         if (other.gameObject.tag == "Player")
         {
             bPlayerInRange = false;

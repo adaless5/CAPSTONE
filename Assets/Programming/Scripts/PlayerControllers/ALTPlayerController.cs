@@ -152,6 +152,9 @@ public class ALTPlayerController : MonoBehaviour
     bool bDebug = false;
     public bool _bIsCredits;
 
+    public bool bWithinInteractVolume { get; set; } = false;
+    public GameObject _CurrentInteractionObj { get; set; } = null;
+
     private void Awake()
     {
         OnTakeDamage += TakeDamage;

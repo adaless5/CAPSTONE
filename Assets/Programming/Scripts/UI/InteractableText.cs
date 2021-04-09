@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.InputSystem;
 
 public class InteractableText : MonoBehaviour
 {
@@ -50,22 +51,45 @@ public class InteractableText : MonoBehaviour
             //if (hitInfo.collider.gameObject.tag != "Untagged" && hitInfo.collider.gameObject.tag != "Player") 
             if(ShouldIgnoreTag(hitInfo.collider.gameObject.tag) == false)
             {
-                m_backgroundImage.enabled = true;
-                if(hitInfo.collider.gameObject.tag == "Interactable")
+                if (m_player.bWithinInteractVolume)
                 {
-                    m_backgroundImage.rectTransform.sizeDelta = new Vector2(220, 20);
-                    m_pickupText.rectTransform.sizeDelta = new Vector2(200, 15);
-                    if (m_player.m_ControllerType == ControllerType.Controller)
-                        m_pickupText.text = "Press 'X' to Interact";
+                    if (m_player._CurrentInteractionObj.Equals(hitInfo.collider.gameObject))
+                    {
+                        m_backgroundImage.enabled = true;
+                        if(hitInfo.collider.gameObject.tag == "Interactable")
+                        {
+                            m_backgroundImage.rectTransform.sizeDelta = new Vector2(220, 20);
+                            m_pickupText.rectTransform.sizeDelta = new Vector2(200, 15);
+                            if (Gamepad.current != null)
+                            {
+                                if (Gamepad.current.IsActuated())
+                                {
+                                    m_pickupText.text = "Press 'X' to Interact";
+                                }
+                                else
+                                    m_pickupText.text = "Press 'E' to Interact";
+                            }
+                            else
+                                m_pickupText.text = "Press 'E' to Interact";
+                        }
+                        else
+                        {
+                            m_backgroundImage.rectTransform.sizeDelta = new Vector2(150, 20);
+                            m_pickupText.rectTransform.sizeDelta = new Vector2(146, 15);
+                            m_pickupText.text = hitInfo.collider.gameObject.tag;
+                        }               
+                    }
                     else
-                        m_pickupText.text = "Press 'E' to Interact";
+                    {
+                        m_backgroundImage.enabled = false;
+                        m_pickupText.text = "";
+                    }
                 }
                 else
                 {
-                    m_backgroundImage.rectTransform.sizeDelta = new Vector2(150, 20);
-                    m_pickupText.rectTransform.sizeDelta = new Vector2(146, 15);
-                    m_pickupText.text = hitInfo.collider.gameObject.tag;
-                }               
+                    m_backgroundImage.enabled = false;
+                    m_pickupText.text = "";
+                }
             }
             else
             {

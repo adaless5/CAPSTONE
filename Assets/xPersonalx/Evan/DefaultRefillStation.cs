@@ -84,6 +84,15 @@ public class DefaultRefillStation : MonoBehaviour
     }
     private void OnTriggerStay(Collider other)
     {
+        ALTPlayerController _playerController = other.gameObject.GetComponent<ALTPlayerController>();
+
+        if (_playerController != null)
+        {
+            _playerController.bWithinInteractVolume = true;
+
+            if (_playerController._CurrentInteractionObj != null)
+                _playerController._CurrentInteractionObj = gameObject;
+        }
 
 
         if (GameObject.FindObjectOfType<ALTPlayerController>().CheckForInteract())
@@ -137,5 +146,22 @@ public class DefaultRefillStation : MonoBehaviour
                 useTimer = 2.5f;
             }
         }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+
+        ALTPlayerController _playerController = other.gameObject.GetComponent<ALTPlayerController>();
+
+        if (_playerController != null)
+        {
+            if (_playerController._CurrentInteractionObj.Equals(gameObject))
+            {
+                _playerController.bWithinInteractVolume = false;
+                _playerController._CurrentInteractionObj = null;
+            }
+        }
+        other.gameObject.GetComponent<ALTPlayerController>().bWithinInteractVolume = false;
+        other.gameObject.GetComponent<ALTPlayerController>()._CurrentInteractionObj = null;
     }
 }
