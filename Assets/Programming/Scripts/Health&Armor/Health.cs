@@ -141,14 +141,14 @@ public class Health : MonoBehaviour, ISaveable
             //Disabled Deactivation on Death to make Death Event more malleable - LCC
         
             //Destroy(gameObject);
-            if(gameObject.tag != "Player")
-            gameObject.SetActive(false);
-            for (int i = 0; i < transform.childCount; ++i)
-            {
-                transform.GetChild(i).gameObject.SetActive(false);
-            }
+            //if(gameObject.tag != "Player")
+            //gameObject.SetActive(false);
+            //for (int i = 0; i < transform.childCount; ++i)
+            //{
+            //    transform.GetChild(i).gameObject.SetActive(false);
+            //}
+            transform.DetachChildren();
             CallOnDeath();
-            //transform.DetachChildren();
         }
     }
 

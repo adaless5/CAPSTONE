@@ -17,7 +17,7 @@ public class EventBroker
     public static event Action OnGameEnd;
     public static event Action OnWeaponSwap;
     public static event Action OnWeaponSwapIn;
-
+    public static event Action<SaveSystem.RespawnInfo_Data> OnLoadingScreenFinished;
     public static void CallSpawnEnemy(GameObject enemyToSpawn)
     {
         SpawnEnemy?.Invoke(enemyToSpawn);
@@ -38,6 +38,12 @@ public class EventBroker
     {
         //Debug.Log("Player has spawned");
         OnPlayerSpawned?.Invoke(player);
+    }
+
+    public static void CallOnLoadingScreenFinished(SaveSystem.RespawnInfo_Data respawninfo)
+    {
+        Debug.Log("Loading Screen Finished");
+        OnLoadingScreenFinished?.Invoke(respawninfo);
     }
 
     public static void CallOnPickupWeapon(int weaponIndex)

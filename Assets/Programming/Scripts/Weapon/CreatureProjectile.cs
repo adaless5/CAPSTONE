@@ -18,7 +18,6 @@ public class CreatureProjectile : MonoBehaviour
     bool m_bHasAction = false;
     float _damage;
     float _targetDefaultSpeed;
-    // Start is called before the first frame update
 
     private void Awake()
     {
@@ -114,6 +113,9 @@ public class CreatureProjectile : MonoBehaviour
         {
             Debug.Log("Sticking");
             transform.parent = collision.transform;
+
+
+            _targetHealth.OnDeath += DeStick;
             Stick();
         }
         DestructibleObject wall = collision.transform.GetComponentInParent<DestructibleObject>();
@@ -131,8 +133,11 @@ public class CreatureProjectile : MonoBehaviour
     }
     void DeStick()
     {
+
+        Debug.Log("Desticking");
         _rigidBody.isKinematic = false;
         _rigidBody.detectCollisions = true;
+
 
     }
     void Stick()
@@ -140,7 +145,6 @@ public class CreatureProjectile : MonoBehaviour
         _rigidBody.isKinematic = true;
         _rigidBody.detectCollisions = false;
 
-        audioManager.TriggerStickCreatureWeapon(GetComponentInChildren<AudioSource>());
     }
 
     public void LinkAudioManager(AudioManager_CreatureWeapon amc)

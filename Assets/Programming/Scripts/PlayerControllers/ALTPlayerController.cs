@@ -263,6 +263,7 @@ public class ALTPlayerController : MonoBehaviour
         SceneManager.sceneLoaded += PlayerSceneChange;
         //Subscribing to Event Broker
         EventBroker.CallOnPlayerSpawned(gameObject);
+        EventBroker.OnLoadingScreenFinished += PlayerRespawn;
         OnTakeDamage += m_armor.ResetArmorTimer;
 
 
@@ -286,99 +287,117 @@ public class ALTPlayerController : MonoBehaviour
         Vector3 downdir = new Vector3(0.0f, -1.0f, 0.0f);
         RaycastHit hit;
 
-        switch (m_ControllerState)
+        if (!isDead)
         {
-            case ControllerState.Play:
-                PlayerRotation();
-                PlayerMovement();
-                if (_cameraBehaviour != null)
-                    _cameraBehaviour.SetIsInMenu(false);
-                break;
-
-            case ControllerState.Menu:
-                if (_cameraBehaviour != null)
-                    _cameraBehaviour.SetIsInMenu(true);
-                break;
-
-            case ControllerState.Wheel:
-                PlayerMovement();
-                break;
-        }
-
-        if (EquipmentWheel.enabled == true)
-        {
-            joyX = _look.x;
-            joyY = _look.y;
-            if (Gamepad.current != null)
+            switch (m_ControllerState)
             {
-                if (Gamepad.current.rightStick.IsActuated())
-                {
-                    joyAngle = Mathf.Atan2(joyX, joyY) * Mathf.Rad2Deg;
-                    Debug.Log("Joy Angle: " + joyAngle);
-                    if (joyAngle > -90.0f && joyAngle < -45.0f)
-                    {
-                        _equipIndex = 0;
-                    }
-                    if (joyAngle > 0.0f && joyAngle < 90.0f)
-                    {
-                        _equipIndex = 1;
-                    }
-                    EventSystem.current.SetSelectedGameObject(_equipButtons[_equipIndex].gameObject);
-                    _equipmentBelt.EquipToolAtIndex(_equipIndex);
-                }
+                case ControllerState.Play:
+                    PlayerRotation();
+                    PlayerMovement();
+                    if (_cameraBehaviour != null)
+                        _cameraBehaviour.SetIsInMenu(false);
+                    break;
+
+                case ControllerState.Menu:
+                    if (_cameraBehaviour != null)
+                        _cameraBehaviour.SetIsInMenu(true);
+                    break;
+
+                case ControllerState.Wheel:
+                    PlayerMovement();
+                    break;
             }
-        }
-
-        if (WeaponWheel.enabled == true)
-        {
-            //EventSystem.current.SetSelectedGameObject(null);
-            joyX = _look.x;
-            joyY = _look.y;
-
+            if (EquipmentWheel.enabled == true)
             {
+                joyX = _look.x;
+                joyY = _look.y;
                 if (Gamepad.current != null)
                 {
                     if (Gamepad.current.rightStick.IsActuated())
                     {
                         joyAngle = Mathf.Atan2(joyX, joyY) * Mathf.Rad2Deg;
-                        Debug.Log(joyAngle);
+                        Debug.Log("Joy Angle: " + joyAngle);
                         if (joyAngle > -90.0f && joyAngle < -45.0f)
                         {
-                            _wepIndex = 1;
-
-                        }
-                        if (joyAngle > -45.0f && joyAngle < 0.0f)
-                        {
-                            _wepIndex = 0;
+                            _equipIndex = 0;
                         }
                         if (joyAngle > 0.0f && joyAngle < 90.0f)
                         {
-                            _wepIndex = 2;
+                            _equipIndex = 1;
                         }
-                        Debug.Log(_wepIndex);
-                        EventSystem.current.SetSelectedGameObject(_wepButtons[_wepIndex].gameObject);
-                        _weaponBelt.EquipToolAtIndex(_wepIndex);
+                        EventSystem.current.SetSelectedGameObject(_equipButtons[_equipIndex].gameObject);
+                        _equipmentBelt.EquipToolAtIndex(_equipIndex);
                     }
                 }
             }
-        }
-        
-        //Solution Until I can come up with a better one. 
-        //Prevents the Wheels from inverting or opening while grappling.
-        if (Gamepad.current != null)
-        {
-            if (Gamepad.current.rightShoulder.IsActuated() || Gamepad.current.leftShoulder.IsActuated())
+
+            if (WeaponWheel.enabled == true)
             {
-                if (Gamepad.current.rightShoulder.isPressed && Gamepad.current.leftShoulder.isPressed)
+                //EventSystem.current.SetSelectedGameObject(null);
+                joyX = _look.x;
+                joyY = _look.y;
+
                 {
-                    DisableWheel(EquipmentWheel, ref _bEquipWheel);
-                    DisableWheel(WeaponWheel, ref _bWepWheel);
-                    bCanOpenWheel = false;
+                    if (Gamepad.current != null)
+                    {
+                        if (Gamepad.current.rightStick.IsActuated())
+                        {
+                            joyAngle = Mathf.Atan2(joyX, joyY) * Mathf.Rad2Deg;
+                            Debug.Log(joyAngle);
+                            if (joyAngle > -90.0f && joyAngle < -45.0f)
+                            {
+                                _wepIndex = 1;
+
+                            }
+                            if (joyAngle > -45.0f && joyAngle < 0.0f)
+                            {
+                                _wepIndex = 0;
+                            }
+                            if (joyAngle > 0.0f && joyAngle < 90.0f)
+                            {
+                                _wepIndex = 2;
+                            }
+                            Debug.Log(_wepIndex);
+                            EventSystem.current.SetSelectedGameObject(_wepButtons[_wepIndex].gameObject);
+                            _weaponBelt.EquipToolAtIndex(_wepIndex);
+                        }
+                    }
                 }
-                else if (!Gamepad.current.rightShoulder.isPressed && !Gamepad.current.leftShoulder.isPressed)
+            }
+
+            Debug.Log(m_ControllerState);
+
+            //Solution Until I can come up with a better one. 
+            //Prevents the Wheels from inverting or opening while grappling.
+            if (Gamepad.current != null)
+            {
+                if (Gamepad.current.rightShoulder.IsActuated() || Gamepad.current.leftShoulder.IsActuated())
                 {
-                    if (m_PlayerState == PlayerState.Idle)
-                        bCanOpenWheel = true;
+                    if (Gamepad.current.rightShoulder.isPressed && Gamepad.current.leftShoulder.isPressed)
+                    {
+                        DisableWheel(EquipmentWheel, ref _bEquipWheel);
+                        DisableWheel(WeaponWheel, ref _bWepWheel);
+                        bCanOpenWheel = false;
+                    }
+                    else if (!Gamepad.current.rightShoulder.isPressed && !Gamepad.current.leftShoulder.isPressed)
+                    {
+                        if (m_PlayerState == PlayerState.Idle)
+                            bCanOpenWheel = true;
+                    }
+                }
+                else
+                {
+                    if ((Keyboard.current.qKey.isPressed && Keyboard.current.tabKey.isPressed))
+                    {
+                        DisableWheel(EquipmentWheel, ref _bEquipWheel);
+                        DisableWheel(WeaponWheel, ref _bWepWheel);
+                        bCanOpenWheel = false;
+                    }
+                    else if ((!Keyboard.current.qKey.isPressed && !Keyboard.current.tabKey.isPressed))
+                    {
+                        if (m_PlayerState == PlayerState.Idle)
+                            bCanOpenWheel = true;
+                    }
                 }
             }
             else
@@ -396,20 +415,8 @@ public class ALTPlayerController : MonoBehaviour
                 }
             }
         }
-        else
-        {
-            if ((Keyboard.current.qKey.isPressed && Keyboard.current.tabKey.isPressed))
-            {
-                DisableWheel(EquipmentWheel, ref _bEquipWheel);
-                DisableWheel(WeaponWheel, ref _bWepWheel);
-                bCanOpenWheel = false;
-            }
-            else if ((!Keyboard.current.qKey.isPressed && !Keyboard.current.tabKey.isPressed))
-            {
-                if (m_PlayerState == PlayerState.Idle)
-                    bCanOpenWheel = true;
-            }
-        }
+
+     
     }
 
     private void OnEnable()
@@ -429,30 +436,37 @@ public class ALTPlayerController : MonoBehaviour
     }
 
     //Death and Respawn functionality -LCC
-    public void PlayerRespawn()
+    public void PlayerRespawn(SaveSystem.RespawnInfo_Data respawninfo)
     {
-        m_health.Heal(m_health.GetMaxHealth());
-        m_armor.ResetArmor();
-        isDead = false;
-        m_ControllerState = ControllerState.Play;
-        _controller.enabled = true;
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-        gameObject.transform.rotation = Quaternion.identity;
+        //if (isDead)
+        {
+            StopCoroutine(DeathAnimation());
+            m_health.Heal(m_health.GetMaxHealth());
+            m_health.bCanBeDamaged = true;
+            m_armor.ResetArmor();
+            isDead = false;
+            m_ControllerState = ControllerState.Play;
+            _controller.enabled = true;
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            gameObject.transform.position = respawninfo.pos;
+            gameObject.transform.rotation = Quaternion.identity;
+
+        }
     }
 
     void PlayerDeath()
     {
         isDead = true;
+        m_health.bCanBeDamaged = false;
         StartCoroutine(DeathAnimation());
         m_ControllerState = ControllerState.Menu;
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
         if (_controller != null)
         {
             Debug.Log("Controller vibe passed");
             _controller.enabled = false;
         }
+
     }
 
     public IEnumerator DeathAnimation()
@@ -647,7 +661,7 @@ public class ALTPlayerController : MonoBehaviour
             GetComponent<CameraBehaviour>().bobFrequency = 7.5f;
         }
         else
-        {            
+        {
             m_MoveSpeed = Mathf.Lerp(m_MoveSpeed, WALK_SPEED, Time.deltaTime);
             GetComponent<CameraBehaviour>().bobFrequency = 5.0f;
         }
@@ -863,7 +877,7 @@ public class ALTPlayerController : MonoBehaviour
                 {
                     DisableWheel(EquipmentWheel, ref _bEquipWheel);
                     return;
-                }   
+                }
             }
         }
     }
@@ -985,10 +999,10 @@ public class ALTPlayerController : MonoBehaviour
     public void SetYAxisInvert()
     {
         bInvertYAxis = !bInvertYAxis;
-    }   
+    }
 
     public float GetMovementSpeed()
     {
         return _movement.magnitude;
-    }    
+    }
 }

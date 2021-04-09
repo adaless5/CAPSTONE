@@ -98,9 +98,16 @@ public class DebugController : MonoBehaviour
             if (!bToggleGui)
             {
                 if (ALTPlayerController.instance != null)
-                    ALTPlayerController.instance.m_ControllerState = ALTPlayerController.ControllerState.Play;
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
+                {
+                    if (!ALTPlayerController.instance.isDead)
+                    {
+                        ALTPlayerController.instance.m_ControllerState = ALTPlayerController.ControllerState.Play;
+                        Cursor.lockState = CursorLockMode.Locked;
+                        Cursor.visible = false;
+
+                    }
+
+                }
                 return;
             }
 
