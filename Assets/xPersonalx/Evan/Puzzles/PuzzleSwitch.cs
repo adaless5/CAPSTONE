@@ -11,6 +11,8 @@ public class PuzzleSwitch : MonoBehaviour, ISaveable
     public GameObject _OffSwitch;// The object that represents the switch being off
     public GameObject _OnSwitch; // The object that represents the switch being on
 
+    public GameObject _DamageObject;
+
     public PuzzleSwitch[] _AffectedSwitches; // The array of switches that this switch will affect
 
     ALTPlayerController _PlayerController;
@@ -18,7 +20,7 @@ public class PuzzleSwitch : MonoBehaviour, ISaveable
     {
         UseButton,//------------------------------------------------ Player presses the use button to activate the switch
 
-        //TODO       Damage,//--------------------------------------------------- Player uses a weapon on the switch to activate it  /
+        Damage,//--------------------------------------------------- Player uses a weapon on the switch to activate it  /
 
         Proximity//------------------------------------------------- Player gets within proximity of the switch to activate it
     };
@@ -46,8 +48,9 @@ public class PuzzleSwitch : MonoBehaviour, ISaveable
 
 
     bool bPlayerInRange;
-    bool bIsActive;
+    public bool bIsActive;
     bool bCanSwitch;
+    bool bObjectBroken;
 
     float fSwitchTimer;
     float fResetTimer;
@@ -159,9 +162,19 @@ public class PuzzleSwitch : MonoBehaviour, ISaveable
         }
     }
 
+    void CheckDamage()
+    {
+        if(_PlayerInteractType == Switch_PlayerInteract_Type.Damage)
+        if(!bObjectBroken && !_DamageObject.activeSelf)
+        {
+            Interact();
+            bObjectBroken = true;
+        }
+    }
     // Update is called once per frame
     void Update()
     {
+        CheckDamage();
         CanSwitchTimer(); 
         ResetSwitchTimer();
         if (_PlayerInteractType == Switch_PlayerInteract_Type.UseButton && bPlayerInRange)
@@ -235,13 +248,17 @@ public class PuzzleSwitch : MonoBehaviour, ISaveable
     public void SaveDataOnSceneChange()
     {
         SaveSystem.Save(gameObject.name, "bIsActive", gameObject.scene.name, bIsActive);
-
+        SaveSystem.Save(gameObject.name, "objectBroken", gameObject.scene.name, bObjectBroken);
     }
 
     public void LoadDataOnSceneEnter()
     {
+        bIsActive = _DoesStartTurnedOn;
         bIsActive = SaveSystem.LoadBool(gameObject.name, "bIsActive", gameObject.scene.name);
-
+        bObjectBroken = SaveSystem.LoadBool(gameObject.name, "objectBroken", gameObject.scene.name);
+        if (bObjectBroken)
+        {
+            Destroy(_DamageObject);
+        }
     }
-
 }

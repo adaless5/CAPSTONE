@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3738910171658949868}
   - component: {fileID: 3056022396187588097}
   - component: {fileID: 8387133963610940005}
+  - component: {fileID: 6095016056118421427}
   m_Layer: 0
   m_Name: ITEM_CONTAINER_HANGING
   m_TagString: Untagged
@@ -85,6 +86,24 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &6095016056118421427
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 945886705503433675}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12204abbb49e55040bf3191c4490c9d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ThermalViewMaterial: {fileID: 2100000, guid: 211f1b39820a1824a831e6ee1b1b6e32,
+    type: 2}
+  m_MeshRenderers: []
+  m_MeshRenderer: {fileID: 0}
+  m_skinnedMeshRenderers: []
+  m_skinnedMeshRenderer: {fileID: 0}
 --- !u!1 &1784301422828103961
 GameObject:
   m_ObjectHideFlags: 0
@@ -123,6 +142,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3826345387903405010}
     m_Modifications:
+    - target: {fileID: -7563840120761610969, guid: 99e5a90da1508a24c89cb52152be57f6,
+        type: 3}
+      propertyPath: m_ThermalViewMaterial
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 8142770768060071447, guid: 99e5a90da1508a24c89cb52152be57f6,
         type: 3}
       propertyPath: m_RootOrder

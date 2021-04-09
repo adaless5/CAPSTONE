@@ -14,6 +14,10 @@ public class RoamerAI : MonoBehaviour
     public bool bShouldWanderRandomly = false;
     public GameObject _wanderSphere;
     public float _wanderRadius;
+
+    public GameObject DebugSphere;
+    public Vector3 _InitialWanderPosition;
+
     private void Awake()
     {
         EventBroker.OnPlayerSpawned += EventStart;
@@ -21,6 +25,7 @@ public class RoamerAI : MonoBehaviour
         _navMeshAgent = GetComponent<NavMeshAgent>();
         _roamerAnimator = GetComponentInChildren<Animator>();
         _roamerHealth = GetComponent<Health>();
+        _InitialWanderPosition = gameObject.transform.position;
         _roamerHealth.OnTakeDamage += TakingDamage;
         //_roamerHealth.OnDeath += Death;
         
@@ -67,7 +72,7 @@ public class RoamerAI : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.DrawWireSphere(transform.position, _wanderRadius);
+        Gizmos.DrawWireSphere(_InitialWanderPosition, _wanderRadius);
     }
 
     public void TakingDamage()

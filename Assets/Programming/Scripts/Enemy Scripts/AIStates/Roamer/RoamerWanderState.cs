@@ -11,6 +11,7 @@ public class RoamerWanderState : RoamerState
     float _wanderRadius;
     Vector3 finalPos;
     int _ChangeToIdleChance;
+    Vector3 _InitialWanderPosition; 
 
     public RoamerWanderState(GameObject enemy, Transform[] pp, Transform playerposition, NavMeshAgent nav, float wanderrad) : base(enemy, pp, playerposition, nav)
     {
@@ -23,6 +24,7 @@ public class RoamerWanderState : RoamerState
     {
         base.Enter();
         _navMeshAgent.isStopped = false;
+        _InitialWanderPosition = _currentEnemy.GetComponent<RoamerAI>()._InitialWanderPosition;
         SetRandomWanderPatrolPoint();
     }
 
@@ -54,15 +56,27 @@ public class RoamerWanderState : RoamerState
     void SetRandomWanderPatrolPoint()
     {
         Vector3 randDir = Random.insideUnitSphere * _wanderRadius;
-        randDir += _currentEnemy.transform.position;
+        randDir += _InitialWanderPosition;
         NavMeshHit hit;
         NavMesh.SamplePosition(randDir, out hit, _wanderRadius, 1);
-        finalPos = hit.position;       
-        //Debug.Log("Point set to" + finalPos);
-        _navMeshAgent.SetDestination(finalPos);
-        _ChangeToIdleChance = Random.Range(0, 3);
+        finalPos = hit.position;
+        _currentEnemy.GetComponent<RoamerAI>().DebugSphere.transform.position = finalPos;
+
+        float dist = Vector3.Distance(_currentEnemy.transform.position, finalPos);
+        RaycastHit rayHit;
+
+        if (!Physics.Raycast(_currentEnemy.transform.position, finalPos - _currentEnemy.transform.position, out rayHit, dist))
+        {
+            _navMeshAgent.SetDestination(finalPos);
+            _ChangeToIdleChance = Random.Range(0, 3);
+        }
+        else
+        {
+            SetRandomWanderPatrolPoint();
+        }
 
     }
+
     public void LookTowards(Vector3 target, float turnspeed)
     {
         Quaternion targetRotation = Quaternion.LookRotation(target - _currentEnemy.transform.position);
