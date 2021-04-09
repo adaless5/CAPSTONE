@@ -23,23 +23,17 @@ public class MineSpawner : Weapon
     float m_timer;
     public override void Start()
     {
-
         base.Start();
         m_weaponClipSize = 1;
         m_startingOverstockAmmo = 12;        
         m_reloadTime = 0.5f;
         _ammoController = FindObjectOfType<AmmoUI>().GetComponent<AmmoController>();
         _ammoController.InitializeAmmo(AmmoController.AmmoTypes.Explosive, m_weaponClipSize, m_startingOverstockAmmo, m_ammoCapAmount);
-
-       
-        bIsActive = false;
-        bIsObtained = false;
     }
 
     void Awake()
     {
         base.Awake();
-        LoadDataOnSceneEnter();
 
         if(m_playerController == null)
         {
@@ -170,8 +164,4 @@ public class MineSpawner : Weapon
         amg.TriggerGrenadeExplode();
     }
 
-    public void LoadDataOnSceneEnter()
-    {
-        bIsObtained = SaveSystem.LoadBool(gameObject.name, "bIsObtained", "Equipment");
-    }
 }
