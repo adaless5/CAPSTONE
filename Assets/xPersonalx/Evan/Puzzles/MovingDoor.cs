@@ -6,6 +6,8 @@ public class MovingDoor : MonoBehaviour//, ISaveable
 {
     // Start is called before the first frame update
 
+    public DoorOpenedClosedEffects _Effects;
+
     public float DoorSpeed = 1.0f;
     public enum Open_Type { None, Switch, Object, Proximity };
     public Open_Type _OpenType;
@@ -57,7 +59,14 @@ public class MovingDoor : MonoBehaviour//, ISaveable
     }
 
     private void Awake()
-    {
+    {        
+        if (_Effects)
+        {
+            if (bIsOpen)
+            { _Effects.Opened(); }
+            else
+            { _Effects.Closed(); }
+        }
     }
 
     // Update is called once per frame
@@ -82,6 +91,8 @@ public class MovingDoor : MonoBehaviour//, ISaveable
     {
         //++++ audioManager.SendMessage("TriggerOpenDoor");
 
+        if (_Effects)
+        { _Effects.Opening(); }
         bHasBeenClosed = false;
         bool AllDoorsReachedOpen = true;
         for (int i = 0; i < _Doors.Length; i++)
@@ -97,11 +108,18 @@ public class MovingDoor : MonoBehaviour//, ISaveable
                 AllDoorsReachedOpen = false;
             }
         }
-        bHasBeenOpened = AllDoorsReachedOpen;
-        
+        bHasBeenOpened = AllDoorsReachedOpen; 
+        if (bHasBeenOpened)
+        {
+            if (_Effects)
+            { _Effects.Opened(); }
+        }
+
     }
     void Close()
     {
+        if (_Effects)
+        { _Effects.Closing(); }
         bHasBeenOpened = false;
         bool AllDoorsReachedClosed = true;
         for (int i = 0; i < _Doors.Length; i++)
@@ -118,11 +136,14 @@ public class MovingDoor : MonoBehaviour//, ISaveable
             }
         }
         bHasBeenClosed = AllDoorsReachedClosed;
-
+        if(bHasBeenClosed)
+        {
+            if (_Effects)
+            { _Effects.Closed(); }
+        }
     }
     void Update()
     {
-
         if (!bRoomOneLogic)
         {
         CheckOpenDoors();
