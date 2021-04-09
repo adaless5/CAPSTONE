@@ -15,6 +15,7 @@ public class LeapingEnemyAI : MonoBehaviour
     public GameObject _jumpDirectionObject;                 //The object that the leaper orients and checks when leaping to determine the direction to jump
     public GameObject _ProjectileSpawnPoint;                // the position that the leaper's projectiles will be spawned in at.
     public Collider _body;                                  // the main collidere attached to this enemy that is used as its body/hit detection
+    public Animator _leaperAnimator;                        // animator controller for leaping enemy animations
 
     public LeapingEnemyProjectile _LeapingEnemyProjectile;  // the projectile that the leaper will fire at the player when in attack state
 
@@ -42,6 +43,7 @@ public class LeapingEnemyAI : MonoBehaviour
     {
         _LeapingEnemyProjectile.gameObject.SetActive(false);
         _rigidBody = GetComponent<Rigidbody>();
+        _leaperAnimator = GetComponentInChildren<Animator>();
     }
 
     private void EventStart(GameObject player)
@@ -57,6 +59,7 @@ public class LeapingEnemyAI : MonoBehaviour
 
     void Update()
     {
+        CheckAnimationState();
         if (_currentState != null)
         {
             _currentState = _currentState.Process();
@@ -95,10 +98,47 @@ public class LeapingEnemyAI : MonoBehaviour
     public bool IsGrounded()
     {
         return Physics.Raycast(transform.position, -Vector3.up, 1.5f);
+        
     }
 
     public void Leap(float baseSpeed)
     {
         _rigidBody.velocity = (_jumpDirectionObject.transform.forward) * (baseSpeed);// * Vector3.Distance(transform.position, _jumpTarget.transform.position) );
+    }
+
+    public void CheckAnimationState()
+    {
+        if(IsGrounded())
+        {
+            _leaperAnimator.SetBool("IsGrounded", false);
+        }
+        else
+        {
+            _leaperAnimator.SetBool("IsGrounded", true);
+        }
+        //if (_currentState != null)
+        //    switch (_currentState._stateName)
+        //    {
+        //        case State.STATENAME.IDLE:
+        //            //_leaperAnimator.SetTrigger("IsIdle");
+        //            Debug.Log("Leaper in Idle");
+        //            break;
+        //        case State.STATENAME.PATROL:
+        //            Debug.Log("Leaper is patrolling");
+        //            //_leaperAnimator.SetTrigger("IsPatrolling");
+        //            break;
+        //        case State.STATENAME.FOLLOW:
+        //            Debug.Log("Leaper is Following");
+        //            //_leaperAnimator.SetTrigger("IsChasing");
+        //            break;
+        //        case State.STATENAME.ATTACK:
+        //            Debug.Log("Leaping attacking");
+        //            //_leaperAnimator.SetTrigger("IsAttacking");
+        //            break;
+        //        case State.STATENAME.WANDER:
+        //            Debug.Log("Leaper wandering");
+        //            //_leaperAnimator.SetTrigger("IsPatrolling");
+        //            break;                
+        //    }
     }
 }

@@ -90,9 +90,7 @@ public class RoamerAI : MonoBehaviour
                 _roamerAnimator.SetTrigger("IsDying");
             }
         }
-    }
-
-  
+    }  
    
 
     public void CheckAnimationState()
