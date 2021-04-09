@@ -21,6 +21,8 @@ public class BossAI : MonoBehaviour
 
     private void Awake()
     {
+        int UCindex = 0;
+        _umbilicalCords = new GameObject[3];
         foreach (Transform g in transform)
         {
             if (g.gameObject.name == "Weak")
@@ -28,6 +30,11 @@ public class BossAI : MonoBehaviour
                 Debug.Log("Weak Component Found");
                 _health = g.GetComponent<Health>();
                 g.GetComponent<Health>().OnDeath += BossDeath;
+            }
+            if (g.GetComponent<UmbilicalCord>() != null)
+            {
+                _umbilicalCords[UCindex] = g.GetComponent<UmbilicalCord>().gameObject;
+                UCindex++;
             }
         }
 

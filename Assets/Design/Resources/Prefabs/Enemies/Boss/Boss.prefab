@@ -172,6 +172,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HP: 10
   m_IsLoadingShield: 0
+  bCanBeDamaged: 1
+  isDead: 0
   healthBar: {fileID: 0}
   m_compass: {fileID: 0}
   m_marker: {fileID: 0}
@@ -224,10 +226,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c0c802dfe498c24d966833ea0cb8623, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _umbilicalCords:
-  - {fileID: 6286709018195359894}
-  - {fileID: 2177995584105765397}
-  - {fileID: 2177995584105765397}
+  _umbilicalCords: []
   _boxCol: {fileID: 0}
   _ucHealth: 5
   _deathParticle: {fileID: 0}
@@ -440,12 +439,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0162f6a426e24c54393feccd3b9219e7, type: 3}
---- !u!1 &2177995584105765397 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1690388749378038222, guid: 0162f6a426e24c54393feccd3b9219e7,
-    type: 3}
-  m_PrefabInstance: {fileID: 670118171503555547}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &102286989005579387 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 587677507395950496, guid: 0162f6a426e24c54393feccd3b9219e7,

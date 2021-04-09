@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class HomingAttackScript : MonoBehaviour
 {
     GameObject _player;
@@ -19,6 +19,7 @@ public class HomingAttackScript : MonoBehaviour
             _damageValue = 30;
         _player = GameObject.FindGameObjectWithTag("Player");
         _originalPos = transform.position;
+        SceneManager.sceneUnloaded += ReturntoPoolOnSceneSwitch;
     }
 
     // Start is called before the first frame update
@@ -39,11 +40,16 @@ public class HomingAttackScript : MonoBehaviour
             ApplyDamage();
         }
     }
-
+    void ReturntoPoolOnSceneSwitch(Scene scene)
+    {
+        ReturnToPoolDead();
+    }
     void PlayDeathAnimation()
     {
         _haAnimator.SetTrigger("Death");
     }
+
+
 
     public void ReturnToPoolDead()
     {
