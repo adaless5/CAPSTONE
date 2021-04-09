@@ -44,7 +44,6 @@ public class ThermalEquipment : Equipment
 
     void Awake()
     {
-        LoadDataOnSceneEnter();
     }
 
     void SetLightsThermal()
