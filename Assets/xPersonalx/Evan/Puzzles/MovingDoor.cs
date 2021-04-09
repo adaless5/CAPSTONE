@@ -17,6 +17,7 @@ public class MovingDoor : MonoBehaviour//, ISaveable
 
     public bool _StayClosed;
     public bool _StayOpen;
+    public bool _affectRotation;
 
     public GameObject[] _Doors;
     public GameObject[] _OpenPositions;
@@ -86,6 +87,11 @@ public class MovingDoor : MonoBehaviour//, ISaveable
         for (int i = 0; i < _Doors.Length; i++)
         {
             _Doors[i].transform.position = Vector3.MoveTowards(_Doors[i].transform.position, _OpenPositions[i].transform.position, DoorSpeed * Time.deltaTime);
+            if(_affectRotation)
+            {
+                _Doors[i].transform.forward = Vector3.MoveTowards(_Doors[i].transform.forward, _OpenPositions[i].transform.forward, DoorSpeed * Time.deltaTime);
+            }
+
             if (_Doors[i].transform.position != _OpenPositions[i].transform.position)
             {
                 AllDoorsReachedOpen = false;
@@ -102,6 +108,10 @@ public class MovingDoor : MonoBehaviour//, ISaveable
         {
 
             _Doors[i].transform.position = Vector3.MoveTowards(_Doors[i].transform.position, _ClosedPositions[i].transform.position, DoorSpeed * Time.deltaTime);
+            if (_affectRotation)
+            {
+                _Doors[i].transform.forward = Vector3.MoveTowards(_Doors[i].transform.forward, _ClosedPositions[i].transform.forward, DoorSpeed * Time.deltaTime);
+            }
             if (_Doors[i].transform.position != _ClosedPositions[i].transform.position)
             {
                 AllDoorsReachedClosed = false;
