@@ -15,6 +15,7 @@ public class LeapingEnemyAI : MonoBehaviour
     public GameObject _jumpDirectionObject;                 //The object that the leaper orients and checks when leaping to determine the direction to jump
     public GameObject _ProjectileSpawnPoint;                // the position that the leaper's projectiles will be spawned in at.
     public Collider _body;                                  // the main collidere attached to this enemy that is used as its body/hit detection
+    public Collider _landingCollider;                       // collider used for landing animation to detect when to start animation
     public Animator _leaperAnimator;                        // animator controller for leaping enemy animations
 
     public LeapingEnemyProjectile _LeapingEnemyProjectile;  // the projectile that the leaper will fire at the player when in attack state
@@ -22,10 +23,13 @@ public class LeapingEnemyAI : MonoBehaviour
     Rigidbody _rigidBody;                                   // the rigid body used by the enemy for body physics stuff
 
     public float _TouchDamage;                              // the amount of damage the leaper should deal to the player when the player makes contact with it
-
+    public float _JumpTimer = 3f;
+    private bool _bHasJumped = false;
     public float _AttackJumpSpeed;                          // the force used for the leaper's jump when the leaper is in its attack state
     public float _WanderJumpSpeed;                          // the force used for the leaper's jump when the leaper is in its wander state or go home state
     public float _ProjectileBaseSpeed;                      // the force that the leaper's projectile is spawned in with
+
+    public float _jumpHeight;
 
     public enum PlayerDistance { far, follow, attack };         // possible distance levels the leaper can consider for the player, used by the detection objects attached to the leaping enemy prefab to determine whether to change leaper state.
     public PlayerDistance _playerDistance;                  // local variable to store the current distance level the player is at, used by the detection objects attached to the leaping enemy prefab to determine whether to change leaper state.
@@ -44,6 +48,9 @@ public class LeapingEnemyAI : MonoBehaviour
         _LeapingEnemyProjectile.gameObject.SetActive(false);
         _rigidBody = GetComponent<Rigidbody>();
         _leaperAnimator = GetComponentInChildren<Animator>();
+        _landingCollider = GetComponent<CapsuleCollider>();
+        //_landingCollider.enabled = false;
+        
     }
 
     private void EventStart(GameObject player)
@@ -71,6 +78,15 @@ public class LeapingEnemyAI : MonoBehaviour
                 _currentState = new LeapingEnemyWanderState(gameObject, gameObject.GetComponent<LeapingEnemyAI>(), _playerReference.transform);
         }
         MoveEyes();
+        //if (_bHasJumped)
+        //{
+        //    _JumpTimer -= Time.deltaTime;
+        //    if (_JumpTimer <= 0)
+        //    {
+        //        _landingCollider.enabled = true;
+        //        _bHasJumped = false;
+        //    }
+        //}
     }
 
     void MoveEyes()
@@ -98,47 +114,47 @@ public class LeapingEnemyAI : MonoBehaviour
     public bool IsGrounded()
     {
         return Physics.Raycast(transform.position, -Vector3.up, 1.5f);
-        
     }
 
     public void Leap(float baseSpeed)
     {
+        //_leaperAnimator.SetTrigger("IsLeaping");
+        _leaperAnimator.SetBool("IsJumping", true);
         _rigidBody.velocity = (_jumpDirectionObject.transform.forward) * (baseSpeed);// * Vector3.Distance(transform.position, _jumpTarget.transform.position) );
+        _landingCollider.enabled = false;
+        _bHasJumped = true;
+        _JumpTimer = 3f;
+    }
+
+    public bool IsLanding()
+    {
+        return Physics.Raycast(transform.position, Vector3.down, 1.6f);
     }
 
     public void CheckAnimationState()
     {
-        if(IsGrounded())
-        {
-            _leaperAnimator.SetBool("IsGrounded", false);
-        }
-        else
-        {
-            _leaperAnimator.SetBool("IsGrounded", true);
-        }
-        //if (_currentState != null)
-        //    switch (_currentState._stateName)
-        //    {
-        //        case State.STATENAME.IDLE:
-        //            //_leaperAnimator.SetTrigger("IsIdle");
-        //            Debug.Log("Leaper in Idle");
-        //            break;
-        //        case State.STATENAME.PATROL:
-        //            Debug.Log("Leaper is patrolling");
-        //            //_leaperAnimator.SetTrigger("IsPatrolling");
-        //            break;
-        //        case State.STATENAME.FOLLOW:
-        //            Debug.Log("Leaper is Following");
-        //            //_leaperAnimator.SetTrigger("IsChasing");
-        //            break;
-        //        case State.STATENAME.ATTACK:
-        //            Debug.Log("Leaping attacking");
-        //            //_leaperAnimator.SetTrigger("IsAttacking");
-        //            break;
-        //        case State.STATENAME.WANDER:
-        //            Debug.Log("Leaper wandering");
-        //            //_leaperAnimator.SetTrigger("IsPatrolling");
-        //            break;                
-        //    }
+        //_jumpHeight = _rigidBody.velocity.y;
+
+        //_jumpHeight = _rigidBody.velocity.magnitude;
+        //Debug.Log(_jumpHeight);
+        //_leaperAnimator.SetFloat("JumpHeight", _jumpHeight);
+        //if (IsLanding())
+        //{
+        //    _leaperAnimator.SetBool("IsJumping", false);
+        //}
+        //if (IsGrounded())
+        //{
+        //    _leaperAnimator.SetBool("IsJumping", false);
+        //}
+        //else
+        //{
+        //    _leaperAnimator.SetBool("IsGrounded", true);
+        //}
+
     }
+
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    _leaperAnimator.SetBool("IsJumping", false);
+    //}
 }
