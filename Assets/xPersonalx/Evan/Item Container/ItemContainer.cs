@@ -73,35 +73,35 @@ public class ItemContainer : MonoBehaviour
 
         if (PossiblePickupsTags[randint] == "Player_Weapon"/* && !ammoController.IsAmmoFullOfType("Player_Weapon")*/ )
         {
-            GameObject pickup = Instantiate(_DefaultAmmoPickup, transform.position, transform.rotation, transform);
+            GameObject pickup = Instantiate(_DefaultAmmoPickup, transform.position, transform.rotation);
             pickup.isStatic = false;
             pickup.SetActive(true);
         }
 
         else if (PossiblePickupsTags[randint] == "Player_Mine"/* && !ammoController.IsAmmoFullOfType("Player_Mine")*/)
         {
-            GameObject pickup = Instantiate(_GrenadePickup, transform.position, transform.rotation, transform);
+            GameObject pickup = Instantiate(_GrenadePickup, transform.position, transform.rotation);
             pickup.isStatic = false;
             pickup.SetActive(true);
         }
 
         else if (PossiblePickupsTags[randint] == "Creature_Weapon"/* && !ammoController.IsAmmoFullOfType("Creature_Weapon")*/)
         {
-            GameObject pickup = Instantiate(_CreaturePickup, transform.position, transform.rotation, transform);
+            GameObject pickup = Instantiate(_CreaturePickup, transform.position, transform.rotation);
             pickup.isStatic = false;
             pickup.SetActive(true);
         }
 
         else if (PossiblePickupsTags[randint] == "Health_Pickup")
         {
-            GameObject pickup = Instantiate(_HealthPickup, transform.position, transform.rotation, transform);
+            GameObject pickup = Instantiate(_HealthPickup, transform.position, transform.rotation);
             pickup.isStatic = false;
             pickup.SetActive(true);
         }
 
         else
         {
-            GameObject pickup = Instantiate(_Jumper, transform.position, transform.rotation, transform);
+            GameObject pickup = Instantiate(_Jumper, transform.position, transform.rotation);
             pickup.isStatic = false;
             pickup.SetActive(true);
         }
