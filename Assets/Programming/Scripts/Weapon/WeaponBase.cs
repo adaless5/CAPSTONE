@@ -251,11 +251,11 @@ public class WeaponBase : Weapon
         if (!m_bHasActionUpgrade)
         {
             RaycastHit hitInfo;
-            //FindObjectOfType<DefaultWeaponEffects>().Fire(muzzlePoint.transform.forward);
+            FindObjectOfType<DefaultWeaponEffects>().Fire(muzzlePoint.transform.forward);
             UpgradedFire();
             if (Physics.Raycast(gunCamera.transform.position, gunCamera.transform.forward, out hitInfo, m_weaponRange))
             {
-                //FindObjectOfType<DefaultWeaponEffects>().Fire(hitInfo.point, hitInfo.normal);
+                FindObjectOfType<DefaultWeaponEffects>().Fire(hitInfo.point, hitInfo.normal);
                 //Only damages if asset has "Health" script
                 Health target = hitInfo.transform.GetComponent<Health>();
                 if (target != null && target.gameObject.tag != "Player")
@@ -365,10 +365,10 @@ public class WeaponBase : Weapon
         for (int i = -1; i < 2; i++)
         {
             RaycastHit hitInfo;
-            //FindObjectOfType<DefaultWeaponEffects>().Fire(muzzlePoint.transform.forward);
+            FindObjectOfType<DefaultWeaponEffects>().Fire(muzzlePoint.transform.forward);
             if (Physics.Raycast(gunCamera.transform.position, Quaternion.Euler(0, 15f * i, 0) * gunCamera.transform.forward, out hitInfo, m_weaponRange))
             {
-                //FindObjectOfType<DefaultWeaponEffects>().Fire(hitInfo.point, hitInfo.normal);
+                FindObjectOfType<DefaultWeaponEffects>().Fire(hitInfo.point, hitInfo.normal);
                 //Only damages if asset has "Health" script
                 Health target = hitInfo.transform.GetComponent<Health>();
                 if (target != null && target.gameObject.tag != "Player")
