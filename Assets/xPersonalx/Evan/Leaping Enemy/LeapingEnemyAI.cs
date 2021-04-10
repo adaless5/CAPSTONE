@@ -16,6 +16,8 @@ public class LeapingEnemyAI : MonoBehaviour
     public GameObject _ProjectileSpawnPoint;                // the position that the leaper's projectiles will be spawned in at.
     public Collider _body;                                  // the main collidere attached to this enemy that is used as its body/hit detection
 
+    public Animator _leaperAnimator;                        // animator controller for leaping enemy animations
+
     public LeapingEnemyProjectile _LeapingEnemyProjectile;  // the projectile that the leaper will fire at the player when in attack state
 
     Rigidbody _rigidBody;                                   // the rigid body used by the enemy for body physics stuff
@@ -25,6 +27,8 @@ public class LeapingEnemyAI : MonoBehaviour
     public float _AttackJumpSpeed;                          // the force used for the leaper's jump when the leaper is in its attack state
     public float _WanderJumpSpeed;                          // the force used for the leaper's jump when the leaper is in its wander state or go home state
     public float _ProjectileBaseSpeed;                      // the force that the leaper's projectile is spawned in with
+
+    public float _jumpVelocity;
 
     public enum PlayerDistance { far, follow, attack };         // possible distance levels the leaper can consider for the player, used by the detection objects attached to the leaping enemy prefab to determine whether to change leaper state.
     public PlayerDistance _playerDistance;                  // local variable to store the current distance level the player is at, used by the detection objects attached to the leaping enemy prefab to determine whether to change leaper state.
@@ -42,6 +46,7 @@ public class LeapingEnemyAI : MonoBehaviour
     {
         _LeapingEnemyProjectile.gameObject.SetActive(false);
         _rigidBody = GetComponent<Rigidbody>();
+        _leaperAnimator = GetComponentInChildren<Animator>();    
     }
 
     private void EventStart(GameObject player)
@@ -57,6 +62,7 @@ public class LeapingEnemyAI : MonoBehaviour
 
     void Update()
     {
+        CheckAnimationState();
         if (_currentState != null)
         {
             _currentState = _currentState.Process();
@@ -80,13 +86,12 @@ public class LeapingEnemyAI : MonoBehaviour
 
     public void LookTowards(Transform thisTransform, Vector3 target, float turnspeed)
     {
-
         Quaternion targetRotation = Quaternion.LookRotation(target - thisTransform.position);
         float str;
         str = Mathf.Min(turnspeed * Time.deltaTime, 1);
         thisTransform.rotation = Quaternion.Lerp(thisTransform.rotation, targetRotation, str);
-
     }
+
     public void SetCurrentLeapingEnemyState(DroneState state)
     {
         _currentState = state;
@@ -97,8 +102,37 @@ public class LeapingEnemyAI : MonoBehaviour
         return Physics.Raycast(transform.position, -Vector3.up, 1.5f);
     }
 
+    //Coroutine for adding a delay before leap logic to match with leaping animation - VR
+    public IEnumerator LeapAnimation(float baseSpeed)
+    {
+        _leaperAnimator.SetBool("IsJumping", true);
+        yield return new WaitForSeconds(0.25f);
+        _rigidBody.velocity = (_jumpDirectionObject.transform.forward) * (baseSpeed);// * Vector3.Distance(transform.position, _jumpTarget.transform.position) );
+
+    }
     public void Leap(float baseSpeed)
     {
-        _rigidBody.velocity = (_jumpDirectionObject.transform.forward) * (baseSpeed);// * Vector3.Distance(transform.position, _jumpTarget.transform.position) );
+        StartCoroutine(LeapAnimation(baseSpeed));       
     }
+
+    //Similar to IsGrounded function, but used for calculating when to start landing animation - VR
+    public bool IsLanding()
+    {
+        return Physics.Raycast(transform.position, Vector3.down, 2.3f);
+    }
+
+    public void CheckAnimationState()
+    {
+        _jumpVelocity = _rigidBody.velocity.y;        
+
+        if(_jumpVelocity < -1)
+        {
+            if(IsLanding())
+            {
+                _leaperAnimator.SetBool("IsJumping", false);
+            }
+        }            
+
+    }
+
 }
