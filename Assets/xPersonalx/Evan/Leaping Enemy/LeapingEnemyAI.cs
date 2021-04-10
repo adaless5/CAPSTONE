@@ -29,7 +29,7 @@ public class LeapingEnemyAI : MonoBehaviour
     public float _WanderJumpSpeed;                          // the force used for the leaper's jump when the leaper is in its wander state or go home state
     public float _ProjectileBaseSpeed;                      // the force that the leaper's projectile is spawned in with
 
-    public float _jumpHeight;
+    public float _jumpVelocity;
 
     public enum PlayerDistance { far, follow, attack };         // possible distance levels the leaper can consider for the player, used by the detection objects attached to the leaping enemy prefab to determine whether to change leaper state.
     public PlayerDistance _playerDistance;                  // local variable to store the current distance level the player is at, used by the detection objects attached to the leaping enemy prefab to determine whether to change leaper state.
@@ -48,7 +48,7 @@ public class LeapingEnemyAI : MonoBehaviour
         _LeapingEnemyProjectile.gameObject.SetActive(false);
         _rigidBody = GetComponent<Rigidbody>();
         _leaperAnimator = GetComponentInChildren<Animator>();
-        _landingCollider = GetComponent<CapsuleCollider>();
+        //_landingCollider = GetComponent<CapsuleCollider>();
         //_landingCollider.enabled = false;
         
     }
@@ -116,45 +116,53 @@ public class LeapingEnemyAI : MonoBehaviour
         return Physics.Raycast(transform.position, -Vector3.up, 1.5f);
     }
 
+    public IEnumerator LeapAnimation(float baseSpeed)
+    {
+        _leaperAnimator.SetBool("IsJumping", true);
+        yield return new WaitForSeconds(0.25f);
+        _rigidBody.velocity = (_jumpDirectionObject.transform.forward) * (baseSpeed);// * Vector3.Distance(transform.position, _jumpTarget.transform.position) );
+
+    }
     public void Leap(float baseSpeed)
     {
+        StartCoroutine(LeapAnimation(baseSpeed));
         //_leaperAnimator.SetTrigger("IsLeaping");
-        _leaperAnimator.SetBool("IsJumping", true);
-        _rigidBody.velocity = (_jumpDirectionObject.transform.forward) * (baseSpeed);// * Vector3.Distance(transform.position, _jumpTarget.transform.position) );
-        _landingCollider.enabled = false;
-        _bHasJumped = true;
-        _JumpTimer = 3f;
+        //_landingCollider.enabled = false;
+        //_bHasJumped = true;
+        //_JumpTimer = 3f;
     }
 
     public bool IsLanding()
     {
-        return Physics.Raycast(transform.position, Vector3.down, 1.6f);
+        return Physics.Raycast(transform.position, Vector3.down, 2.3f);
     }
 
     public void CheckAnimationState()
     {
-        //_jumpHeight = _rigidBody.velocity.y;
+        _jumpVelocity = _rigidBody.velocity.y;
+        _leaperAnimator.SetFloat("JumpHeight", _jumpVelocity);
 
-        //_jumpHeight = _rigidBody.velocity.magnitude;
-        //Debug.Log(_jumpHeight);
-        //_leaperAnimator.SetFloat("JumpHeight", _jumpHeight);
-        //if (IsLanding())
-        //{
-        //    _leaperAnimator.SetBool("IsJumping", false);
-        //}
-        //if (IsGrounded())
-        //{
-        //    _leaperAnimator.SetBool("IsJumping", false);
-        //}
-        //else
-        //{
-        //    _leaperAnimator.SetBool("IsGrounded", true);
-        //}
+        if(_jumpVelocity < -1)
+        {
+            if(IsLanding())
+            {
+                _leaperAnimator.SetBool("IsJumping", false);
+            }
+        }            
 
     }
 
     //private void OnTriggerEnter(Collider other)
     //{
+    //    Debug.Log("Collided with " + other.name);
+    //    if(other.tag != "LeaperExtras")
+    //    {
+    //    //Debug.Log("COLLIDER HAS TRIGGERED");
+    //    //_landingCollider.enabled = false;
     //    _leaperAnimator.SetBool("IsJumping", false);
+    //    //_leaperAnimator.SetTrigger("IsLanding");
+
+    //    }
+        
     //}
 }
