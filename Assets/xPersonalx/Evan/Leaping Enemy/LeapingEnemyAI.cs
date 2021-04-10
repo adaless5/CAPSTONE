@@ -15,7 +15,7 @@ public class LeapingEnemyAI : MonoBehaviour
     public GameObject _jumpDirectionObject;                 //The object that the leaper orients and checks when leaping to determine the direction to jump
     public GameObject _ProjectileSpawnPoint;                // the position that the leaper's projectiles will be spawned in at.
     public Collider _body;                                  // the main collidere attached to this enemy that is used as its body/hit detection
-    public Collider _landingCollider;                       // collider used for landing animation to detect when to start animation
+
     public Animator _leaperAnimator;                        // animator controller for leaping enemy animations
 
     public LeapingEnemyProjectile _LeapingEnemyProjectile;  // the projectile that the leaper will fire at the player when in attack state
@@ -23,8 +23,7 @@ public class LeapingEnemyAI : MonoBehaviour
     Rigidbody _rigidBody;                                   // the rigid body used by the enemy for body physics stuff
 
     public float _TouchDamage;                              // the amount of damage the leaper should deal to the player when the player makes contact with it
-    public float _JumpTimer = 3f;
-    private bool _bHasJumped = false;
+
     public float _AttackJumpSpeed;                          // the force used for the leaper's jump when the leaper is in its attack state
     public float _WanderJumpSpeed;                          // the force used for the leaper's jump when the leaper is in its wander state or go home state
     public float _ProjectileBaseSpeed;                      // the force that the leaper's projectile is spawned in with
@@ -47,10 +46,7 @@ public class LeapingEnemyAI : MonoBehaviour
     {
         _LeapingEnemyProjectile.gameObject.SetActive(false);
         _rigidBody = GetComponent<Rigidbody>();
-        _leaperAnimator = GetComponentInChildren<Animator>();
-        //_landingCollider = GetComponent<CapsuleCollider>();
-        //_landingCollider.enabled = false;
-        
+        _leaperAnimator = GetComponentInChildren<Animator>();    
     }
 
     private void EventStart(GameObject player)
@@ -78,15 +74,6 @@ public class LeapingEnemyAI : MonoBehaviour
                 _currentState = new LeapingEnemyWanderState(gameObject, gameObject.GetComponent<LeapingEnemyAI>(), _playerReference.transform);
         }
         MoveEyes();
-        //if (_bHasJumped)
-        //{
-        //    _JumpTimer -= Time.deltaTime;
-        //    if (_JumpTimer <= 0)
-        //    {
-        //        _landingCollider.enabled = true;
-        //        _bHasJumped = false;
-        //    }
-        //}
     }
 
     void MoveEyes()
@@ -99,13 +86,12 @@ public class LeapingEnemyAI : MonoBehaviour
 
     public void LookTowards(Transform thisTransform, Vector3 target, float turnspeed)
     {
-
         Quaternion targetRotation = Quaternion.LookRotation(target - thisTransform.position);
         float str;
         str = Mathf.Min(turnspeed * Time.deltaTime, 1);
         thisTransform.rotation = Quaternion.Lerp(thisTransform.rotation, targetRotation, str);
-
     }
+
     public void SetCurrentLeapingEnemyState(DroneState state)
     {
         _currentState = state;
@@ -116,6 +102,7 @@ public class LeapingEnemyAI : MonoBehaviour
         return Physics.Raycast(transform.position, -Vector3.up, 1.5f);
     }
 
+    //Coroutine for adding a delay before leap logic to match with leaping animation - VR
     public IEnumerator LeapAnimation(float baseSpeed)
     {
         _leaperAnimator.SetBool("IsJumping", true);
@@ -125,13 +112,10 @@ public class LeapingEnemyAI : MonoBehaviour
     }
     public void Leap(float baseSpeed)
     {
-        StartCoroutine(LeapAnimation(baseSpeed));
-        //_leaperAnimator.SetTrigger("IsLeaping");
-        //_landingCollider.enabled = false;
-        //_bHasJumped = true;
-        //_JumpTimer = 3f;
+        StartCoroutine(LeapAnimation(baseSpeed));       
     }
 
+    //Similar to IsGrounded function, but used for calculating when to start landing animation - VR
     public bool IsLanding()
     {
         return Physics.Raycast(transform.position, Vector3.down, 2.3f);
@@ -139,8 +123,7 @@ public class LeapingEnemyAI : MonoBehaviour
 
     public void CheckAnimationState()
     {
-        _jumpVelocity = _rigidBody.velocity.y;
-        _leaperAnimator.SetFloat("JumpHeight", _jumpVelocity);
+        _jumpVelocity = _rigidBody.velocity.y;        
 
         if(_jumpVelocity < -1)
         {
@@ -152,17 +135,4 @@ public class LeapingEnemyAI : MonoBehaviour
 
     }
 
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    Debug.Log("Collided with " + other.name);
-    //    if(other.tag != "LeaperExtras")
-    //    {
-    //    //Debug.Log("COLLIDER HAS TRIGGERED");
-    //    //_landingCollider.enabled = false;
-    //    _leaperAnimator.SetBool("IsJumping", false);
-    //    //_leaperAnimator.SetTrigger("IsLanding");
-
-    //    }
-        
-    //}
 }
