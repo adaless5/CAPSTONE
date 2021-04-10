@@ -35,6 +35,7 @@ public class InteractableText : MonoBehaviour
         m_TagsToIgnore.Add("Player_Blade");
         m_TagsToIgnore.Add("Roamer");
         m_TagsToIgnore.Add("LeaperExtras");
+
     }
 
     // Update is called once per frame
