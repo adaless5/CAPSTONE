@@ -110,7 +110,7 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
     public void LoadDataOnSceneEnter()
     {
         isUsed = SaveSystem.LoadBool(gameObject.name, "isEnabled", gameObject.scene.name);
-        if (transform.GetChild(0) != null)
+        if (transform.childCount>0 && transform.GetChild(0) != null)
         {
             transform.GetChild(0).gameObject.SetActive(!isUsed);
         }

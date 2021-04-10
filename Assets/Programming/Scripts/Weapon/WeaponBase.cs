@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.Rendering;
 
-public class WeaponBase : Weapon, ISaveable
+public class WeaponBase : Weapon
 {
 
     [Header("UI Elements - ParticleFX and Reticule")]
@@ -64,6 +64,7 @@ public class WeaponBase : Weapon, ISaveable
 
     public override void Start()
     {
+        base.Start();
         gunCamera = GameObject.FindObjectOfType<Camera>();
 
         _ammoController = FindObjectOfType<AmmoUI>().GetComponent<AmmoController>();

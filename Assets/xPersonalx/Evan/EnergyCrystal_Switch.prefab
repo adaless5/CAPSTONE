@@ -15217,6 +15217,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HP: 50
   m_IsLoadingShield: 0
+  bCanBeDamaged: 1
   isDead: 0
   healthBar: {fileID: 0}
   m_compass: {fileID: 0}
@@ -15526,6 +15527,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8394405669015181096}
   - component: {fileID: 5097445694557750863}
+  - component: {fileID: 7647638723076878736}
   m_Layer: 2
   m_Name: EnergyCrystal_Switch
   m_TagString: Untagged
@@ -15562,6 +15564,29 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.2, y: 0.3, z: 0.12}
   m_Center: {x: 0, y: 0.13, z: 0}
+--- !u!114 &7647638723076878736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9166298413746916754}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a9e63d38d9d8b04fb55cb9db671e7fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _DoesSwitchReset: 0
+  _DoesStartTurnedOn: 1
+  _ActivationTimer: 0
+  _ResetTimer: 0
+  _OffSwitch: {fileID: 0}
+  _OnSwitch: {fileID: 0}
+  _DamageObject: {fileID: 7274032328313492518}
+  _AffectedSwitches: []
+  _PlayerInteractType: 1
+  _ActivationPolicy: 0
+  _ResponseType: 0
 --- !u!1 &9175967991831983869
 GameObject:
   m_ObjectHideFlags: 0
