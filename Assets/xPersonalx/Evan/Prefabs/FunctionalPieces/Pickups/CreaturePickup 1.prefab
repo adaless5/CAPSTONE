@@ -1,5 +1,19 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!64 &5475634078006663224
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 594020154969036538}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4189982400938805098, guid: 49ebcd802b7532742a9b12567c5f9b4a, type: 3}
 --- !u!1 &6091876594549676564
 GameObject:
   m_ObjectHideFlags: 0
@@ -11,7 +25,7 @@ GameObject:
   - component: {fileID: 6091876594549676565}
   - component: {fileID: 6091876594549676586}
   - component: {fileID: 6091876594549676587}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: CreaturePickup 1
   m_TagString: Interactable
   m_Icon: {fileID: 0}
@@ -142,6 +156,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: CreatureWeaponModel
       objectReference: {fileID: 0}
+    - target: {fileID: 9068111401418280139, guid: 817bb73d217bc78419bc718abd293c82,
+        type: 3}
+      propertyPath: m_TagString
+      value: Gland Gun
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 817bb73d217bc78419bc718abd293c82, type: 3}
 --- !u!1 &6801622407645659542 stripped
@@ -153,6 +172,12 @@ GameObject:
 --- !u!4 &7650570455856000081 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2290727073025357408, guid: 817bb73d217bc78419bc718abd293c82,
+    type: 3}
+  m_PrefabInstance: {fileID: 8495483697077606961}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &594020154969036538 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9068111401418280139, guid: 817bb73d217bc78419bc718abd293c82,
     type: 3}
   m_PrefabInstance: {fileID: 8495483697077606961}
   m_PrefabAsset: {fileID: 0}

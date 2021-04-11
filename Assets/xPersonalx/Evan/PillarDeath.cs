@@ -17,7 +17,7 @@ public class PillarDeath : MonoBehaviour
 
     void FinalCountdown()
     {
-        if(_showTime && _finalCountdown >0)
+        if(_showTime && _finalCountdown > 0)
         {
           _finalCountdown -= Time.deltaTime;
             for (int i = 0; i < _deathEffects.Length; i++)

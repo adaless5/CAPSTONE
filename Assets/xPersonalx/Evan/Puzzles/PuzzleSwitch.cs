@@ -119,7 +119,7 @@ public class PuzzleSwitch : MonoBehaviour, ISaveable
             SetSwitchModel(onOff);
             bCanSwitch = false;
             SaveDataOnSceneChange();
-            if(_ActivationPolicy == Switch_ActivationPolicy_Type.CanInteractWhenInactive || _ActivationPolicy == Switch_ActivationPolicy_Type.CanInteractWhenActive)
+            if (_ActivationPolicy == Switch_ActivationPolicy_Type.CanInteractWhenInactive || _ActivationPolicy == Switch_ActivationPolicy_Type.CanInteractWhenActive)
             {
                 gameObject.tag = "Untagged";
             }
@@ -248,14 +248,16 @@ public class PuzzleSwitch : MonoBehaviour, ISaveable
     public void SaveDataOnSceneChange()
     {
         SaveSystem.Save(gameObject.name, "bIsActive", gameObject.scene.name, bIsActive);
-        SaveSystem.Save(gameObject.name, "objectBroken", gameObject.scene.name, bObjectBroken);
+        if (_PlayerInteractType == Switch_PlayerInteract_Type.Damage)
+            SaveSystem.Save(gameObject.name, "objectBroken", gameObject.scene.name, bObjectBroken);
     }
 
     public void LoadDataOnSceneEnter()
     {
         bIsActive = _DoesStartTurnedOn;
         bIsActive = SaveSystem.LoadBool(gameObject.name, "bIsActive", gameObject.scene.name);
-        bObjectBroken = SaveSystem.LoadBool(gameObject.name, "objectBroken", gameObject.scene.name);
+        if (_PlayerInteractType == Switch_PlayerInteract_Type.Damage)
+            bObjectBroken = SaveSystem.LoadBool(gameObject.name, "objectBroken", gameObject.scene.name);
         if (bObjectBroken)
         {
             Destroy(_DamageObject);

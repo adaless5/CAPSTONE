@@ -6,7 +6,7 @@ public class PowerPillar : MonoBehaviour, ISaveable
 {
     // Start is called before the first frame update
     public PuzzleSwitch[] _switches;
-
+    public FinalPowerPillar _finalPillar;
     public ParticleSystem _livingEffect;
     public ParticleSystem _deadEffect;
 
@@ -16,10 +16,6 @@ public class PowerPillar : MonoBehaviour, ISaveable
     float saveTime = 15;
 
     public bool _hasFallen;
-
-    Vector3 _fallenPosition;
-    Vector3 _fallenRotation;
-
 
     bool IsDefeated()
     {
@@ -40,17 +36,23 @@ public class PowerPillar : MonoBehaviour, ISaveable
             _rigidbody.isKinematic = false;
             _rigidbody.useGravity = true;
         }
+
         if(_hover)
         {
             _hover.enabled = false;
         }
+
         _hasFallen = true;
+
         GetComponentInChildren<MeshRenderer>().materials[1].SetColor("_EmissiveColor", new Color(0,0,0));
         GetComponentInChildren<MeshRenderer>().materials[1].SetColor("_Color", new Color(0, 0, 0));
+
         GetComponentInChildren<MeshRenderer>().materials[3].SetColor("_EmissiveColor", new Color(0,0,0));
         GetComponentInChildren<MeshRenderer>().materials[3].SetColor("_Color", new Color(0, 0, 0));
-        SaveData();
 
+        SaveData(transform.position, transform.forward);
+
+        _finalPillar.PillarBreak();
         _livingEffect.Stop();
         _deadEffect.Play();
     }
@@ -62,25 +64,22 @@ public class PowerPillar : MonoBehaviour, ISaveable
             saveTime -= Time.deltaTime;
             if(saveTime <= 0)
             {
-                SaveData();
+              SaveData(transform.position,transform.forward);
             }
         }
     }
 
-    void SaveData() // saves the position and rotation of the pillar, as well as the hasFallen bool
+    void SaveData(Vector3 pos, Vector3 rot) // saves the position and rotation of the pillar, as well as the hasFallen bool
     {
-        _fallenPosition = transform.position;
-        _fallenRotation = transform.forward;
-
         SaveSystem.Save(gameObject.name, "hasFallen", gameObject.scene.name, _hasFallen);
         
-        SaveSystem.Save(gameObject.name, "posX", gameObject.scene.name, _fallenPosition.x);
-        SaveSystem.Save(gameObject.name, "posY", gameObject.scene.name, _fallenPosition.y);
-        SaveSystem.Save(gameObject.name, "posZ", gameObject.scene.name, _fallenPosition.z);
+        SaveSystem.Save(gameObject.name, "posX", gameObject.scene.name, pos.x);
+        SaveSystem.Save(gameObject.name, "posY", gameObject.scene.name, pos.y);
+        SaveSystem.Save(gameObject.name, "posZ", gameObject.scene.name, pos.z);
 
-        SaveSystem.Save(gameObject.name, "rotX", gameObject.scene.name, _fallenRotation.x);
-        SaveSystem.Save(gameObject.name, "rotY", gameObject.scene.name, _fallenRotation.y);
-        SaveSystem.Save(gameObject.name, "rotZ", gameObject.scene.name, _fallenRotation.z);
+        SaveSystem.Save(gameObject.name, "rotX", gameObject.scene.name, rot.x);
+        SaveSystem.Save(gameObject.name, "rotY", gameObject.scene.name, rot.y);
+        SaveSystem.Save(gameObject.name, "rotZ", gameObject.scene.name, rot.z);
     }
 
     public bool GetIsDefeated()
@@ -89,7 +88,6 @@ public class PowerPillar : MonoBehaviour, ISaveable
     }
     private void Awake()
     {
-        
         _rigidbody = GetComponent<Rigidbody>();
         _hover = GetComponent<CultLight>();
         LoadDataOnSceneEnter();
@@ -97,10 +95,13 @@ public class PowerPillar : MonoBehaviour, ISaveable
     // Update is called once per frame
     void Update()
     {
-        CountLandedSave();
-        if(IsDefeated() && !_hasFallen)
+        if(IsDefeated())
         {
-            Fall();
+            if (!_hasFallen)
+            { 
+                Fall(); 
+            }
+            CountLandedSave();
         }
     }
     public void LoadDataOnSceneEnter() // loads the has fallen bool, and if the pillar has fallen, grabs the position and rotation and calls fall on the pillar.

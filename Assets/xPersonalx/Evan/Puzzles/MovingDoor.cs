@@ -242,6 +242,13 @@ public class MovingDoor : MonoBehaviour//, ISaveable
 
         }
 
+        else if (_CloseType == Close_Type.Switch)
+        {
+
+            bIsOpen = !CheckSwitches(_Switches);
+
+        }
+
     }
     void CheckCloseDoors()
     {
@@ -250,6 +257,12 @@ public class MovingDoor : MonoBehaviour//, ISaveable
         {
 
             bIsOpen = !CheckObjectArray(_CloseObjects);
+
+        }
+        else if (_OpenType == Open_Type.Switch)
+        {
+
+            bIsOpen = CheckSwitches(_Switches);
 
         }
 
