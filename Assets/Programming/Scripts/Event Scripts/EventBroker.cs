@@ -13,6 +13,7 @@ public class EventBroker
     public static event Action<WeaponType, int, int> OnAmmoPickup;
     public static event Action<float> OnHealthPickup;
     public static event Action OnAmmoPickupAttempt;
+    public static event Action<float, float> OnCurrencyPickup;
     public static event Action<bool> OnHealthPickupAttempt;
     public static event Action OnGameEnd;
     public static event Action OnWeaponSwap;
@@ -78,6 +79,11 @@ public class EventBroker
     public static void CallOnWeaponSwapIn()
     {
         OnWeaponSwapIn?.Invoke();
+    }
+
+    public static void CallOnCurrencyPickup(float currencyAmount, float totalCurrency)
+    {
+        OnCurrencyPickup?.Invoke(currencyAmount, totalCurrency);
     }
 
 }
