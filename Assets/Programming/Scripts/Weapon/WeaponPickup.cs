@@ -127,11 +127,6 @@ public class WeaponPickup : MonoBehaviour, ITippable
             _canPlayerPickUp = false;
     }
 
-    private void OnTriggerStay(Collider other)
-    {
-
-    }
-
     public void SaveDataOnSceneChange()
     {
         SaveSystem.Save(gameObject.name, "isEnabled", gameObject.scene.name, isUsed);

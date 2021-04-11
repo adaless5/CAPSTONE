@@ -18,6 +18,10 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
 
     bool bCanDestroyMessage = false;
 
+    bool _canPlayerPickUp = false;
+
+    Image _toolTip;
+
     void Awake()
     {
         LoadDataOnSceneEnter();
@@ -40,6 +44,7 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
     void PlayerStart(GameObject player)
     {
         _player = player.GetComponent<ALTPlayerController>();
+        _toolTip = GameObject.FindWithTag("Tip").GetComponent<Image>();
     }
 
     void Update()
@@ -71,24 +76,16 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
                     DestroyTip();
                 }
             }
-        }
-    }
 
-    private void OnTriggerStay(Collider other)
-    {
-        Debug.Log("Triggered");
-        if (FindObjectOfType<ALTPlayerController>() != null && FindObjectOfType<ALTPlayerController>().CheckForInteract())
-            if (!isUsed)
+            if (_canPlayerPickUp && isUsed == false)
             {
-                Debug.Log("Isn't used");
-                if (other.gameObject.tag == "Player")
+                if (_player.CheckForInteract())
                 {
-                    Debug.Log("Is player");
-                    Belt belt = other.gameObject.GetComponentInChildren<Belt>();
-                    belt.ObtainEquipmentAtIndex(_CorrespondingEquipmentBeltIndex);
-
+                    _player.GetComponentInChildren<Belt>().ObtainEquipmentAtIndex(_CorrespondingEquipmentBeltIndex);
+                    CreateTip("Sprites/Messages/" + _tipName[_CorrespondingEquipmentBeltIndex]);
+                    //EventBroker.CallOnPickupWeapon();
+                    _canPlayerPickUp = false;
                     isUsed = true;
-                    SaveSystem.Save(gameObject.name, "isEnabled", gameObject.scene.name, isUsed);
                     if (GetComponent<MeshRenderer>() != null)
                     {
                         GetComponent<MeshRenderer>().enabled = false;
@@ -96,15 +93,66 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
                     if (_modelObj != null)
                     {
                         _modelObj.SetActive(false);
+
                     }
-                    GetComponent<Collider>().enabled = false;
                     if (transform.GetChild(0) != null)
                     {
                         transform.GetChild(0).gameObject.SetActive(false);
                     }
-                    CreateTip("Sprites/Messages/" + _tipName[_CorrespondingEquipmentBeltIndex]);
+
+                    GetComponent<Collider>().enabled = false;
+
+                    
+
                 }
             }
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Player")
+            _canPlayerPickUp = true;
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "Player")
+            _canPlayerPickUp = false;
+    }
+
+
+    private void OnTriggerStay(Collider other)
+    {
+        //Debug.Log("Triggered");
+        //if (FindObjectOfType<ALTPlayerController>() != null && FindObjectOfType<ALTPlayerController>().CheckForInteract())
+        //    if (!isUsed)
+        //    {
+        //        Debug.Log("Isn't used");
+        //        if (other.gameObject.tag == "Player")
+        //        {
+        //            Debug.Log("Is player");
+        //            Belt belt = other.gameObject.GetComponentInChildren<Belt>();
+        //            belt.ObtainEquipmentAtIndex(_CorrespondingEquipmentBeltIndex);
+
+        //            isUsed = true;
+        //            SaveSystem.Save(gameObject.name, "isEnabled", gameObject.scene.name, isUsed);
+        //            if (GetComponent<MeshRenderer>() != null)
+        //            {
+        //                GetComponent<MeshRenderer>().enabled = false;
+        //            }
+        //            if (_modelObj != null)
+        //            {
+        //                _modelObj.SetActive(false);
+        //            }
+        //            GetComponent<Collider>().enabled = false;
+        //            if (transform.GetChild(0) != null)
+        //            {
+        //                transform.GetChild(0).gameObject.SetActive(false);
+        //            }
+        //            CreateTip("Sprites/Messages/" + _tipName[_CorrespondingEquipmentBeltIndex]);
+        //        }
+        //    }
     }
 
     public void LoadDataOnSceneEnter()
@@ -128,26 +176,29 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
             {
                 DestroyTip();
                 bCanDestroyMessage = false;
-                _imageObject = new GameObject("testTip");
-                _imageObject.tag = "Tip";
 
-                RectTransform trans = _imageObject.AddComponent<RectTransform>();
-                trans.transform.SetParent(canvas.transform); // setting parent
-                trans.localScale = Vector3.one;
-                trans.anchoredPosition = new Vector2(0f, 0f); // setting position, will be on center
-                Texture2D tex = Resources.Load<Texture2D>(filename);
-                if (tex != null)
-                {
-                    trans.sizeDelta = new Vector2(tex.width, tex.height); // custom size
-                }
+                //RectTransform trans = _imageObject.AddComponent<RectTransform>();
+                //trans.transform.SetParent(canvas.transform); // setting parent
+                //trans.localScale = Vector3.one;
+                //trans.anchoredPosition = new Vector2(0f, 0f); // setting position, will be on center
+                //Texture2D tex = Resources.Load<Texture2D>(filename);
+                Sprite spr = Resources.Load<Sprite>(filename);
 
-                Image image = _imageObject.AddComponent<Image>();
+                //if (tex != null)
+                //{
+                //    trans.sizeDelta = new Vector2(tex.width, tex.height); // custom size
+                //}
+
+                Image image = _toolTip.GetComponent<Image>();
+
                 if (image != null)
                 {
-                    if (tex != null)
+                    if (spr != null)
                     {
-                        image.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
-                        _imageObject.transform.SetParent(canvas.transform);
+                        //image.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
+                        //_imageObject.transform.SetParent(canvas.transform);
+                        image.sprite = spr;
+                        _toolTip.enabled = true;
                     }
                 }
             }
@@ -156,14 +207,16 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
 
     public void DestroyTip()
     {
-        GameObject[] array = FindObjectsOfType<GameObject>();
-        foreach (GameObject obj in array)
-        {
-            if (obj.tag == "Tip")
-            {
-                Destroy(obj);
-            }
-        }
-        _imageObject = null;
+        //GameObject[] array = FindObjectsOfType<GameObject>();
+        //foreach (GameObject obj in array)
+        //{
+        //    if (obj.tag == "Tip")
+        //    {
+        //        Destroy(obj);
+        //    }
+        //}
+
+        //_imageObject = null;
+        _toolTip.enabled = false;
     }
 }
