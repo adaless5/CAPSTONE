@@ -90,7 +90,7 @@ public class DefaultRefillStation : MonoBehaviour
         {
             _playerController.bWithinInteractVolume = true;
 
-            if (_playerController._CurrentInteractionObj != null)
+            if (_playerController._CurrentInteractionObj == null)
                 _playerController._CurrentInteractionObj = gameObject;
         }
 
@@ -155,10 +155,13 @@ public class DefaultRefillStation : MonoBehaviour
 
         if (_playerController != null)
         {
-            if (_playerController._CurrentInteractionObj.Equals(gameObject))
+            if (_playerController._CurrentInteractionObj != null)
             {
-                _playerController.bWithinInteractVolume = false;
-                _playerController._CurrentInteractionObj = null;
+                if (_playerController._CurrentInteractionObj.Equals(gameObject))
+                {
+                    _playerController.bWithinInteractVolume = false;
+                    _playerController._CurrentInteractionObj = null;
+                }
             }
         }
         other.gameObject.GetComponent<ALTPlayerController>().bWithinInteractVolume = false;

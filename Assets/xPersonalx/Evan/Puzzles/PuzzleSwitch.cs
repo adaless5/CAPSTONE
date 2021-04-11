@@ -202,13 +202,24 @@ public class PuzzleSwitch : MonoBehaviour, ISaveable
 
     void OnTriggerEnter(Collider other)
     {
+        ALTPlayerController _playerController = other.gameObject.GetComponent<ALTPlayerController>();
+
+        if (_playerController != null)
+        {
+            _playerController.bWithinInteractVolume = true;
+
+            if (_playerController._CurrentInteractionObj == null)
+                _playerController._CurrentInteractionObj = gameObject;
+        }
+
         if (other.gameObject.tag == "Player")
         {
             other.gameObject.GetComponent<ALTPlayerController>().bWithinInteractVolume = true;
             bPlayerInRange = true;
-            if (_PlayerInteractType == Switch_PlayerInteract_Type.Proximity)
+            if (_PlayerInteractType == Switch_PlayerInteract_Type.UseButton)
             {
-                Interact();
+                if (_playerController.CheckForInteract())
+                    Interact();
             }
         }
 
@@ -216,7 +227,27 @@ public class PuzzleSwitch : MonoBehaviour, ISaveable
 
     void OnTriggerExit(Collider other)
     {
-        other.gameObject.GetComponent<ALTPlayerController>().bWithinInteractVolume = false;
+        ALTPlayerController _playerController = other.gameObject.GetComponent<ALTPlayerController>();
+
+        if (_playerController != null)
+        {
+            if (_playerController._CurrentInteractionObj != null)
+            {
+                if (_playerController._CurrentInteractionObj.Equals(gameObject))
+                {
+                    _playerController.bWithinInteractVolume = false;
+                    _playerController._CurrentInteractionObj = null;
+                }
+            }
+        }
+
+        ALTPlayerController playerController;
+        playerController = other.gameObject.GetComponent<ALTPlayerController>();
+        if (playerController != null)
+        {
+            playerController.bWithinInteractVolume = false;
+        }
+
         if (other.gameObject.tag == "Player")
         {
             bPlayerInRange = false;

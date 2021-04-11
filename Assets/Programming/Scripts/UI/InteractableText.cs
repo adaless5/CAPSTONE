@@ -53,36 +53,73 @@ public class InteractableText : MonoBehaviour
             {
                 if (m_player.bWithinInteractVolume)
                 {
-                    if (m_player._CurrentInteractionObj.Equals(hitInfo.collider.gameObject))
+                    if (m_player._CurrentInteractionObj != null)
                     {
-                        m_backgroundImage.enabled = true;
-                        if(hitInfo.collider.gameObject.tag == "Interactable")
+                        GameObject potentialParent = hitInfo.collider.gameObject.transform.parent.gameObject;
+
+                        if (potentialParent != null)
                         {
-                            m_backgroundImage.rectTransform.sizeDelta = new Vector2(220, 20);
-                            m_pickupText.rectTransform.sizeDelta = new Vector2(200, 15);
-                            if (Gamepad.current != null)
+                            if (m_player._CurrentInteractionObj.Equals(potentialParent))
                             {
-                                if (Gamepad.current.IsActuated())
+                                m_backgroundImage.enabled = true;
+                                if (hitInfo.collider.gameObject.tag == "Interactable")
                                 {
-                                    m_pickupText.text = "Press 'X' to Interact";
+                                    m_backgroundImage.rectTransform.sizeDelta = new Vector2(220, 20);
+                                    m_pickupText.rectTransform.sizeDelta = new Vector2(200, 15);
+                                    if (Gamepad.current != null)
+                                    {
+                                        if (Gamepad.current.IsActuated())
+                                        {
+                                            m_pickupText.text = "Press 'X' to Interact";
+                                        }
+                                        else
+                                            m_pickupText.text = "Press 'E' to Interact";
+                                    }
+                                    else
+                                        m_pickupText.text = "Press 'E' to Interact";
                                 }
                                 else
-                                    m_pickupText.text = "Press 'E' to Interact";
+                                {
+                                    m_backgroundImage.rectTransform.sizeDelta = new Vector2(150, 20);
+                                    m_pickupText.rectTransform.sizeDelta = new Vector2(146, 15);
+                                    m_pickupText.text = hitInfo.collider.gameObject.tag;
+                                }
                             }
-                            else
-                                m_pickupText.text = "Press 'E' to Interact";
+                        }
+                        else if (potentialParent == null)
+                        {
+                            if (m_player._CurrentInteractionObj.Equals(hitInfo.collider.gameObject))
+                            {
+                                m_backgroundImage.enabled = true;
+                                if (hitInfo.collider.gameObject.tag == "Interactable")
+                                {
+                                    m_backgroundImage.rectTransform.sizeDelta = new Vector2(220, 20);
+                                    m_pickupText.rectTransform.sizeDelta = new Vector2(200, 15);
+                                    if (Gamepad.current != null)
+                                    {
+                                        if (Gamepad.current.IsActuated())
+                                        {
+                                            m_pickupText.text = "Press 'X' to Interact";
+                                        }
+                                        else
+                                            m_pickupText.text = "Press 'E' to Interact";
+                                    }
+                                    else
+                                        m_pickupText.text = "Press 'E' to Interact";
+                                }
+                                else
+                                {
+                                    m_backgroundImage.rectTransform.sizeDelta = new Vector2(150, 20);
+                                    m_pickupText.rectTransform.sizeDelta = new Vector2(146, 15);
+                                    m_pickupText.text = hitInfo.collider.gameObject.tag;
+                                }
+                            }
                         }
                         else
                         {
-                            m_backgroundImage.rectTransform.sizeDelta = new Vector2(150, 20);
-                            m_pickupText.rectTransform.sizeDelta = new Vector2(146, 15);
-                            m_pickupText.text = hitInfo.collider.gameObject.tag;
-                        }               
-                    }
-                    else
-                    {
-                        m_backgroundImage.enabled = false;
-                        m_pickupText.text = "";
+                            m_backgroundImage.enabled = false;
+                            m_pickupText.text = "";
+                        }
                     }
                 }
                 else

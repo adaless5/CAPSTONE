@@ -60,7 +60,11 @@ public class RoamerWanderState : RoamerState
         NavMeshHit hit;
         NavMesh.SamplePosition(randDir, out hit, _wanderRadius, 1);
         finalPos = hit.position;
-        _currentEnemy.GetComponent<RoamerAI>().DebugSphere.transform.position = finalPos;
+
+        if (_currentEnemy.GetComponent<RoamerAI>().DebugSphere != null)
+        {
+            _currentEnemy.GetComponent<RoamerAI>().DebugSphere.transform.position = finalPos;
+        }
 
         float dist = Vector3.Distance(_currentEnemy.transform.position, finalPos);
         RaycastHit rayHit;
