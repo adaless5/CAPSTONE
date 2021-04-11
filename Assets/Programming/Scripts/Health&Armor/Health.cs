@@ -123,11 +123,7 @@ public class Health : MonoBehaviour, ISaveable
         }
         if (gameObject.tag != "Roamer")
         {
-            if (m_marker != null)
-            {
-                m_compass.RemoveMarker(m_marker);
-            }
-
+            RemoveCompassMarker();
             //Temporary Spawning Stuff - Anthony
             Spawner spawner = GetComponent<Spawner>();
             if (spawner != null)
@@ -158,6 +154,14 @@ public class Health : MonoBehaviour, ISaveable
 
         }
 
+    }
+
+    public void RemoveCompassMarker()
+    {
+        if (m_marker != null)
+        {
+            m_compass.RemoveMarker(m_marker);
+        }
     }
 
     public void CallOnTakeDamage()

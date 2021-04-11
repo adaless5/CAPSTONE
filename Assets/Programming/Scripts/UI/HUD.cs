@@ -65,6 +65,7 @@ public class HUD : MonoBehaviour
         EventBroker.OnAmmoPickup += NotificationText;
         EventBroker.OnAmmoPickupAttempt += NotificationText;
         EventBroker.OnHealthPickupAttempt += NotificationText;
+        EventBroker.OnCurrencyPickup += NotificationText;
     }
 
     // Start is called before the first frame update
@@ -149,6 +150,13 @@ public class HUD : MonoBehaviour
         float percentHealed = healAmount / maxHealth * 100;
 
         m_notificationText.text = "HEALED " + percentHealed + "%";     
+    }
+
+    void NotificationText(float currencyAmount, float currencyTotal)
+    {
+        m_pickupAnimator.SetTrigger("IsPicked");
+
+        m_notificationText.text = "ACQUIRED $" + currencyAmount + " IN UPGRADE FUNDS\nFUNDS TOTAL: $" + currencyTotal;
     }
 
     void NotificationText(WeaponType weapon, int clipAmount, int ammoCap)
