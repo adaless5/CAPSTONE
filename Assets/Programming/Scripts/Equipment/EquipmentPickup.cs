@@ -77,6 +77,7 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
                 }
             }
 
+
             if (_canPlayerPickUp && isUsed == false)
             {
                 if (_player.CheckForInteract())

@@ -35,13 +35,14 @@ public class FinalPowerPillar : MonoBehaviour, ISaveable
         {
             _rigidbody.isKinematic = false;
             _rigidbody.useGravity = true;
+            _rigidbody.velocity = new Vector3();
         }
         if (_hover)
         {
-            _hover.enabled = false;
+            _hover.bIsActive = false;
         }
         _isDefeated = true;
-        SaveData();
+      SaveData();
         _death.Die();
     }
 
@@ -63,7 +64,7 @@ public class FinalPowerPillar : MonoBehaviour, ISaveable
             Die();
         }
         _hover.BobSpeed = 6 - (pillarsLeft);
-        _hover.pieceOneSpinSpeed = (6 - (pillarsLeft)) * 5;
+        _hover.pieceOneSpinSpeed = (6 - (pillarsLeft)) * 7;
     }
     public void LoadDataOnSceneEnter() // loads the has fallen bool, and if the pillar has fallen, grabs the position and rotation and calls fall on the pillar.
     {

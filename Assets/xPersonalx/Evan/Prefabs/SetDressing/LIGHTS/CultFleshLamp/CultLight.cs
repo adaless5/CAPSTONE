@@ -14,6 +14,8 @@ public class CultLight : MonoBehaviour
     public float pieceOneSpinSpeed;
     public float pieceTwoSpinSpeed;
 
+    public bool bIsActive = true;
+
     float floatingOffset;
     Vector3 OriginalPosition;
     void Start()
@@ -48,7 +50,10 @@ public class CultLight : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Float();
-        RotateArmor();
+        if (bIsActive)
+        {
+            Float();
+            RotateArmor();
+        }
     }
 }

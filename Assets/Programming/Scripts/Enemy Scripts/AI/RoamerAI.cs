@@ -93,11 +93,10 @@ public class RoamerAI : MonoBehaviour
                 int deathRandomize = Random.Range(0, 2);
                 _roamerAnimator.SetInteger("RandomDeath", deathRandomize);
                 _roamerAnimator.SetTrigger("IsDying");
+                _roamerHealth.RemoveCompassMarker();
             }
         }
-    }
-
-  
+    }  
    
 
     public void CheckAnimationState()
