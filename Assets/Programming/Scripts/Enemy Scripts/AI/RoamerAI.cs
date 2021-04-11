@@ -15,7 +15,7 @@ public class RoamerAI : MonoBehaviour
     public GameObject _wanderSphere;
     public float _wanderRadius;
 
-    public GameObject DebugSphere;
+    //public GameObject DebugSphere;
     public Vector3 _InitialWanderPosition;
 
     private void Awake()
