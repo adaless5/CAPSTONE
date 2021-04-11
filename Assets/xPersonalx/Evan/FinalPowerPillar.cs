@@ -11,6 +11,7 @@ public class FinalPowerPillar : MonoBehaviour, ISaveable
     public Rigidbody _rigidbody;
     public CultLight _hover;
     public PillarDeath _death;
+    public PuzzleSwitch _triggerSwitch;
     bool _isDefeated;
     int pillarsLeft;
 
@@ -92,7 +93,7 @@ public class FinalPowerPillar : MonoBehaviour, ISaveable
     }
     void SaveData() 
     {
-        SaveSystem.Save(gameObject.name, "isDefeated", gameObject.scene.name, _isDefeated);
+     SaveSystem.Save(gameObject.name, "isDefeated", gameObject.scene.name, _isDefeated);
     }
 
     private void Awake()
@@ -104,12 +105,14 @@ public class FinalPowerPillar : MonoBehaviour, ISaveable
     {
         _isDefeated = SaveSystem.LoadBool(gameObject.name, "isDefeated", gameObject.scene.name);
         PillarBeams();
+        _triggerSwitch.bIsActive = true;
         if (_isDefeated)
         {
-            Destroy(_stonesParent);
-            Destroy(gameObject);
             for(int i = 0; i< _connectingBeams.Length;i++)
             { _connectingBeams[i].Stop(); Destroy(_connectingBeams[i]);}
+            _triggerSwitch.bIsActive = false;
+            Destroy(_stonesParent);
+            Destroy(gameObject);
         }
     }
 }

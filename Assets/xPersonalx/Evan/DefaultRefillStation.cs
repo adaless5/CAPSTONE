@@ -84,57 +84,57 @@ public class DefaultRefillStation : MonoBehaviour
     }
     private void OnTriggerStay(Collider other)
     {
-
-
-        if (GameObject.FindObjectOfType<ALTPlayerController>().CheckForInteract())
+        if (other.tag == "Player")
         {
-            bool isMissingAmmo = false;
-            Health playerHP = other.GetComponent<Health>();
-            if (playerHP)
-            {
-                if (!playerHP.IsAtFullHealth())
-                {
-                    playerHP.Heal(100.0f);
-                    EventBroker.CallOnHealthPickupAttempt(playerHP.IsAtFullHealth());
-                    isMissingAmmo = true;
-                }
-            }
-            if (m_ammoController == null)
+            GameObject.FindObjectOfType<InteractableText>().b_inInteractCollider = true;
+            if (GameObject.FindObjectOfType<ALTPlayerController>().CheckForInteract())
             {
 
-                m_ammoController = FindObjectOfType<AmmoController>();
-            }
-            if (other.tag == "Player" && m_ammoController.IsAmmoFull(WeaponType.BaseWeapon) == false)
-            {
-                if (GameObject.FindObjectOfType<WeaponBase>().bIsObtained)
+                Health playerHP = other.GetComponent<Health>();
+                if (playerHP)
                 {
-                    EventBroker.CallOnAmmoPickup(WeaponType.BaseWeapon, m_amountOfClipsInPickup, m_ammoCap);
-                    isMissingAmmo = true;
-                }
-            }
+                    if (!playerHP.IsAtFullHealth())
+                    {
+                        playerHP.Heal(100.0f);
+                        EventBroker.CallOnHealthPickupAttempt(playerHP.IsAtFullHealth());
 
-            if (other.tag == "Player" && m_ammoController.IsAmmoFull(WeaponType.CreatureWeapon) == false)
-            {
-                if (GameObject.FindObjectOfType<CreatureWeapon>().bIsObtained)
-                {
-                    EventBroker.CallOnAmmoPickup(WeaponType.CreatureWeapon, m_amountOfClipsInPickup, m_ammoCap);
-                    isMissingAmmo = true;
+                    }
                 }
-            }
-            if (other.tag == "Player" && m_ammoController.IsAmmoFull(WeaponType.GrenadeWeapon) == false)
-            {
-                if (GameObject.FindObjectOfType<MineSpawner>().bIsObtained)
+                if (m_ammoController == null)
                 {
-                    EventBroker.CallOnAmmoPickup(WeaponType.GrenadeWeapon, m_amountOfClipsInPickup, m_ammoCap);
-                    isMissingAmmo = true;
+
+                    m_ammoController = FindObjectOfType<AmmoController>();
                 }
-            }
-            if (isMissingAmmo)
-            {
-                EventBroker.CallOnAmmoPickupAttempt();
+                if (m_ammoController.IsAmmoFull(WeaponType.BaseWeapon) == false)
+                {
+                    if (GameObject.FindObjectOfType<WeaponBase>().bIsObtained)
+                    {
+                        EventBroker.CallOnAmmoPickup(WeaponType.BaseWeapon, m_amountOfClipsInPickup, m_ammoCap);
+                        EventBroker.CallOnAmmoPickupAttempt();
+                    }
+                }
+
+                if (m_ammoController.IsAmmoFull(WeaponType.CreatureWeapon) == false)
+                {
+                    if (GameObject.FindObjectOfType<CreatureWeapon>().bIsObtained)
+                    {
+                        EventBroker.CallOnAmmoPickup(WeaponType.CreatureWeapon, m_amountOfClipsInPickup, m_ammoCap);
+
+                    }
+                }
+                if (m_ammoController.IsAmmoFull(WeaponType.GrenadeWeapon) == false)
+                {
+                    if (GameObject.FindObjectOfType<MineSpawner>().bIsObtained)
+                    {
+                        EventBroker.CallOnAmmoPickup(WeaponType.GrenadeWeapon, m_amountOfClipsInPickup, m_ammoCap);
+
+                    }
+                }
+
                 Color newCol = new Color(1.0f, 1.0f, 1.0f, 1.0f);
                 FillUsed.GetComponent<MeshRenderer>().material.color = newCol;
                 useTimer = 2.5f;
+
             }
         }
     }

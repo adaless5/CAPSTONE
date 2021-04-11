@@ -64,22 +64,22 @@ public class PowerPillar : MonoBehaviour, ISaveable
             saveTime -= Time.deltaTime;
             if(saveTime <= 0)
             {
-              SaveData(transform.position,transform.forward);
+             SaveData(transform.position,transform.forward);
             }
         }
     }
 
     void SaveData(Vector3 pos, Vector3 rot) // saves the position and rotation of the pillar, as well as the hasFallen bool
     {
-        SaveSystem.Save(gameObject.name, "hasFallen", gameObject.scene.name, _hasFallen);
-        
-        SaveSystem.Save(gameObject.name, "posX", gameObject.scene.name, pos.x);
-        SaveSystem.Save(gameObject.name, "posY", gameObject.scene.name, pos.y);
-        SaveSystem.Save(gameObject.name, "posZ", gameObject.scene.name, pos.z);
-
-        SaveSystem.Save(gameObject.name, "rotX", gameObject.scene.name, rot.x);
-        SaveSystem.Save(gameObject.name, "rotY", gameObject.scene.name, rot.y);
-        SaveSystem.Save(gameObject.name, "rotZ", gameObject.scene.name, rot.z);
+       SaveSystem.Save(gameObject.name, "hasFallen", gameObject.scene.name, _hasFallen);
+       
+       SaveSystem.Save(gameObject.name, "posX", gameObject.scene.name, pos.x);
+       SaveSystem.Save(gameObject.name, "posY", gameObject.scene.name, pos.y);
+       SaveSystem.Save(gameObject.name, "posZ", gameObject.scene.name, pos.z);
+       
+       SaveSystem.Save(gameObject.name, "rotX", gameObject.scene.name, rot.x);
+       SaveSystem.Save(gameObject.name, "rotY", gameObject.scene.name, rot.y);
+       SaveSystem.Save(gameObject.name, "rotZ", gameObject.scene.name, rot.z);
     }
 
     public bool GetIsDefeated()

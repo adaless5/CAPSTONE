@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1904207817144874736}
   m_Layer: 2
   m_Name: Obelisk Switch
-  m_TagString: Interactable
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -53,10 +53,12 @@ MonoBehaviour:
   _ResetTimer: 0
   _OffSwitch: {fileID: 1834162195795105921}
   _OnSwitch: {fileID: 5110952701702727268}
+  _DamageObject: {fileID: 0}
   _AffectedSwitches: []
   _PlayerInteractType: 0
   _ActivationPolicy: 1
   _ResponseType: 0
+  bIsActive: 0
 --- !u!65 &1904207817144874736
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -81,7 +83,7 @@ GameObject:
   - component: {fileID: 1314928358313755195}
   m_Layer: 0
   m_Name: ObeliskOff
-  m_TagString: Untagged
+  m_TagString: Interactable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -115,7 +117,7 @@ GameObject:
   - component: {fileID: 7534341920896432085}
   m_Layer: 0
   m_Name: Obelisk_low
-  m_TagString: Untagged
+  m_TagString: Interactable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -207,6 +209,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: ObeliskOn
+      objectReference: {fileID: 0}
+    - target: {fileID: 7919546695009796008, guid: 94cfd36178633694f89fbc01a54fed39,
+        type: 3}
+      propertyPath: m_TagString
+      value: Interactable
       objectReference: {fileID: 0}
     - target: {fileID: 7919546695009796009, guid: 94cfd36178633694f89fbc01a54fed39,
         type: 3}

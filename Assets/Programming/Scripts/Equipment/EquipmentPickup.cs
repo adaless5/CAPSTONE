@@ -64,7 +64,7 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
 
             }
 
-            if(bCanDestroyMessage)
+            if (bCanDestroyMessage)
             {
                 if (_player.CheckForInteract())
                 {
@@ -77,40 +77,40 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
     private void OnTriggerStay(Collider other)
     {
         Debug.Log("Triggered");
-        if (FindObjectOfType<ALTPlayerController>() != null && FindObjectOfType<ALTPlayerController>().CheckForInteract())
-            if (!isUsed)
-            {
-                Debug.Log("Isn't used");
-                if (other.gameObject.tag == "Player")
-                {
-                    Debug.Log("Is player");
-                    Belt belt = other.gameObject.GetComponentInChildren<Belt>();
-                    belt.ObtainEquipmentAtIndex(_CorrespondingEquipmentBeltIndex);
 
-                    isUsed = true;
-                    SaveSystem.Save(gameObject.name, "isEnabled", gameObject.scene.name, isUsed);
-                    if (GetComponent<MeshRenderer>() != null)
-                    {
-                        GetComponent<MeshRenderer>().enabled = false;
-                    }
-                    if (_modelObj != null)
-                    {
-                        _modelObj.SetActive(false);
-                    }
-                    GetComponent<Collider>().enabled = false;
-                    if (transform.GetChild(0) != null)
-                    {
-                        transform.GetChild(0).gameObject.SetActive(false);
-                    }
-                    CreateTip("Sprites/Messages/" + _tipName[_CorrespondingEquipmentBeltIndex]);
+        if (other.gameObject.tag == "Player" && !isUsed)
+        {
+            GameObject.FindObjectOfType<InteractableText>().b_inInteractCollider = true;
+            if (FindObjectOfType<ALTPlayerController>() != null && FindObjectOfType<ALTPlayerController>().CheckForInteract())
+            {
+                Debug.Log("Is player");
+                Belt belt = other.gameObject.GetComponentInChildren<Belt>();
+                belt.ObtainEquipmentAtIndex(_CorrespondingEquipmentBeltIndex);
+
+                isUsed = true;
+                SaveSystem.Save(gameObject.name, "isEnabled", gameObject.scene.name, isUsed);
+                if (GetComponent<MeshRenderer>() != null)
+                {
+                    GetComponent<MeshRenderer>().enabled = false;
                 }
+                if (_modelObj != null)
+                {
+                    _modelObj.SetActive(false);
+                }
+                GetComponent<Collider>().enabled = false;
+                if (transform.GetChild(0) != null)
+                {
+                    transform.GetChild(0).gameObject.SetActive(false);
+                }
+                CreateTip("Sprites/Messages/" + _tipName[_CorrespondingEquipmentBeltIndex]);
             }
+        }
     }
 
     public void LoadDataOnSceneEnter()
     {
         isUsed = SaveSystem.LoadBool(gameObject.name, "isEnabled", gameObject.scene.name);
-        if (transform.childCount>0 && transform.GetChild(0) != null)
+        if (transform.childCount > 0 && transform.GetChild(0) != null)
         {
             transform.GetChild(0).gameObject.SetActive(!isUsed);
         }

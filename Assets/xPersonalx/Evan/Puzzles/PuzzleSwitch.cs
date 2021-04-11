@@ -177,11 +177,6 @@ public class PuzzleSwitch : MonoBehaviour, ISaveable
         CheckDamage();
         CanSwitchTimer(); 
         ResetSwitchTimer();
-        if (_PlayerInteractType == Switch_PlayerInteract_Type.UseButton && bPlayerInRange)
-        {
-            PlayerInput();
-        }
-
     }
 
 
@@ -209,6 +204,20 @@ public class PuzzleSwitch : MonoBehaviour, ISaveable
             {
                 Interact();
             }
+        }
+
+    }
+    void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.tag == "Player")
+        {
+            bool allowed = !(_ActivationPolicy == Switch_ActivationPolicy_Type.CanInteractWhenActive && !bIsActive);
+            if (_ActivationPolicy == Switch_ActivationPolicy_Type.CanInteractWhenInactive && bIsActive)
+            { allowed = false; }
+            if (allowed)
+            { GameObject.FindObjectOfType<InteractableText>().b_inInteractCollider = true; }
+            PlayerInput();
+
         }
 
     }
