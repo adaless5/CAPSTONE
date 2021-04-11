@@ -23,6 +23,7 @@ public class WeaponBase : Weapon
     bool _bPlayedNewShellSound;
     bool _bcoroutineOutIsRunning = false;
     bool _bcoroutineInIsRunning = false;
+
     GameObject muzzlePoint;
     Weapon_Animations _DGAnimator;
 
@@ -49,10 +50,10 @@ public class WeaponBase : Weapon
 
         _bPlayedNewShellSound = false;
 
-      
+
     }
 
-    
+
 
     public void InitWeaponControls(GameObject player)
     {
@@ -94,33 +95,24 @@ public class WeaponBase : Weapon
         {
             if (bIsActive && _playerController.m_ControllerState == ALTPlayerController.ControllerState.Play)
             {
-                // GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;
-                //transform.GetChild(0).gameObject.SetActive(true);
-
-                //_DGAnimator.SetFireAnimationSpeed(m_fireRate);
-                //DGAnimator.SetReloadAnimationSpeed(m_reloadTime);
-
                 UseTool();
                 OnTarget();
             }
-            //else if (!bIsActive)
-            //{
-            //    WeaponSwapOut();
-
-            //}
         }
-      
+
     }
 
     public IEnumerator SwapOutLogic()
     {
         _bcoroutineOutIsRunning = true;
         Debug.Log("Started DG SwapOutCoroutine at timestamp: " + Time.time);
-        //Waits for default gun swap out animation to play before setting inactive
-        //yield return new WaitForSeconds(1.133f);
+        //Waits for default gun swap out animation to play before setting inactiv      
         yield return new WaitForSeconds(1.2f);
         if (!bIsActive)
+        {
             transform.GetChild(0).gameObject.SetActive(false);
+            bCanShoot = false;
+        }
         else
         {
             transform.GetChild(0).gameObject.SetActive(true);
@@ -133,11 +125,13 @@ public class WeaponBase : Weapon
     {
         _bcoroutineInIsRunning = true;
         Debug.Log("Started DG SwapInCoroutine at timestamp: " + Time.time);
-        //Waits for other equipped weapon to swap out before playing swap in animation, currently only gland gun timing (0.667f) seconds
-        //yield return new WaitForSeconds(1f);
+        //Waits for other equipped weapon to swap out before playing swap in animation, currently only gland gun timing (0.667f) seconds       
         yield return new WaitForSeconds(1.2f);
         if (bIsActive)
+        {
             transform.GetChild(0).gameObject.SetActive(true);
+            bCanShoot = true;
+        }
         else
         {
             transform.GetChild(0).gameObject.SetActive(false);
@@ -148,14 +142,14 @@ public class WeaponBase : Weapon
 
     public void WeaponSwapOut()
     {
-        if(!_bcoroutineOutIsRunning && !bIsActive)
-        StartCoroutine(SwapOutLogic());
+        if (!_bcoroutineOutIsRunning && !bIsActive)
+            StartCoroutine(SwapOutLogic());
     }
 
     public void DGWeaponSwapIn()
     {
-        if(!_bcoroutineInIsRunning && bIsActive)
-        StartCoroutine(SwapInLogic());
+        if (!_bcoroutineInIsRunning && bIsActive)
+            StartCoroutine(SwapInLogic());
     }
 
     public override void UseTool()
@@ -236,80 +230,81 @@ public class WeaponBase : Weapon
 
     void OnShoot()
     {
-        //Play Recoil animation
-        //gunAnimator.SetTrigger("OnRecoil");   
-        _DGAnimator._weaponAnimator.SetTrigger("Fired");
-        muzzleFlash.Play();
-        if (bIsActive)
-        {
-            //Gun Shot Sounds
-            GetComponent<AudioManager_Archebus>().TriggerShot();
-            StartCoroutine(TriggerNewShellSound());
-            //
-        }
-
-        if (!m_bHasActionUpgrade)
-        {
-            RaycastHit hitInfo;
-            FindObjectOfType<DefaultWeaponEffects>().Fire(muzzlePoint.transform.forward);
-            UpgradedFire();
-            if (Physics.Raycast(gunCamera.transform.position, gunCamera.transform.forward, out hitInfo, m_weaponRange))
+        if (bCanShoot)
+        {               
+            _DGAnimator._weaponAnimator.SetTrigger("Fired");
+            muzzleFlash.Play();
+            if (bIsActive)
             {
-                FindObjectOfType<DefaultWeaponEffects>().Fire(hitInfo.point, hitInfo.normal);
-                //Only damages if asset has "Health" script
-                Health target = hitInfo.transform.GetComponent<Health>();
-                if (target != null && target.gameObject.tag != "Player")
-                {
-                    target.TakeDamage(m_damageAmount);
-                    reticuleAnimator.SetTrigger("isTargetted");
-                }
-                else
-                {
-                    reticuleAnimator.SetTrigger("isTargetted");
-                }
-
-                //checks if breakable wall
-                DestructibleObject wall = hitInfo.transform.GetComponentInParent<DestructibleObject>();
-                if (wall)
-                {
-                    wall.Break(gameObject.tag);
-                }
-
-                /// Evan's Item container call vvv
-                ItemContainer container = hitInfo.transform.GetComponentInParent<ItemContainer>();
-                if (container)
-                {
-                    container.Break(gameObject.tag);
-                }
-                /// Evan's Item container call ^^^
-
-                /// Evan's Eyeball call vvv
-                EyeLight eye = hitInfo.transform.GetComponentInParent<EyeLight>();
-                if (eye)
-                {
-                    eye.Hit();
-                }
-                /// Evan's Eyeball call ^^^
-
-                /// 
-                //Force of impact on hit
-                if (hitInfo.rigidbody != null)
-                {
-                    hitInfo.rigidbody.AddForce(-hitInfo.normal * m_hitImpact);
-                }
-
-                //Particle effects on hit
-                GameObject hitImpact = Instantiate(impactFX, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
-                Destroy(hitImpact, 2.0f);
+                //Gun Shot Sounds
+                GetComponent<AudioManager_Archebus>().TriggerShot();
+                StartCoroutine(TriggerNewShellSound());               
             }
-        }
-        else
-        {
-            UpgradedFire();
-        }
 
-        //Using ammo             
-        _ammoController.UseAmmo();
+            if (!m_bHasActionUpgrade)
+            {
+                RaycastHit hitInfo;
+                FindObjectOfType<DefaultWeaponEffects>().Fire(muzzlePoint.transform.forward);
+                UpgradedFire();
+                if (Physics.Raycast(gunCamera.transform.position, gunCamera.transform.forward, out hitInfo, m_weaponRange))
+                {
+                    FindObjectOfType<DefaultWeaponEffects>().Fire(hitInfo.point, hitInfo.normal);
+                    //Only damages if asset has "Health" script
+                    Health target = hitInfo.transform.GetComponent<Health>();
+                    if (target != null && target.gameObject.tag != "Player")
+                    {
+                        target.TakeDamage(m_damageAmount);
+                        reticuleAnimator.SetTrigger("isTargetted");
+                    }
+                    else
+                    {
+                        reticuleAnimator.SetTrigger("isTargetted");
+                    }
+
+                    //checks if breakable wall
+                    DestructibleObject wall = hitInfo.transform.GetComponentInParent<DestructibleObject>();
+                    if (wall)
+                    {
+                        wall.Break(gameObject.tag);
+                    }
+
+                    /// Evan's Item container call vvv
+                    ItemContainer container = hitInfo.transform.GetComponentInParent<ItemContainer>();
+                    if (container)
+                    {
+                        container.Break(gameObject.tag);
+                    }
+                    /// Evan's Item container call ^^^
+
+                    /// Evan's Eyeball call vvv
+                    EyeLight eye = hitInfo.transform.GetComponentInParent<EyeLight>();
+                    if (eye)
+                    {
+                        eye.Hit();
+                    }
+                    /// Evan's Eyeball call ^^^
+
+                    /// 
+                    //Force of impact on hit
+                    if (hitInfo.rigidbody != null)
+                    {
+                        hitInfo.rigidbody.AddForce(-hitInfo.normal * m_hitImpact);
+                    }
+
+                    //Particle effects on hit
+                    GameObject hitImpact = Instantiate(impactFX, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
+                    Destroy(hitImpact, 2.0f);
+                }
+            }
+            else
+            {
+                UpgradedFire();
+            }
+
+            //Using ammo             
+            _ammoController.UseAmmo();
+
+        }
     }
 
     //VR - Plays Animation to focus reticule on targeting
