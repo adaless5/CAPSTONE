@@ -14,7 +14,6 @@ public class EndGameManager : MonoBehaviour
         endGameDirector = GetComponent<PlayableDirector>();
         EventBroker.OnPlayerSpawned += PlayerSpawn;
 
-
     }
 
     void PlayEndGameCutscene()
