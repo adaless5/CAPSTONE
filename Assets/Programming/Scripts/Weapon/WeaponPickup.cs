@@ -71,15 +71,14 @@ public class WeaponPickup : MonoBehaviour, ITippable
             {
                 if (Gamepad.current != null)
                 {
-                    if (Gamepad.current.xButton.IsActuated())
-                    {
-                        if (!Gamepad.current.xButton.isPressed)
-                            bCanDestroyMessage = true;
-                    }
+
+                    if (!Gamepad.current.xButton.isPressed)
+                        bCanDestroyMessage = true;
+
                     else if (!Keyboard.current.eKey.isPressed)
                         bCanDestroyMessage = true;
                 }
-                else if (!Keyboard.current.eKey.isPressed)
+                else if (!Keyboard.current.eKey.isPressed && isUsed)
                     bCanDestroyMessage = true;
             }
 
@@ -170,8 +169,8 @@ public class WeaponPickup : MonoBehaviour, ITippable
                     {
                         //image.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
                         //_imageObject.transform.SetParent(canvas.transform);
-                        image.sprite = spr;
                         _toolTip.enabled = true;
+                        image.sprite = spr;
                     }
                 }
             }

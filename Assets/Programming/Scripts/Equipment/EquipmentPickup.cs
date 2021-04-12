@@ -20,7 +20,7 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
 
     bool _canPlayerPickUp = false;
 
-    Image _toolTip;
+    public Image _toolTip;
 
     void Awake()
     {
@@ -64,12 +64,12 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
                     else if (!Keyboard.current.eKey.isPressed)
                         bCanDestroyMessage = true;
                 }
-                else if (!Keyboard.current.eKey.isPressed)
+                else if (!Keyboard.current.eKey.isPressed && isUsed)
                     bCanDestroyMessage = true;
 
             }
 
-            if(bCanDestroyMessage)
+            if (bCanDestroyMessage)
             {
                 if (_player.CheckForInteract())
                 {
@@ -103,7 +103,7 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
 
                     GetComponent<Collider>().enabled = false;
 
-                    
+
 
                 }
             }
@@ -159,7 +159,7 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
     public void LoadDataOnSceneEnter()
     {
         isUsed = SaveSystem.LoadBool(gameObject.name, "isEnabled", gameObject.scene.name);
-        if (transform.childCount>0 && transform.GetChild(0) != null)
+        if (transform.childCount > 0 && transform.GetChild(0) != null)
         {
             transform.GetChild(0).gameObject.SetActive(!isUsed);
         }
@@ -175,7 +175,7 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
 
             if (canvas != null)
             {
-                DestroyTip();
+                //DestroyTip();
                 bCanDestroyMessage = false;
 
                 //RectTransform trans = _imageObject.AddComponent<RectTransform>();
@@ -190,18 +190,18 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
                 //    trans.sizeDelta = new Vector2(tex.width, tex.height); // custom size
                 //}
 
-                Image image = _toolTip.GetComponent<Image>();
+                //Image image = _toolTip.GetComponent<Image>();
 
-                if (image != null)
-                {
+                //if (image != null)
+                //{
                     if (spr != null)
                     {
                         //image.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
                         //_imageObject.transform.SetParent(canvas.transform);
-                        image.sprite = spr;
                         _toolTip.enabled = true;
+                        _toolTip.sprite = spr;
                     }
-                }
+                //}
             }
         }
     }
