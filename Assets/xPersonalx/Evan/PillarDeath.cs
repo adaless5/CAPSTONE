@@ -20,10 +20,13 @@ public class PillarDeath : MonoBehaviour
         if(_showTime && _finalCountdown >0)
         {
           _finalCountdown -= Time.deltaTime;
-          transform.position = _finalPillar.gameObject.transform.position; 
+            for (int i = 0; i < _deathEffects.Length; i++)
+            { _deathEffects[i].transform.position = _finalPillar.transform.position; }
+            //transform.position = _finalPillar.gameObject.transform.position; 
             if (_finalCountdown <= 0)
             {
-                _finalPillar.gameObject.SetActive(false); 
+                _finalPillar.gameObject.SetActive(false);
+                deathPop.transform.position = _finalPillar.transform.position;
                 deathPop.Play();
             }
         }

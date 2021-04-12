@@ -11,6 +11,7 @@ public class TEST_UpgradePickup : MonoBehaviour
         if(player)
         {
             player.m_UpgradeCurrencyAmount += worth;
+            EventBroker.CallOnCurrencyPickup(worth, player.m_UpgradeCurrencyAmount);
             Destroy(gameObject);
         }
     }

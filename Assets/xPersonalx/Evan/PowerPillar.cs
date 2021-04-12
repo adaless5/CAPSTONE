@@ -45,8 +45,10 @@ public class PowerPillar : MonoBehaviour, ISaveable
             _hover.enabled = false;
         }
         _hasFallen = true;
-        Material mat = GetComponentInChildren<MeshRenderer>().materials[2];
-        GetComponentInChildren<MeshRenderer>().materials[3] = mat;
+        GetComponentInChildren<MeshRenderer>().materials[1].SetColor("_EmissiveColor", new Color(0,0,0));
+        GetComponentInChildren<MeshRenderer>().materials[1].SetColor("_Color", new Color(0, 0, 0));
+        GetComponentInChildren<MeshRenderer>().materials[3].SetColor("_EmissiveColor", new Color(0,0,0));
+        GetComponentInChildren<MeshRenderer>().materials[3].SetColor("_Color", new Color(0, 0, 0));
         SaveData();
 
         _livingEffect.Stop();

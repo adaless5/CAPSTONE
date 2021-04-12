@@ -66,6 +66,7 @@ public abstract class Weapon : Tool
     protected AmmoController _ammoController;
     protected float m_fireStart = 0.0f;
     protected bool bIsReloading = false;
+    protected bool bCanShoot = false;
 
     protected bool m_bHasActionUpgrade = false;
 
