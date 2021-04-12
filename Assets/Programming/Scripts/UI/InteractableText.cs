@@ -8,6 +8,9 @@ public class InteractableText : MonoBehaviour
 {
     //This class displays raycast info on HUD so player knows what they're looking at, anything you want display text to show up for must have a tag added
     //Anything that's interactable must have the "Interactable" tag
+
+    public bool b_inInteractCollider;
+
     public ALTPlayerController m_player;
     public Camera m_playerCamera;
     public TMP_Text m_pickupText;
@@ -52,14 +55,15 @@ public class InteractableText : MonoBehaviour
             if(ShouldIgnoreTag(hitInfo.collider.gameObject.tag) == false)
             {
                 m_backgroundImage.enabled = true;
-                if(hitInfo.collider.gameObject.tag == "Interactable")
+                if(b_inInteractCollider)
                 {
                     m_backgroundImage.rectTransform.sizeDelta = new Vector2(220, 20);
                     m_pickupText.rectTransform.sizeDelta = new Vector2(200, 15);
                     if (m_player.m_ControllerType == ControllerType.Controller)
-                        m_pickupText.text = "Press 'X' to Interact";
+                    { m_pickupText.text = "Press 'X' to Interact"; }
                     else
-                        m_pickupText.text = "Press 'E' to Interact";
+                    { m_pickupText.text = "Press 'E' to Interact"; }
+                    b_inInteractCollider = false;
                 }
                 else
                 {

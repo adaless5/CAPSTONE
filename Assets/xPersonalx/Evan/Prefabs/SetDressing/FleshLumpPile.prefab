@@ -335,6 +335,7 @@ GameObject:
   - component: {fileID: 5473175187329926076}
   - component: {fileID: 4701242343573908552}
   - component: {fileID: 4379162189706759524}
+  - component: {fileID: 8553824412590330099}
   m_Layer: 0
   m_Name: Plane001
   m_TagString: Untagged
@@ -405,6 +406,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &8553824412590330099
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5904339560045637365}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 7450741763379908841, guid: 64374703887daf24ba20b63e0c5b25be, type: 3}
 --- !u!1 &6258180563698606277
 GameObject:
   m_ObjectHideFlags: 0
@@ -738,7 +753,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8379524331791174017}
-  - component: {fileID: 3249476084585493850}
   m_Layer: 0
   m_Name: FleshLumpPile
   m_TagString: Untagged
@@ -769,16 +783,3 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!135 &3249476084585493850
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9151838184912950075}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: -0.35, z: 1}

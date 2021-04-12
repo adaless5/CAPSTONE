@@ -126,6 +126,12 @@ public class WeaponPickup : MonoBehaviour, ITippable
             _canPlayerPickUp = false;
     }
 
+    private void OnTriggerStay(collider other)
+    {
+         if (other.gameObject.tag == "Player" && !isUsed)
+            GameObject.FindObjectOfType<InteractableText>().b_inInteractCollider = true;
+    }
+
     public void SaveDataOnSceneChange()
     {
         SaveSystem.Save(gameObject.name, "isEnabled", gameObject.scene.name, isUsed);

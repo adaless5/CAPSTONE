@@ -65,6 +65,7 @@ public class ThermalSkin : MonoBehaviour, ISaveable
     {
         foreach (SkinnedMeshRenderer m in m_skinnedMeshRenderers)
         {
+            m_ThermalViewMaterial.SetTexture("Normal", m.material.GetTexture("Normal"));
             m.material = m_ThermalViewMaterial;
         }
         foreach (MeshRenderer m in m_MeshRenderers)

@@ -81,6 +81,50 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &1991976459993435866
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4658621061188770578}
+  - component: {fileID: 1810194566430052148}
+  m_Layer: 0
+  m_Name: Cube
+  m_TagString: Gland Gun Ammo
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4658621061188770578
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1991976459993435866}
+  m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: -0.036, y: -0.038, z: 0.065}
+  m_LocalScale: {x: 0.5948699, y: 0.38602492, z: 0.44938487}
+  m_Children: []
+  m_Father: {fileID: 4287993091414241055}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1810194566430052148
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1991976459993435866}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1.0000005, z: 1.0000005}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3515572242083968421
 GameObject:
   m_ObjectHideFlags: 0
@@ -99,7 +143,7 @@ GameObject:
   - component: {fileID: 731343146066044867}
   - component: {fileID: 330568300304248474}
   - component: {fileID: -2893258586217256907}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: AMMO_Creature
   m_TagString: Gland Gun Ammo
   m_Icon: {fileID: 0}
@@ -122,6 +166,7 @@ Transform:
   - {fileID: 5917947445772217370}
   - {fileID: 8697530638071113906}
   - {fileID: 7389948718318838372}
+  - {fileID: 4658621061188770578}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
