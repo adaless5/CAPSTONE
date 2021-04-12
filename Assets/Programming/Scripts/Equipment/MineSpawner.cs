@@ -18,6 +18,11 @@ public class MineSpawner : Weapon
     public GameObject minePrefab;
     public GameObject grenadeInHand;
     public ALTPlayerController m_playerController;
+    Weapon_Animations _grenadeAnimator;
+    bool _bcoroutineOutIsRunning = false;
+    bool _bcoroutineInIsRunning = false;
+    public GameObject _grenadeArmModel;
+    public Transform _spawnLocation;
 
     bool m_bCanThrow = true;
     float m_timer;
@@ -25,17 +30,23 @@ public class MineSpawner : Weapon
     {
         base.Start();
         m_weaponClipSize = 1;
-        m_startingOverstockAmmo = 12;        
+        m_startingOverstockAmmo = 12;
         m_reloadTime = 0.5f;
         _ammoController = FindObjectOfType<AmmoUI>().GetComponent<AmmoController>();
         _ammoController.InitializeAmmo(AmmoController.AmmoTypes.Explosive, m_weaponClipSize, m_startingOverstockAmmo, m_ammoCapAmount);
+        //_grenadeArmModel = transform.GetChild(2).gameObject;
+        _grenadeArmModel = gameObject.transform.Find("Grenade_Model").gameObject;
+        _spawnLocation = gameObject.transform.Find("SpawnLocation");
+        _grenadeArmModel.SetActive(false);
+        //_grenadeArmModel.SetActive(false);
+
     }
 
     void Awake()
     {
         base.Awake();
 
-        if(m_playerController == null)
+        if (m_playerController == null)
         {
             m_playerController = FindObjectOfType<ALTPlayerController>();
         }
@@ -46,18 +57,20 @@ public class MineSpawner : Weapon
         m_blastradius *= m_upgradestats.BlastRadius;
         m_blastforce *= m_upgradestats.ImpactForce;
         m_damageAmount = 50f * m_upgradestats.Damage;
-
+        _grenadeAnimator = GetComponent<Grenade_Animations>();
+        EventBroker.OnWeaponSwap += WeaponSwapOut;
+        EventBroker.OnWeaponSwapIn += GrenadeWeaponSwapIn;
         m_timer = m_fireRate;
     }
 
     // Update is called once per frame
     public override void Update()
     {
-        if(bIsActive)
+        if (bIsActive)
         {
-            if(m_playerController.m_ControllerState == ALTPlayerController.ControllerState.Play)
-            UseTool();
-            if(m_bCanThrow)
+            if (m_playerController.m_ControllerState == ALTPlayerController.ControllerState.Play)
+                UseTool();
+            if (m_bCanThrow)
             {
                 grenadeInHand.SetActive(true);
             }
@@ -108,11 +121,23 @@ public class MineSpawner : Weapon
 
     void ThrowMine()
     {
-        GameObject mine = Instantiate(minePrefab, transform.position, transform.rotation);
-        //Debug.Log("MINE SPAWNED");
-        if(mine)
+        if (bCanShoot)
         {
-            mine.GetComponent<Rigidbody>().AddForce(transform.forward * m_projectileforce);
+            StartCoroutine(SpawnMine());
+            _grenadeAnimator._weaponAnimator.SetTrigger("Fired");
+
+            _ammoController.UseAmmo();
+        }
+    }
+
+    IEnumerator SpawnMine()
+    {
+        yield return new WaitForSeconds(0.45f);
+        GameObject mine = Instantiate(minePrefab, _spawnLocation.position, _spawnLocation.rotation);
+        //Debug.Log("MINE SPAWNED");
+        if (mine)
+        {
+            mine.GetComponent<Rigidbody>().AddForce(_spawnLocation.forward * m_projectileforce);
             mine.GetComponent<Rigidbody>().AddTorque(new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), -90f));
             mine.GetComponent<Mine>().InitMine(m_projectileLifeTime, m_blastradius, m_blastforce, m_damageAmount, m_bHasActionUpgrade);
 
@@ -123,16 +148,16 @@ public class MineSpawner : Weapon
             StartCoroutine(StartExplosionSounds(audioManager));
             //
         }
-
-        _ammoController.UseAmmo();
     }
 
     IEnumerator OnReload()
     {
-        bIsReloading = true;    
-        yield return new WaitForSeconds(m_reloadTime);      
+        _grenadeAnimator.SetReloadAnimationSpeed(m_reloadTime);
+        bIsReloading = true;
+        yield return new WaitForSeconds(m_reloadTime);
         _ammoController.Reload();
-        bIsReloading = false;      
+        bIsReloading = false;
+        _grenadeAnimator.TriggerReloadAnimation();
     }
 
     public override void AddUpgrade(WeaponUpgrade upgrade)
@@ -146,7 +171,7 @@ public class MineSpawner : Weapon
         m_damageAmount *= upgrade.Damage + 1;
         if (upgrade.HasAction) m_bHasActionUpgrade = true;
 
-        m_currentupgrades.Add(upgrade.Type);    
+        m_currentupgrades.Add(upgrade.Type);
 
     }
 
@@ -162,6 +187,55 @@ public class MineSpawner : Weapon
         amg.TriggerGrenadeCook();
         yield return new WaitForSeconds(2f);
         amg.TriggerGrenadeExplode();
+    }
+
+    public IEnumerator SwapOutLogic()
+    {
+        _bcoroutineOutIsRunning = true;
+        Debug.Log("Started DG SwapOutCoroutine at timestamp: " + Time.time);
+        yield return new WaitForSeconds(1.2f);
+        if (!bIsActive)
+        {
+            _grenadeArmModel.SetActive(false);
+            bCanShoot = false;
+        }
+        else
+        {
+            _grenadeArmModel.SetActive(true);
+        }
+        Debug.Log("Finished DG SwapOutCoroutine at timestamp: " + Time.time);
+        _bcoroutineOutIsRunning = false;
+    }
+
+    public IEnumerator SwapInLogic()
+    {
+        _bcoroutineInIsRunning = true;
+        Debug.Log("Started DG SwapInCoroutine at timestamp: " + Time.time);
+
+        yield return new WaitForSeconds(1.2f);
+        if (bIsActive)
+        {
+            _grenadeArmModel.SetActive(true);
+            bCanShoot = true;
+        }
+        else
+        {
+            _grenadeArmModel.SetActive(false);
+        }
+        Debug.Log("Finished DG SwapInCoroutine at timestamp: " + Time.time);
+        _bcoroutineInIsRunning = false;
+    }
+
+    public void WeaponSwapOut()
+    {
+        if (!_bcoroutineOutIsRunning && !bIsActive)
+            StartCoroutine(SwapOutLogic());
+    }
+
+    public void GrenadeWeaponSwapIn()
+    {
+        if (!_bcoroutineInIsRunning && bIsActive)
+            StartCoroutine(SwapInLogic());
     }
 
 }

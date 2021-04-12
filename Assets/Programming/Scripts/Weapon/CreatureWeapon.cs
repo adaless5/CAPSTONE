@@ -13,7 +13,7 @@ public class CreatureWeapon : Weapon
     //public GG_Animations _GGAnimator;
     public Weapon_Animations _GGAnimator;
     bool _bcoroutineOutIsRunning = false;
-    bool _bcoroutineInIsRunning = false;
+    bool _bcoroutineInIsRunning = false;   
 
     //vvv EP model stuff
     public GameObject _gunObject;
@@ -37,6 +37,7 @@ public class CreatureWeapon : Weapon
         _creatureProjectile = (GameObject)Resources.Load("Prefabs/Weapon/Creature Projectile");
         m_weaponClipSize = 8;
         m_reloadTime = 3.0f;
+
         _firingOrganSize = _firingOrganObject.transform.localScale;
         _internalOrganSize = _internalOrganObject.transform.localScale;
 
@@ -45,16 +46,16 @@ public class CreatureWeapon : Weapon
         EventBroker.OnWeaponSwapIn += GGWeaponSwapIn;
 
         _GGAnimator = GetComponent<GG_Animations>();
-       
+
     }
 
     void OrganPulse()
     {
         _pulseTime += Time.deltaTime * 3;
-        _currentScale =  new Vector3( Mathf.Sin(_pulseTime)*0.1f, Mathf.Cos(_pulseTime) * 0.1f, Mathf.Cos(_pulseTime) * 0.1f);
+        _currentScale = new Vector3(Mathf.Sin(_pulseTime) * 0.1f, Mathf.Cos(_pulseTime) * 0.1f, Mathf.Cos(_pulseTime) * 0.1f);
         _firingOrganObject.transform.localScale = _firingOrganSize - _currentScale;
-        _internalOrganObject.transform.localScale = _internalOrganSize + new Vector3 (0, _currentScale.y,0 );
-        if(_pulseTime>360)
+        _internalOrganObject.transform.localScale = _internalOrganSize + new Vector3(0, _currentScale.y, 0);
+        if (_pulseTime > 360)
         {
             _pulseTime = 0.0f;
         }
@@ -86,24 +87,27 @@ public class CreatureWeapon : Weapon
 
     public override void UseTool()
     {
-        if (bIsReloading)
+        if(bCanShoot)
         {
-            return;
-        }
-
-        //Reloads automatically at 0 or if player users reload input "R"       
-        if (_ammoController.NeedsReload())
-        {
-            StartCoroutine(OnReload());
-            return;
-        }
-
-        if (_playerController.CheckForUseWeaponInput() && Time.time >= m_fireStart)
-        {
-            m_fireStart = Time.time + 1.0f / m_fireRate;
-            if (_ammoController.CanUseAmmo())
+            if (bIsReloading)
             {
-                OnShoot();
+                return;
+            }
+
+            //Reloads automatically at 0 or if player users reload input "R"       
+            if (_ammoController.NeedsReload())
+            {
+                StartCoroutine(OnReload());
+                return;
+            }
+
+            if (_playerController.CheckForUseWeaponInput() && Time.time >= m_fireStart)
+            {
+                m_fireStart = Time.time + 1.0f / m_fireRate;
+                if (_ammoController.CanUseAmmo())
+                {
+                    OnShoot();
+                }
             }
         }
     }
@@ -117,7 +121,10 @@ public class CreatureWeapon : Weapon
         //yield return new WaitForSeconds(0.667f);
         yield return new WaitForSeconds(1.2f);
         if (!bIsActive)
+        {
             _gunObject.SetActive(false);
+            bCanShoot = false;
+        }
         else
         {
             _gunObject.SetActive(true);
@@ -132,7 +139,10 @@ public class CreatureWeapon : Weapon
         //Waits for other weapon to finish swapping out before swapping in, currently only default gun at 1.133 seconds
         yield return new WaitForSeconds(1.2f);
         if (bIsActive)
+        {
             _gunObject.SetActive(true);
+            bCanShoot = true;
+        }
         else
         {
             _gunObject.SetActive(false);
@@ -142,14 +152,14 @@ public class CreatureWeapon : Weapon
     }
     public void WeaponSwapOut()
     {
-        if(!_bcoroutineOutIsRunning && !bIsActive)
-        StartCoroutine(SwapOutLogic());
+        if (!_bcoroutineOutIsRunning && !bIsActive)
+            StartCoroutine(SwapOutLogic());
     }
 
     public void GGWeaponSwapIn()
     {
-        if(!_bcoroutineInIsRunning && bIsActive)
-        StartCoroutine(GGSwapInLogic());
+        if (!_bcoroutineInIsRunning && bIsActive)
+            StartCoroutine(GGSwapInLogic());
     }
 
     private void Reload()
@@ -212,12 +222,12 @@ public class CreatureWeapon : Weapon
             //vvv Evan's adjustments
             if (ObjectPool.Instance != null)
             {
-                
+
                 GameObject creatureProjectile = ObjectPool.Instance.SpawnFromPool("Creature", _creatureProjectile, _muzzlePointObject.transform.position, _muzzlePointObject.transform.rotation);
-                float randomfloat = UnityEngine.Random.Range(_globSizeRange.x,_globSizeRange.y);
+                float randomfloat = UnityEngine.Random.Range(_globSizeRange.x, _globSizeRange.y);
                 Vector3 randomSize = new Vector3(randomfloat, randomfloat, randomfloat);
                 creatureProjectile.transform.localScale = randomSize;
-                Vector3 randomRot = new Vector3(UnityEngine.Random.Range(-_fireAngleRange, _fireAngleRange),UnityEngine.Random.Range(-_fireAngleRange, _fireAngleRange),0.0f);
+                Vector3 randomRot = new Vector3(UnityEngine.Random.Range(-_fireAngleRange, _fireAngleRange), UnityEngine.Random.Range(-_fireAngleRange, _fireAngleRange), 0.0f);
                 creatureProjectile.transform.Rotate(randomRot);
                 creatureProjectile.GetComponent<Rigidbody>().AddForce(creatureProjectile.transform.forward * _globuleFireSpeed, ForceMode.Impulse);
                 creatureProjectile.GetComponent<CreatureProjectile>().InitCreatureProjectile(m_maxDamageTime, m_projectileLifeTime, m_damageAmount, m_bHasActionUpgrade);
