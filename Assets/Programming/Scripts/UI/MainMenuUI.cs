@@ -194,5 +194,9 @@ public class MainMenuUI : MonoBehaviour
         _canvasGroup.blocksRaycasts = active;
     }  
 
+    public void LoadCredits()
+    {
+        SceneManager.LoadScene("R4_CreditsScene");
+    }
     //TODO:: make a new game function that wipes the save and starts from the begining 
 }
