@@ -126,7 +126,7 @@ public class WeaponPickup : MonoBehaviour, ITippable
             _canPlayerPickUp = false;
     }
 
-    private void OnTriggerStay(collider other)
+    private void OnTriggerStay(Collider other)
     {
          if (other.gameObject.tag == "Player" && !isUsed)
             GameObject.FindObjectOfType<InteractableText>().b_inInteractCollider = true;

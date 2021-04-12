@@ -107,6 +107,7 @@ public class PuzzleSwitch : MonoBehaviour, ISaveable
         {
             foreach (PuzzleSwitch pswitch in _AffectedSwitches)
             {
+                if(pswitch)
                 pswitch.SwitchInteract();
             }
         }
