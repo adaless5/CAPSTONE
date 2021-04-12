@@ -207,7 +207,7 @@ public class WeaponBase : Weapon
     {
         _DGAnimator.SetReloadAnimationSpeed(m_reloadTime);
 
-        if (bIsActive)
+        if (bIsActive && !bIsReloading)
         {
             //Reload Sounds
             GetComponent<AudioManager_Archebus>().TriggerReloadStart();
@@ -416,7 +416,7 @@ public class WeaponBase : Weapon
 
     IEnumerator TriggerReloadEndSound()
     {
-        yield return new WaitForSeconds(1.45f);
+        yield return new WaitForSeconds(1.30f);
         GetComponent<AudioManager_Archebus>().TriggerReloadEnd();
     }
 }
