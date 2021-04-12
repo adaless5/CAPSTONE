@@ -62,6 +62,18 @@ public class SceneConnector : MonoBehaviour
             {
                 case SceneConnectorType.Seamless:
 
+                    //Attempt at using less colliders for seamless scene transitions -LCC
+                    //for (int i = 1; i < SceneManager.sceneCount; i++)
+                    //{
+
+                    //    if (SceneManager.GetSceneAt(i).name != SceneManager.GetSceneByBuildIndex(3).name)
+                    //    {
+                    //        SceneManager.UnloadSceneAsync(SceneManager.GetSceneAt(i).name);
+                    //    }
+                    //}
+
+                    //StartCoroutine(UnloadSceneDelayed());
+
                     if (!SceneManager.GetSceneByName(_data.destinationSceneName).IsValid())
                         SceneManager.LoadSceneAsync(_data.destinationSceneName, LoadSceneMode.Additive);
 
@@ -97,6 +109,17 @@ public class SceneConnector : MonoBehaviour
         }
     }
 
+    void OnTriggerExit(Collider other)
+    {
+        
+        switch (_data.type)
+        {
+            case SceneConnectorType.Seamless:
+                UnloadScene();
+                break;
+        }
+    }
+
     IEnumerator UpdateRespawnInfo(Transform playerTransform)
     {
         yield return new WaitForSeconds(3f);
@@ -121,6 +144,20 @@ public class SceneConnector : MonoBehaviour
 
     public void UnloadScene()
     {
+        if (bDebug) Debug.Log("Unloaded : " + _data.sceneName);
+        try
+        {
+            SceneManager.UnloadSceneAsync(_data.sceneName);
+        }
+        catch (Exception e)
+        {
+            Debug.Log("can't unload scene");
+        }
+    }
+
+    public IEnumerator UnloadSceneDelayed()
+    {
+        yield return new WaitForEndOfFrame();
         if (bDebug) Debug.Log("Unloaded : " + _data.sceneName);
         try
         {

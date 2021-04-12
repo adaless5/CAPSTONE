@@ -17,6 +17,7 @@ public class RoamerDeath : RoamerState
     {
         base.Enter();        
         _navMeshAgent.isStopped = true;
+        _currentEnemy.GetComponent<Health>().bCanBeDamaged = false;
     }
 
     // Update is called once per frame
@@ -31,7 +32,9 @@ public class RoamerDeath : RoamerState
             _currentEnemy.SetActive(false);
             for (int i = 0; i < _currentEnemy.transform.childCount; ++i)
             {
+                _currentEnemy.GetComponent<Health>().bCanBeDamaged = true;
                 _currentEnemy.transform.GetChild(i).gameObject.SetActive(false);
+
             }
         }
     }

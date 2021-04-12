@@ -12,9 +12,9 @@ public class WeaponPickup : MonoBehaviour, ITippable
     bool isUsed = false;
     public GameObject _modelObj;
     GameObject _imageObject;
-
+    bool _canPlayerPickUp = false;
     string[] _tipName = { "EQUIPMENT_DEFAULT_GUN", "EQUIPMENT_GRENADE", "EQUIPMENT_GLANDGUN" };
-
+    Image _toolTip;
     ALTPlayerController player;
 
     bool bCanDestroyMessage = false;
@@ -54,6 +54,7 @@ public class WeaponPickup : MonoBehaviour, ITippable
         try
         {
             player = playerref.GetComponent<ALTPlayerController>();
+            _toolTip = GameObject.FindWithTag("Tip").GetComponent<Image>();
         }
         catch (Exception e)
         {
@@ -70,15 +71,14 @@ public class WeaponPickup : MonoBehaviour, ITippable
             {
                 if (Gamepad.current != null)
                 {
-                    if (Gamepad.current.xButton.IsActuated())
-                    {
-                        if (!Gamepad.current.xButton.isPressed)
-                            bCanDestroyMessage = true;
-                    }
+
+                    if (!Gamepad.current.xButton.isPressed)
+                        bCanDestroyMessage = true;
+
                     else if (!Keyboard.current.eKey.isPressed)
                         bCanDestroyMessage = true;
                 }
-                else if (!Keyboard.current.eKey.isPressed)
+                else if (!Keyboard.current.eKey.isPressed && isUsed)
                     bCanDestroyMessage = true;
             }
 
@@ -89,34 +89,48 @@ public class WeaponPickup : MonoBehaviour, ITippable
                     DestroyTip();
                 }
             }
-        }
-    }
 
-    private void OnTriggerStay(Collider other)
-    {
-
-        if (other.gameObject.tag == "Player" && !isUsed)
-        {
-            GameObject.FindObjectOfType<InteractableText>().b_inInteractCollider = true;
-            if (FindObjectOfType<ALTPlayerController>() != null && FindObjectOfType<ALTPlayerController>().CheckForInteract())
+            if (_canPlayerPickUp && isUsed == false)
             {
-                EventBroker.CallOnPickupWeapon(weaponNum);
-                isUsed = true;
-                if (GetComponent<MeshRenderer>() != null)
+                if (player.CheckForInteract())
                 {
-                    GetComponent<MeshRenderer>().enabled = false;
-                }
-                if (_modelObj != null)
-                {
-                    _modelObj.SetActive(false);
-                }
-                GetComponent<Collider>().enabled = false;
+                    EventBroker.CallOnPickupWeapon(weaponNum);
+                    _canPlayerPickUp = false;
+                    isUsed = true;
+                    if (GetComponent<MeshRenderer>() != null)
+                    {
+                        GetComponent<MeshRenderer>().enabled = false;
+                    }
+                    if (_modelObj != null)
+                    {
+                        _modelObj.SetActive(false);
+                    }
+                    GetComponent<Collider>().enabled = false;
 
-                CreateTip("Sprites/Messages/" + _tipName[weaponNum]);
+                    CreateTip("Sprites/Messages/" + _tipName[weaponNum]);
+
+                }
             }
         }
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Player")
+            _canPlayerPickUp = true;
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "Player")
+            _canPlayerPickUp = false;
+    }
+
+    private void OnTriggerStay(collider other)
+    {
+         if (other.gameObject.tag == "Player" && !isUsed)
+            GameObject.FindObjectOfType<InteractableText>().b_inInteractCollider = true;
+    }
 
     public void SaveDataOnSceneChange()
     {
@@ -140,27 +154,29 @@ public class WeaponPickup : MonoBehaviour, ITippable
             {
                 DestroyTip();
                 bCanDestroyMessage = false;
-                _imageObject = new GameObject("testTip");
-                _imageObject.tag = "Tip";
 
-                RectTransform trans = _imageObject.AddComponent<RectTransform>();
-                trans.transform.SetParent(canvas.transform); // setting parent
-                trans.localScale = Vector3.one;
-                trans.anchoredPosition = new Vector2(0f, 0f); // setting position, will be on center
-                Texture2D tex = Resources.Load<Texture2D>(filename);
+                //RectTransform trans = _imageObject.AddComponent<RectTransform>();
+                //trans.transform.SetParent(canvas.transform); // setting parent
+                //trans.localScale = Vector3.one;
+                //trans.anchoredPosition = new Vector2(0f, 0f); // setting position, will be on center
+                //Texture2D tex = Resources.Load<Texture2D>(filename);
+                Sprite spr = Resources.Load<Sprite>(filename);
 
-                if (tex != null)
-                {
-                    trans.sizeDelta = new Vector2(tex.width, tex.height); // custom size
-                }
+                //if (tex != null)
+                //{
+                //    trans.sizeDelta = new Vector2(tex.width, tex.height); // custom size
+                //}
 
-                Image image = _imageObject.AddComponent<Image>();
+                Image image = _toolTip.GetComponent<Image>();
+
                 if (image != null)
                 {
-                    if (tex != null)
+                    if (spr != null)
                     {
-                        image.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
-                        _imageObject.transform.SetParent(canvas.transform);
+                        //image.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
+                        //_imageObject.transform.SetParent(canvas.transform);
+                        _toolTip.enabled = true;
+                        image.sprite = spr;
                     }
                 }
             }
@@ -169,15 +185,16 @@ public class WeaponPickup : MonoBehaviour, ITippable
 
     public void DestroyTip()
     {
-        GameObject[] array = FindObjectsOfType<GameObject>();
-        foreach (GameObject obj in array)
-        {
-            if (obj.tag == "Tip")
-            {
-                Destroy(obj);
-            }
-        }
+        //GameObject[] array = FindObjectsOfType<GameObject>();
+        //foreach (GameObject obj in array)
+        //{
+        //    if (obj.tag == "Tip")
+        //    {
+        //        Destroy(obj);
+        //    }
+        //}
 
-        _imageObject = null;
+        //_imageObject = null;
+        _toolTip.enabled = false;
     }
 }

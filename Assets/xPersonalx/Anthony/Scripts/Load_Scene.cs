@@ -15,7 +15,7 @@ public class Load_Scene : MonoBehaviour
     {
         yield return new WaitForSeconds(1.0f);
         StartCoroutine(LoadAsyncOperation());
-        
+
         if (MainMenuUI.bNewGame)
         {
             print("SHOULD START A NEW GAME!");
@@ -24,7 +24,7 @@ public class Load_Scene : MonoBehaviour
         {
             print("DON'T START A NEW GAME!");
         }
-        
+
     }
 
     IEnumerator LoadAsyncOperation()
@@ -34,7 +34,7 @@ public class Load_Scene : MonoBehaviour
         if (MainMenuUI.bNewGame)
         {
             AsyncOperation firstLevel = SceneManager.LoadSceneAsync(3);
-            AsyncOperation secondlevel = SceneManager.LoadSceneAsync(4,LoadSceneMode.Additive);
+            AsyncOperation secondlevel = SceneManager.LoadSceneAsync(4, LoadSceneMode.Additive);
 
 
             while (firstLevel.progress < 1f)
@@ -48,34 +48,50 @@ public class Load_Scene : MonoBehaviour
                 _fillMeter.fillAmount = secondlevel.progress;
                 yield return new WaitForEndOfFrame();
             }
+
+
         }
         else if (!MainMenuUI.bNewGame)
         {
             SaveSystem.RespawnInfo_Data data = new SaveSystem.RespawnInfo_Data();
             data.FromString(FileIO.FetchRespawnInfo());
 
-            if (data.sceneName == "")
+            //if (data.sceneName == "")
+            //{
+            //    AsyncOperation firstLevel = SceneManager.LoadSceneAsync(3);
+
+            //    while (firstLevel.progress < 1f)
+            //    {
+            //        _fillMeter.fillAmount = firstLevel.progress;
+            //        yield return new WaitForEndOfFrame();
+            //    }
+            //}
+            //else
             {
-                AsyncOperation firstLevel = SceneManager.LoadSceneAsync(3);
+                //AsyncOperation firstLevel = SceneManager.LoadSceneAsync(3, LoadSceneMode.Additive);
+                AsyncOperation secondLevel = SceneManager.LoadSceneAsync(data.sceneName, LoadSceneMode.Additive);
 
-                while (firstLevel.progress < 1f)
+                //while (firstLevel.progress < 1f)
+                //{
+                //    _fillMeter.fillAmount = firstLevel.progress;
+                //    yield return new WaitForEndOfFrame();
+                //    SceneManager.UnloadSceneAsync(2);
+                //    EventBroker.CallOnLoadingScreenFinished(data);
+                //}
+
+
+                while (secondLevel.progress < 1f)
                 {
-                    _fillMeter.fillAmount = firstLevel.progress;
+                    _fillMeter.fillAmount = secondLevel.progress;
                     yield return new WaitForEndOfFrame();
-                }
-            }
-            else
-            {
-                AsyncOperation firstLevel = SceneManager.LoadSceneAsync(data.sceneName);
 
-                while (firstLevel.progress < 1f)
-                {
-                    _fillMeter.fillAmount = firstLevel.progress;
-                    yield return new WaitForEndOfFrame();
                 }
+                SceneManager.UnloadSceneAsync(2);
+                EventBroker.CallOnLoadingScreenFinished(data);
+
             }
 
-            
+
         }
     }
 }

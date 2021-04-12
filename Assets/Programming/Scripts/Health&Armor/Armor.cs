@@ -42,6 +42,7 @@ public class Armor : MonoBehaviour
     public void ResetArmor()
     {
         m_Armor = m_MaxArmor;
+        armorBar.SetCurrentArmor(m_Armor);
     }
 
     public float GetCurrentArmor()

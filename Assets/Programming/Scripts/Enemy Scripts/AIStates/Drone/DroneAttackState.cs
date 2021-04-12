@@ -76,6 +76,7 @@ public class DroneAttack : DroneState
             //}
             Debug.Log("Spawn Bullet");
             GameObject tempbullet = GameObject.Instantiate(_droneProjectile, finalFowardVector, _currentEnemy.transform.rotation, _currentEnemy.transform);
+            tempbullet.transform.rotation = Quaternion.LookRotation(playerDir, Vector3.up);
             tempbullet.GetComponent<Rigidbody>().AddForce(playerDir * _shootDistance, ForceMode.Impulse);
             _shootTimer = 0.5f;
         }

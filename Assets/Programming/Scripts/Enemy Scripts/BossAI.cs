@@ -18,16 +18,27 @@ public class BossAI : MonoBehaviour
     event Action OnWeakStateEnded;
     public float _ucHealth = 20.0f;
     public GameObject _deathParticle;
-
+    public GameObject _arm;
     private void Awake()
     {
+        int UCindex = 0;
+        _umbilicalCords = new GameObject[3];
         foreach (Transform g in transform)
         {
+            if (g.gameObject.name.Contains("Arm"))
+            {
+                _arm = g.gameObject;
+            }
             if (g.gameObject.name == "Weak")
             {
                 Debug.Log("Weak Component Found");
                 _health = g.GetComponent<Health>();
                 g.GetComponent<Health>().OnDeath += BossDeath;
+            }
+            if (g.GetComponent<UmbilicalCord>() != null)
+            {
+                _umbilicalCords[UCindex] = g.GetComponent<UmbilicalCord>().gameObject;
+                UCindex++;
             }
         }
 
@@ -46,6 +57,11 @@ public class BossAI : MonoBehaviour
     private void Start()
     {
         _currentBossState = new UCState(gameObject);
+    }
+    
+    public GameObject GetBossArm()
+    {
+        return _arm;
     }
 
     void BossDeath()

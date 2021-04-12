@@ -31,7 +31,7 @@ public class BossWeakState : BossState
         _weakTimer -= Time.deltaTime;
         if (_weakTimer <= 0.00f)
         {
-            _nextState = new UCState(_currentEnemy);
+            _nextState = new BossArmSmashState(_currentEnemy, _currentEnemy.GetComponent<BossAI>().GetBossArm());
             _stage = EVENT.EXIT;
         }
     }

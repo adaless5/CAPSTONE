@@ -58,7 +58,9 @@ public class DroneBossAttack : DroneState
             //}
 
             GameObject tempbullet = GameObject.Instantiate(_droneProjectile, _currentEnemy.transform.position, Quaternion.identity, _currentEnemy.transform);
+            tempbullet.transform.rotation = Quaternion.LookRotation(playerDir, Vector3.up);
             tempbullet.GetComponent<Rigidbody>().AddForce(playerDir * _shootDistance, ForceMode.Impulse);
+            
             _shootTimer = 0.5f;
         }
     }

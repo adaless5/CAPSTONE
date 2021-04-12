@@ -39,6 +39,20 @@ public class DeathMenuUI : MonoBehaviour
         {
         }
     }
+
+    void HideDeathMenu()
+    {
+        try
+        {
+            _deathMenuCanvas.interactable = false;
+            _deathMenuCanvas.blocksRaycasts = false;
+            _deathMenuCanvas.alpha = 0;
+        }
+        catch
+        {
+
+        }
+    }
     IEnumerator FadeTo(float aValue, float aTime)
     {
         float alpha = _deathMenuCanvas.alpha;
@@ -63,35 +77,37 @@ public class DeathMenuUI : MonoBehaviour
         _deathMenuCanvas.blocksRaycasts = false;
 
         //MainMenuUI..Continue()
-        Destroy(GameObject.FindGameObjectWithTag("Player"));
+        //Destroy(GameObject.FindGameObjectWithTag("Player"));
         Time.timeScale = 1f;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        SaveSystem.RespawnInfo_Data data = new SaveSystem.RespawnInfo_Data();
-        data.FromString(FileIO.FetchRespawnInfo());
+        MainMenuUI.bNewGame = false;
+        HideDeathMenu();
 
-        if (data.sceneName == null || data.sceneName == "")
-        {
+        SceneManager.LoadScene(2, LoadSceneMode.Additive);
+        
+        //SaveSystem.RespawnInfo_Data data = new SaveSystem.RespawnInfo_Data();
+        //data.FromString(FileIO.FetchRespawnInfo());
 
-            //SceneManager.LoadSceneAsync(4, LoadSceneMode.Additive);
-            StartCoroutine(LoadAsyncScene(4));
-        }
-        else
-        {
-           
-            //SceneManager.LoadSceneAsync(data.sceneName, LoadSceneMode.Additive);
-            StartCoroutine(LoadAsyncScene(data.sceneName));
+        //if (data.sceneName == null || data.sceneName == "")
+        //{
+
+        //    //SceneManager.LoadSceneAsync(4, LoadSceneMode.Additive);
+        //    StartCoroutine(LoadAsyncScene(4));
+        //}
+        //else
+        //{
+
+        //    //SceneManager.LoadSceneAsync(data.sceneName, LoadSceneMode.Additive);
+        //    StartCoroutine(LoadAsyncScene(data.sceneName));
 
 
-            //if (_player != null)
-            //{
-            //    _player.transform.rotation = data.rot;
-            //    _player.transform.position = data.pos;
-            //}
-        }
+
+        //}
         //_playerController.PlayerRespawn();
         //StartCoroutine(FadeTo(0.0f, 1.0f));
     }
+
 
     IEnumerator LoadAsyncScene(int sceneIndex)
     {
@@ -108,6 +124,7 @@ public class DeathMenuUI : MonoBehaviour
         {
             yield return new WaitForEndOfFrame();
         }
+
     }
     IEnumerator LoadAsyncScene(string scenename)
     {
@@ -131,7 +148,7 @@ public class DeathMenuUI : MonoBehaviour
         _deathMenuCanvas.interactable = false;
         _deathMenuCanvas.blocksRaycasts = false;
 
-     
+
         Destroy(_playerController.gameObject);
         SceneManager.LoadScene(1);
         //_deathMenuCanvas.alpha = 0;

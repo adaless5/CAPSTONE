@@ -32,7 +32,7 @@ public class AmmoPickup : MonoBehaviour
 
         isPickedUp = false;
         isMarkerCreated = false;
-        m_ammoController = FindObjectOfType<AmmoController>();
+        m_ammoController = null;
     }
 
     void PlayerSpawned(GameObject playerReference)
@@ -42,6 +42,7 @@ public class AmmoPickup : MonoBehaviour
             m_ammoPickup = GetComponent<Pickup>();
             m_compass = FindObjectOfType<Compass>();
             m_marker = GetComponent<CompassMarkers>();
+            m_ammoController = FindObjectOfType<AmmoController>();
         }
         catch { }
         if (m_marker != null && isMarkerCreated == false)
@@ -72,21 +73,21 @@ public class AmmoPickup : MonoBehaviour
 
     // Update is called once per frame
     private void OnTriggerEnter(Collider other)
-    {             
-        if(m_ammoController==null)
+    {
+        if (m_ammoController == null)
         {
             m_ammoController = FindObjectOfType<AmmoController>();
         }
-       if (other.tag == "Player" && isPickedUp == false && m_ammoController.IsAmmoFull(ammoType) == false)
-        { 
+        if (other.tag == "Player" && isPickedUp == false && m_ammoController.IsAmmoFull(ammoType) == false)
+        {
             isPickedUp = true;
-            EventBroker.CallOnAmmoPickup(ammoType, m_amountOfClipsInPickup, m_ammoCap);              
+            EventBroker.CallOnAmmoPickup(ammoType, m_amountOfClipsInPickup, m_ammoCap);
             gameObject.SetActive(false);
 
             if (m_marker != null)
                 m_compass.RemoveMarker(m_marker);
         }
-        else if(other.tag == "Player" && isPickedUp == false && m_ammoController.IsAmmoFull(ammoType) == true)
+        else if (other.tag == "Player" && isPickedUp == false && m_ammoController.IsAmmoFull(ammoType) == true)
         {
             EventBroker.CallOnAmmoPickupAttempt();
         }

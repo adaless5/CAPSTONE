@@ -78,6 +78,10 @@ public class Health : MonoBehaviour, ISaveable
         if (bCanBeDamaged)
         {
             m_HP -= damage;
+            
+            //Clamp values -LCC
+            m_HP = Mathf.Clamp(m_HP, 0, m_MaxHealth);
+            
             if (healthBar != null && gameObject.tag == "Player")
                 healthBar.LoseHealth(m_HP, damage, m_MaxHealth);
             if (hitEffects != null)
@@ -101,8 +105,6 @@ public class Health : MonoBehaviour, ISaveable
                 }
             }
 
-            //Clamp values -LCC
-            m_HP = Mathf.Clamp(m_HP, 0, m_MaxHealth);
 
             CallOnTakeDamage();
         }
@@ -133,17 +135,16 @@ public class Health : MonoBehaviour, ISaveable
 
 
             //Disabled Deactivation on Death to make Death Event more malleable - LCC
-        
+
             //Destroy(gameObject);
-            if(gameObject.tag != "Player")
-            gameObject.SetActive(false);
-            for (int i = 0; i < transform.childCount; ++i)
-            {
-                transform.GetChild(i).gameObject.SetActive(false);
-            }
-            CallOnDeath();
-            //transform.DetachChildren();
+            //if(gameObject.tag != "Player")
+            //gameObject.SetActive(false);
+            //for (int i = 0; i < transform.childCount; ++i)
+            //{
+            //    transform.GetChild(i).gameObject.SetActive(false);
+            //}
         }
+        CallOnDeath();
     }
 
     void PlayerDeath()

@@ -32,7 +32,6 @@ public class PauseOptionsMenuUI : MonoBehaviour
         _pauseMenu = FindObjectOfType<PauseMenuUI>();
         _pauseMenu = FindObjectOfType<PauseMenuUI>();
         _isFullScreen = Screen.fullScreen;
-
         //_light = FindObjectOfType<Light>();
         //m_Volume = FindObjectOfType<Volume>();
 

@@ -18,7 +18,6 @@ public class CreatureProjectile : MonoBehaviour
     bool m_bHasAction = false;
     float _damage;
     float _targetDefaultSpeed;
-    // Start is called before the first frame update
 
     private void Awake()
     {
@@ -83,17 +82,17 @@ public class CreatureProjectile : MonoBehaviour
 
     private void OnDisable()
     {
-        _lifeTime = _maxLifeTime;
-        //transform.parent = _transformOrigin;
-        if (m_bHasAction)
-        {
-            if (_target.GetComponent<TEMP_Roamer>())
-            {
-                _target.GetComponent<TEMP_Roamer>()._FollowSpeed = _targetDefaultSpeed;
-            }
-        }
+        //_lifeTime = _maxLifeTime;
+        ////transform.parent = _transformOrigin;
+        //if (m_bHasAction)
+        //{
+        //    if (_target.GetComponent<TEMP_Roamer>())
+        //    {
+        //        _target.GetComponent<TEMP_Roamer>()._FollowSpeed = _targetDefaultSpeed;
+        //    }
+        //}
 
-        DeStick();
+        //DeStick();
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -114,6 +113,7 @@ public class CreatureProjectile : MonoBehaviour
         {
             Debug.Log("Sticking");
             transform.parent = collision.transform;
+            _targetHealth.OnDeath += DeStick;
             Stick();
         }
         DestructibleObject wall = collision.transform.GetComponentInParent<DestructibleObject>();
@@ -131,15 +131,16 @@ public class CreatureProjectile : MonoBehaviour
     }
     void DeStick()
     {
+        Debug.Log("Destick");
+        transform.parent = _transformOrigin;
         _rigidBody.isKinematic = false;
         _rigidBody.detectCollisions = true;
-
+        ObjectPool.Instance.ReturnToPool("Creature", gameObject);
     }
     void Stick()
     {
         _rigidBody.isKinematic = true;
         _rigidBody.detectCollisions = false;
-
         audioManager.TriggerStickCreatureWeapon(GetComponentInChildren<AudioSource>());
     }
 

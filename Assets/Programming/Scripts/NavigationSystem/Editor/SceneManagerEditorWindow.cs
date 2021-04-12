@@ -105,6 +105,11 @@ public class SceneManagerEditorWindow : EditorWindow
                         //Display Scenes
                         GUILayout.BeginHorizontal();
                         GUILayout.Space(15);
+                        if (GUILayout.Button("s", GUILayout.Width(17f)))
+                        {
+                            GUIUtility.systemCopyBuffer = GetFileNameWithoutExtention(_scenes[levelIndex][sceneIndex].Name);
+                            Debug.Log("Scene Name Copied To Clipboard");
+                        }
                         GUI.contentColor = SceneFoundInBuildSettings(levelIndex,sceneIndex);
                         _sceneFoldouts[levelIndex][sceneIndex] =
                             EditorGUILayout.Foldout(_sceneFoldouts[levelIndex][sceneIndex], GetFileNameWithoutExtention(_scenes[levelIndex][sceneIndex].Name));
@@ -119,7 +124,7 @@ public class SceneManagerEditorWindow : EditorWindow
                             activeSceneAtLevelIndex = levelIndex;
                         }
                         //
-
+         
                         //Change Load Scene Button To Green If scene is currently loaded
                         GUI.backgroundColor = SetLoadButtonColor(sceneIndex,levelIndex);
 
