@@ -13,6 +13,7 @@ public class TeleporterAnimations : MonoBehaviour
     void Start()
     {
         _Position = transform.position;
+        currentTime = Random.Range(0, rotationSpeed);
     }
     void Timing()
     {

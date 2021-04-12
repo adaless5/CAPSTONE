@@ -36,12 +36,16 @@ public class AmmoProjectorScript : MonoBehaviour
 
         if (m_Player != null)
         {
-            if (Hologram != null && Beam_1 != null && Beam_1 != null)
+            if (Hologram != null)
+
+            {
+                Hologram.transform.LookAt(m_Player.transform);
+                Hologram.transform.Rotate(90.0f, 0.0f, 0.0f);
+            }
+                if(Beam_1 != null && Beam_1 != null)
             {
                 Beam_1.transform.Rotate(0.0f, 0.0f, 2.0f);
                 Beam_2.transform.Rotate(0.0f, 0.0f, 3.5f);
-                Hologram.transform.LookAt(m_Player.transform);
-                Hologram.transform.Rotate(90.0f, 0.0f, 0.0f);
             }
         }
         else

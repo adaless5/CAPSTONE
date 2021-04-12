@@ -94,27 +94,29 @@ public class WeaponPickup : MonoBehaviour, ITippable
 
     private void OnTriggerStay(Collider other)
     {
-        if (FindObjectOfType<ALTPlayerController>() != null && FindObjectOfType<ALTPlayerController>().CheckForInteract())
-            if (!isUsed)
-            {
-                if (other.gameObject.tag == "Player")
-                {
-                    EventBroker.CallOnPickupWeapon(weaponNum);
-                    isUsed = true; 
-                    if (GetComponent<MeshRenderer>() != null)
-                    {
-                        GetComponent<MeshRenderer>().enabled = false;
-                    }
-                    if (_modelObj != null)
-                    {
-                        _modelObj.SetActive(false);
-                    }
-                    GetComponent<Collider>().enabled = false;
 
-                    CreateTip("Sprites/Messages/" + _tipName[weaponNum]);
+        if (other.gameObject.tag == "Player" && !isUsed)
+        {
+            GameObject.FindObjectOfType<InteractableText>().b_inInteractCollider = true;
+            if (FindObjectOfType<ALTPlayerController>() != null && FindObjectOfType<ALTPlayerController>().CheckForInteract())
+            {
+                EventBroker.CallOnPickupWeapon(weaponNum);
+                isUsed = true;
+                if (GetComponent<MeshRenderer>() != null)
+                {
+                    GetComponent<MeshRenderer>().enabled = false;
                 }
+                if (_modelObj != null)
+                {
+                    _modelObj.SetActive(false);
+                }
+                GetComponent<Collider>().enabled = false;
+
+                CreateTip("Sprites/Messages/" + _tipName[weaponNum]);
             }
+        }
     }
+
 
     public void SaveDataOnSceneChange()
     {

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3056022396187588097}
   - component: {fileID: 8387133963610940005}
   - component: {fileID: 6095016056118421427}
+  - component: {fileID: 6951344266028557914}
   m_Layer: 0
   m_Name: ITEM_CONTAINER_HANGING
   m_TagString: Untagged
@@ -28,7 +29,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 945886705503433675}
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 218.88, y: 22.778, z: 321.21}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3826345387903405010}
@@ -69,7 +70,7 @@ SphereCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 1
-  m_Center: {x: 0, y: 0, z: 0.32}
+  m_Center: {x: 0, y: 0.05, z: -5.87}
 --- !u!54 &8387133963610940005
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -101,9 +102,24 @@ MonoBehaviour:
   m_ThermalViewMaterial: {fileID: 2100000, guid: 211f1b39820a1824a831e6ee1b1b6e32,
     type: 2}
   m_MeshRenderers: []
-  m_MeshRenderer: {fileID: 0}
   m_skinnedMeshRenderers: []
   m_skinnedMeshRenderer: {fileID: 0}
+--- !u!114 &6951344266028557914
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 945886705503433675}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d22a001680f83e4eb3ef49757c23245, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _globObject: {fileID: 945886705503433675}
+  _pulseScale: 0.5
+  bGrow: 0
+  dontRotate: 1
 --- !u!1 &1784301422828103961
 GameObject:
   m_ObjectHideFlags: 0
@@ -128,7 +144,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1784301422828103961}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -0.01, y: 0.04, z: -0.661}
+  m_LocalPosition: {x: -0.01, y: 0.04, z: -6.825}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 7760102525838394759}
