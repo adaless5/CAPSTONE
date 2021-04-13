@@ -6,12 +6,12 @@ public class DefaultWeaponEffects : MonoBehaviour
 {
     // Start is called before the first frame update
 
-    public GameObject _gunMuzzlePoint;
+    GameObject _gunMuzzlePoint;
     public GameObject _muzzleEffects;
     public GameObject _muzzleFireSpiral;
     public GameObject[] _muzzleFireRings;
 
-    public GameObject _hitLandedEffects;
+    GameObject _hitLandedEffects;
     List<GameObject> _hitLandedBulletEffects = new List<GameObject>();
     List<GameObject> _hitLandedRingEffects = new List<GameObject>();
 
@@ -29,8 +29,8 @@ public class DefaultWeaponEffects : MonoBehaviour
         _hitLandedRingEffects.Add(GameObject.Find("hitLandedRingEffects (1)"));
         _hitLandedRingEffects.Add(GameObject.Find("hitLandedRingEffects (2)"));
 
-        //_gunMuzzlePoint = GameObject.Find("DefaultWeaponMuzzlePoint");
-        _gunMuzzlePoint = GameObject.Find("DefaultMuzzlePoint");
+        _gunMuzzlePoint = GameObject.Find("DefaultWeaponMuzzlePoint");
+
         SetAllPiecesAlpha(0.0f);
     }
 

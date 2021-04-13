@@ -156,7 +156,7 @@ public class HUD : MonoBehaviour
     {
         m_pickupAnimator.SetTrigger("IsPicked");
 
-        m_notificationText.text = "ACQUIRED " + currencyAmount + " CATALYST\nTOTAL: " + currencyTotal;
+        m_notificationText.text = "ACQUIRED $" + currencyAmount + " IN UPGRADE FUNDS\nFUNDS TOTAL: $" + currencyTotal;
     }
 
     void NotificationText(WeaponType weapon, int clipAmount, int ammoCap)
