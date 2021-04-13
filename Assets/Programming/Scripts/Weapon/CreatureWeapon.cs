@@ -116,7 +116,7 @@ public class CreatureWeapon : Weapon
     public IEnumerator SwapOutLogic()
     {
         _bcoroutineOutIsRunning = true;
-       
+        Debug.Log("Started GG SwapOutCoroutine at timestamp: " + Time.time);
         //Waits for default gun swap out animation to play before setting inactive
         //yield return new WaitForSeconds(0.667f);
         yield return new WaitForSeconds(1.2f);
@@ -129,13 +129,13 @@ public class CreatureWeapon : Weapon
         {
             _gunObject.SetActive(true);
         }
-       
+        Debug.Log("Finished GG SwapOutCoroutine at timestamp: " + Time.time);
         _bcoroutineOutIsRunning = false;
     }
     public IEnumerator GGSwapInLogic()
     {
         _bcoroutineInIsRunning = true;
-        
+        Debug.Log("Started GG SwapInCoroutine at timestamp: " + Time.time);
         //Waits for other weapon to finish swapping out before swapping in, currently only default gun at 1.133 seconds
         yield return new WaitForSeconds(1.2f);
         if (bIsActive)
@@ -147,7 +147,7 @@ public class CreatureWeapon : Weapon
         {
             _gunObject.SetActive(false);
         }
-       
+        Debug.Log("Finished GG SwapInCoroutine at timestamp: " + Time.time);
         _bcoroutineInIsRunning = false;
     }
     public void WeaponSwapOut()
