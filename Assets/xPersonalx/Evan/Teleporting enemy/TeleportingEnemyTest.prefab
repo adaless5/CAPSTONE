@@ -44,6 +44,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HP: 60
   m_IsLoadingShield: 0
+  bCanBeDamaged: 1
+  isDead: 0
   healthBar: {fileID: 0}
   m_compass: {fileID: 0}
   m_marker: {fileID: 0}
@@ -9990,6 +9992,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7753339147034711008, guid: d23333eade538f545ae823168e5fc82b,
+        type: 3}
+      propertyPath: dontRotate
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8125546305124463899, guid: d23333eade538f545ae823168e5fc82b,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 4193308824637522265, guid: d23333eade538f545ae823168e5fc82b, type: 3}
