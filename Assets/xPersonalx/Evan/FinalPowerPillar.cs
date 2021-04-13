@@ -82,7 +82,7 @@ public class FinalPowerPillar : MonoBehaviour, ISaveable
         }
         _isDefeated = true;
         _stonesParent.transform.DetachChildren();
-        SaveData();
+        //////////////////////////////////////////////////////////////////////////////////////////  SaveData();
         _death.Die();
     }
 

@@ -77,7 +77,7 @@ public class SceneConnector : MonoBehaviour
                     if (!SceneManager.GetSceneByName(_data.destinationSceneName).IsValid())
                         SceneManager.LoadSceneAsync(_data.destinationSceneName, LoadSceneMode.Additive);
 
-                    StartCoroutine(UpdateRespawnInfo(playerTransform));
+
 
                     break;
 
@@ -111,23 +111,39 @@ public class SceneConnector : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
-        
-        switch (_data.type)
+        Transform playerTransform = other.GetComponentInParent<Transform>();
+        Debug.Log("Exit load trigger");
+        if (_data != null)
         {
-            case SceneConnectorType.Seamless:
-                UnloadScene();
-                break;
+            switch (_data.type)
+            {
+                case SceneConnectorType.Seamless:
+                    UnloadScene();
+                    if (playerTransform != null)
+                        StartCoroutine(UpdateRespawnInfo(playerTransform));
+                    break;
+            }
+
         }
     }
 
     IEnumerator UpdateRespawnInfo(Transform playerTransform)
     {
-        yield return new WaitForSeconds(3f);
-        FileIO.ExportRespawnInfoToFile(playerTransform, SceneManager.GetActiveScene().name);
-        if (SceneManager.sceneCount > 1)
+        //yield return new WaitForSeconds(3f);
+        for (int i = 1; i < SceneManager.sceneCount; i++)
         {
-            FileIO.ExportRespawnInfoToFile(playerTransform, SceneManager.GetSceneAt(1).name);
+
+            if (SceneManager.GetSceneAt(i).name == _data.destinationSceneName)
+            {
+                FileIO.ExportRespawnInfoToFile(playerTransform, SceneManager.GetSceneAt(i).name);
+            }
         }
+        yield return null;
+        //FileIO.ExportRespawnInfoToFile(playerTransform, SceneManager.GetActiveScene().name);
+        //if (SceneManager.sceneCount > 1)
+        //{
+        //    FileIO.ExportRespawnInfoToFile(playerTransform, SceneManager.GetSceneAt(1).name);
+        //}
     }
 
     public void CreateUnloadTrigger()

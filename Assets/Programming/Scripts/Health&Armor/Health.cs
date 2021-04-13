@@ -24,6 +24,7 @@ public class Health : MonoBehaviour, ISaveable
 
     public bool bCanBeDamaged = true;
     public bool isDead = false;
+    public bool HasOwnDeathLogic = false;
     bool isMarkerCreated;
 
     public HealthBarUI healthBar;
@@ -78,10 +79,10 @@ public class Health : MonoBehaviour, ISaveable
         if (bCanBeDamaged)
         {
             m_HP -= damage;
-            
+
             //Clamp values -LCC
             m_HP = Mathf.Clamp(m_HP, 0, m_MaxHealth);
-            
+
             if (healthBar != null && gameObject.tag == "Player")
                 healthBar.LoseHealth(m_HP, damage, m_MaxHealth);
             if (hitEffects != null)
@@ -118,31 +119,18 @@ public class Health : MonoBehaviour, ISaveable
     void Die()
     {
         isDead = true;
-
+        RemoveCompassMarker();
         if (hitEffects != null)
         {
             hitEffects.Death();
         }
-        if (gameObject.tag != "Roamer")
+        if (!HasOwnDeathLogic)
         {
-            RemoveCompassMarker();
-            //Temporary Spawning Stuff - Anthony
-            Spawner spawner = GetComponent<Spawner>();
-            if (spawner != null)
+            gameObject.SetActive(false);
+            for (int i = 0; i < transform.childCount; ++i)
             {
-                spawner.Spawn();
+                transform.GetChild(i).gameObject.SetActive(false);
             }
-
-
-            //Disabled Deactivation on Death to make Death Event more malleable - LCC
-
-            //Destroy(gameObject);
-            //if(gameObject.tag != "Player")
-            //gameObject.SetActive(false);
-            //for (int i = 0; i < transform.childCount; ++i)
-            //{
-            //    transform.GetChild(i).gameObject.SetActive(false);
-            //}
         }
         CallOnDeath();
     }

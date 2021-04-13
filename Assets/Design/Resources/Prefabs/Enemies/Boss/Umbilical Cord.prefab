@@ -115,6 +115,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ec5fa271f0379e498a2d60cef375b0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _health: {fileID: 0}
+  _ucAnimator: {fileID: 0}
 --- !u!1 &3272070920058034194
 GameObject:
   m_ObjectHideFlags: 0
@@ -225,6 +227,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HP: 20
   m_IsLoadingShield: 0
+  bCanBeDamaged: 1
+  isDead: 0
+  HasOwnDeathLogic: 1
   healthBar: {fileID: 0}
   m_compass: {fileID: 0}
   m_marker: {fileID: 0}
