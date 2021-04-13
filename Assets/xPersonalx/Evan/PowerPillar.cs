@@ -50,7 +50,7 @@ public class PowerPillar : MonoBehaviour, ISaveable
         GetComponentInChildren<MeshRenderer>().materials[3].SetColor("_EmissiveColor", new Color(0,0,0));
         GetComponentInChildren<MeshRenderer>().materials[3].SetColor("_Color", new Color(0, 0, 0));
 
-        SaveData(transform.position, transform.forward);
+        //////////////////////////////////////////////////////////////////////////////////////////  SaveData(transform.position, transform.forward);
 
         _finalPillar.PillarBreak();
         _livingEffect.Stop();
@@ -64,7 +64,7 @@ public class PowerPillar : MonoBehaviour, ISaveable
             saveTime -= Time.deltaTime;
             if(saveTime <= 0)
             {
-             SaveData(transform.position,transform.forward);
+                //////////////////////////////////////////////////////////////////////////////////////////   SaveData(transform.position,transform.forward);
             }
         }
     }
