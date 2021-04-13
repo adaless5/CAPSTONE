@@ -17,7 +17,7 @@ public class RoamerWanderState : RoamerState
     {
         _stateName = STATENAME.WANDER;
         _wanderRadius = wanderrad;
-        //Debug.Log("Enter Wander State");
+        Debug.Log("Enter Wander State");
     }
 
     public override void Enter()
