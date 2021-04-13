@@ -22,20 +22,16 @@ public class TEMP_PORTAL : MonoBehaviour
     }
     void AboutToTeleportIndicator()
     {
-        
+
     }
 
     void OnTriggerEnter(Collider Other)
     {
         if(TeleportToPositionObject != null)
-        if(Other.tag == "Player" || Other.tag == "Enemy" || Other.tag == "Player_Mine" || Other.GetComponentInChildren<CreatureProjectile>())
+        if(Other.tag == "Player" || Other.tag == "Enemy" || Other.tag == "Player_Mine")
         {
             Transform targetTransform = Other.GetComponentInParent<Transform>();
             MoveTarget(targetTransform);
-                if(Other.tag == "Player")
-                {
-                    GameObject.FindObjectOfType<GrappleHook>().DeactivateGrappleHook();
-                }
         }
     }
     // Update is called once per frame

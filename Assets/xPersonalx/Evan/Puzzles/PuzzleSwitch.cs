@@ -78,40 +78,37 @@ public class PuzzleSwitch : MonoBehaviour, ISaveable
 
     public void SwitchInteract()
     {
-        if (_DoesSwitchReset)
-        {
-            fResetTimer = _ResetTimer;
-        }
-        if (_ActivationPolicy == Switch_ActivationPolicy_Type.CanAlwaysInteract)
-        {
-            Activate(!bIsActive);
-        }
+            if (_DoesSwitchReset)
+            {
+                fResetTimer = _ResetTimer;
+            }
+            if (_ActivationPolicy == Switch_ActivationPolicy_Type.CanAlwaysInteract)
+            {
+                Activate(!bIsActive);
+            }
 
-        else if (_ActivationPolicy == Switch_ActivationPolicy_Type.CanInteractWhenActive && bIsActive)
-        {
-            Activate(!bIsActive);
-        }
+            else if (_ActivationPolicy == Switch_ActivationPolicy_Type.CanInteractWhenActive && bIsActive)
+            {
+                Activate(!bIsActive);
+            }
 
-        else if (_ActivationPolicy == Switch_ActivationPolicy_Type.CanInteractWhenInactive && !bIsActive)
-        {
-            Activate(!bIsActive);
-        }
+            else if (_ActivationPolicy == Switch_ActivationPolicy_Type.CanInteractWhenInactive && !bIsActive)
+            {
+                Activate(!bIsActive);
+            }
 
-
+        
     }
 
     public void Interact()
     {
-        if (bCanSwitch)
+        SwitchInteract();
+        if (_ResponseType == Switch_Response_Type.InteractSwitches)
         {
-            SwitchInteract();
-            if (_ResponseType == Switch_Response_Type.InteractSwitches)
+            foreach (PuzzleSwitch pswitch in _AffectedSwitches)
             {
-                foreach (PuzzleSwitch pswitch in _AffectedSwitches)
-                {
-                    if (pswitch)
-                        pswitch.SwitchInteract();
-                }
+                if(pswitch)
+                pswitch.SwitchInteract();
             }
         }
     }
@@ -122,7 +119,7 @@ public class PuzzleSwitch : MonoBehaviour, ISaveable
             bIsActive = onOff;
             SetSwitchModel(onOff);
             bCanSwitch = false;
-            //////////////////////////////////////////////////////////////////////////////////////////  SaveDataOnSceneChange();
+            SaveDataOnSceneChange();
             if (_ActivationPolicy == Switch_ActivationPolicy_Type.CanInteractWhenInactive || _ActivationPolicy == Switch_ActivationPolicy_Type.CanInteractWhenActive)
             {
                 gameObject.tag = "Untagged";
@@ -168,18 +165,18 @@ public class PuzzleSwitch : MonoBehaviour, ISaveable
 
     void CheckDamage()
     {
-        if (_PlayerInteractType == Switch_PlayerInteract_Type.Damage)
-            if (!bObjectBroken && !_DamageObject.activeSelf)
-            {
-                Interact();
-                bObjectBroken = true;
-            }
+        if(_PlayerInteractType == Switch_PlayerInteract_Type.Damage)
+        if(!bObjectBroken && !_DamageObject.activeSelf)
+        {
+            Interact();
+            bObjectBroken = true;
+        }
     }
     // Update is called once per frame
     void Update()
     {
         CheckDamage();
-        CanSwitchTimer();
+        CanSwitchTimer(); 
         ResetSwitchTimer();
     }
 
@@ -241,20 +238,19 @@ public class PuzzleSwitch : MonoBehaviour, ISaveable
 
     void SetSwitchModel(bool OnOff)
     {
-        if (OnOff)
+        if (_OffSwitch != null && _OnSwitch != null)
         {
-            if (_OffSwitch)
+            if (OnOff)
+            {
                 _OffSwitch.SetActive(false);
-            if (_OnSwitch)
                 _OnSwitch.SetActive(true);
-        }
-        else
+            }
+            else
 
-        {
-            if (_OffSwitch)
+            {
                 _OffSwitch.SetActive(true);
-            if (_OnSwitch)
                 _OnSwitch.SetActive(false);
+            }
         }
     }
 
