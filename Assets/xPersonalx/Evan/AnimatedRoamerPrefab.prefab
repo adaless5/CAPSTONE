@@ -15,7 +15,8 @@ MonoBehaviour:
   m_ThermalViewMaterial: {fileID: 2100000, guid: 211f1b39820a1824a831e6ee1b1b6e32,
     type: 2}
   m_MeshRenderers: []
-  m_MeshRenderer: {fileID: 0}
+  m_skinnedMeshRenderers: []
+  m_skinnedMeshRenderer: {fileID: 0}
 --- !u!1 &3400368523988965129
 GameObject:
   m_ObjectHideFlags: 0
@@ -97,6 +98,7 @@ MonoBehaviour:
   bShouldWanderRandomly: 1
   _wanderSphere: {fileID: 0}
   _wanderRadius: 20
+  _InitialWanderPosition: {x: 0, y: 0, z: 0}
 --- !u!114 &3400368523988965120
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -112,7 +114,8 @@ MonoBehaviour:
   m_ThermalViewMaterial: {fileID: 2100000, guid: 211f1b39820a1824a831e6ee1b1b6e32,
     type: 2}
   m_MeshRenderers: []
-  m_MeshRenderer: {fileID: 0}
+  m_skinnedMeshRenderers: []
+  m_skinnedMeshRenderer: {fileID: 0}
 --- !u!114 &3400368523988965135
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -127,7 +130,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HP: 40
   m_IsLoadingShield: 0
+  bCanBeDamaged: 1
   isDead: 0
+  HasOwnDeathLogic: 1
   healthBar: {fileID: 0}
   m_compass: {fileID: 0}
   m_marker: {fileID: 0}
