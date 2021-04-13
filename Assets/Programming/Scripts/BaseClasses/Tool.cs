@@ -19,13 +19,13 @@ public abstract class Tool : MonoBehaviour, ISaveable
     public virtual void Activate()
     {
         bIsActive = true;
-        //EventBroker.CallOnWeaponSwapIn();
+        EventBroker.CallOnWeaponSwapIn();
     }
 
     public virtual void Deactivate()
     {
         bIsActive = false;
-        //EventBroker.CallOnWeaponSwapOut();
+        EventBroker.CallOnWeaponSwapOut();
     }
 
     public void ObtainEquipment()

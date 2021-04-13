@@ -20,7 +20,7 @@ public class RoamerPatrolState : RoamerState
         
         bFirstPatrol = true;
         MoveToNextPoint();
-        //Debug.Log("Enemy Patrolling");       
+        Debug.Log("Enemy Patrolling");       
     }
 
     public override void Update()

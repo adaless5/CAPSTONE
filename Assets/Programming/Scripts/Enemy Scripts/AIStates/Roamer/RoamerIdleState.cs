@@ -26,7 +26,7 @@ public class RoamerIdleState : RoamerState
 
         _IdleTimer -= Time.deltaTime;
 
-        if (CanSeePlayer() && Vector3.Distance(_currentEnemy.gameObject.transform.position, _playerPos.position) < 14f)
+        if (CanSeePlayer())
         {
             _nextState = new RoamerPursueState(_currentEnemy, _patrolPoints, _playerPos, _navMeshAgent);
             _stage = EVENT.EXIT;
