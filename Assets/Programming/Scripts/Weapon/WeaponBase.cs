@@ -7,8 +7,8 @@ public class WeaponBase : Weapon
 {
 
     [Header("UI Elements - ParticleFX and Reticule")]
-    public ParticleSystem muzzleFlash;
-    public GameObject impactFX;
+    //public ParticleSystem muzzleFlash;
+    //public GameObject impactFX;
     public Animator reticuleAnimator;
     [SerializeField]
     //Animator gunAnimator;
@@ -31,7 +31,7 @@ public class WeaponBase : Weapon
     {
         base.Awake();
         LoadDataOnSceneEnter();
-        muzzlePoint = GameObject.Find("DefaultWeaponMuzzlePoint");
+        muzzlePoint = GameObject.Find("DefaultMuzzlePoint");
         //TODO: Readd Save implementation
         //SaveSystem.SaveEvent += SaveDataOnSceneChange;
 
@@ -233,7 +233,7 @@ public class WeaponBase : Weapon
         if (bCanShoot)
         {               
             _DGAnimator._weaponAnimator.SetTrigger("Fired");
-            muzzleFlash.Play();
+           // muzzleFlash.Play();
             if (bIsActive)
             {
                 //Gun Shot Sounds
@@ -292,8 +292,8 @@ public class WeaponBase : Weapon
                     }
 
                     //Particle effects on hit
-                    GameObject hitImpact = Instantiate(impactFX, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
-                    Destroy(hitImpact, 2.0f);
+                    //GameObject hitImpact = Instantiate(impactFX, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
+                    //Destroy(hitImpact, 2.0f);
                 }
             }
             else
@@ -390,8 +390,8 @@ public class WeaponBase : Weapon
                 }
 
                 //Particle effects on hit
-                GameObject hitImpact = Instantiate(impactFX, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
-                Destroy(hitImpact, 2.0f);
+                //GameObject hitImpact = Instantiate(impactFX, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
+               // Destroy(hitImpact, 2.0f);
             }
         }
     }

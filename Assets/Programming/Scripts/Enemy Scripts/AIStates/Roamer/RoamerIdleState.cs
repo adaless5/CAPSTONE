@@ -16,7 +16,7 @@ public class RoamerIdleState : RoamerState
     public override void Enter()
     {
         base.Enter();
-        //Debug.Log("Enemy Idle");
+        Debug.Log("Enemy Idle");
     }
 
     // Update is called once per frame
@@ -26,7 +26,7 @@ public class RoamerIdleState : RoamerState
 
         _IdleTimer -= Time.deltaTime;
 
-        if (CanSeePlayer())
+        if (CanSeePlayer() && Vector3.Distance(_currentEnemy.gameObject.transform.position, _playerPos.position) < 14f)
         {
             _nextState = new RoamerPursueState(_currentEnemy, _patrolPoints, _playerPos, _navMeshAgent);
             _stage = EVENT.EXIT;
