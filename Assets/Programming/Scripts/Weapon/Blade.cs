@@ -38,7 +38,7 @@ public class Blade : Equipment
         }
         SkinnedMeshRenderer arm = GetComponentInChildren<SkinnedMeshRenderer>();
         arm.enabled = false;
-
+        
     }
 
     void Awake()
@@ -58,16 +58,7 @@ public class Blade : Equipment
     {
         if (bIsActive && bIsObtained)
         {
-            MeshRenderer[] meshs = GetComponentsInChildren<MeshRenderer>();
-            foreach (MeshRenderer obj in meshs)
-            {
-                obj.enabled = true;
-            }
-            SkinnedMeshRenderer arm = GetComponentInChildren<SkinnedMeshRenderer>();
-            arm.enabled = true;
-            _animator.enabled = true;
-            _animator.SetBool("IsOut", true);
-
+            
             UseTool();
         }
         else if (!bIsActive)
@@ -203,12 +194,24 @@ public class Blade : Equipment
         }
     }
 
-    
-//    private void OnDrawGizmos()
-//    {
-//        Gizmos.color = Color.yellow;
-//        Vector3 pos = ALTPlayerController.instance.GetComponentInChildren<Camera>().gameObject.transform.position;
-//        Gizmos.DrawRay(pos, transform.forward * 1f);
-//        Gizmos.DrawWireSphere(pos + transform.forward * 1f, 0.5f);
-//    }
+    public override void Activate()
+    {
+        base.Activate();
+
+        StartCoroutine(EnterBlade());
+    }
+
+    IEnumerator EnterBlade()
+    {
+        yield return new WaitForSeconds(0.55f);
+        MeshRenderer[] meshs = GetComponentsInChildren<MeshRenderer>();
+        foreach (MeshRenderer obj in meshs)
+        {
+            obj.enabled = true;
+        }
+        SkinnedMeshRenderer arm = GetComponentInChildren<SkinnedMeshRenderer>();
+        arm.enabled = true;
+        _animator.enabled = true;
+        _animator.SetBool("IsOut", true);
+    }
 }
