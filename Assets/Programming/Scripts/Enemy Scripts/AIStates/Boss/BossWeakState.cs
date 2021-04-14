@@ -10,13 +10,14 @@ public class BossWeakState : BossState
     {
         _bossStateName = BOSSSTATENAME.WEAK;
         Debug.Log("Weak State Activated");
-        foreach (Transform b in boss.transform)
-        {
-            if (b.gameObject.name == "Weak")
-            {
-                _bossWeakPoint = b.gameObject;
-            }
-        }
+        //foreach (Transform b in boss.transform)
+        //{
+        //    if (b.gameObject.name == "Weak")
+        //    {
+        //        _bossWeakPoint = b.gameObject;
+        //    }
+        //}
+        _bossWeakPoint = _currentEnemy.GetComponent<BossAI>()._weakPoint;
     }
 
     public override void Enter()

@@ -24,7 +24,7 @@ public class UCState : BossState
     public override void Update()
     {
         base.Update();
-       // _nextState = _randomState[1];
+        _nextState = _randomState[_bossStateNum];
         _stage = EVENT.EXIT;
     }
 

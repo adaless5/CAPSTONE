@@ -20,10 +20,14 @@ public class BossAI : MonoBehaviour
     public GameObject _deathParticle;
     public GameObject _arm;
     public Animator _bossAnimator;
+    public Transform _spawnPoint;
+    public GameObject _weakPoint;
+
     bool bIsDead = false;
 
     private void Awake()
     {
+        _spawnPoint = transform.Find("Boss_Animated_Model/Stomach Attach Point");
         _bossAnimator = GetComponentInChildren<Animator>();
         int UCindex = 0;
         _umbilicalCords = new GameObject[3];
@@ -35,6 +39,7 @@ public class BossAI : MonoBehaviour
             }
             if (g.gameObject.name == "Weak")
             {
+                _weakPoint = g.gameObject;
                 Debug.Log("Weak Component Found");
                 _health = g.GetComponent<Health>();
                 _health.OnTakeDamage += TakingDamage;
@@ -53,7 +58,7 @@ public class BossAI : MonoBehaviour
         Vector3 _rotAxis = Vector3.forward;
         GameObject _rot = gameObject;
 
-
+        _weakPoint.SetActive(false);
         OnArmSmashStateEnded += RegenerateUC;
     }
 
