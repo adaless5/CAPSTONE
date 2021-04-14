@@ -191,8 +191,7 @@ public class MineSpawner : Weapon
 
     public IEnumerator SwapOutLogic()
     {
-        _bcoroutineOutIsRunning = true;
-        Debug.Log("Started DG SwapOutCoroutine at timestamp: " + Time.time);
+        _bcoroutineOutIsRunning = true;        
         yield return new WaitForSeconds(1.2f);
         if (!bIsActive)
         {
@@ -202,15 +201,13 @@ public class MineSpawner : Weapon
         else
         {
             _grenadeArmModel.SetActive(true);
-        }
-        Debug.Log("Finished DG SwapOutCoroutine at timestamp: " + Time.time);
+        }        
         _bcoroutineOutIsRunning = false;
     }
 
     public IEnumerator SwapInLogic()
     {
-        _bcoroutineInIsRunning = true;
-        Debug.Log("Started DG SwapInCoroutine at timestamp: " + Time.time);
+        _bcoroutineInIsRunning = true;        
 
         yield return new WaitForSeconds(1.2f);
         if (bIsActive)
@@ -221,8 +218,7 @@ public class MineSpawner : Weapon
         else
         {
             _grenadeArmModel.SetActive(false);
-        }
-        Debug.Log("Finished DG SwapInCoroutine at timestamp: " + Time.time);
+        }        
         _bcoroutineInIsRunning = false;
     }
 

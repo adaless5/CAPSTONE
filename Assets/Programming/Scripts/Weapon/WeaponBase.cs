@@ -6,12 +6,8 @@ using UnityEngine.Rendering;
 public class WeaponBase : Weapon
 {
 
-    [Header("UI Elements - ParticleFX and Reticule")]
-    public ParticleSystem muzzleFlash;
-    public GameObject impactFX;
-    public Animator reticuleAnimator;
-    [SerializeField]
-    //Animator gunAnimator;
+    [Header("UI Elements - ParticleFX and Reticule")]   
+    public Animator reticuleAnimator;   
 
 
     [Header("Camera Settings")]
@@ -31,7 +27,7 @@ public class WeaponBase : Weapon
     {
         base.Awake();
         LoadDataOnSceneEnter();
-        muzzlePoint = GameObject.Find("DefaultWeaponMuzzlePoint");
+        muzzlePoint = GameObject.Find("DefaultMuzzlePoint");
         //TODO: Readd Save implementation
         //SaveSystem.SaveEvent += SaveDataOnSceneChange;
 
@@ -44,12 +40,10 @@ public class WeaponBase : Weapon
 
         EventBroker.OnPlayerSpawned += InitWeaponControls;
         EventBroker.OnWeaponSwap += WeaponSwapOut;
-        EventBroker.OnWeaponSwapIn += DGWeaponSwapIn;
-        //gunAnimator = GetComponent<Animator>();
+        EventBroker.OnWeaponSwapIn += DGWeaponSwapIn;        
         _DGAnimator = GetComponent<DG_Animations>();
 
         _bPlayedNewShellSound = false;
-
 
     }
 
@@ -105,7 +99,7 @@ public class WeaponBase : Weapon
     public IEnumerator SwapOutLogic()
     {
         _bcoroutineOutIsRunning = true;
-        Debug.Log("Started DG SwapOutCoroutine at timestamp: " + Time.time);
+        //Debug.Log("Started DG SwapOutCoroutine at timestamp: " + Time.time);
         //Waits for default gun swap out animation to play before setting inactiv      
         yield return new WaitForSeconds(1.2f);
         if (!bIsActive)
@@ -117,14 +111,14 @@ public class WeaponBase : Weapon
         {
             transform.GetChild(0).gameObject.SetActive(true);
         }
-        Debug.Log("Finished DG SwapOutCoroutine at timestamp: " + Time.time);
+       // Debug.Log("Finished DG SwapOutCoroutine at timestamp: " + Time.time);
         _bcoroutineOutIsRunning = false;
     }
 
     public IEnumerator SwapInLogic()
     {
         _bcoroutineInIsRunning = true;
-        Debug.Log("Started DG SwapInCoroutine at timestamp: " + Time.time);
+        //Debug.Log("Started DG SwapInCoroutine at timestamp: " + Time.time);
         //Waits for other equipped weapon to swap out before playing swap in animation, currently only gland gun timing (0.667f) seconds       
         yield return new WaitForSeconds(1.2f);
         if (bIsActive)
@@ -136,7 +130,7 @@ public class WeaponBase : Weapon
         {
             transform.GetChild(0).gameObject.SetActive(false);
         }
-        Debug.Log("Finished DG SwapInCoroutine at timestamp: " + Time.time);
+        //Debug.Log("Finished DG SwapInCoroutine at timestamp: " + Time.time);
         _bcoroutineInIsRunning = false;
     }
 
@@ -233,7 +227,7 @@ public class WeaponBase : Weapon
         if (bCanShoot)
         {               
             _DGAnimator._weaponAnimator.SetTrigger("Fired");
-            muzzleFlash.Play();
+           // muzzleFlash.Play();
             if (bIsActive)
             {
                 //Gun Shot Sounds
@@ -292,8 +286,8 @@ public class WeaponBase : Weapon
                     }
 
                     //Particle effects on hit
-                    GameObject hitImpact = Instantiate(impactFX, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
-                    Destroy(hitImpact, 2.0f);
+                    //GameObject hitImpact = Instantiate(impactFX, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
+                    //Destroy(hitImpact, 2.0f);
                 }
             }
             else
@@ -390,8 +384,8 @@ public class WeaponBase : Weapon
                 }
 
                 //Particle effects on hit
-                GameObject hitImpact = Instantiate(impactFX, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
-                Destroy(hitImpact, 2.0f);
+                //GameObject hitImpact = Instantiate(impactFX, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
+               // Destroy(hitImpact, 2.0f);
             }
         }
     }
