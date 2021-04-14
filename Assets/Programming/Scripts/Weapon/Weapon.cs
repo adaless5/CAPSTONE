@@ -75,7 +75,6 @@ public abstract class Weapon : Tool
         EventBroker.OnPlayerSpawned += InitializePlayer;
         m_currentupgrades = new List<EUpgradeType>();
         m_upgradestats.SetToDefault();
-        bIsWeapon = true;
     }
 
     protected void InitializePlayer(GameObject player)
