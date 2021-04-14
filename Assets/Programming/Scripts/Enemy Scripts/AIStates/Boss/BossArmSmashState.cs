@@ -10,6 +10,7 @@ public class BossArmSmashState : BossState
     float fadeSpeed = 0.6f;
     public BossArmSmashState(GameObject boss, GameObject armsmash) : base(boss)
     {
+        _bossStateName = BOSSSTATENAME.ARMSMASH;
         _armSmash = armsmash;
     }
 
@@ -17,6 +18,7 @@ public class BossArmSmashState : BossState
     {
         base.Enter();
         _armSmash.GetComponent<BossArm>().ShowArm();
+        _currentEnemy.GetComponent<BossAI>().SetArmSmashAnimation();
     }
 
     public override void Update()
@@ -43,5 +45,6 @@ public class BossArmSmashState : BossState
     public override void Exit()
     {
         base.Exit();
+        _currentEnemy.GetComponent<BossAI>().CallOnMeleeAttackEnded();
     }
 }

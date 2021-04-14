@@ -15,11 +15,12 @@ public class BossAI : MonoBehaviour
     Vector3 boxDimensions;
     float ucLength;
     event Action OnWeakStateStarted;
-    event Action OnWeakStateEnded;
+    event Action OnArmSmashStateEnded;
     public float _ucHealth = 20.0f;
     public GameObject _deathParticle;
     public GameObject _arm;
     public Animator _bossAnimator;
+    bool bIsDead = false;
 
     private void Awake()
     {
@@ -36,6 +37,7 @@ public class BossAI : MonoBehaviour
             {
                 Debug.Log("Weak Component Found");
                 _health = g.GetComponent<Health>();
+                _health.OnTakeDamage += TakingDamage;
                 g.GetComponent<Health>().OnDeath += BossDeath;
             }
             if (g.GetComponent<UmbilicalCord>() != null)
@@ -45,8 +47,6 @@ public class BossAI : MonoBehaviour
             }
         }
 
-
-
         direction = (Vector3.down - transform.position);
 
 
@@ -54,31 +54,43 @@ public class BossAI : MonoBehaviour
         GameObject _rot = gameObject;
 
 
-        OnWeakStateEnded += RegenerateUC;
+        OnArmSmashStateEnded += RegenerateUC;
     }
 
     private void Start()
     {
         _currentBossState = new UCState(gameObject);
     }
-    
+
     public GameObject GetBossArm()
     {
         return _arm;
     }
 
-    void BossDeath()
+    IEnumerator BossDeathLogic()
     {
-        gameObject.SetActive(false);
-        for (int i = 0; i < transform.childCount; ++i)
-        {
-            transform.GetChild(i).gameObject.SetActive(false);
-        }
+        _bossAnimator.SetTrigger("OnDeath");
+        yield return new WaitForSeconds(4f);
+        //gameObject.SetActive(false);
+        //for (int i = 0; i < transform.childCount; ++i)
+        //{
+        //    transform.GetChild(i).gameObject.SetActive(false);
+        //}
         EventBroker.CallOnGameEnd();
     }
 
-    void RegenerateUC()
+
+    void BossDeath()
     {
+        bIsDead = true;
+        StartCoroutine(BossDeathLogic());
+    }
+
+    IEnumerator RegenerateAnimation()
+    {
+        _bossAnimator.SetTrigger("Regenerating");
+        //Waits till Boss slams his arm down before spawning, about 1.2 seconds in regen animation
+        yield return new WaitForSeconds(1.145f);
         foreach (GameObject g in _umbilicalCords)
         {
             foreach (Transform f in g.transform)
@@ -88,10 +100,16 @@ public class BossAI : MonoBehaviour
             }
             g.SetActive(true);
         }
-
     }
 
-
+    void RegenerateUC()
+    {
+        _bossAnimator.SetBool("IsWeak", false);
+        if (!bIsDead)
+        {
+            StartCoroutine(RegenerateAnimation());
+        }
+    }
 
     // Update is called once per frame
     void Update()
@@ -108,6 +126,7 @@ public class BossAI : MonoBehaviour
         {
             Debug.Log("Weak Spot State");
             _currentBossState = new BossWeakState(gameObject);
+            _bossAnimator.SetBool("IsWeak", true);
         }
     }
 
@@ -121,14 +140,52 @@ public class BossAI : MonoBehaviour
         return true;
     }
 
-    public void CallOnWeakStateEnded()
+    public void SetUCAnimationPosition(GameObject UC)
     {
-        OnWeakStateEnded?.Invoke();
+        _bossAnimator.SetTrigger("UC_Death");
+        for (int i = 0; i < _umbilicalCords.Length; i++)
+        {
+            if (_umbilicalCords[i] == UC)
+            {
+                _bossAnimator.SetInteger("UC_Side", i);
+            }
+        }
     }
 
-    public void CheckAnimationState()
+    public void SetArmSmashAnimation()
     {
-
+        _bossAnimator.SetTrigger("ArmSmash");
     }
+
+    public void SetDroneAndHomingSpawnAnimation()
+    {
+        _bossAnimator.SetTrigger("Spawning");
+    }
+
+    public void CallOnMeleeAttackEnded()
+    {
+        OnArmSmashStateEnded?.Invoke();
+    }
+
+    public void TakingDamage()
+    {
+        if (!bIsDead)
+        {
+            _bossAnimator.SetTrigger("HitReact");
+
+        }
+    }
+
+    //public void CheckAnimationState()
+    //{
+    //    BossState boss = (BossState)_currentBossState;
+    //    if (boss != null)
+    //    {
+    //        if (boss._bossStateName == BOSSSTATENAME.ARMSMASH)
+    //        {
+    //            _bossAnimator.SetTrigger("ArmSmash");
+    //        }
+    //    }
+    //}
 
 }

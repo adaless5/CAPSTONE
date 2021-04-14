@@ -24,12 +24,12 @@ public class UCState : BossState
     public override void Update()
     {
         base.Update();
-        _nextState = _randomState[1];
+       // _nextState = _randomState[1];
         _stage = EVENT.EXIT;
     }
 
     public override void Exit()
     {
-        base.Exit();
+        base.Exit();        
     }
 }

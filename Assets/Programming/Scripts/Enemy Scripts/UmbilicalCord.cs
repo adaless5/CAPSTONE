@@ -6,8 +6,11 @@ public class UmbilicalCord : MonoBehaviour
 {
     public Health _health;
     public Animator _ucAnimator;
+   // public BossAI _bossRef;
+
     private void Awake()
     {
+        //_bossRef = GetComponentInParent<BossAI>();
         _ucAnimator = GetComponent<Animator>();
         _health = GetComponentInChildren<Health>();
         _health.OnDeath += PlayDeathAnimation;
@@ -35,6 +38,7 @@ public class UmbilicalCord : MonoBehaviour
     {
         gameObject.SetActive(false);
         gameObject.GetComponentInParent<BossAI>().CheckUC();
+        gameObject.GetComponentInParent<BossAI>().SetUCAnimationPosition(gameObject);
     }
 
     public Health GetHealth()

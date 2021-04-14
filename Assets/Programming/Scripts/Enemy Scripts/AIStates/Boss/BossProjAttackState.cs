@@ -8,12 +8,14 @@ public class BossProjAttack : BossState
     float _droneTimer;
     public BossProjAttack(GameObject boss) : base(boss)
     {
+        _bossStateName = BOSSSTATENAME.DRONESPAWNING;
         Debug.Log("Projectile State");
     }
 
     public override void Enter()
     {
         base.Enter();
+        _currentEnemy.GetComponent<BossAI>().SetDroneAndHomingSpawnAnimation();
         _drone = GameObject.Instantiate(Resources.Load("Prefabs/Enemies/Drone/DroneEnemy") as GameObject, _currentEnemy.transform.position, Quaternion.identity);
         _drone.GetComponent<DroneAI>().SetCurrentDroneState(new DroneBossAttack(_drone));
         _droneTimer = 7.0f;
