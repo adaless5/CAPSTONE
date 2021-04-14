@@ -161,12 +161,16 @@ public class OptionsMenuUI : MonoBehaviour
             Volume volume = _sfVol.GetComponentInChildren<Volume>();
             if (volume != null)
             {
-                ColorAdjustments color;
-                volume.profile.TryGet<ColorAdjustments>(out color);
+                LiftGammaGain lgg;
+                //ColorAdjustments color;
+                //volume.profile.TryGet<ColorAdjustments>(out color);
+                volume.profile.TryGet<LiftGammaGain>(out lgg);
 
-                if (color != null)
+                if (lgg != null)
                 {
-                    color.postExposure.SetValue(new FloatParameter(amt));
+                    //color.postExposure.SetValue(new FloatParameter(amt));
+                    Vector4 vec4 = new Vector4(amt, 0f, 0f, 100f);
+                    lgg.gamma = new Vector4Parameter(vec4);
                 }
             }
         }
