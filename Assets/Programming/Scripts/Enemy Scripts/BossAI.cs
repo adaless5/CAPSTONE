@@ -10,7 +10,7 @@ public class BossAI : MonoBehaviour
     private float[] _facePos = new float[3];
     public MeshCollider _boxCol;
     Vector3 direction;
-    Health _health;
+    public Health _health;
     State _currentBossState;
     Vector3 boxDimensions;
     float ucLength;
@@ -19,8 +19,11 @@ public class BossAI : MonoBehaviour
     public float _ucHealth = 20.0f;
     public GameObject _deathParticle;
     public GameObject _arm;
+    public Animator _bossAnimator;
+
     private void Awake()
     {
+        _bossAnimator = GetComponentInChildren<Animator>();
         int UCindex = 0;
         _umbilicalCords = new GameObject[3];
         foreach (Transform g in transform)
@@ -121,6 +124,11 @@ public class BossAI : MonoBehaviour
     public void CallOnWeakStateEnded()
     {
         OnWeakStateEnded?.Invoke();
+    }
+
+    public void CheckAnimationState()
+    {
+
     }
 
 }
