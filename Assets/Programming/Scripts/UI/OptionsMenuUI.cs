@@ -27,8 +27,11 @@ public class OptionsMenuUI : MonoBehaviour
     bool _isStereo;
     bool _isFullScreen;
     Resolution[] resolutions;
+    List<Resolution> validResolutions;
+
     private void Start()
     {
+        validResolutions = new List<Resolution>();
         resolutions = Screen.resolutions;
         resolutions = Screen.resolutions.Select(resolution => new Resolution { width = resolution.width, height = resolution.height }).Distinct().ToArray();
         resolutionMenu.ClearOptions();
@@ -40,11 +43,14 @@ public class OptionsMenuUI : MonoBehaviour
         for (int i = 0; i < resolutions.Length; i++)
         {
             string resData = resolutions[i].width.ToString() + " x " + resolutions[i].height.ToString();
+            
             foreach (string obj in validRes)
             {
                 if (obj == resData)
                 {
+                    validResolutions.Add(resolutions[i]);
                     data.Add(resData);
+                    break;
                 }
             }
             if (resolutions[i].width == Screen.currentResolution.width)
@@ -54,6 +60,15 @@ public class OptionsMenuUI : MonoBehaviour
                     index = i;
                 }
             }
+
+            //foreach (string obj in validRes)
+            //{
+            //    if (obj == resData)
+            //    {
+            //        data.Add(resData);
+            //    }
+            //}
+
 
         }
 
@@ -134,7 +149,7 @@ public class OptionsMenuUI : MonoBehaviour
 
     public void SetResolution(int index)
     {
-        Resolution resolution = resolutions[index];
+        Resolution resolution = validResolutions[index];
         Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
     }
 

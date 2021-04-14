@@ -685,7 +685,6 @@ public class ALTPlayerController : MonoBehaviour
             bIsMoving = true;
             _lastMoveVelocity = movement;
 
-            //TODO: Figure out Why Camera behaviour is bugging out.
             if (!_bIsJumping)
             {
                 if (_cameraBehaviour != null)
@@ -696,7 +695,6 @@ public class ALTPlayerController : MonoBehaviour
         {
             bIsMoving = false;
 
-            //TODO: Figure out Why Camera behaviour is bugging out.
             if (_cameraBehaviour != null)
                 _cameraBehaviour.SetIsWalking(false);
         }
@@ -723,6 +721,15 @@ public class ALTPlayerController : MonoBehaviour
                 bcanJump = true;
                 bDidJump = false;
             }
+        }
+        else if(bisGrounded && _bIsJumping && bDidJump)
+        {
+            bcanJump = false;
+            bIsMoving = true;
+            //_preJumpVelocity = Vector3.zero;
+            //_lastMoveVelocity = Vector3.zero;
+            bDidJump = false;
+            m_Velocity = Vector3.zero;
         }
 
         if (bcanJump)
@@ -801,7 +808,6 @@ public class ALTPlayerController : MonoBehaviour
         m_Velocity += m_Momentum * Time.deltaTime;
 
         //Handling Grappling Hook Momentum
-        //TODO: Reapproach momentum to make it feel more satisfying.
         if (m_Momentum.magnitude >= 0f)
         {
             if (!bisGrounded)
