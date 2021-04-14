@@ -52,8 +52,6 @@ public class CameraBehaviour : MonoBehaviour
             verticalOffset = Mathf.Sin(time * bobFrequency * 2f) * bobVerticalAmplitude;
 
             offset = transform.right * horizontalOffset + transform.up * verticalOffset;
-
-            print("OFFSET = " + offset);
         }
 
         return offset;
