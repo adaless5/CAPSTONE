@@ -134,6 +134,7 @@ public class WeaponPickup : MonoBehaviour, ITippable
 
     public void SaveDataOnSceneChange()
     {
+        EventBroker.CallOnAutoSave();
         SaveSystem.Save(gameObject.name, "isEnabled", gameObject.scene.name, isUsed);
     }
 

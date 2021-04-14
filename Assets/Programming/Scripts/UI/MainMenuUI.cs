@@ -61,7 +61,7 @@ public class MainMenuUI : MonoBehaviour
         FileIO.ClearAllSavedData();
 
         //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-        SceneManager.LoadScene(2);
+        SceneManager.LoadScene("Loading_Scene");
         bNewGame = true;
     }
 

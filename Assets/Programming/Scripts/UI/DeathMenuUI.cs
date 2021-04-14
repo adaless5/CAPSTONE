@@ -92,14 +92,14 @@ public class DeathMenuUI : MonoBehaviour
                 SceneManager.UnloadSceneAsync(SceneManager.GetSceneAt(i).name);
             }
         }
-        SceneManager.LoadScene(2, LoadSceneMode.Additive);
+        SceneManager.LoadScene("Loading_Scene", LoadSceneMode.Additive);
 
     }
 
 
     IEnumerator LoadAsyncScene(int sceneIndex)
     {
-        AsyncOperation firstLevel = SceneManager.LoadSceneAsync(3);
+        AsyncOperation firstLevel = SceneManager.LoadSceneAsync("R3_0_Persistant");
         AsyncOperation secondlevel = SceneManager.LoadSceneAsync(sceneIndex, LoadSceneMode.Additive);
 
 
@@ -116,7 +116,7 @@ public class DeathMenuUI : MonoBehaviour
     }
     IEnumerator LoadAsyncScene(string scenename)
     {
-        AsyncOperation firstLevel = SceneManager.LoadSceneAsync(3);
+        AsyncOperation firstLevel = SceneManager.LoadSceneAsync("R3_0_Persistant");
         AsyncOperation secondlevel = SceneManager.LoadSceneAsync(scenename, LoadSceneMode.Additive);
 
 
@@ -138,7 +138,7 @@ public class DeathMenuUI : MonoBehaviour
 
 
         Destroy(_playerController.gameObject);
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene("MainMenu");
         //_deathMenuCanvas.alpha = 0;
 
     }

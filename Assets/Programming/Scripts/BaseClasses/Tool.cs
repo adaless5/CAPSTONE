@@ -30,6 +30,7 @@ public abstract class Tool : MonoBehaviour, ISaveable
 
     public void ObtainEquipment()
     {
+        EventBroker.CallOnAutoSave();
         bIsObtained = true;
         SaveSystem.Save(gameObject.name, "bIsObtained", "Equipment", bIsObtained, SaveSystem.SaveType.EQUIPMENT);
     }
