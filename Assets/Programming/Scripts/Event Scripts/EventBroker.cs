@@ -19,6 +19,7 @@ public class EventBroker
     public static event Action OnWeaponSwap;
     public static event Action OnWeaponSwapIn;
     public static event Action<SaveSystem.RespawnInfo_Data> OnLoadingScreenFinished;
+    public static event Action OnAutoSave;
     public static void CallSpawnEnemy(GameObject enemyToSpawn)
     {
         SpawnEnemy?.Invoke(enemyToSpawn);
@@ -90,6 +91,11 @@ public class EventBroker
     public static void CallOnCurrencyPickup(float currencyAmount, float totalCurrency)
     {
         OnCurrencyPickup?.Invoke(currencyAmount, totalCurrency);
+    }
+
+    public static void CallOnAutoSave()
+    {
+        OnAutoSave?.Invoke();
     }
 
 }

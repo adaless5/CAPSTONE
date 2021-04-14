@@ -10,7 +10,7 @@ public static class FileIO
 
 
     const string _testPath = "Assets/Design/Resources/Data/GameSave/";
-    const string _path = "Abyssian_Data/StreamingAssets/GameSave/";
+    const string _path = "GameSave/";
 
 
     public enum WriteMode
@@ -249,7 +249,7 @@ public static class FileIO
 
     public static void ClearAllSavedData()
     {
-        string path = (buildMode) ? "Abyssian_Data/StreamingAssets/GameSave" : "Assets/Design/Resources/Data/GameSave";
+        string path = (buildMode) ? "GameSave/" : "Assets/Design/Resources/Data/GameSave";
         DirectoryInfo SaveDir = new DirectoryInfo(path);
 
         foreach (FileInfo file in SaveDir.GetFiles())

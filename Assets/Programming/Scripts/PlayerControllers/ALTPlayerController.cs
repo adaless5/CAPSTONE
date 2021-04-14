@@ -455,7 +455,7 @@ public class ALTPlayerController : MonoBehaviour
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
             gameObject.transform.position = respawninfo.pos;
-            gameObject.transform.rotation = Quaternion.identity;
+            gameObject.transform.rotation = respawninfo.rot;
 
         }
     }

@@ -203,7 +203,7 @@ public class GrappleHook : Equipment
         }
     }
 
-    void DeactivateGrappleHook()
+    public void DeactivateGrappleHook()
     {
         //Grapple Done Audio Triggers
         GetComponent<AudioManager_Grapple>().StopRetract();
