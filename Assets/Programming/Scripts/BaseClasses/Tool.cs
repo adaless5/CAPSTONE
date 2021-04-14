@@ -7,7 +7,7 @@ public abstract class Tool : MonoBehaviour, ISaveable
     public bool bIsActive = false;
     public bool bIsObtained = false;
 
-    public bool bIsWeapon = false;
+
     public virtual void Start()
     {
         LoadDataOnSceneEnter();
@@ -19,15 +19,13 @@ public abstract class Tool : MonoBehaviour, ISaveable
     public virtual void Activate()
     {
         bIsActive = true;
-        if(bIsWeapon)
-             EventBroker.CallOnWeaponSwapIn();
+        //EventBroker.CallOnWeaponSwapIn();
     }
 
     public virtual void Deactivate()
     {
         bIsActive = false;
-        if (bIsWeapon)
-            EventBroker.CallOnWeaponSwapOut();
+        //EventBroker.CallOnWeaponSwapOut();
     }
 
     public void ObtainEquipment()

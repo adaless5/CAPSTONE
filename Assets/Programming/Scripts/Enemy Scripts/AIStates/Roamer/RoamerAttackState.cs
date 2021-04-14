@@ -17,7 +17,7 @@ public class RoamerAttackState : RoamerState
     public override void Enter()
     {
         base.Enter();
-        Debug.Log("Enemy Attacking");
+        //Debug.Log("Enemy Attacking");
         _AttackTimer = 0.4f;
     }
 

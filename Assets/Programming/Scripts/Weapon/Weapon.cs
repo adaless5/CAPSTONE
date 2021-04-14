@@ -86,6 +86,19 @@ public abstract class Weapon : Tool
 
     public abstract void AddUpgrade(WeaponUpgrade upgrade);
     //public abstract void RemoveUpgrade(WeaponScalars scalars);
+
+    public override void Activate()
+    {
+        base.Activate();
+        EventBroker.CallOnWeaponSwapIn();
+    }
+
+    public override void Deactivate()
+    {
+        base.Deactivate();
+        EventBroker.CallOnWeaponSwapOut();
+    }
+
 }
 
 [System.Serializable]
