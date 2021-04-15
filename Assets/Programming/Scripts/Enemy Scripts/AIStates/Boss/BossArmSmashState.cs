@@ -18,7 +18,7 @@ public class BossArmSmashState : BossState
     {
         Debug.Log("HE's GONNA SMASH");
         base.Enter();
-        _armSmash.GetComponent<BossArm>().ShowArm();
+        //_armSmash.GetComponent<BossArm>().ShowArm();
         _currentEnemy.GetComponent<BossAI>().SetArmSmashAnimation();
     }
 
@@ -35,8 +35,8 @@ public class BossArmSmashState : BossState
                 _armTimer = 3.0f;
                 _coolDownTimer = 2.6f;
                 _armSmash.GetComponent<BoxCollider>().enabled = false;
-                _armSmash.GetComponent<MeshRenderer>().material.color = new Color(1, 1, 1, 0);
-                _armSmash.GetComponent<MeshRenderer>().enabled = false;
+                //_armSmash.GetComponent<MeshRenderer>().material.color = new Color(1, 1, 1, 0);
+                //_armSmash.GetComponent<MeshRenderer>().enabled = false;
                 _nextState = new UCState(_currentEnemy);
                 _stage = EVENT.EXIT;
             }
