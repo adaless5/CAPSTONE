@@ -126,12 +126,12 @@ public class ALTPlayerController : MonoBehaviour
 
     //New Controller
     public PlayerControls _controls;
-    Vector2 _movement;
+    public Vector2 _movement;
     Vector2 _look;
     bool _bIsShooting;
-    bool _bIsRunning;
+    public bool _bIsRunning;
     bool _bPaused;
-    bool _bIsJumping;
+    public bool _bIsJumping;
 
     //Special case: These guys needed some re-routing to make sure they didn't collude with the Pause logic 
     bool _bEquipWheel = true;
@@ -762,6 +762,7 @@ public class ALTPlayerController : MonoBehaviour
                     m_Velocity.y = _jumpVelocity.y;
                 }
 
+                GetComponent<AudioManager_Footsteps>()._isJumping = true;
                 GetComponent<AudioManager_Footsteps>().TriggerJump(false);
 
                 bcanJump = false;

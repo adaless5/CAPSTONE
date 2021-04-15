@@ -30,6 +30,7 @@ public class AudioManager_Footsteps : AudioManager
 
     Camera _camRef;
     CharacterController _controllerRef;
+    ALTPlayerController _playerControllerRef;
 
     Vector3 _lastPosition;
     float _distanceMoved = 0f;
@@ -47,6 +48,7 @@ public class AudioManager_Footsteps : AudioManager
     int _metalTerrainLayerIndex;
 
     bool _isFalling = false;
+    public bool _isJumping = false;
     float _maxFallVelocity = 0;
 
     public override void Initialize()
@@ -57,8 +59,9 @@ public class AudioManager_Footsteps : AudioManager
         //Fetch references
         _camRef = GetComponentInChildren<Camera>();
         _controllerRef = GetComponent<CharacterController>();
+        _playerControllerRef = GetComponent<ALTPlayerController>();
         _lastPosition = gameObject.transform.position;
-        _dirtTerrainLayerIndex = LayerMask.NameToLayer("terrainmask");
+        _dirtTerrainLayerIndex = LayerMask.NameToLayer("Terrain_Dirt");
         _concreteTerrainLayerIndex = LayerMask.NameToLayer("Terrain_Concrete");
         _metalTerrainLayerIndex = LayerMask.NameToLayer("Terrain_Metal");
 
@@ -158,9 +161,15 @@ public class AudioManager_Footsteps : AudioManager
     //Runs before update
     void FixedUpdate()
     {
+        
+    }
+
+    private void Update()
+    {
+
         //Raycast down to find terrain type
         RaycastHit hit;
-        if (Physics.Raycast(transform.position,-transform.up,out hit,10f, 
+        if (Physics.Raycast(transform.position, -transform.up, out hit, 10f,
                 (1 << _dirtTerrainLayerIndex) | (1 << _concreteTerrainLayerIndex) | (1 << _metalTerrainLayerIndex)))
         {
             if (hit.collider.gameObject.layer == _dirtTerrainLayerIndex)
@@ -184,10 +193,7 @@ public class AudioManager_Footsteps : AudioManager
             else _terrainType = TerrainType.Dirt;
         }
         //
-    }
 
-    private void Update()
-    {
         //Handle falling
         if (CheckIfFalling())
         {
@@ -199,6 +205,7 @@ public class AudioManager_Footsteps : AudioManager
         if (CheckHasLanded() && _isFalling == true) //Fall Finished
         {
             _isFalling = false;
+            _isJumping = false;
             
             //Trigger a landing sound
             TriggerJump(true,
@@ -211,29 +218,43 @@ public class AudioManager_Footsteps : AudioManager
             _maxFallVelocity = 0f;
         }
         //
+
+        _lastPosition = gameObject.transform.position;
     }
 
+    float moveCounter = 0;
+    public float maxMoveTillFootstep = 30;
     //runs after update
     void LateUpdate()
     {
-        //Calculate distance moved
-        if (_controllerRef.isGrounded)
-        {
-            _distanceMoved += Vector3.Distance(transform.position, _lastPosition);
-        }
-        //
+        ////Calculate distance moved
+        //if (_controllerRef.isGrounded)
+        //{
+        //    _distanceMoved += Vector3.Distance(transform.position, _lastPosition);
+        //}
+        ////
 
-        //Update Last Position
-        _lastPosition = transform.position;
-        //
+        ////Update Last Position
+        //_lastPosition = transform.position;
+        ////
+        ///
 
-        //Trigger Footstep
-        if (_distanceMoved >= _distanceTillFootstepTriggered)
+ 
+
+
+        if (_playerControllerRef._movement != Vector2.zero)
         {
-            _distanceMoved = 0f;
-            TriggerFootstep();
+            if (_playerControllerRef._bIsRunning) moveCounter += 1.5f;
+            else moveCounter++;
         }
-        //
+
+        if (moveCounter >= maxMoveTillFootstep)
+        {
+            moveCounter = 0;
+            if(_isJumping == false) TriggerFootstep();
+
+        }
+
     }
 
     //Swaps foot from left to right when a footstep occurs
@@ -245,12 +266,18 @@ public class AudioManager_Footsteps : AudioManager
 
     bool CheckIfFalling()
     {
-        return ((transform.position.y - _lastPosition.y) < -0.2f);
+        return ((transform.position.y - _lastPosition.y) < -.2f);
+    }
+
+    bool IsJumping()
+    {
+        Debug.Log((transform.position.y - _lastPosition.y));
+        return ((transform.position.y - _lastPosition.y) > .2f);
     }
 
     private bool CheckHasLanded()
     {
-        return Mathf.Abs(transform.position.y - _lastPosition.y) < .05f;
+        return Mathf.Abs(transform.position.y - _lastPosition.y) < .1f;
     }
 
     const int CONCRETE_FOOTSTEP_INDEX_START = 0;
@@ -416,6 +443,11 @@ public class AudioManager_Footsteps : AudioManager
                 break;
 
             case TerrainType.Concrete:
+                if (isLanding) i = PickRandomConcreteJumpLand();
+                else { i = PickRandomConcreteJumpStart(); }
+                break;
+
+            case TerrainType.Metal:
                 if (isLanding) i = PickRandomConcreteJumpLand();
                 else { i = PickRandomConcreteJumpStart(); }
                 break;
