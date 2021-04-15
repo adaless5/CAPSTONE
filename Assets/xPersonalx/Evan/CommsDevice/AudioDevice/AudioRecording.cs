@@ -4,7 +4,6 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(AudioSource))]
 public class AudioRecording : MonoBehaviour
 {
-    public AudioSource audioSource;
     bool isPlaying = false;
 
     // Update is called once per frame
@@ -18,9 +17,9 @@ public class AudioRecording : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!audioSource.isPlaying && isPlaying == true)
+        if (isPlaying == true)
         {
-            audioSource.Play();
+            //GetComponent<AudioManager_VoiceOver>().PlayVoiceOver();
         }
     }
 }
