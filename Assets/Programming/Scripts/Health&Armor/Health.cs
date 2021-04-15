@@ -191,7 +191,7 @@ public class Health : MonoBehaviour, ISaveable
                 healthBar.GainHealth(m_HP, healthToHeal, m_MaxHealth);
 
             m_HP = Mathf.Clamp(m_HP, 0, m_MaxHealth);
-            Debug.Log("Healed" + healthToHeal + "amount");
+            //Debug.Log("Healed" + healthToHeal + "amount");
         }
     }
 

@@ -4,23 +4,26 @@ using UnityEngine;
 
 public class BossWeakState : BossState
 {
-    float _weakTimer = 3.0f;
+    float _weakTimer = 5.833f;
     GameObject _bossWeakPoint;
     public BossWeakState(GameObject boss) : base(boss)
     {
+        _bossStateName = BOSSSTATENAME.WEAK;
         Debug.Log("Weak State Activated");
-        foreach (Transform b in boss.transform)
-        {
-            if (b.gameObject.name == "Weak")
-            {
-                _bossWeakPoint = b.gameObject;
-            }
-        }
+        //foreach (Transform b in boss.transform)
+        //{
+        //    if (b.gameObject.name == "Weak")
+        //    {
+        //        _bossWeakPoint = b.gameObject;
+        //    }
+        //}
+        _bossWeakPoint = _currentEnemy.GetComponent<BossAI>()._weakPoint;
     }
 
     public override void Enter()
     {
         base.Enter();
+        _weakTimer = 5.833f;
         _bossWeakPoint.SetActive(true);
 
     }
@@ -38,8 +41,7 @@ public class BossWeakState : BossState
 
     public override void Exit()
     {
-        base.Exit();
-        _currentEnemy.GetComponent<BossAI>().CallOnWeakStateEnded();
+        base.Exit();        
         _bossWeakPoint.SetActive(false);
     }
 }
