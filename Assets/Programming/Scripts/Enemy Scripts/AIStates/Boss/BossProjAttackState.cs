@@ -12,7 +12,7 @@ public class BossProjAttack : BossState
     public BossProjAttack(GameObject boss) : base(boss)
     {
         _bossStateName = BOSSSTATENAME.DRONESPAWNING;
-        Debug.Log("Projectile State");
+        Debug.Log("Spawning Drones..");
     }
 
     public override void Enter()

@@ -31,20 +31,22 @@ public class BossAI : MonoBehaviour
         _bossAnimator = GetComponentInChildren<Animator>();
         int UCindex = 0;
         _umbilicalCords = new GameObject[3];
+        _weakPoint = GameObject.Find("Weak");
+
         foreach (Transform g in transform)
         {
             if (g.gameObject.name.Contains("Arm"))
             {
                 _arm = g.gameObject;
             }
-            if (g.gameObject.name == "Weak")
-            {
-                _weakPoint = g.gameObject;
-                Debug.Log("Weak Component Found");
-                _health = g.GetComponent<Health>();
-                _health.OnTakeDamage += TakingDamage;
-                g.GetComponent<Health>().OnDeath += BossDeath;
-            }
+            //if (g.gameObject.name == "Weak")
+            //{
+            //    _weakPoint = g.gameObject;
+            //    Debug.Log("Weak Component Found");
+            //    _health = g.GetComponent<Health>();
+            //    _health.OnTakeDamage += TakingDamage;
+            //    g.GetComponent<Health>().OnDeath += BossDeath;
+            //}            
             if (g.GetComponent<UmbilicalCord>() != null)
             {
                 _umbilicalCords[UCindex] = g.GetComponent<UmbilicalCord>().gameObject;
@@ -93,7 +95,8 @@ public class BossAI : MonoBehaviour
 
     IEnumerator RegenerateAnimation()
     {
-        _bossAnimator.SetTrigger("Regenerating");
+        //_bossAnimator.SetTrigger("Regenerating");
+        _bossAnimator.SetBool("IsRegenerating", true);
         //Waits till Boss slams his arm down before spawning, about 1.2 seconds in regen animation
         yield return new WaitForSeconds(1.145f);
         foreach (GameObject g in _umbilicalCords)
@@ -105,6 +108,8 @@ public class BossAI : MonoBehaviour
             }
             g.SetActive(true);
         }
+        yield return new WaitForSeconds(.5f);
+        _bossAnimator.SetBool("IsRegenerating", false);
     }
 
     void RegenerateUC()

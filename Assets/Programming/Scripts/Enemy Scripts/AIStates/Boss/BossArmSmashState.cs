@@ -5,8 +5,8 @@ using UnityEngine;
 public class BossArmSmashState : BossState
 {
     GameObject _armSmash;
-    float _armTimer = 3.0f;
-    float _coolDownTimer = 4.0f;
+    float _armTimer = 1.0f;
+    float _coolDownTimer = 2.6f;
     float fadeSpeed = 0.6f;
     public BossArmSmashState(GameObject boss, GameObject armsmash) : base(boss)
     {
@@ -16,6 +16,7 @@ public class BossArmSmashState : BossState
 
     public override void Enter()
     {
+        Debug.Log("HE's GONNA SMASH");
         base.Enter();
         _armSmash.GetComponent<BossArm>().ShowArm();
         _currentEnemy.GetComponent<BossAI>().SetArmSmashAnimation();
@@ -32,7 +33,7 @@ public class BossArmSmashState : BossState
             if (_coolDownTimer <= 0.0f)
             {
                 _armTimer = 3.0f;
-                _coolDownTimer = 4.0f;
+                _coolDownTimer = 2.6f;
                 _armSmash.GetComponent<BoxCollider>().enabled = false;
                 _armSmash.GetComponent<MeshRenderer>().material.color = new Color(1, 1, 1, 0);
                 _armSmash.GetComponent<MeshRenderer>().enabled = false;
