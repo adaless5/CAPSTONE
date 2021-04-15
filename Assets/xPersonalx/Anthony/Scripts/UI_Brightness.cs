@@ -15,7 +15,8 @@ public class UI_Brightness : MonoBehaviour
 
         foreach (Image img in _imagesInCanvas)
         {
-            img.color = new Color(0.75f, 0.75f, 0.75f, 1.0f);
+            if (img.gameObject.name != "RaycastInfo")
+                img.color = new Color(0.75f, 0.75f, 0.75f, 1.0f);
         }
     }
 
@@ -23,7 +24,8 @@ public class UI_Brightness : MonoBehaviour
     {
         foreach (Image img in _imagesInCanvas)
         {
-            img.color = newcolor;
+            if (img.gameObject.name != "RaycastInfo")
+                img.color = newcolor;
         }
     }
 }

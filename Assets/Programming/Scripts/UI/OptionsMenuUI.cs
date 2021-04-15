@@ -167,8 +167,21 @@ public class OptionsMenuUI : MonoBehaviour
                 if (color != null)
                 {
                     color.postExposure.SetValue(new FloatParameter(amt));
+
                 }
             }
+        }
+
+        UI_Brightness[] _allUI = FindObjectsOfType<UI_Brightness>();
+
+        float percentage = (amt + 2) / 4;
+        float percentpercent = (percentage * 0.5f) + 0.5f;
+
+        Color newUIColor = new Color(percentpercent, percentpercent, percentpercent, 1.0f);
+
+        foreach (UI_Brightness ui in _allUI)
+        {
+            ui.SetBrightness(newUIColor);
         }
     }
     public void SetOptions()

@@ -18,8 +18,6 @@ public class PauseOptionsMenuUI : MonoBehaviour
     public Button FullScreenButton;
     public Button WindowedButton;
 
-    Color newUIColor;
-
     private PauseMenuUI _pauseMenu;
    // private 
     bool _isFullScreen;
@@ -77,7 +75,7 @@ public class PauseOptionsMenuUI : MonoBehaviour
         float percentage = (amt + 2) / 4;
         float percentpercent = (percentage * 0.5f) + 0.5f;
 
-        newUIColor = new Color(percentpercent, percentpercent, percentpercent, 1.0f);
+        Color newUIColor = new Color(percentpercent, percentpercent, percentpercent, 1.0f);
 
         foreach (UI_Brightness ui in _allUI)
         {
