@@ -22,6 +22,7 @@ public class BossAI : MonoBehaviour
     public Animator _bossAnimator;
     public Transform _spawnPoint;
     public GameObject _weakPoint;
+    public float _overallHealth;
 
     bool bIsDead = false;
 
@@ -32,6 +33,8 @@ public class BossAI : MonoBehaviour
         int UCindex = 0;
         _umbilicalCords = new GameObject[3];
         _weakPoint = GameObject.Find("Weak");
+        _health = _weakPoint.GetComponent<Health>();
+        
 
         foreach (Transform g in transform)
         {
@@ -60,8 +63,10 @@ public class BossAI : MonoBehaviour
         Vector3 _rotAxis = Vector3.forward;
         GameObject _rot = gameObject;
 
-        _weakPoint.SetActive(false);
         OnArmSmashStateEnded += RegenerateUC;
+        _health.OnTakeDamage += TakingDamage;
+        _weakPoint.GetComponent<Health>().OnDeath += BossDeath;
+        _weakPoint.SetActive(false);
     }
 
     private void Start()
@@ -77,7 +82,7 @@ public class BossAI : MonoBehaviour
     IEnumerator BossDeathLogic()
     {
         _bossAnimator.SetTrigger("OnDeath");
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(8f);
         //gameObject.SetActive(false);
         //for (int i = 0; i < transform.childCount; ++i)
         //{
@@ -101,12 +106,22 @@ public class BossAI : MonoBehaviour
         yield return new WaitForSeconds(1.145f);
         foreach (GameObject g in _umbilicalCords)
         {
-            foreach (Transform f in g.transform)
+            //foreach (Transform f in g.transform)
+            //{
+            //    //f.gameObject.SetActive(true);
+            //    f.gameObject.GetComponent<UmbilicalCord>()._bIsDead = false;
+            //    f.gameObject.GetComponent<UmbilicalCord>().PlayUCRegenAnimation();
+            //    f.gameObject.GetComponent<Health>().Heal(_ucHealth);
+            //}
+            //g.SetActive(true);
+            try
             {
-                f.gameObject.SetActive(true);
-                f.gameObject.GetComponent<Health>().Heal(_ucHealth);
+
+                g.GetComponent<UmbilicalCord>()._bIsDead = false;
+                g.GetComponent<UmbilicalCord>().PlayUCRegenAnimation();
+                g.GetComponent<Health>().Heal(_ucHealth);
             }
-            g.SetActive(true);
+            catch { }
         }
         yield return new WaitForSeconds(.5f);
         _bossAnimator.SetBool("IsRegenerating", false);
@@ -142,12 +157,33 @@ public class BossAI : MonoBehaviour
 
     bool AreGOInactive()
     {
-        if (GetComponentInChildren<UmbilicalCord>())
+        //if (!GetComponentInChildren<UmbilicalCord>()._bIsDead)
+        //{
+        //    Debug.Log("Still UCs");
+        //    return false;
+        //}
+        float amountOfUC = 0;
+        for (int i = 0; i < _umbilicalCords.Length; i++)
         {
-            Debug.Log("Still UCs");
+            if (_umbilicalCords[i].GetComponent<UmbilicalCord>()._bIsDead)
+            {
+                amountOfUC += 1;
+            }
+            //else
+            //{
+            //    return false;
+            //}
+        }
+        //return false;
+        if (amountOfUC == 3)
+        {
+            return true;
+        }
+        else
+        {
+            amountOfUC = 0;
             return false;
         }
-        return true;
     }
 
     public void SetUCAnimationPosition(GameObject UC)
@@ -182,20 +218,7 @@ public class BossAI : MonoBehaviour
         if (!bIsDead)
         {
             _bossAnimator.SetTrigger("HitReact");
-
         }
-    }
-
-    //public void CheckAnimationState()
-    //{
-    //    BossState boss = (BossState)_currentBossState;
-    //    if (boss != null)
-    //    {
-    //        if (boss._bossStateName == BOSSSTATENAME.ARMSMASH)
-    //        {
-    //            _bossAnimator.SetTrigger("ArmSmash");
-    //        }
-    //    }
-    //}
+    } 
 
 }
