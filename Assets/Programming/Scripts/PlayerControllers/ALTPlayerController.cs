@@ -155,6 +155,8 @@ public class ALTPlayerController : MonoBehaviour
 
     float color;
 
+    public bool _InInteractionVolume { get; set; } = false;
+
     private void Awake()
     {
         OnTakeDamage += TakeDamage;
