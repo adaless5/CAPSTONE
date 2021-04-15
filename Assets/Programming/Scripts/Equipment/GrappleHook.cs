@@ -24,18 +24,21 @@ public class GrappleHook : Equipment
     public GameObject m_GrappleGun;
     public GameObject m_GrappleCable;
     MeshRenderer m_SpriteRenderer;
+    Animator _animator;
 
     bool bCanGrapple = true;
+    bool bHasGrappled = false;
+    bool bIsOut = false;
 
     void Awake()
     {
         LoadDataOnSceneEnter();
 
         m_SpriteRenderer = m_GrappleMarker.GetComponentInChildren<MeshRenderer>();
+        _animator = GetComponentInChildren<Animator>();
         m_GrappleMarker.SetActive(false);
         m_GrappleGun.SetActive(false);
         m_GrappleCable.SetActive(false);
-    
     }
 
     public override void Start()
@@ -47,7 +50,6 @@ public class GrappleHook : Equipment
     {
         if (bIsActive && bIsObtained)
         {
-            m_GrappleGun.SetActive(true);
             switch (m_PlayerController.m_PlayerState)
             {
                 case ALTPlayerController.PlayerState.Idle:
@@ -69,8 +71,28 @@ public class GrappleHook : Equipment
         {
             bCanGrapple = true;
         }
-        
-        
+
+        //Animation
+        if (ALTPlayerController.instance.GetIsWalking() && ALTPlayerController.instance.CheckForSprintInput() == false)
+        {
+            _animator.SetBool("IsWalking", true);
+            _animator.SetBool("IsSprinting", false);
+            _animator.SetBool("IsIdle", false);
+
+        }
+        else if (ALTPlayerController.instance.CheckForSprintInput() == true)
+        {
+            _animator.SetBool("IsWalking", false);
+            _animator.SetBool("IsSprinting", true);
+            _animator.SetBool("IsIdle", false);
+        }
+        else
+        {
+            _animator.SetBool("IsWalking", false);
+            _animator.SetBool("IsSprinting", false);
+            _animator.SetBool("IsIdle", true);
+        }
+        //
     }
 
     public override void UseTool()
@@ -107,8 +129,14 @@ public class GrappleHook : Equipment
                         GetComponent<AudioManager_Grapple>().SetGrappleHookPointAndHitType
                             (raycastHit.transform, raycastHit.collider.gameObject.layer);
                         GetComponent<AudioManager_Grapple>().TriggerShot();
-
+                        //Animation
+                        if (bCanGrapple)
+                        {
+                            _animator.SetTrigger("Fire");
+                        }
+                        //
                         bCanGrapple = false;
+                        bHasGrappled = false;
                         m_PlayerController.bWasGrappling = true;
                     }
                 }
@@ -145,11 +173,29 @@ public class GrappleHook : Equipment
         m_GrappleMarker.SetActive(false);
         m_GrappleHookTransform.LookAt(m_GrappleTarget);
 
+
+
         float distFromGrappleTarget = Vector3.Distance(m_PlayerPosition.position, m_GrappleTarget);
         Vector3 grappleDirection = m_GrappleTarget - m_PlayerPosition.position;
         grappleDirection.Normalize();
 
         float speed = 30.0f;
+
+        //Animation
+        if (!bHasGrappled)
+        {
+            if (distFromGrappleTarget > m_AutoReleaseGrappleDistance)
+            {
+                _animator.SetFloat("multiplier", 1);
+                if (distFromGrappleTarget < 20f)
+                {
+                    _animator.SetFloat("multiplier", (distFromGrappleTarget - 0) / (2 - 0));
+                }
+                _animator.SetTrigger("Reel");
+            }
+        }
+        bHasGrappled = true;
+        //
 
         m_PlayerController._controller.Move(grappleDirection * m_GrappleHookSpeedMultiplier * speed * Time.deltaTime);
 
@@ -221,11 +267,35 @@ public class GrappleHook : Equipment
     public override void Deactivate()
     {
         base.Deactivate();
+        _animator.SetBool("IsOut", false);
+        StartCoroutine(ExitGrapple());
+        //m_GrappleGun.SetActive(false);
+        //m_GrappleCable.SetActive(false);
+        //m_GrappleMarker.SetActive(false);
+        //DeactivateGrappleHook();
+        //gameObject.GetComponentInChildren<MeshRenderer>().enabled = false;
+    }
+
+    public override void Activate()
+    {
+        base.Activate();
+        StartCoroutine(EnterGrapple());
+    }
+
+    IEnumerator ExitGrapple()
+    {
+        yield return new WaitForSeconds(0.5f);
         m_GrappleGun.SetActive(false);
         m_GrappleCable.SetActive(false);
         m_GrappleMarker.SetActive(false);
         DeactivateGrappleHook();
-        //gameObject.GetComponentInChildren<MeshRenderer>().enabled = false;
     }
 
+    IEnumerator EnterGrapple()
+    {
+        yield return new WaitForSeconds(0.6f);
+        m_GrappleGun.SetActive(true);
+        _animator.SetBool("IsOut", true);
+        bIsOut = true;
+    }
 }
