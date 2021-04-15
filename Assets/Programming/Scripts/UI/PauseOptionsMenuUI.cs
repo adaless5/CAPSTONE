@@ -18,9 +18,7 @@ public class PauseOptionsMenuUI : MonoBehaviour
     public Button FullScreenButton;
     public Button WindowedButton;
 
-    //Volume m_Volume;
-    //Exposure m_Exposure;
-    //Light _light;
+    Color newUIColor;
 
     private PauseMenuUI _pauseMenu;
    // private 
@@ -32,23 +30,6 @@ public class PauseOptionsMenuUI : MonoBehaviour
         _pauseMenu = FindObjectOfType<PauseMenuUI>();
         _pauseMenu = FindObjectOfType<PauseMenuUI>();
         _isFullScreen = Screen.fullScreen;
-        //_light = FindObjectOfType<Light>();
-        //m_Volume = FindObjectOfType<Volume>();
-
-
-        //VolumeProfile profile = m_Volume.sharedProfile;
-
-        //if (!profile.TryGet<Exposure>(out var expose))
-        //{
-        //    expose = profile.Add<Exposure>(false);
-        //    m_Exposure = expose;
-        //}
-        //else
-        //{
-        //    m_Exposure = expose;
-        //}
-        //m_Exposure.mode = new ExposureModeParameter(ExposureMode.Automatic, true);
-        //expose.compensation = new FloatParameter(7f);
     }
 
 
@@ -60,21 +41,7 @@ public class PauseOptionsMenuUI : MonoBehaviour
 
     private void Update()
     {
-        //if (Input.GetButtonDown("Pause"))
-        //{
-        //    _pauseMenu.Unpause();
-        //    gameObject.SetActive(false);
-        //}
-
-        //if (_isFullScreen)
-        //{
-        //    FullScreenButton.Select();
-        //}
-        //else
-        //{
-        //    WindowedButton.Select();
-        //}
-
+       
     }
 
     public void SetSensitivity(float amount)
@@ -100,8 +67,21 @@ public class PauseOptionsMenuUI : MonoBehaviour
                 if (color != null)
                 {
                     color.postExposure.SetValue(new FloatParameter(amt));
+
                 }
             }
+        }
+
+        UI_Brightness[] _allUI = FindObjectsOfType<UI_Brightness>();
+
+        float percentage = (amt + 2) / 4;
+        float percentpercent = (percentage * 0.5f) + 0.5f;
+
+        newUIColor = new Color(percentpercent, percentpercent, percentpercent, 1.0f);
+
+        foreach (UI_Brightness ui in _allUI)
+        {
+            ui.SetBrightness(newUIColor);
         }
     }
 
@@ -122,12 +102,12 @@ public class PauseOptionsMenuUI : MonoBehaviour
     {
         float f1;
         audioMusicMixer.GetFloat("musicVol", out f1);
-        Debug.Log(f1);
+        //Debug.Log(f1);
         musicSlider.value = Mathf.Pow(10, f1 / 20);
 
         float f2;
         audioFXMixer.GetFloat("FXVol", out f2);
-        Debug.Log(f2);
+        //Debug.Log(f2);
         fxSlider.value = Mathf.Pow(10, f2 / 20);
     }
 

@@ -152,6 +152,8 @@ public class ALTPlayerController : MonoBehaviour
     bool bDebug = false;
     public bool _bIsCredits;
 
+    float color;
+
     private void Awake()
     {
         OnTakeDamage += TakeDamage;
@@ -281,6 +283,10 @@ public class ALTPlayerController : MonoBehaviour
 
     void Update()
     {
+        //UI_Brightness brightness = FindObjectOfType<UI_Brightness>();
+
+        //color += Time.deltaTime;
+
         float dist = 100.0f;
         Vector3 dir = _ControllerCollisionPos - transform.position;
         Vector3 downdir = new Vector3(0.0f, -1.0f, 0.0f);
