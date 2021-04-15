@@ -272,7 +272,10 @@ public class GrappleHook : Equipment
     public override void Deactivate()
     {
         base.Deactivate();
-        _animator.SetBool("IsOut", false);
+        if (_animator != null)
+        {
+            _animator.SetBool("IsOut", false);
+        }
         StartCoroutine(ExitGrapple());
         //m_GrappleGun.SetActive(false);
         //m_GrappleCable.SetActive(false);
