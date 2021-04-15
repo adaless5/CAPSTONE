@@ -663,9 +663,9 @@ public class ALTPlayerController : MonoBehaviour
         _Acceleration = Mathf.Clamp(_Acceleration, 0.0f, 1.0f);
 
         //Forcing Player onto ground
-        if (bisGrounded && m_Velocity.y < 0f)
+        if (bisGrounded && m_Velocity.y < Mathf.Epsilon)
         {
-            m_Velocity.y = 0.0f;
+            m_Velocity.y = -2.0f;
 
             if (bWasGrappling)
             {
@@ -727,7 +727,7 @@ public class ALTPlayerController : MonoBehaviour
         }
 
         //Resetting After Jump
-        if (bisGrounded && !_bIsJumping || _coyoteTime < MAX_COYOTE_TIME)
+        if ((bisGrounded && !_bIsJumping) || (_coyoteTime < MAX_COYOTE_TIME) || (bisGrounded && bDidJump))
         {
             if (!bcanJump)
             {
@@ -737,15 +737,18 @@ public class ALTPlayerController : MonoBehaviour
                 bDidJump = false;
             }
         }
-        else if (bisGrounded && _bIsJumping && bDidJump)
-        {
-            bcanJump = false;
-            bIsMoving = true;
-            //_preJumpVelocity = Vector3.zero;
-            //_lastMoveVelocity = Vector3.zero;
-            bDidJump = false;
-            m_Velocity = Vector3.zero;
-        }
+
+        print("JUMPING = " + _bIsJumping);
+
+        //else if (bisGrounded && _bIsJumping && bDidJump)
+        //{
+        //    bcanJump = false;
+        //    bIsMoving = true;
+        //    //_preJumpVelocity = Vector3.zero;
+        //    //_lastMoveVelocity = Vector3.zero;
+        //    bDidJump = false;
+        //    m_Velocity = Vector3.zero;
+        //}
 
         if (bcanJump)
         {
