@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using UnityEngine.SceneManagement;
 public class ShowInfoInWheel : MonoBehaviour
 {
     Image[] _Icon;
@@ -11,7 +11,10 @@ public class ShowInfoInWheel : MonoBehaviour
     public int _CorrespondingToolIndex = 0;
 
     private bool bCorrespondingToolIsObtained;
-
+    private void Awake()
+    {
+        SceneManager.sceneLoaded += LoadInfoData;
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -31,6 +34,15 @@ public class ShowInfoInWheel : MonoBehaviour
         {
             _Icon[1].enabled = true;
             _Text.enabled = true;
+        }
+    }
+
+    void LoadInfoData(Scene scene, LoadSceneMode scenemode)
+    {
+        if (scene.name == "R3_0_Persistant")
+        {
+            _Icon[1].enabled = IsToolObtained();
+            _Text.enabled = IsToolObtained();
         }
     }
 

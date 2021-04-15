@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 //This class holds necessary information to spawn a player in a scene. 
 //also handles what connector the player spawns at while testing and editing a scene
 public class PlayerStart : MonoBehaviour
@@ -9,9 +9,33 @@ public class PlayerStart : MonoBehaviour
     Object _playerPrefab;
     Vector3 _startPosition;
     Vector3 _startRotation;
-    Vector3 _halfCharacterControllerHeight = new Vector3(0,1.3f,0);
+    Vector3 _halfCharacterControllerHeight = new Vector3(0, 1.3f, 0);
 
     bool firstPass = false;
+
+
+    private void Awake()
+    {
+        SceneManager.sceneLoaded += SceneManager_sceneLoaded;
+    }
+
+    private void SceneManager_sceneLoaded(Scene arg0, LoadSceneMode arg1)
+    {
+        if (arg0.name == "R3_1_CrashSite")
+        {
+            if (MainMenuUI.bNewGame)
+            {
+                InitializePlayer();
+                if (ALTPlayerController.instance != null)
+                {
+                    ALTPlayerController.instance.transform.position = _startPosition;
+                    ALTPlayerController.instance.transform.Rotate(_startRotation, Space.Self);
+                }
+                MainMenuUI.bNewGame = false;
+
+            }
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -33,15 +57,15 @@ public class PlayerStart : MonoBehaviour
             //Creates a player at the start of the game.
             if (GameObject.FindWithTag("Player") == null)
             {
-                
                 _playerPrefab = Instantiate(_playerPrefab, _startPosition + _halfCharacterControllerHeight, Quaternion.Euler(_startRotation));
 
                 GameObject player = (GameObject)_playerPrefab;
+
+                //    FileIO.ExportRespawnInfoToFile(player.transform, SceneManager.GetSceneByName("R3_1_CrashSite").name);
                 EventBroker.CallOnPlayerSpawned(ref player);
                 player.transform.position = _startPosition;
                 player.transform.Rotate(_startRotation, Space.Self);
             }
-            //
         }
     }
 
@@ -58,7 +82,7 @@ public class PlayerStart : MonoBehaviour
     //finds the default and creates a player at that scene connectors position.
     void InitializePlayer()
     {
-        
+
         //Init Player From Spawn Point if its Present.
         SpawnPoint spawnPoint = FindObjectOfType<SpawnPoint>();
         if (spawnPoint != null)
@@ -67,7 +91,7 @@ public class PlayerStart : MonoBehaviour
             _startRotation = spawnPoint.transform.rotation.eulerAngles;
 
         }
-        
+
         //Else Init player from the first SceneConnector in the scene.
         else
         {

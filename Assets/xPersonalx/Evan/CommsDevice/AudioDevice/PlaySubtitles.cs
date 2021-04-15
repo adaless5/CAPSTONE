@@ -31,6 +31,7 @@ public class PlaySubtitles : MonoBehaviour
         if (other.CompareTag("Player") && isPlaying == true)
         {
             StartCoroutine(DisplaySubtitles());
+            GetComponent<AudioManager_VoiceOver>().PlayVoiceOver();
         }
     }
 

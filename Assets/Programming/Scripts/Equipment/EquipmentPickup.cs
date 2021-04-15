@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
-
+using UnityEngine.SceneManagement;
 public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
 {
     [SerializeField] int _CorrespondingEquipmentBeltIndex = 0;
@@ -24,7 +24,7 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
 
     void Awake()
     {
-        LoadDataOnSceneEnter();
+        SceneManager.sceneLoaded += UpdateEquipmentPickupData;
         if (GetComponent<MeshRenderer>() != null)
         {
             if (isUsed) GetComponent<MeshRenderer>().enabled = false;
@@ -39,6 +39,13 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
         EventBroker.OnPlayerSpawned += PlayerStart;
 
 
+    }
+
+    void UpdateEquipmentPickupData(Scene scene, LoadSceneMode scenemode)
+    {
+
+        if (scene.name != "R3_0_Persistant")
+            LoadDataOnSceneEnter();
     }
 
     void PlayerStart(GameObject player)
@@ -87,6 +94,7 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
                     //EventBroker.CallOnPickupWeapon();
                     _canPlayerPickUp = false;
                     isUsed = true;
+                    SaveDataOnSceneChange();
                     if (GetComponent<MeshRenderer>() != null)
                     {
                         GetComponent<MeshRenderer>().enabled = false;
@@ -108,6 +116,22 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
                 }
             }
         }
+    }
+
+    public void SaveDataOnSceneChange()
+    {
+        try
+        {
+            for (int i = 0; i < SceneManager.sceneCount; i++)
+            {
+                if (SceneManager.GetSceneAt(i).name != "R3_0_Persistant")
+                    FileIO.ExportRespawnInfoToFile(ALTPlayerController.instance.transform, SceneManager.GetSceneAt(i).name);
+
+            }
+            SaveSystem.Save(gameObject.name, "isEnabled", gameObject.scene.name, isUsed);
+
+        }
+        catch { }
     }
 
     private void OnTriggerEnter(Collider other)
