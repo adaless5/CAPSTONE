@@ -122,7 +122,7 @@ public class PuzzleSwitch : MonoBehaviour, ISaveable
             bIsActive = onOff;
             SetSwitchModel(onOff);
             bCanSwitch = false;
-            //////////////////////////////////////////////////////////////////////////////////////////  SaveDataOnSceneChange();
+            SaveDataOnSceneChange();
             if (_ActivationPolicy == Switch_ActivationPolicy_Type.CanInteractWhenInactive || _ActivationPolicy == Switch_ActivationPolicy_Type.CanInteractWhenActive)
             {
                 gameObject.tag = "Untagged";

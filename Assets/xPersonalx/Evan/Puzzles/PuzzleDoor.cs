@@ -51,6 +51,7 @@ public class PuzzleDoor : MonoBehaviour, ISaveable
             if (CheckObjectArray(_OpenObjects))
             {
                 SetDoorOpen(true);
+                bHasBeenClosed = false;
             }
         }
 
@@ -59,12 +60,13 @@ public class PuzzleDoor : MonoBehaviour, ISaveable
             if (CheckSwitches(_OpenSwitches))
             {
                 SetDoorOpen(true);
+                bHasBeenClosed = false;
             }
         }
 
-        else if ( _OpenType == Open_Type.Proximity)
+        else if (_OpenType == Open_Type.Proximity)
         {
-                SetDoorOpen(CheckProximity(_OpenProximityTrigger));
+            SetDoorOpen(CheckProximity(_OpenProximityTrigger));
         }
 
     }
@@ -81,7 +83,7 @@ public class PuzzleDoor : MonoBehaviour, ISaveable
                 }
             }
 
-           else if (_CloseType == Close_Type.Switch)
+            else if (_CloseType == Close_Type.Switch)
             {
                 if (CheckSwitches(_CloseSwitches))
                 {
@@ -90,9 +92,9 @@ public class PuzzleDoor : MonoBehaviour, ISaveable
                 }
             }
 
-           else if (_CloseType == Close_Type.Proximity)
+            else if (_CloseType == Close_Type.Proximity)
             {
-                if (_CloseProximityTrigger!=null && CheckProximity(_CloseProximityTrigger))
+                if (_CloseProximityTrigger != null && CheckProximity(_CloseProximityTrigger))
                 {
                     SetDoorOpen(false);
                     bHasBeenClosed = true;
@@ -110,10 +112,20 @@ public class PuzzleDoor : MonoBehaviour, ISaveable
         {
             if (objects[i] != null)
             {
+                Health health = objects[i].GetComponent<Health>();
+                if (health && health.isDead)
+                {
+                    AllDead = false;
+                }
                 if (objects[i].activeSelf == true)
                 {
                     AllDead = false;
                 }
+
+            }
+            else
+            {
+                AllDead = false;
             }
         }
         return AllDead;
@@ -153,8 +165,8 @@ public class PuzzleDoor : MonoBehaviour, ISaveable
     // Update is called once per frame
     void Update()
     {
-           Close();
-           Open();
+        Close();
+        Open();
     }
 
     public void SetDoorOpen(bool OpenClosed)
