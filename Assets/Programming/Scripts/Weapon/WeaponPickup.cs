@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
-
+using UnityEngine.SceneManagement;
 public class WeaponPickup : MonoBehaviour, ITippable
 {
     public WeaponType _pickUpWeapon;
@@ -21,7 +21,7 @@ public class WeaponPickup : MonoBehaviour, ITippable
 
     void Awake()
     {
-        LoadDataOnSceneEnter();
+        SceneManager.sceneLoaded += UpdateWeaponPickupData;
 
         switch (_pickUpWeapon)
         {
@@ -47,6 +47,13 @@ public class WeaponPickup : MonoBehaviour, ITippable
         }
 
         EventBroker.OnPlayerSpawned += PlayerSpawn;
+    }
+
+    void UpdateWeaponPickupData(Scene scene, LoadSceneMode scenemode)
+    {
+
+        if (scene.name != "R3_0_Persistant")
+            LoadDataOnSceneEnter();
     }
 
     void PlayerSpawn(GameObject playerref)
@@ -97,6 +104,7 @@ public class WeaponPickup : MonoBehaviour, ITippable
                     EventBroker.CallOnPickupWeapon(weaponNum);
                     _canPlayerPickUp = false;
                     isUsed = true;
+                    SaveDataOnSceneChange();
                     if (GetComponent<MeshRenderer>() != null)
                     {
                         GetComponent<MeshRenderer>().enabled = false;
@@ -112,6 +120,8 @@ public class WeaponPickup : MonoBehaviour, ITippable
                 }
             }
         }
+
+
     }
 
     private void OnTriggerEnter(Collider other)
@@ -128,20 +138,43 @@ public class WeaponPickup : MonoBehaviour, ITippable
 
     private void OnTriggerStay(Collider other)
     {
-         if (other.gameObject.tag == "Player" && !isUsed)
+        if (other.gameObject.tag == "Player" && !isUsed)
             GameObject.FindObjectOfType<InteractableText>().b_inInteractCollider = true;
     }
 
     public void SaveDataOnSceneChange()
     {
-        EventBroker.CallOnAutoSave();
-        SaveSystem.Save(gameObject.name, "isEnabled", gameObject.scene.name, isUsed);
+        try
+        {
+            for (int i = 0; i < SceneManager.sceneCount; i++)
+            {
+                if (SceneManager.GetSceneAt(i).name != "R3_0_Persistant")
+                    FileIO.ExportRespawnInfoToFile(ALTPlayerController.instance.transform, SceneManager.GetSceneAt(i).name);
+
+            }
+            SaveSystem.Save(gameObject.name, "isEnabled", gameObject.scene.name, isUsed);
+
+        }
+        catch { }
     }
 
     public void LoadDataOnSceneEnter()
     {
-        isUsed = SaveSystem.LoadBool(gameObject.name, "isEnabled", gameObject.scene.name);
+        if (this != null)
+        {
+            isUsed = SaveSystem.LoadBool(gameObject.name, "isEnabled", gameObject.scene.name);
+            if (GetComponent<MeshRenderer>() != null)
+            {
+                GetComponent<MeshRenderer>().enabled = !isUsed;
+            }
+            if (_modelObj != null)
+            {
+                _modelObj.SetActive(!isUsed);
+            }
+        }
+
     }
+
 
     public void CreateTip(string filename)
     {

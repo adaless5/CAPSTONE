@@ -29,7 +29,7 @@ public class MainMenuUI : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 
-        if (FileIO.FetchRespawnInfo() != "" && !bNewGame)
+        if (FileIO.FetchRespawnInfo() != "")
         {
             ContinueButton.interactable = true;
             ColorBlock temp = ContinueButton.colors;
