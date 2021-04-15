@@ -114,7 +114,8 @@ public class PauseMenuUI : MonoBehaviour
         yield return null;
         yield return null;
         Destroy(GameObject.Find("EventSystem"));
-        Destroy(Player);
+        //Destroy(Player);
+        ALTPlayerController.instance.m_ControllerState = ALTPlayerController.ControllerState.Dormant;
         //SceneManager.LoadScene(0);
         SceneManager.LoadScene("MainMenu");
         //tigger save and exit
