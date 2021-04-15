@@ -315,6 +315,7 @@ MonoBehaviour:
   _bossAnimator: {fileID: 0}
   _spawnPoint: {fileID: 0}
   _weakPoint: {fileID: 0}
+  _overallHealth: 0
 --- !u!135 &7296674043763670847
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -421,6 +422,7 @@ GameObject:
   - component: {fileID: 2334428272743989094}
   - component: {fileID: 6821991831326040213}
   - component: {fileID: 232963441}
+  - component: {fileID: 232963444}
   m_Layer: 0
   m_Name: Weak
   m_TagString: Untagged
@@ -457,11 +459,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01dfb7d86835dc749b42ade1c715bbec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_HP: 200
+  m_HP: 10
   m_IsLoadingShield: 0
   bCanBeDamaged: 1
   isDead: 0
-  HasOwnDeathLogic: 0
+  HasOwnDeathLogic: 1
   healthBar: {fileID: 0}
   m_compass: {fileID: 0}
   m_marker: {fileID: 0}
@@ -487,7 +489,7 @@ MonoBehaviour:
   LookSpeedRange: {x: 1, y: 5}
   LidClosingSpeedRange: {x: 25, y: 1000}
   BlinkingTimeRange: {x: 0.5, y: 5}
-  HitReactTimeRange: {x: 0.5, y: 2}
+  HitReactTimeRange: {x: 2, y: 7}
 --- !u!95 &232963441
 Animator:
   serializedVersion: 3
@@ -507,6 +509,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!135 &232963444
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8186839361236261589}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.1954678
+  m_Center: {x: 0.021409135, y: -9.4756425e-12, z: 2.0001147e-12}
 --- !u!1001 &1071039047
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -961,6 +976,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Boss_Animated_Model
+      objectReference: {fileID: 0}
+    - target: {fileID: 1890936602869178883, guid: f4a66c4be4a450040b140af49863b974,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.0022928058
+      objectReference: {fileID: 0}
+    - target: {fileID: 1890936602869178883, guid: f4a66c4be4a450040b140af49863b974,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.20756857
       objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: f4a66c4be4a450040b140af49863b974,
         type: 3}
