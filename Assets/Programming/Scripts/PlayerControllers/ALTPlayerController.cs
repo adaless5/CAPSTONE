@@ -27,7 +27,8 @@ public class ALTPlayerController : MonoBehaviour
         Play,
         Menu,
         Wheel,
-        Debug
+        Debug,
+        Dormant,
     }
 
 
@@ -305,6 +306,14 @@ public class ALTPlayerController : MonoBehaviour
                 case ControllerState.Wheel:
                     PlayerMovement();
                     break;
+
+                case ControllerState.Dormant:
+                    if (Cursor.lockState == CursorLockMode.Locked)
+                    {
+                        Cursor.lockState = CursorLockMode.None;
+                        Cursor.visible = true;
+                    }
+                    break;
             }
             if (EquipmentWheel.enabled == true)
             {
@@ -334,7 +343,7 @@ public class ALTPlayerController : MonoBehaviour
             {
                 _bIsRunning = !_bIsRunning;
             }
-   
+
 
             if (WeaponWheel.enabled == true)
             {
@@ -421,7 +430,7 @@ public class ALTPlayerController : MonoBehaviour
             }
         }
 
-     
+
     }
 
     private void OnEnable()
@@ -443,21 +452,19 @@ public class ALTPlayerController : MonoBehaviour
     //Death and Respawn functionality -LCC
     public void PlayerRespawn(SaveSystem.RespawnInfo_Data respawninfo)
     {
-        //if (isDead)
-        {
-            StopCoroutine(DeathAnimation());
-            m_health.Heal(m_health.GetMaxHealth());
-            m_health.bCanBeDamaged = true;
-            m_armor.ResetArmor();
-            isDead = false;
-            m_ControllerState = ControllerState.Play;
-            _controller.enabled = true;
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-            gameObject.transform.position = respawninfo.pos;
-            gameObject.transform.rotation = respawninfo.rot;
 
-        }
+        StopCoroutine(DeathAnimation());
+        m_health.Heal(m_health.GetMaxHealth());
+        m_health.bCanBeDamaged = true;
+        m_armor.ResetArmor();
+        isDead = false;
+        m_ControllerState = ControllerState.Play;
+        _controller.enabled = true;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        gameObject.transform.position = respawninfo.pos;
+        gameObject.transform.rotation = respawninfo.rot;
+
     }
 
     void PlayerDeath()
@@ -722,7 +729,7 @@ public class ALTPlayerController : MonoBehaviour
                 bDidJump = false;
             }
         }
-        else if(bisGrounded && _bIsJumping && bDidJump)
+        else if (bisGrounded && _bIsJumping && bDidJump)
         {
             bcanJump = false;
             bIsMoving = true;

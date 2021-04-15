@@ -9,6 +9,7 @@ public class Belt : MonoBehaviour
 
     protected void Start()
     {
+       
         _items = GetComponentsInChildren<Tool>();
 
     }

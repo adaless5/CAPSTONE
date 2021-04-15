@@ -252,16 +252,21 @@ public class GrappleHook : Equipment
     public void DeactivateGrappleHook()
     {
         //Grapple Done Audio Triggers
-        GetComponent<AudioManager_Grapple>().StopRetract();
-        GetComponent<AudioManager_Grapple>().TriggerClick();
-        //
+        try
+        {
+            GetComponent<AudioManager_Grapple>().StopRetract();
+            GetComponent<AudioManager_Grapple>().TriggerClick();
+            //
 
-        m_GrappleHookTransform.localEulerAngles = Vector3.zero;
-        m_PlayerController.ResetGravity();
-        m_PlayerController.ChangePlayerState(ALTPlayerController.PlayerState.Idle);
-        m_GrappleHookTransform.localEulerAngles = Vector3.zero;
-        m_GrappleCable.SetActive(false);
-        m_GrappleCable.transform.localScale = new Vector3(1, 1, 1);
+            m_GrappleHookTransform.localEulerAngles = Vector3.zero;
+            m_PlayerController.ResetGravity();
+            m_PlayerController.ChangePlayerState(ALTPlayerController.PlayerState.Idle);
+            m_GrappleHookTransform.localEulerAngles = Vector3.zero;
+            m_GrappleCable.SetActive(false);
+            m_GrappleCable.transform.localScale = new Vector3(1, 1, 1);
+
+        }
+        catch { }
     }
 
     public override void Deactivate()
