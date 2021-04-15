@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
-
+using UnityEngine.UI;
+using TMPro;
 public class MainMenuUI : MonoBehaviour
 {
     public GameObject firstMenuOption;
@@ -19,12 +20,23 @@ public class MainMenuUI : MonoBehaviour
     public CanvasGroup _canvasGroup;
     public CanvasGroup _controlsGroup;
     public CanvasGroup _quitGroup;
+    public Button ContinueButton;
+    public Color ActivatedColor;
 
     public static bool bNewGame = true;
     private void Awake()
     {
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+
+        if (FileIO.FetchRespawnInfo() != "" && !bNewGame)
+        {
+            ContinueButton.interactable = true;
+            ColorBlock temp = ContinueButton.colors;
+            temp.normalColor = ActivatedColor;
+            ContinueButton.colors = temp;
+            ContinueButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = Color.white;
+        }
     }
     public void Continue()
     {
@@ -38,18 +50,15 @@ public class MainMenuUI : MonoBehaviour
         if (data.sceneName == "" || data.sceneName == null)
 
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-            //SceneManager.LoadScene(2);
             bNewGame = true;
         }
         else
         {
-            SceneManager.LoadScene(data.sceneName);
-            //SceneManager.LoadScene(2);
             bNewGame = false;
         }
-
+        SceneManager.LoadScene("Loading_Scene");
         //get info from save system and load accordnaly
+
     }
     public void NewGame()
     {

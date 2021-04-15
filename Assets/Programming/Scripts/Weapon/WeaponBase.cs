@@ -6,8 +6,8 @@ using UnityEngine.Rendering;
 public class WeaponBase : Weapon
 {
 
-    [Header("UI Elements - ParticleFX and Reticule")]   
-    public Animator reticuleAnimator;   
+    [Header("UI Elements - ParticleFX and Reticule")]
+    public Animator reticuleAnimator;
 
 
     [Header("Camera Settings")]
@@ -40,7 +40,7 @@ public class WeaponBase : Weapon
 
         EventBroker.OnPlayerSpawned += InitWeaponControls;
         EventBroker.OnWeaponSwap += WeaponSwapOut;
-        EventBroker.OnWeaponSwapIn += DGWeaponSwapIn;        
+        EventBroker.OnWeaponSwapIn += DGWeaponSwapIn;
         _DGAnimator = GetComponent<DG_Animations>();
 
         _bPlayedNewShellSound = false;
@@ -52,9 +52,12 @@ public class WeaponBase : Weapon
     public void InitWeaponControls(GameObject player)
     {
         //Controls initializing for reloading && trying to shoot with no ammo
-
-        _playerController._controls.Player.Reload.performed += ctx => Reload();
-        _playerController._controls.Player.Shoot.started += ctx => TryShoot();
+        try
+        {
+            _playerController._controls.Player.Reload.performed += ctx => Reload();
+            _playerController._controls.Player.Shoot.started += ctx => TryShoot();
+        }
+        catch { }
     }
 
     public override void Start()
@@ -111,7 +114,7 @@ public class WeaponBase : Weapon
         {
             transform.GetChild(0).gameObject.SetActive(true);
         }
-       // Debug.Log("Finished DG SwapOutCoroutine at timestamp: " + Time.time);
+        // Debug.Log("Finished DG SwapOutCoroutine at timestamp: " + Time.time);
         _bcoroutineOutIsRunning = false;
     }
 
@@ -225,14 +228,14 @@ public class WeaponBase : Weapon
     void OnShoot()
     {
         if (bCanShoot)
-        {               
+        {
             _DGAnimator._weaponAnimator.SetTrigger("Fired");
-           // muzzleFlash.Play();
+            // muzzleFlash.Play();
             if (bIsActive)
             {
                 //Gun Shot Sounds
                 GetComponent<AudioManager_Archebus>().TriggerShot();
-                StartCoroutine(TriggerNewShellSound());               
+                StartCoroutine(TriggerNewShellSound());
             }
 
             if (!m_bHasActionUpgrade)
@@ -385,7 +388,7 @@ public class WeaponBase : Weapon
 
                 //Particle effects on hit
                 //GameObject hitImpact = Instantiate(impactFX, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
-               // Destroy(hitImpact, 2.0f);
+                // Destroy(hitImpact, 2.0f);
             }
         }
     }
@@ -396,11 +399,11 @@ public class WeaponBase : Weapon
         SaveSystem.Save(gameObject.name, "bIsObtained", gameObject.scene.name, bIsObtained);
     }
 
-    public void LoadDataOnSceneEnter()
-    {
-        bIsActive = SaveSystem.LoadBool(gameObject.name, "bIsActive", gameObject.scene.name);
-        bIsObtained = SaveSystem.LoadBool(gameObject.name, "bIsObtained", gameObject.scene.name);
-    }
+    //public void LoadDataOnSceneEnter()
+    //{
+    //    bIsActive = SaveSystem.LoadBool(gameObject.name, "bIsActive", gameObject.scene.name);
+    //    bIsObtained = SaveSystem.LoadBool(gameObject.name, "bIsObtained", gameObject.scene.name);
+    //}
 
     IEnumerator TriggerNewShellSound()
     {

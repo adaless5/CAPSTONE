@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public abstract class Tool : MonoBehaviour, ISaveable
 {
     public bool bIsActive = false;
@@ -10,7 +10,7 @@ public abstract class Tool : MonoBehaviour, ISaveable
 
     public virtual void Start()
     {
-        LoadDataOnSceneEnter();
+        SceneManager.sceneLoaded += UpdateToolData;
     }
 
     public abstract void Update();
@@ -35,8 +35,19 @@ public abstract class Tool : MonoBehaviour, ISaveable
         SaveSystem.Save(gameObject.name, "bIsObtained", "Equipment", bIsObtained, SaveSystem.SaveType.EQUIPMENT);
     }
 
+    public void UpdateToolData(Scene scene, LoadSceneMode scenemode)
+    {
+        if (scene.name == "Loading_Scene")
+            LoadDataOnSceneEnter();
+    }
+
     public void LoadDataOnSceneEnter()
     {
         bIsObtained = SaveSystem.LoadBool(gameObject.name, "bIsObtained", "Equipment");
+        bIsActive = SaveSystem.LoadBool(gameObject.name, "bIsActive", "Equipment");
+
+        if (!bIsActive)
+            Deactivate();
+
     }
 }

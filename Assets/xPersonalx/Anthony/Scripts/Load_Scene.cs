@@ -30,15 +30,17 @@ public class Load_Scene : MonoBehaviour
     IEnumerator LoadAsyncOperation()
     {
         _MinimumLoadTime += Time.deltaTime;
+
         if (!SceneManager.GetSceneByName("R3_0_Persistant").IsValid())
         {
-            AsyncOperation firstLevel = SceneManager.LoadSceneAsync("R3_0_Persistant");
-            while (firstLevel.progress < 1f)
-            {
-                _fillMeter.fillAmount = firstLevel.progress;
-                yield return new WaitForEndOfFrame();
-            }
+            AsyncOperation firstLevel = SceneManager.LoadSceneAsync("R3_0_Persistant", LoadSceneMode.Additive);
+            //while (firstLevel.progress < 1f)
+            //{
+            //    _fillMeter.fillAmount = firstLevel.progress;
+            //    yield return new WaitForEndOfFrame();
+            //}
         }
+        
         if (MainMenuUI.bNewGame)
         {
             AsyncOperation secondlevel = SceneManager.LoadSceneAsync("R3_1_CrashSite", LoadSceneMode.Additive);
@@ -47,13 +49,13 @@ public class Load_Scene : MonoBehaviour
                 _fillMeter.fillAmount = secondlevel.progress;
                 yield return new WaitForEndOfFrame();
             }
-
-
+            SceneManager.UnloadSceneAsync("Loading_Scene");
         }
         else if (!MainMenuUI.bNewGame)
         {
             SaveSystem.RespawnInfo_Data data = new SaveSystem.RespawnInfo_Data();
             data.FromString(FileIO.FetchRespawnInfo());
+
 
             //if (data.sceneName == "")
             //{
@@ -85,12 +87,12 @@ public class Load_Scene : MonoBehaviour
                     yield return new WaitForEndOfFrame();
 
                 }
-                SceneManager.UnloadSceneAsync("Loading_Scene");
-                EventBroker.CallOnLoadingScreenFinished(data);
-
             }
-
+            SceneManager.UnloadSceneAsync("Loading_Scene");
+            EventBroker.CallOnLoadingScreenFinished(data);
 
         }
+
+
     }
 }

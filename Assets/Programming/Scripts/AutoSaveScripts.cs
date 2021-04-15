@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AutoSaveScripts : MonoBehaviour
 {
-    GameObject _autoSaveIcon;
+    public GameObject _autoSaveIcon;
 
     private void Awake()
     {
@@ -14,14 +14,20 @@ public class AutoSaveScripts : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
 
     void DisplayAutoSaveIcon()
     {
-        _autoSaveIcon.SetActive(true);
-        StartCoroutine(HideAutoSaveIcon());
+        try
+        {
+            _autoSaveIcon.SetActive(true);
+            StartCoroutine(HideAutoSaveIcon());
+
+        }
+        catch
+        { Debug.Log("Reference of AutoSaveIcon not found"); }
     }
 
     public IEnumerator HideAutoSaveIcon()

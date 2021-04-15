@@ -20,9 +20,16 @@ public class EventBroker
     public static event Action OnWeaponSwapIn;
     public static event Action<SaveSystem.RespawnInfo_Data> OnLoadingScreenFinished;
     public static event Action OnAutoSave;
+    public static event Action OnDataChange;
+
     public static void CallSpawnEnemy(GameObject enemyToSpawn)
     {
         SpawnEnemy?.Invoke(enemyToSpawn);
+    }
+
+    public static void CallOnDataChange()
+    {
+        OnDataChange?.Invoke();
     }
 
     public static void CallOnGameEnd()

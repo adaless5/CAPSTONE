@@ -137,7 +137,8 @@ public class DeathMenuUI : MonoBehaviour
         _deathMenuCanvas.blocksRaycasts = false;
 
 
-        Destroy(_playerController.gameObject);
+        //Destroy(_playerController.gameObject);
+        _playerController.m_ControllerState = ALTPlayerController.ControllerState.Dormant;
         SceneManager.LoadScene("MainMenu");
         //_deathMenuCanvas.alpha = 0;
 
