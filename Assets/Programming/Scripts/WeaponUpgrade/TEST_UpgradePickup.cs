@@ -12,7 +12,16 @@ public class TEST_UpgradePickup : MonoBehaviour
         {
             player.m_UpgradeCurrencyAmount += worth;
             EventBroker.CallOnCurrencyPickup(worth, player.m_UpgradeCurrencyAmount);
-            Destroy(gameObject);
+
+            try { GetComponent<AudioManager_Universal>().Play(); }
+            catch { }
+            StartCoroutine(DelayDeactivate());
         }
+    }
+
+    IEnumerator DelayDeactivate()
+    {
+        yield return new WaitForSeconds(.1f);
+        Destroy(gameObject);
     }
 }
