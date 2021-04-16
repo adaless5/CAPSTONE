@@ -18,10 +18,12 @@ public class CreditsWarpTunnel : MonoBehaviour
     {
         for (int i = 0; i < _tunnels.Length; i++)
         {
-            _tunnels[i].transform.position = new Vector3(_tunnels[i].transform.position.x + Time.deltaTime * _warpSpeed, 0,0);
-            if(_tunnels[i].transform.position.x>750)
+            //_tunnels[i].transform.position = new Vector3(_tunnels[i].transform.position.x + Time.deltaTime * _warpSpeed, 0,0);
+            _tunnels[i].transform.position = new Vector3(_tunnels[i].transform.position.x + Time.deltaTime * _warpSpeed, _tunnels[i].transform.position.y, _tunnels[i].transform.position.z);
+            if (_tunnels[i].transform.position.x>750)
             {
-                _tunnels[i].transform.position = new Vector3(-750,0,0);
+                //_tunnels[i].transform.position = new Vector3(-750,0,0);
+                _tunnels[i].transform.position = new Vector3(-750, _tunnels[i].transform.position.y, _tunnels[i].transform.position.z);
             }
         }
     }
