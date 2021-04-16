@@ -17,6 +17,8 @@ public class Blade : Equipment
     bool _bisAttacking;
     GameObject prevHit;
 
+    bool _bClickSet = false;
+
     // Start is called before the first frame update
     public override void Start()
     {
@@ -57,6 +59,8 @@ public class Blade : Equipment
     // Update is called once per frame
     public override void Update()
     {
+        if (Mouse.current.rightButton.wasReleasedThisFrame) _bClickSet = false;
+
         if (bIsActive && bIsObtained)
         {
             
@@ -127,8 +131,10 @@ public class Blade : Equipment
     {
 
         AudioManager_Sword audioManager = GetComponent<AudioManager_Sword>();
-        if (Mouse.current.rightButton.wasPressedThisFrame) audioManager.TriggerSwing();
+        if ((_animator.GetBool("Attack1") || _animator.GetBool("Attack2"))
+            && !audioManager.isPlaying() && _bClickSet == false) audioManager.TriggerSwing();
 
+        _bClickSet = true;
         _bisAttacking = true;
 
         yield return new WaitForSeconds(0.5f);
