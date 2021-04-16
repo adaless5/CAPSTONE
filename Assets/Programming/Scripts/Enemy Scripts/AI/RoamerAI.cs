@@ -127,10 +127,10 @@ public class RoamerAI : MonoBehaviour
 
         if (_playerReference != null)
         {
-            if (bShouldWanderRandomly)
-                _currentState = new RoamerWanderState(gameObject, _patrolPoints, _playerReference.transform, _navMeshAgent, _wanderRadius);
+            //if (bShouldWanderRandomly)
+            //    _currentState = new RoamerWanderState(gameObject, _patrolPoints, _playerReference.transform, _navMeshAgent, _wanderRadius);
 
-            else if (!bShouldWanderRandomly)
+            //else if (!bShouldWanderRandomly)
                 _currentState = new RoamerIdleState(gameObject, _patrolPoints, _playerReference.transform, _navMeshAgent);
             //_currentState = new RoamerPatrolState(gameObject, _patrolPoints, player.transform, _navMeshAgent);
 

@@ -737,9 +737,6 @@ public class ALTPlayerController : MonoBehaviour
                 bDidJump = false;
             }
         }
-
-        print("JUMPING = " + _bIsJumping);
-
         //else if (bisGrounded && _bIsJumping && bDidJump)
         //{
         //    bcanJump = false;
