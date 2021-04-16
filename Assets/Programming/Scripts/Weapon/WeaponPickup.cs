@@ -122,8 +122,6 @@ public class WeaponPickup : MonoBehaviour, ITippable
                 }
             }
         }
-
-
     }
 
     private void OnTriggerEnter(Collider other)
@@ -163,21 +161,22 @@ public class WeaponPickup : MonoBehaviour, ITippable
     public void LoadDataOnSceneEnter()
     {
 
-
-        if (this != null)
+        try
         {
-            isUsed = SaveSystem.LoadBool(gameObject.name, "isEnabled", gameObject.scene.name);
-            if (GetComponent<MeshRenderer>() != null)
+            if (this != null)
             {
-                GetComponent<MeshRenderer>().enabled = !isUsed;
-            }
-            if (_modelObj != null)
-            {
-                _modelObj.SetActive(!isUsed);
+                isUsed = SaveSystem.LoadBool(gameObject.name, "isEnabled", gameObject.scene.name);
+                if (GetComponent<MeshRenderer>() != null)
+                {
+                    GetComponent<MeshRenderer>().enabled = !isUsed;
+                }
+                if (_modelObj != null)
+                {
+                    _modelObj.SetActive(!isUsed);
+                }
             }
         }
-
-
+        catch { }
     }
 
 
