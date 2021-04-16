@@ -87,8 +87,9 @@ public class Load_Scene : MonoBehaviour
                     yield return new WaitForEndOfFrame();
                 }
             }
-            SceneManager.UnloadSceneAsync("Loading_Scene");
             EventBroker.CallOnLoadingScreenFinished(data);
+            EventBroker.CallOnDataChange();
+            SceneManager.UnloadSceneAsync("Loading_Scene");
         }
     }
 }
