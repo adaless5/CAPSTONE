@@ -38,13 +38,10 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
         }
         GetComponent<Collider>().enabled = true;
         EventBroker.OnPlayerSpawned += PlayerStart;
-
-
     }
 
     void UpdateEquipmentPickupData(Scene scene, LoadSceneMode scenemode)
     {
-
         if (scene.name != "R3_0_Persistant")
             LoadDataOnSceneEnter();
     }
@@ -74,7 +71,6 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
                 }
                 else if (!Keyboard.current.eKey.isPressed && isUsed)
                     bCanDestroyMessage = true;
-
             }
 
             if (bCanDestroyMessage)
