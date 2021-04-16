@@ -67,6 +67,10 @@ public class DestructibleObject : MonoBehaviour, ISaveable
                 if (tag == t)
                 {
                     StartCoroutine(TriggerBreak());
+
+                    try { GetComponent<AudioManager_Squash>().Play(); }
+                    catch { }
+
                     break;
                 }
             }

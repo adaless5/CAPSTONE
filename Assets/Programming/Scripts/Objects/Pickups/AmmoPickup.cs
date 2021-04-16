@@ -79,9 +79,12 @@ public class AmmoPickup : MonoBehaviour
 
         if (other.tag == "Player" && isPickedUp == false && m_ammoController.IsAmmoFull(ammoType) == false)
         {
+            try { GetComponent<AudioManager_Universal>().Play(); }
+            catch { }
+
             isPickedUp = true;
             EventBroker.CallOnAmmoPickup(ammoType, m_amountOfClipsInPickup, m_ammoCap);
-            gameObject.SetActive(false);
+            StartCoroutine(DelayDeactivate());
 
             if (m_marker != null)
                 m_compass.RemoveMarker(m_marker);
@@ -90,5 +93,11 @@ public class AmmoPickup : MonoBehaviour
         {
             EventBroker.CallOnAmmoPickupAttempt();
         }
+    }
+
+    IEnumerator DelayDeactivate()
+    {
+        yield return new WaitForSeconds(.1f);
+        gameObject.SetActive(false);
     }
 }
