@@ -24,7 +24,6 @@ public class Load_Scene : MonoBehaviour
         {
             print("DON'T START A NEW GAME!");
         }
-
     }
 
     IEnumerator LoadAsyncOperation()
