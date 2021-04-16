@@ -23,7 +23,7 @@ public class BossWeakState : BossState
     public override void Enter()
     {
         base.Enter();
-        _weakTimer = 5.833f;
+        _weakTimer = 7.75f;
         _bossWeakPoint.SetActive(true);
 
     }
@@ -32,6 +32,11 @@ public class BossWeakState : BossState
     {
         base.Update();
         _weakTimer -= Time.deltaTime;
+
+        if (_weakTimer <= 1.2f)
+        {
+            _currentEnemy.GetComponent<BossAI>().OnWeakPointExit();
+        }
         if (_weakTimer <= 0.00f)
         {
             _nextState = new BossArmSmashState(_currentEnemy, _currentEnemy.GetComponent<BossAI>().GetBossArm());
@@ -41,7 +46,7 @@ public class BossWeakState : BossState
 
     public override void Exit()
     {
-        base.Exit();        
+        base.Exit();
         _bossWeakPoint.SetActive(false);
     }
 }

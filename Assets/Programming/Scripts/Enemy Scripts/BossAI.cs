@@ -20,6 +20,7 @@ public class BossAI : MonoBehaviour
     public GameObject _deathParticle;
     public GameObject _arm;
     public Animator _bossAnimator;
+    public Animator _weakPointAnimator;
     public Transform _spawnPoint;
     public GameObject _weakPoint;
     public float _overallHealth;
@@ -34,6 +35,7 @@ public class BossAI : MonoBehaviour
         _umbilicalCords = new GameObject[3];
         _weakPoint = GameObject.Find("Weak");
         _health = _weakPoint.GetComponent<Health>();
+        _weakPointAnimator = _weakPoint.GetComponent<Animator>();
         
 
         foreach (Transform g in transform)
@@ -82,7 +84,7 @@ public class BossAI : MonoBehaviour
     IEnumerator BossDeathLogic()
     {
         _bossAnimator.SetTrigger("OnDeath");
-        yield return new WaitForSeconds(8f);
+        yield return new WaitForSeconds(4f);
         //gameObject.SetActive(false);
         //for (int i = 0; i < transform.childCount; ++i)
         //{
@@ -103,7 +105,7 @@ public class BossAI : MonoBehaviour
         //_bossAnimator.SetTrigger("Regenerating");
         _bossAnimator.SetBool("IsRegenerating", true);
         //Waits till Boss slams his arm down before spawning, about 1.2 seconds in regen animation
-        yield return new WaitForSeconds(1.145f);
+        yield return new WaitForSeconds(0.75f);
         foreach (GameObject g in _umbilicalCords)
         {
             //foreach (Transform f in g.transform)
@@ -217,8 +219,14 @@ public class BossAI : MonoBehaviour
     {
         if (!bIsDead)
         {
+            _weakPointAnimator.SetTrigger("OnHit");
             _bossAnimator.SetTrigger("HitReact");
         }
     } 
+
+    public void OnWeakPointExit()
+    {
+        _weakPointAnimator.SetTrigger("WeakRetreat");
+    }
 
 }
