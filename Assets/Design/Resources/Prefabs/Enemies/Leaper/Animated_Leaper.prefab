@@ -211,7 +211,6 @@ GameObject:
   - component: {fileID: 2076326657844921592}
   - component: {fileID: 6192549426865607819}
   - component: {fileID: 4511300801734887858}
-  - component: {fileID: 1243263705445562738}
   m_Layer: 0
   m_Name: TestLeapingEnemy
   m_TagString: Enemy
@@ -284,6 +283,7 @@ MonoBehaviour:
   m_IsLoadingShield: 0
   bCanBeDamaged: 1
   isDead: 0
+  HasOwnDeathLogic: 0
   healthBar: {fileID: 0}
   m_compass: {fileID: 0}
   m_marker: {fileID: 0}
@@ -334,25 +334,6 @@ MonoBehaviour:
   m_markerImage: {fileID: 0}
   m_markerPosition: {x: 0, y: 0}
   bIsMoving: 1
---- !u!95 &1243263705445562738
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2076326657844921569}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: d7fbd8496be8f074a8c4a3ceddaba355, type: 3}
-  m_Controller: {fileID: 9100000, guid: 7c67479aa19637b4eaa2fc12da3c8140, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &2076326658876958455
 GameObject:
   m_ObjectHideFlags: 0
@@ -364,7 +345,7 @@ GameObject:
   - component: {fileID: 2076326658876958451}
   - component: {fileID: 2076326658876958453}
   m_Layer: 2
-  m_Name: LeapingEnemyTemp
+  m_Name: Animated_Leaper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -377,7 +358,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2076326658876958455}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 36.45, y: 1.83, z: 37.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -850,7 +831,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 707e9572178388b44b4e92fa54c6df1c, type: 2}
+  - {fileID: 2100000, guid: 65937f520bde708428607ae8eaef4cf5, type: 2}
   - {fileID: 2100000, guid: 61c2bf4cafb957b408439100083ab6ff, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -1166,17 +1147,17 @@ PrefabInstance:
     - target: {fileID: 3066598455142586360, guid: c0623cdf0250c434e86be08c8a608151,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.18622074
+      value: -0.1904
       objectReference: {fileID: 0}
     - target: {fileID: 3066598455142586360, guid: c0623cdf0250c434e86be08c8a608151,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.10194358
+      value: -0.0455
       objectReference: {fileID: 0}
     - target: {fileID: 3066598455142586360, guid: c0623cdf0250c434e86be08c8a608151,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.062138245
+      value: 0.0621
       objectReference: {fileID: 0}
     - target: {fileID: 3066598455142586360, guid: c0623cdf0250c434e86be08c8a608151,
         type: 3}
@@ -1267,17 +1248,17 @@ PrefabInstance:
     - target: {fileID: 8509285537776439612, guid: b98c4a2e634503d4eaf3d013b24e3b6f,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.18622074
+      value: -0.1904
       objectReference: {fileID: 0}
     - target: {fileID: 8509285537776439612, guid: b98c4a2e634503d4eaf3d013b24e3b6f,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.10194358
+      value: -0.0455
       objectReference: {fileID: 0}
     - target: {fileID: 8509285537776439612, guid: b98c4a2e634503d4eaf3d013b24e3b6f,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.06213698
+      value: -0.0622
       objectReference: {fileID: 0}
     - target: {fileID: 8509285537776439612, guid: b98c4a2e634503d4eaf3d013b24e3b6f,
         type: 3}

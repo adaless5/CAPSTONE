@@ -32,9 +32,10 @@ public class DronePatrol : DroneState
             _stage = EVENT.EXIT;
         }
 
-        _currentEnemy.transform.position = Vector3.MoveTowards(_currentEnemy.transform.position, destination, _enemySpeed * Time.deltaTime);
-        LookAt(_patrolPoints[_currentPatrolIndex]);
-
+        //_currentEnemy.transform.position = Vector3.MoveTowards(_currentEnemy.transform.position, destination, _enemySpeed * Time.deltaTime);
+        // LookAt(_patrolPoints[_currentPatrolIndex]);
+        _currentEnemy.transform.position += _currentEnemy.transform.forward * _enemySpeed * Time.deltaTime;
+        LookTowards(_currentEnemy.transform, _patrolPoints[_currentPatrolIndex].position, 2.0f);
         if (Vector3.Distance(_currentEnemy.transform.position, destination) < 2)
         {
             MoveToNextPoint();

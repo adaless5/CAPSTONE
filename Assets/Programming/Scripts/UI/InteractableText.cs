@@ -55,7 +55,7 @@ public class InteractableText : MonoBehaviour
             if(ShouldIgnoreTag(hitInfo.collider.gameObject.tag) == false)
             {
                 m_backgroundImage.enabled = true;
-                if(b_inInteractCollider)
+                if (b_inInteractCollider)
                 {
                     m_backgroundImage.rectTransform.sizeDelta = new Vector2(220, 20);
                     m_pickupText.rectTransform.sizeDelta = new Vector2(200, 15);
@@ -65,7 +65,7 @@ public class InteractableText : MonoBehaviour
                     { m_pickupText.text = "Press 'E' to Interact"; }
                     b_inInteractCollider = false;
                 }
-                else
+                else if (ALTPlayerController.instance._InInteractionVolume == false && !b_inInteractCollider)
                 {
                     m_backgroundImage.rectTransform.sizeDelta = new Vector2(150, 20);
                     m_pickupText.rectTransform.sizeDelta = new Vector2(146, 15);

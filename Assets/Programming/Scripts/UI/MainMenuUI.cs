@@ -21,7 +21,9 @@ public class MainMenuUI : MonoBehaviour
     public CanvasGroup _controlsGroup;
     public CanvasGroup _quitGroup;
     public Button ContinueButton;
+    public Button NewButton;
     public Color ActivatedColor;
+    public Color DeactivatedColor;
 
     public static bool bNewGame = true;
     private void Awake()
@@ -36,6 +38,10 @@ public class MainMenuUI : MonoBehaviour
             temp.normalColor = ActivatedColor;
             ContinueButton.colors = temp;
             ContinueButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = Color.white;
+            NewButton.interactable = false;
+            temp.normalColor = DeactivatedColor;
+            NewButton.colors = temp;
+            NewButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = Color.black;
         }
     }
     public void Continue()
@@ -70,8 +76,8 @@ public class MainMenuUI : MonoBehaviour
         FileIO.ClearAllSavedData();
 
         //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-        SceneManager.LoadScene("Loading_Scene");
         bNewGame = true;
+        SceneManager.LoadScene("Loading_Scene");
     }
 
     void Start()

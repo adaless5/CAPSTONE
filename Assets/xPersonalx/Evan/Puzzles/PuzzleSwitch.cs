@@ -210,6 +210,7 @@ public class PuzzleSwitch : MonoBehaviour, ISaveable
         if (other.gameObject.tag == "Player")
         {
             bPlayerInRange = true;
+            ALTPlayerController.instance._InInteractionVolume = true;
             if (_PlayerInteractType == Switch_PlayerInteract_Type.Proximity)
             {
                 Interact();
@@ -236,6 +237,7 @@ public class PuzzleSwitch : MonoBehaviour, ISaveable
     {
         if (other.gameObject.tag == "Player")
         {
+            ALTPlayerController.instance._InInteractionVolume = false;
             bPlayerInRange = false;
             if (_PlayerInteractType == Switch_PlayerInteract_Type.Proximity)
             {

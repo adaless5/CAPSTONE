@@ -90,5 +90,14 @@ public class State
     {
         return _currentEnemy;
     }
+    public void LookTowards(Transform thisTransform, Vector3 targetLocation, float turnspeed)
+    {
+
+        Quaternion targetRotation = Quaternion.LookRotation(targetLocation - thisTransform.position);
+        float str;
+        str = Mathf.Min(turnspeed * Time.deltaTime, 1);
+        thisTransform.rotation = Quaternion.Lerp(thisTransform.rotation, targetRotation, str);
+
+    }
 
 }
