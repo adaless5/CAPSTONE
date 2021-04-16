@@ -33,6 +33,25 @@ AudioMixerEffectController:
   m_SendTarget: {fileID: 0}
   m_EnableWetMix: 0
   m_Bypass: 0
+--- !u!243 &-1937516156301462518
+AudioMixerGroupController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Sword
+  m_AudioMixer: {fileID: 24100000}
+  m_GroupID: 0d7acbcba61a04c4c98eb40595e9e449
+  m_Children: []
+  m_Volume: cbf0854b5cc97cd4e9e7edd849f76836
+  m_Pitch: 30cfb5d8dc117ea469e924d6ac670f70
+  m_Send: 00000000000000000000000000000000
+  m_Effects:
+  - {fileID: 5066797202207928452}
+  m_UserColorIndex: 0
+  m_Mute: 0
+  m_Solo: 0
+  m_BypassEffects: 0
 --- !u!243 &-1608289396372025265
 AudioMixerGroupController:
   m_ObjectHideFlags: 0
@@ -96,6 +115,7 @@ AudioMixerController:
     - b094ae0942770654ca567ccb7c0c83f9
     - 5afe4ede686ec0248a107e5ba82d27a9
     - 3d4416a8e4ca05b4f812c1497cc48177
+    - 0d7acbcba61a04c4c98eb40595e9e449
     name: View
   m_CurrentViewIndex: 0
   m_TargetSnapshot: {fileID: 24500006}
@@ -114,6 +134,7 @@ AudioMixerGroupController:
   - {fileID: -7017097787811387302}
   - {fileID: -1484178027323591972}
   - {fileID: 2973122970001177647}
+  - {fileID: -1937516156301462518}
   m_Volume: 351d954a68f97b34499faaabedd8919d
   m_Pitch: c7911229e81042b4099cac4d42d34055
   m_Send: 00000000000000000000000000000000
@@ -216,6 +237,20 @@ AudioMixerGroupController:
   m_Mute: 0
   m_Solo: 0
   m_BypassEffects: 0
+--- !u!244 &5066797202207928452
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: c40abf691ed74504980810ef6199e022
+  m_EffectName: Attenuation
+  m_MixLevel: ef9a9a884a4327d4c9081c55a4c44a40
+  m_Parameters: []
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
 --- !u!244 &5712776647261969278
 AudioMixerEffectController:
   m_ObjectHideFlags: 3

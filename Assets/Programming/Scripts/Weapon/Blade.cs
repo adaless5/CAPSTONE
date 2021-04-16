@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using UnityEngine.InputSystem;
 
 public class Blade : Equipment
 {
@@ -100,6 +101,8 @@ public class Blade : Equipment
 
     public override void UseTool()
     {
+        
+
         if (ALTPlayerController.instance.CheckForUseEquipmentInput())
         {
             if (!_animator.GetCurrentAnimatorStateInfo(0).IsName("Attack1") && !_animator.GetCurrentAnimatorStateInfo(0).IsName("Attack2"))
@@ -107,7 +110,9 @@ public class Blade : Equipment
                 int rand = Random.Range(1, 3);
                 _animator.SetBool("Attack" + rand.ToString(), true);
                 bHasHit = false;
+
                 StartCoroutine(OnAttack());
+                
             }
         }
         else
@@ -120,7 +125,14 @@ public class Blade : Equipment
 
     IEnumerator OnAttack()
     {
+
+        AudioManager_Sword audioManager = GetComponent<AudioManager_Sword>();
+        if (Mouse.current.rightButton.wasPressedThisFrame) audioManager.TriggerSwing();
+
+        _bisAttacking = true;
+
         yield return new WaitForSeconds(0.5f);
+
 
         Vector3 pos = ALTPlayerController.instance.GetComponentInChildren<Camera>().gameObject.transform.position;
         RaycastHit[] hit = null;
@@ -192,6 +204,7 @@ public class Blade : Equipment
                 }
             }
         }
+        _bisAttacking = false;
     }
 
     public override void Activate()
