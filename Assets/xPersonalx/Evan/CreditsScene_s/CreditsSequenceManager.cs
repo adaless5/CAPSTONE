@@ -47,6 +47,7 @@ public class CreditsSequenceManager : MonoBehaviour
     {
         if (GameObject.FindObjectOfType<WeaponBase>() != null)
         {
+            GameObject.FindObjectOfType<WeaponBase>().Activate();
             GameObject.FindObjectOfType<WeaponBase>().bIsActive = true;
             GameObject.FindObjectOfType<WeaponBase>().bIsObtained = true;
         }
@@ -69,19 +70,10 @@ public class CreditsSequenceManager : MonoBehaviour
         if (GameObject.FindObjectOfType<ALTPlayerController>() != null)
         { GameObject.FindObjectOfType<ALTPlayerController>()._bIsCredits = true; }
 
-        //  if (GameObject.Find("Weapon_Wheel_Canvas") != null)
-        //  { GameObject.Find("Weapon_Wheel_Canvas").SetActive(false); }
-        //
-        //  if (GameObject.Find("Tool_Wheel_Canvas") != null)
-        //  { GameObject.Find("Tool_Wheel_Canvas").SetActive(false); }
-
-        // if (GameObject.FindObjectOfType<HUD>() != null)
-        // { GameObject.FindObjectOfType<HUD>().gameObject.SetActive(false); }
     }
     // Update is called once per frame
     void Update()
     {
-        SetWeapon();
         if (!_lightsOut)
         {
             DisablePlayerLights();
@@ -123,6 +115,7 @@ public class CreditsSequenceManager : MonoBehaviour
                 _explosion.bDontDie = false;
                 if (!_explosion2.isPlaying)
                 {
+                    SetWeapon();
                     _explosion2.Play();
                 }
             }

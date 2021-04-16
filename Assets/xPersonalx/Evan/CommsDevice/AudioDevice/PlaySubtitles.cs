@@ -10,28 +10,34 @@ public class PlaySubtitles : MonoBehaviour
     private ScriptManager scriptManager;
     private SubtitleGuiManager guiManager;
     bool isPlaying = false;
-
+    ALTPlayerController controller;
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
         scriptManager = FindObjectOfType<ScriptManager>();  //expensive call
         guiManager = FindObjectOfType<SubtitleGuiManager>();
+        controller = FindObjectOfType<ALTPlayerController>();
     }
 
     void Update()
     {
-        if (Keyboard.current.eKey.isPressed)
+        if (controller == null)
         {
-            isPlaying = true;
+            controller = FindObjectOfType<ALTPlayerController>();
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag("Player") && isPlaying == true)
+        if (other.CompareTag("Player"))
         {
-            StartCoroutine(DisplaySubtitles());
-            GetComponent<AudioManager_VoiceOver>().PlayVoiceOver();
+            GameObject.FindObjectOfType<InteractableText>().b_inInteractCollider = true;
+            if (controller.CheckForInteract())
+            {
+                StartCoroutine(DisplaySubtitles());
+                GetComponent<AudioManager_VoiceOver>().PlayVoiceOver();
+            }
+
         }
     }
 

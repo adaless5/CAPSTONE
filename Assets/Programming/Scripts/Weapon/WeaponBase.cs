@@ -280,7 +280,11 @@ public class WeaponBase : Weapon
                         eye.Hit();
                     }
                     /// Evan's Eyeball call ^^^
-
+                    CreditObject cred = hitInfo.transform.GetComponentInParent<CreditObject>();
+                    if (cred)
+                    {
+                        cred.Hit(hitInfo.point);
+                    }
                     /// 
                     //Force of impact on hit
                     if (hitInfo.rigidbody != null)
@@ -380,6 +384,26 @@ public class WeaponBase : Weapon
                     wall.Break(gameObject.tag);
                 }
 
+                /// Evan's Item container call vvv
+                ItemContainer container = hitInfo.transform.GetComponentInParent<ItemContainer>();
+                if (container)
+                {
+                    container.Break(gameObject.tag);
+                }
+                /// Evan's Item container call ^^^
+
+                /// Evan's Eyeball call vvv
+                EyeLight eye = hitInfo.transform.GetComponentInParent<EyeLight>();
+                if (eye)
+                {
+                    eye.Hit();
+                }
+                /// Evan's Eyeball call ^^^
+                CreditObject cred = hitInfo.transform.GetComponentInParent<CreditObject>();
+                if (cred)
+                {
+                    cred.Hit(hitInfo.point);
+                }
                 //Force of impact on hit
                 if (hitInfo.rigidbody != null)
                 {
