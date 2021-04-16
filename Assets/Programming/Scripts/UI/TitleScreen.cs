@@ -6,28 +6,36 @@ using UnityEngine.InputSystem;
 
 public class TitleScreen : MonoBehaviour
 {
+    bool canStart = false;
+    IEnumerator Start()
+    {
+        yield return new WaitForSeconds(3.0f);
+        canStart = true;
+    }
     private void Update()
     {
-
-        if (Gamepad.current != null)
+        if (canStart)
         {
-            if (Gamepad.current.IsPressed())
+            if (Gamepad.current != null)
             {
-                SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
+                if (Gamepad.current.IsPressed())
+                {
+                    SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
+                }
             }
-        }
-        if (Keyboard.current != null)
-        {
-            if (Keyboard.current.anyKey.isPressed)
+            if (Keyboard.current != null)
             {
-                SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
+                if (Keyboard.current.anyKey.isPressed)
+                {
+                    SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
+                }
             }
-        }
-        if (Mouse.current != null)
-        {
-            if (Mouse.current.rightButton.isPressed || Mouse.current.leftButton.isPressed)
+            if (Mouse.current != null)
             {
-                SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
+                if (Mouse.current.rightButton.isPressed || Mouse.current.leftButton.isPressed)
+                {
+                    SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
+                }
             }
         }
     }
