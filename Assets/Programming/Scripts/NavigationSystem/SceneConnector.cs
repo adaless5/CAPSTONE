@@ -62,17 +62,17 @@ public class SceneConnector : MonoBehaviour
             {
                 case SceneConnectorType.Seamless:
 
-                    //Attempt at using less colliders for seamless scene transitions -LCC
-                    //for (int i = 1; i < SceneManager.sceneCount; i++)
+                    //attempt at using less colliders for seamless scene transitions -lcc
+                    //for (int i = 1; i < scenemanager.scenecount; i++)
                     //{
 
-                    //    if (SceneManager.GetSceneAt(i).name != SceneManager.GetSceneByBuildIndex(3).name)
+                    //    if (scenemanager.getsceneat(i).name != scenemanager.getscenebybuildindex(3).name)
                     //    {
-                    //        SceneManager.UnloadSceneAsync(SceneManager.GetSceneAt(i).name);
+                    //        scenemanager.unloadsceneasync(scenemanager.getsceneat(i).name);
                     //    }
                     //}
 
-                    //StartCoroutine(UnloadSceneDelayed());
+                    //startcoroutine(unloadscenedelayed());
 
                     if (!SceneManager.GetSceneByName(_data.destinationSceneName).IsValid())
                         SceneManager.LoadSceneAsync(_data.destinationSceneName, LoadSceneMode.Additive);
@@ -111,21 +111,21 @@ public class SceneConnector : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
-        Transform playerTransform = other.GetComponentInParent<Transform>();
-        Debug.Log("Exit load trigger");
-        if (_data != null)
-        {
-            switch (_data.type)
-            {
-                case SceneConnectorType.Seamless:
-                    UnloadScene();
-                    EventBroker.CallOnDataChange();
-                    if (playerTransform != null)
-                        StartCoroutine(UpdateRespawnInfo(playerTransform));
-                    break;
-            }
+        //Transform playerTransform = other.GetComponentInParent<Transform>();
+        //Debug.Log("Exit load trigger");
+        //if (_data != null)
+        //{
+        //    switch (_data.type)
+        //    {
+        //        case SceneConnectorType.Seamless:
+        //            UnloadScene();
+        //            EventBroker.CallOnDataChange();
+        //            if (playerTransform != null)
+        //                StartCoroutine(UpdateRespawnInfo(playerTransform));
+        //            break;
+        //    }
 
-        }
+        //}
     }
 
     IEnumerator UpdateRespawnInfo(Transform playerTransform)
