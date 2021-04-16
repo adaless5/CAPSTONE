@@ -102,6 +102,7 @@ public class PuzzleSwitch : MonoBehaviour, ISaveable
 
     public void Interact()
     {
+
         if (bCanSwitch)
         {
             SwitchInteract();
@@ -117,8 +118,13 @@ public class PuzzleSwitch : MonoBehaviour, ISaveable
     }
     void Activate(bool onOff)
     {
+        
         if (bCanSwitch)
         {
+            try { GetComponent<AudioManager_Universal>().Play(); }
+            catch { }
+            
+
             bIsActive = onOff;
             SetSwitchModel(onOff);
             bCanSwitch = false;

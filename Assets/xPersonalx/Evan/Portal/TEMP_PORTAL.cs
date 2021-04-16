@@ -19,6 +19,8 @@ public class TEMP_PORTAL : MonoBehaviour
         Vector3 newpos = TeleportToPositionObject.transform.position;
         targetTransform.position = newpos;
         TargetTeleparticles.Play();
+
+        GetComponent<AudioManager_Universal>().Play();
     }
     void AboutToTeleportIndicator()
     {

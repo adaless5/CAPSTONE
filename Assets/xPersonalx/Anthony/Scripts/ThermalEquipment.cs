@@ -149,10 +149,23 @@ public class ThermalEquipment : Equipment
     {
         if (!bIsInThermalView)
         {
+            try 
+            {
+                AudioManager_Goggles audioManager = GetComponent<AudioManager_Goggles>();
+                if (audioManager._thermalState == AudioManager_Goggles.ThermalStates.off) audioManager.Play(true);
+            }
+            catch { }
+
             ThermalOn();
         }
         else if (bIsInThermalView)
         {
+            try
+            {
+                AudioManager_Goggles audioManager = GetComponent<AudioManager_Goggles>();
+                if (audioManager._thermalState == AudioManager_Goggles.ThermalStates.on) audioManager.Play(false);
+            }
+            catch { }
             ThermalOff();
         }
         _playerController.SetThermalView(bIsInThermalView);

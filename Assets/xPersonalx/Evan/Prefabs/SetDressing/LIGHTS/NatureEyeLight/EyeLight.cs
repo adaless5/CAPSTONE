@@ -114,6 +114,9 @@ public class EyeLight : MonoBehaviour
         currentState = EyeballState.HitReacting;
         LidClosingSpeed = LidClosingSpeedRange.y;
         HitReactTime = Random.Range(HitReactTimeRange.x, HitReactTimeRange.y);
+
+        try { GetComponent<AudioManager_Squash>().Play(); }
+        catch { }
     }
     void HitReact()
     {

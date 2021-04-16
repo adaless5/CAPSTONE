@@ -126,12 +126,12 @@ public class ALTPlayerController : MonoBehaviour
 
     //New Controller
     public PlayerControls _controls;
-    Vector2 _movement;
+    public Vector2 _movement;
     Vector2 _look;
     bool _bIsShooting;
-    bool _bIsRunning;
+    public bool _bIsRunning;
     bool _bPaused;
-    bool _bIsJumping;
+    public bool _bIsJumping;
 
     //Special case: These guys needed some re-routing to make sure they didn't collude with the Pause logic 
     bool _bEquipWheel = true;
@@ -157,9 +157,13 @@ public class ALTPlayerController : MonoBehaviour
 
     public bool _InInteractionVolume { get; set; } = false;
 
+    public Vector3 DeathRotation = new Vector3(0, 0, 100);
+
     private void Awake()
     {
         OnTakeDamage += TakeDamage;
+        SceneManager.sceneLoaded += PlayerSceneChange;
+        EventBroker.OnLoadingScreenFinished += PlayerRespawn;
         EventBroker.OnPlayerDeath += PlayerDeath;
         _respawnPosition = gameObject.transform.position;
         m_ControllerState = ControllerState.Play;
@@ -264,10 +268,8 @@ public class ALTPlayerController : MonoBehaviour
                 WeaponWheel.enabled = false;
             }
         }
-        SceneManager.sceneLoaded += PlayerSceneChange;
         //Subscribing to Event Broker
         EventBroker.CallOnPlayerSpawned(gameObject);
-        EventBroker.OnLoadingScreenFinished += PlayerRespawn;
         OnTakeDamage += m_armor.ResetArmorTimer;
 
 
@@ -276,6 +278,7 @@ public class ALTPlayerController : MonoBehaviour
         _equipButtons = _equipmentBelt.GetComponentsInChildren<Button>();
         _wepButtons = _weaponBelt.GetComponentsInChildren<Button>();
     }
+
 
     private void PlayerSceneChange(Scene arg0, LoadSceneMode arg1)
     {
@@ -460,8 +463,7 @@ public class ALTPlayerController : MonoBehaviour
     //Death and Respawn functionality -LCC
     public void PlayerRespawn(SaveSystem.RespawnInfo_Data respawninfo)
     {
-
-        StopCoroutine(DeathAnimation());
+        StopAllCoroutines();
         m_health.Heal(m_health.GetMaxHealth());
         m_health.bCanBeDamaged = true;
         m_armor.ResetArmor();
@@ -486,7 +488,6 @@ public class ALTPlayerController : MonoBehaviour
             Debug.Log("Controller vibe passed");
             _controller.enabled = false;
         }
-
     }
 
     public IEnumerator DeathAnimation()
@@ -494,7 +495,7 @@ public class ALTPlayerController : MonoBehaviour
         Quaternion deathRotation = Quaternion.Euler(new Vector3(0, 0, 100));
         while (gameObject.transform.rotation != deathRotation)
         {
-            gameObject.transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(new Vector3(0, 0, 100)), Time.deltaTime * 5.0f);
+            gameObject.transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(DeathRotation), Time.deltaTime * 5.0f);
             yield return new WaitForSeconds(0.03f * Time.deltaTime);
         }
         yield return null;
@@ -764,6 +765,7 @@ public class ALTPlayerController : MonoBehaviour
                     m_Velocity.y = _jumpVelocity.y;
                 }
 
+                GetComponent<AudioManager_Footsteps>()._isJumping = true;
                 GetComponent<AudioManager_Footsteps>().TriggerJump(false);
 
                 bcanJump = false;

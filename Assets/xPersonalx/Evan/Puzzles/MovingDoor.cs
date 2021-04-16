@@ -25,9 +25,6 @@ public class MovingDoor : MonoBehaviour//, ISaveable
     public GameObject[] _OpenPositions;
     public GameObject[] _ClosedPositions;
 
-    AudioManager audioManager;
-    AudioSource audioSource;
-
     public enum DoorType { Metal, Rock};
     public DoorType doorType;
 
@@ -43,6 +40,9 @@ public class MovingDoor : MonoBehaviour//, ISaveable
 
     public GameObject[] _CloseObjects;
     public PuzzleProximityTrigger _CloseProximityTrigger;
+
+    public AudioManager_Door _audioManager;
+
     void Start()
     {
         bIsOpen = _StartOpened;
@@ -50,11 +50,7 @@ public class MovingDoor : MonoBehaviour//, ISaveable
         bHasBeenOpened = false;
         SetDoorPositions(bIsOpen);
 
-        //++++ if (doorType == DoorType.Metal) audioManager = new AudioManager_MetalDoor();
-        //++++ else { audioManager = new AudioManager_RockDoor(); }
-
-        //++++ audioSource = new AudioSource();
-        //++++ audioSource.transform.position = transform.position;
+        _audioManager = GetComponent<AudioManager_Door>();
 
     }
 
@@ -89,7 +85,8 @@ public class MovingDoor : MonoBehaviour//, ISaveable
     }
     void Open()
     {
-        //++++ audioManager.SendMessage("TriggerOpenDoor");
+        try { if (_audioManager._Playing != AudioManager_Door.Playing.open) _audioManager.Play(true); }
+        catch { }
 
         if (_Effects)
         { _Effects.Opening(); }
@@ -111,6 +108,9 @@ public class MovingDoor : MonoBehaviour//, ISaveable
         bHasBeenOpened = AllDoorsReachedOpen; 
         if (bHasBeenOpened)
         {
+            try { if (_audioManager._Playing != AudioManager_Door.Playing.close) _audioManager.Play(false); }
+            catch { }
+
             if (_Effects)
             { _Effects.Opened(); }
         }
@@ -118,6 +118,9 @@ public class MovingDoor : MonoBehaviour//, ISaveable
     }
     void Close()
     {
+        try { if (_audioManager._Playing != AudioManager_Door.Playing.open) _audioManager.Play(true); }
+        catch { }
+
         if (_Effects)
         { _Effects.Closing(); }
         bHasBeenOpened = false;
@@ -138,6 +141,9 @@ public class MovingDoor : MonoBehaviour//, ISaveable
         bHasBeenClosed = AllDoorsReachedClosed;
         if(bHasBeenClosed)
         {
+            try { if (_audioManager._Playing != AudioManager_Door.Playing.close) _audioManager.Play(false); }
+            catch { }
+
             if (_Effects)
             { _Effects.Closed(); }
         }

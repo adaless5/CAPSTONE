@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using UnityEngine.InputSystem;
 
 public class Blade : Equipment
 {
@@ -15,6 +16,8 @@ public class Blade : Equipment
     Animator _animator;
     bool _bisAttacking;
     GameObject prevHit;
+
+    bool _bClickSet = false;
 
     // Start is called before the first frame update
     public override void Start()
@@ -56,6 +59,8 @@ public class Blade : Equipment
     // Update is called once per frame
     public override void Update()
     {
+        if (Mouse.current.rightButton.wasReleasedThisFrame) _bClickSet = false;
+
         if (bIsActive && bIsObtained)
         {
             
@@ -100,6 +105,8 @@ public class Blade : Equipment
 
     public override void UseTool()
     {
+        
+
         if (ALTPlayerController.instance.CheckForUseEquipmentInput())
         {
             if (!_animator.GetCurrentAnimatorStateInfo(0).IsName("Attack1") && !_animator.GetCurrentAnimatorStateInfo(0).IsName("Attack2"))
@@ -107,7 +114,9 @@ public class Blade : Equipment
                 int rand = Random.Range(1, 3);
                 _animator.SetBool("Attack" + rand.ToString(), true);
                 bHasHit = false;
+
                 StartCoroutine(OnAttack());
+                
             }
         }
         else
@@ -120,7 +129,16 @@ public class Blade : Equipment
 
     IEnumerator OnAttack()
     {
+
+        AudioManager_Sword audioManager = GetComponent<AudioManager_Sword>();
+        if ((_animator.GetBool("Attack1") || _animator.GetBool("Attack2"))
+            && !audioManager.isPlaying() && _bClickSet == false) audioManager.TriggerSwing();
+
+        _bClickSet = true;
+        _bisAttacking = true;
+
         yield return new WaitForSeconds(0.5f);
+
 
         Vector3 pos = ALTPlayerController.instance.GetComponentInChildren<Camera>().gameObject.transform.position;
         RaycastHit[] hit = null;
@@ -192,6 +210,7 @@ public class Blade : Equipment
                 }
             }
         }
+        _bisAttacking = false;
     }
 
     public override void Activate()

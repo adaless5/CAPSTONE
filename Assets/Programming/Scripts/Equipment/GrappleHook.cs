@@ -164,7 +164,7 @@ public class GrappleHook : Equipment
             GetComponent<AudioManager_Grapple>().TriggerHit();
             //GetComponent<AudioManager_Grapple>().StopShot();
             GetComponent<AudioManager_Grapple>().TriggerRetract();
-            //
+            // 
         }
     }
 
@@ -255,7 +255,7 @@ public class GrappleHook : Equipment
         try
         {
             GetComponent<AudioManager_Grapple>().StopRetract();
-            GetComponent<AudioManager_Grapple>().TriggerClick();
+            if (bIsActive) GetComponent<AudioManager_Grapple>().TriggerClick();
             //
 
             m_GrappleHookTransform.localEulerAngles = Vector3.zero;

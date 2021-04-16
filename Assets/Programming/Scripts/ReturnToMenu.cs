@@ -17,7 +17,7 @@ public class ReturnToMenu : MonoBehaviour
         {
             SceneManager.UnloadSceneAsync(SceneManager.GetSceneAt(i));
         }
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene("R4_CreditsScene");
 
     }
 

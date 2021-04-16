@@ -27,25 +27,28 @@ public class DefaultRefillStation : MonoBehaviour
         bool itsAllOn = true;
         if (m_ammoController != null)
         {
-            Health healthcomp = m_ammoController.GetComponentInChildren<Health>();
-            if (healthcomp != null)
+            if (GameObject.FindObjectOfType<WeaponBase>())
             {
-                if (healthcomp.IsAtFullHealth() == false)
+                Health healthcomp = m_ammoController.GetComponentInChildren<Health>();
+                if (healthcomp != null)
+                {
+                    if (healthcomp.IsAtFullHealth() == false)
+                    {
+                        itsAllOn = false;
+                    }
+                }
+                if (m_ammoController.IsAmmoFull(WeaponType.BaseWeapon) == false && GameObject.FindObjectOfType<WeaponBase>().bIsObtained)
                 {
                     itsAllOn = false;
                 }
-            }
-            if (m_ammoController.IsAmmoFull(WeaponType.BaseWeapon) == false && GameObject.FindObjectOfType<WeaponBase>().bIsObtained)
-            {
-                itsAllOn = false;
-            }
-            if (m_ammoController.IsAmmoFull(WeaponType.BaseWeapon) == false && GameObject.FindObjectOfType<WeaponBase>().bIsObtained)
-            {
-                itsAllOn = false;
-            }
-            if (m_ammoController.IsAmmoFull(WeaponType.BaseWeapon) == false && GameObject.FindObjectOfType<WeaponBase>().bIsObtained)
-            {
-                itsAllOn = false;
+                if (m_ammoController.IsAmmoFull(WeaponType.BaseWeapon) == false && GameObject.FindObjectOfType<WeaponBase>().bIsObtained)
+                {
+                    itsAllOn = false;
+                }
+                if (m_ammoController.IsAmmoFull(WeaponType.BaseWeapon) == false && GameObject.FindObjectOfType<WeaponBase>().bIsObtained)
+                {
+                    itsAllOn = false;
+                }
             }
         }
         else
