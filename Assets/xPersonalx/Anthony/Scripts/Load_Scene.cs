@@ -91,5 +91,6 @@ public class Load_Scene : MonoBehaviour
             EventBroker.CallOnDataChange();
             SceneManager.UnloadSceneAsync("Loading_Scene");
         }
+        SceneManager.UnloadSceneAsync("Loading_Scene");
     }
 }
