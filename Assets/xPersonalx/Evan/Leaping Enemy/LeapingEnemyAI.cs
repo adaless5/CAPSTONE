@@ -48,7 +48,7 @@ public class LeapingEnemyAI : MonoBehaviour
     {
         _LeapingEnemyProjectile.gameObject.SetActive(false);
         _rigidBody = GetComponent<Rigidbody>();
-        _leaperAnimator = GetComponentInChildren<Animator>();    
+        
     }
 
     private void EventStart(GameObject player)
@@ -143,6 +143,11 @@ public class LeapingEnemyAI : MonoBehaviour
             }
             catch { }
 
+        }
+
+        if(_leaperAnimator == null)
+        {
+            _leaperAnimator = GetComponentInChildren<Animator>();
         }
 
         if (_playerReference != null)
