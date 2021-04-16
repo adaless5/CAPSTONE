@@ -42,7 +42,7 @@ public class EndGameManager : MonoBehaviour
     {
         if (ALTPlayerController.instance.CheckForInteract())
         {
-            EventBroker.CallOnGameEnd();
+            //EventBroker.CallOnGameEnd();
             //PlayEndGameCutscene();
         }
     }
