@@ -115,10 +115,19 @@ public class ItemContainer : MonoBehaviour
                 if (tag == t)
                 {
                     GetComponent<Collider>().enabled = false;
-                    _Container.SetActive(false);
+                    StartCoroutine(DelayDeactivate());
                     SpawnPickup();
                     bIsBroken = true;
+
+                    try { GetComponent<AudioManager_Squash>().Play(); }
+                    catch { }
                 }
             }
+    }
+
+    IEnumerator DelayDeactivate()
+    {
+        yield return new WaitForSeconds(.1f);
+        _Container.SetActive(false);
     }
 }

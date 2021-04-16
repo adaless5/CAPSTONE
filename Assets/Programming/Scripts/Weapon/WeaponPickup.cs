@@ -185,6 +185,9 @@ public class WeaponPickup : MonoBehaviour, ITippable
     {
         GameObject hud = GameObject.Find("HUD");
 
+        try { GetComponent<AudioManager_Universal>().Play(); }
+        catch { }
+
         if (hud != null)
         {
             Canvas canvas = hud.GetComponent<Canvas>();

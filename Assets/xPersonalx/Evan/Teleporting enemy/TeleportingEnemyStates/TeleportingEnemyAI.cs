@@ -44,6 +44,14 @@ public class TeleportingEnemyAI : MonoBehaviour
 
     public void Teleport(Vector3 target)
     {
+        try 
+        {
+            Debug.Log("TELEPORT");
+            AudioManager_Teleporter audioManager = GetComponent<AudioManager_Teleporter>();
+            if (!audioManager.teleportIsPlaying()) audioManager.TriggerTeleport();
+        }
+        catch { }
+
         if (!_hasDisappeared)
         {
             Disappear();

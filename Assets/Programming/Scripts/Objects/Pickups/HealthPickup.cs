@@ -47,7 +47,12 @@ public class HealthPickup : MonoBehaviour
             {
                 EventBroker.CallOnHealthPickup(m_healAmount);
                 playerHP.Heal(m_healAmount);
-                Destroy(gameObject);
+
+                try { GetComponent<AudioManager_Universal>().Play(); }
+                catch { }
+
+                StartCoroutine(DelayDeactivate());
+
                 if (m_marker != null)
                 {
                     m_compass.RemoveMarker(m_marker);
@@ -58,5 +63,11 @@ public class HealthPickup : MonoBehaviour
                 EventBroker.CallOnHealthPickupAttempt(playerHP.IsAtFullHealth());
             }
         }
+    }
+
+    IEnumerator DelayDeactivate()
+    {
+        yield return new WaitForSeconds(.1f);
+        Destroy(gameObject);
     }
 }
