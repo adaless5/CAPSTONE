@@ -17,20 +17,37 @@ public class DroneProjectile : MonoBehaviour
         
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.GetComponentInParent<ALTPlayerController>() != null || collision.gameObject.GetComponentInParent<Tool>() != null)
+        if (other.gameObject.GetComponentInParent<ALTPlayerController>() != null || other.gameObject.GetComponentInParent<Tool>() != null)
         {
             //Debug.Log("Player found");
-            ALTPlayerController tempplayer = collision.gameObject.GetComponentInParent<ALTPlayerController>();
+            ALTPlayerController tempplayer = other.gameObject.GetComponentInParent<ALTPlayerController>();
             if (tempplayer != null)
             {
                 tempplayer.CallOnTakeDamage(_bulletDamage);
             }
-                Destroy(this);
+            Destroy(this);
         }
-        
-            Destroy(gameObject);
-        
+
+        Destroy(gameObject);
+
     }
+
+    //private void OnCollisionEnter(Collision collision)
+    //{
+    //    if (collision.gameObject.GetComponentInParent<ALTPlayerController>() != null || collision.gameObject.GetComponentInParent<Tool>() != null)
+    //    {
+    //        //Debug.Log("Player found");
+    //        ALTPlayerController tempplayer = collision.gameObject.GetComponentInParent<ALTPlayerController>();
+    //        if (tempplayer != null)
+    //        {
+    //            tempplayer.CallOnTakeDamage(_bulletDamage);
+    //        }
+    //            Destroy(this);
+    //    }
+        
+    //        Destroy(gameObject);
+        
+    //}
 }
