@@ -5,14 +5,16 @@ using UnityEngine;
 public class UmbilicalCord : MonoBehaviour
 {
     public Health _health;
-    public Animator _ucAnimator;
+    public Animator _meatSackAnimator;
+    public Animator _tendonAnimator;
     public bool _bIsDead;
    // public BossAI _bossRef;
 
     private void Awake()
     {
         //_bossRef = GetComponentInParent<BossAI>();
-        _ucAnimator = GetComponentInChildren<Animator>();
+        _meatSackAnimator = GetComponentInChildren<Animator>();
+        _tendonAnimator = gameObject.transform.Find("UmbilicalCord").GetComponentInChildren<Animator>();           
         _health = GetComponentInChildren<Health>();
         _health.OnDeath += PlayDeathAnimation;
         _bIsDead = false;
@@ -30,15 +32,17 @@ public class UmbilicalCord : MonoBehaviour
     }
     
     void PlayDeathAnimation()
-    {  
-        _ucAnimator.SetTrigger("Death");
+    {
+        _meatSackAnimator.SetTrigger("Death");
+        _tendonAnimator.SetTrigger("Death");
         Debug.Log("UC died");
         SetDead();
     }    
 
     public void PlayUCRegenAnimation()
     {
-        _ucAnimator.SetTrigger("Regen");
+        _meatSackAnimator.SetTrigger("Regen");
+        _tendonAnimator.SetTrigger("Regen");
     }
 
     public void SetDead()

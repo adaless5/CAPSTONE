@@ -20,6 +20,8 @@ public class EndGameManager : MonoBehaviour
     void PlayEndGameCutscene()
     {
         _player.SetActive(false);
+        //Camera cam = _player.GetComponentInChildren<Camera>();
+        //cam = cinematicPlayer.GetComponent<Camera>();
         Debug.Log("Sequence Playing");
         endGameDirector.Play();
     }
@@ -38,6 +40,10 @@ public class EndGameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (ALTPlayerController.instance.CheckForInteract())
+        {
+            //EventBroker.CallOnGameEnd();
+            //PlayEndGameCutscene();
+        }
     }
 }
