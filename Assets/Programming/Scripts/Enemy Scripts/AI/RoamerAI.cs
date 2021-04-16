@@ -28,24 +28,31 @@ public class RoamerAI : MonoBehaviour
         _InitialWanderPosition = gameObject.transform.position;
         _roamerHealth.OnTakeDamage += TakingDamage;
         //_roamerHealth.OnDeath += Death;
-
-        InitializingEnemyState();
+        
     }
 
     void Start()
     {
-        
+     
     }
 
     private void EventStart(GameObject player)
     {
-        InitializingEnemyState();
+        if (this != null)
+        {
+            if (bShouldWanderRandomly)
+                _currentState = new RoamerWanderState(gameObject, _patrolPoints, player.transform, _navMeshAgent, _wanderRadius);
+
+            else if (!bShouldWanderRandomly)
+                _currentState = new RoamerIdleState(gameObject, _patrolPoints, player.transform, _navMeshAgent); 
+                //_currentState = new RoamerPatrolState(gameObject, _patrolPoints, player.transform, _navMeshAgent);
+
+            _playerReference = player;
+        }
     }
 
     void Update()
     {
-        //InitializingEnemyState();
-
         if (_currentState != null)
             _currentState = _currentState.Process();
         CheckAnimationState();
@@ -91,6 +98,7 @@ public class RoamerAI : MonoBehaviour
         }
     }  
    
+
     public void CheckAnimationState()
     {
         if(_currentState != null)
@@ -112,29 +120,5 @@ public class RoamerAI : MonoBehaviour
                 _roamerAnimator.SetTrigger("IsPatrolling");
                 break;
         }     
-    }
-    
-    void InitializingEnemyState()
-    {
-        if (_playerReference == null)
-        {
-            try
-            {
-                _playerReference = ALTPlayerController.instance.gameObject;
-            }
-            catch { }
-        }
-
-        if (_playerReference != null)
-        {
-            //if (bShouldWanderRandomly)
-            //    _currentState = new RoamerWanderState(gameObject, _patrolPoints, _playerReference.transform, _navMeshAgent, _wanderRadius);
-
-            //else if (!bShouldWanderRandomly)
-                _currentState = new RoamerIdleState(gameObject, _patrolPoints, _playerReference.transform, _navMeshAgent);
-            //_currentState = new RoamerPatrolState(gameObject, _patrolPoints, player.transform, _navMeshAgent);
-
-            _playerReference = ALTPlayerController.instance.gameObject;
-        }
-    }
+    }    
 }

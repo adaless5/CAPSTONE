@@ -155,8 +155,6 @@ public class ALTPlayerController : MonoBehaviour
 
     float color;
 
-    public bool _InInteractionVolume { get; set; } = false;
-
     private void Awake()
     {
         OnTakeDamage += TakeDamage;
@@ -663,9 +661,9 @@ public class ALTPlayerController : MonoBehaviour
         _Acceleration = Mathf.Clamp(_Acceleration, 0.0f, 1.0f);
 
         //Forcing Player onto ground
-        if (bisGrounded && m_Velocity.y < Mathf.Epsilon)
+        if (bisGrounded && m_Velocity.y < 0f)
         {
-            m_Velocity.y = -2.0f;
+            m_Velocity.y = 0.0f;
 
             if (bWasGrappling)
             {
@@ -727,7 +725,7 @@ public class ALTPlayerController : MonoBehaviour
         }
 
         //Resetting After Jump
-        if ((bisGrounded && !_bIsJumping) || (_coyoteTime < MAX_COYOTE_TIME) || (bisGrounded && bDidJump))
+        if (bisGrounded && !_bIsJumping || _coyoteTime < MAX_COYOTE_TIME)
         {
             if (!bcanJump)
             {
@@ -737,15 +735,15 @@ public class ALTPlayerController : MonoBehaviour
                 bDidJump = false;
             }
         }
-        //else if (bisGrounded && _bIsJumping && bDidJump)
-        //{
-        //    bcanJump = false;
-        //    bIsMoving = true;
-        //    //_preJumpVelocity = Vector3.zero;
-        //    //_lastMoveVelocity = Vector3.zero;
-        //    bDidJump = false;
-        //    m_Velocity = Vector3.zero;
-        //}
+        else if (bisGrounded && _bIsJumping && bDidJump)
+        {
+            bcanJump = false;
+            bIsMoving = true;
+            //_preJumpVelocity = Vector3.zero;
+            //_lastMoveVelocity = Vector3.zero;
+            bDidJump = false;
+            m_Velocity = Vector3.zero;
+        }
 
         if (bcanJump)
         {

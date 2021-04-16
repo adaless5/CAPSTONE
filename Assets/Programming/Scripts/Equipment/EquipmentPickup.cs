@@ -24,8 +24,7 @@ public class EquipmentPickup : MonoBehaviour, ISaveable, ITippable
 
     void Awake()
     {
-        //SceneManager.sceneLoaded += UpdateEquipmentPickupData;
-        EventBroker.OnDataChange += LoadDataOnSceneEnter;
+        SceneManager.sceneLoaded += UpdateEquipmentPickupData;
         if (GetComponent<MeshRenderer>() != null)
         {
             if (isUsed) GetComponent<MeshRenderer>().enabled = false;

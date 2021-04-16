@@ -4857,7 +4857,6 @@ GameObject:
   - component: {fileID: 3256764717229897311}
   - component: {fileID: 5291521785111156384}
   - component: {fileID: 2095617392371080345}
-  - component: {fileID: 40112076173081232}
   m_Layer: 0
   m_Name: Point Light
   m_TagString: Untagged
@@ -4967,7 +4966,7 @@ MonoBehaviour:
   m_InnerSpotPercent: 0
   m_SpotIESCutoffPercent: 100
   m_LightDimmer: 1
-  m_VolumetricDimmer: 1
+  m_VolumetricDimmer: 3.2
   m_LightUnit: 0
   m_FadeDistance: 10000
   m_VolumetricFadeDistance: 10000
@@ -5063,17 +5062,3 @@ MonoBehaviour:
   m_AreaLightEmissiveMeshShadowCastingMode: 0
   m_AreaLightEmissiveMeshMotionVectorGenerationMode: 0
   m_AreaLightEmissiveMeshLayer: -1
---- !u!114 &40112076173081232
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5897997412149678744}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea3ee3efd897a8644b16798a58479411, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _light: {fileID: 5291521785111156384}
-  _additive: 5

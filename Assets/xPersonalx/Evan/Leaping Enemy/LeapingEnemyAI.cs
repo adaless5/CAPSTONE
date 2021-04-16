@@ -40,26 +40,28 @@ public class LeapingEnemyAI : MonoBehaviour
     private void Awake()
     {
         EventBroker.OnPlayerSpawned += EventStart;
-
-        InitializingEnemyState();
     }
 
     private void Start()
     {
         _LeapingEnemyProjectile.gameObject.SetActive(false);
         _rigidBody = GetComponent<Rigidbody>();
-        
+        _leaperAnimator = GetComponentInChildren<Animator>();    
     }
 
     private void EventStart(GameObject player)
     {
-        InitializingEnemyState();
+        try
+        {
+            _currentState = new LeapingEnemyWanderState(gameObject, gameObject.GetComponent<LeapingEnemyAI>(), player.transform);
+            _playerReference = player;
+
+        }
+        catch { }
     }
 
     void Update()
     {
-        //InitializingEnemyState();
-
         CheckAnimationState();
         if (_currentState != null)
         {
@@ -133,24 +135,4 @@ public class LeapingEnemyAI : MonoBehaviour
 
     }
 
-    void InitializingEnemyState()
-    {
-        if (_playerReference == null)
-        {
-            try
-            {
-                _playerReference = ALTPlayerController.instance.gameObject;
-            }
-            catch { }
-
-        }
-
-        if(_leaperAnimator == null)
-        {
-            _leaperAnimator = GetComponentInChildren<Animator>();
-        }
-
-        if (_playerReference != null)
-            _currentState = new LeapingEnemyWanderState(gameObject, gameObject.GetComponent<LeapingEnemyAI>(), _playerReference.transform);
-    }
 }

@@ -16,7 +16,6 @@ public class PlayerStart : MonoBehaviour
 
     private void Awake()
     {
-        //EventBroker.OnDataChange += PlayerLoadData;
         SceneManager.sceneLoaded += SceneManager_sceneLoaded;
     }
 
@@ -36,16 +35,6 @@ public class PlayerStart : MonoBehaviour
 
             }
         }
-    }
-
-    private void OnEnable()
-    {
-        SceneManager.sceneLoaded += SceneManager_sceneLoaded;
-    }
-
-    private void OnDisable()
-    {
-        SceneManager.sceneLoaded -= SceneManager_sceneLoaded;
     }
 
     // Start is called before the first frame update

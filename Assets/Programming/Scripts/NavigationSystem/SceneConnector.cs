@@ -119,7 +119,6 @@ public class SceneConnector : MonoBehaviour
             {
                 case SceneConnectorType.Seamless:
                     UnloadScene();
-                    EventBroker.CallOnDataChange();
                     if (playerTransform != null)
                         StartCoroutine(UpdateRespawnInfo(playerTransform));
                     break;

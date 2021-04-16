@@ -85,11 +85,14 @@ public class Load_Scene : MonoBehaviour
                 {
                     _fillMeter.fillAmount = secondLevel.progress;
                     yield return new WaitForEndOfFrame();
+
                 }
             }
-            EventBroker.CallOnLoadingScreenFinished(data);
-            EventBroker.CallOnDataChange();
             SceneManager.UnloadSceneAsync("Loading_Scene");
+            EventBroker.CallOnLoadingScreenFinished(data);
+
         }
+
+
     }
 }

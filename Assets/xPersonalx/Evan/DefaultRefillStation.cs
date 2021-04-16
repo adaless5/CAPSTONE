@@ -86,8 +86,6 @@ public class DefaultRefillStation : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            ALTPlayerController.instance._InInteractionVolume = true;
-
             GameObject.FindObjectOfType<InteractableText>().b_inInteractCollider = true;
             if (GameObject.FindObjectOfType<ALTPlayerController>().CheckForInteract())
             {
@@ -138,14 +136,6 @@ public class DefaultRefillStation : MonoBehaviour
                 useTimer = 2.5f;
 
             }
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.tag == "Player")
-        {
-            ALTPlayerController.instance._InInteractionVolume = false;
         }
     }
 }

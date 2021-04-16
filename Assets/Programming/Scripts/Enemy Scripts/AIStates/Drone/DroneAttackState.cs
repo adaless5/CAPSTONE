@@ -29,17 +29,16 @@ public class DroneAttack : DroneState
         base.Update();
         if (CanSeePlayer())
         {
+            
+            LookAt(_playerPos);
 
-            //LookAt(_playerPos);
-            LookTowards(_currentEnemy.transform,_playerPos.position,2.0f);
             if (Vector3.Distance(_currentEnemy.transform.position, _playerPos.position) < _shootDistance)
             {
                 ShootPlayer();
             }
             else
             {
-                //_currentEnemy.transform.position = Vector3.MoveTowards(_currentEnemy.transform.position, _playerPos.position, _enemySpeed * Time.deltaTime);
-                _currentEnemy.transform.position += _currentEnemy.transform.forward * _enemySpeed * Time.deltaTime;
+                _currentEnemy.transform.position = Vector3.MoveTowards(_currentEnemy.transform.position, _playerPos.position, _enemySpeed * Time.deltaTime);
             }
         }
         else

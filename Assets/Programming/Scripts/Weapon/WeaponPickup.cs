@@ -21,9 +21,7 @@ public class WeaponPickup : MonoBehaviour, ITippable
 
     void Awake()
     {
-        //SceneManager.sceneLoaded += UpdateWeaponPickupData;
-
-        EventBroker.OnDataChange += LoadDataOnSceneEnter;
+        SceneManager.sceneLoaded += UpdateWeaponPickupData;
 
         switch (_pickUpWeapon)
         {
@@ -162,8 +160,6 @@ public class WeaponPickup : MonoBehaviour, ITippable
 
     public void LoadDataOnSceneEnter()
     {
-
-
         if (this != null)
         {
             isUsed = SaveSystem.LoadBool(gameObject.name, "isEnabled", gameObject.scene.name);
@@ -176,7 +172,6 @@ public class WeaponPickup : MonoBehaviour, ITippable
                 _modelObj.SetActive(!isUsed);
             }
         }
-
 
     }
 
