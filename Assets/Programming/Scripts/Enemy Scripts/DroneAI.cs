@@ -22,6 +22,8 @@ public class DroneAI : MonoBehaviour
             if (_navMeshAgent != null)
                 _navMeshAgent.baseOffset += hit.distance;
         }
+
+        InitializingEnemyState();
     }
 
     // Start is called before the first frame update
@@ -32,24 +34,16 @@ public class DroneAI : MonoBehaviour
 
     private void EventStart(GameObject player)
     {
-        try
-        {
-            _currentState = new DronePatrol(gameObject, _patrolPoints, player.transform, _navMeshAgent);
-            _playerReference = player;
-
-        }
-        catch { }
+        InitializingEnemyState();
     }
 
     // Update is called once per frame
     void Update()
     {
+        //InitializingEnemyState();
+
         if (_currentState != null)
             _currentState = _currentState.Process();
-
-
-
-
     }
 
     public void SetCurrentDroneState(DroneState state)
@@ -61,5 +55,21 @@ public class DroneAI : MonoBehaviour
     {
         State savedState = _currentState;
         _currentState = new Stun(3.0f, savedState);
+    }
+
+    void InitializingEnemyState()
+    {
+        if (_playerReference == null)
+        {
+            try
+            {
+                _playerReference = ALTPlayerController.instance.gameObject;
+            }
+            catch { }
+
+        }
+
+        if (_playerReference != null)
+            _currentState = new DronePatrol(gameObject, _patrolPoints, _playerReference.transform, _navMeshAgent);
     }
 }
