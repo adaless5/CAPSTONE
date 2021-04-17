@@ -1,5 +1,38 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!244 &-8018704684045481308
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: c43c40a8d54e02e48b43e550f64d0eb7
+  m_EffectName: Attenuation
+  m_MixLevel: 4f2a5ef523529084ab2b3e0c65d8d784
+  m_Parameters: []
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
+--- !u!243 &-7944911035404109281
+AudioMixerGroupController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Leaper_Land
+  m_AudioMixer: {fileID: 24100000}
+  m_GroupID: 33787fe437fae4f42a757750f848ec42
+  m_Children: []
+  m_Volume: 8e3dfca9cdfab42498459153524e1cc5
+  m_Pitch: 42d53507420de4f4689b8941bd2f80ce
+  m_Send: 00000000000000000000000000000000
+  m_Effects:
+  - {fileID: -8018704684045481308}
+  m_UserColorIndex: 0
+  m_Mute: 0
+  m_Solo: 0
+  m_BypassEffects: 0
 --- !u!241 &24100000
 AudioMixerController:
   m_ObjectHideFlags: 0
@@ -20,6 +53,8 @@ AudioMixerController:
   m_AudioMixerGroupViews:
   - guids:
     - 4a8c92e4240d2b94bb9ebc333f662477
+    - 33787fe437fae4f42a757750f848ec42
+    - e1b0e9c4aa7efb94c874ebd7b3d718a2
     name: View
   m_CurrentViewIndex: 0
   m_TargetSnapshot: {fileID: 24500006}
@@ -32,7 +67,9 @@ AudioMixerGroupController:
   m_Name: Master
   m_AudioMixer: {fileID: 24100000}
   m_GroupID: 4a8c92e4240d2b94bb9ebc333f662477
-  m_Children: []
+  m_Children:
+  - {fileID: 6588345193408206664}
+  - {fileID: -7944911035404109281}
   m_Volume: 13d0655ec6b02894792c809746427d26
   m_Pitch: 22af301b88f005d45a7533744dadca18
   m_Send: 00000000000000000000000000000000
@@ -65,5 +102,39 @@ AudioMixerSnapshotController:
   m_Name: Snapshot
   m_AudioMixer: {fileID: 24100000}
   m_SnapshotID: 56faafb20e38d6a4daf8e8fbe29d465e
-  m_FloatValues: {}
+  m_FloatValues:
+    ac4de3e41afffe24380d6614891a7c16: -0.08374829
   m_TransitionOverrides: {}
+--- !u!244 &4141540038499853561
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: 10653ecf93aa54f4c8fae4fa967594d2
+  m_EffectName: Attenuation
+  m_MixLevel: 8c65598ca6aa05b46896fc4f2dd03c8f
+  m_Parameters: []
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
+--- !u!243 &6588345193408206664
+AudioMixerGroupController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Leaper_Jump
+  m_AudioMixer: {fileID: 24100000}
+  m_GroupID: e1b0e9c4aa7efb94c874ebd7b3d718a2
+  m_Children: []
+  m_Volume: ac4de3e41afffe24380d6614891a7c16
+  m_Pitch: 610bb740309f0f640ab1a5db123df09e
+  m_Send: 00000000000000000000000000000000
+  m_Effects:
+  - {fileID: 4141540038499853561}
+  m_UserColorIndex: 0
+  m_Mute: 0
+  m_Solo: 0
+  m_BypassEffects: 0

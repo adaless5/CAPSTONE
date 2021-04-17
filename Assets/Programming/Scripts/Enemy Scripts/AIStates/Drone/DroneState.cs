@@ -8,7 +8,7 @@ using UnityEngine.AI;
 public class DroneState : State
 {
 
-    protected float _shootTimer = 0.5f;
+    protected float _shootTimer = 0.25f;
     protected float _enemySpeed = 5f;
     protected Transform[] _patrolPoints;
     protected NavMeshAgent _navMeshAgent;
