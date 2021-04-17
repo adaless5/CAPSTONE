@@ -46,7 +46,7 @@ public class Blade : Equipment
 
     void Awake()
     {
-        //LoadDataOnSceneEnter();
+        LoadDataOnSceneEnter();
         MeshRenderer[] meshs = GetComponentsInChildren<MeshRenderer>();
         foreach (MeshRenderer obj in meshs)
         {

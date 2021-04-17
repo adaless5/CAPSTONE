@@ -73,7 +73,8 @@ public class SceneConnector : MonoBehaviour
                     //}
 
                     //startcoroutine(unloadscenedelayed());
-
+                    StartCoroutine(UpdateRespawnInfo(playerTransform));
+                    EventBroker.CallOnAutoSave();
                     if (!SceneManager.GetSceneByName(_data.destinationSceneName).IsValid())
                         SceneManager.LoadSceneAsync(_data.destinationSceneName, LoadSceneMode.Additive);
 
@@ -130,7 +131,7 @@ public class SceneConnector : MonoBehaviour
 
     IEnumerator UpdateRespawnInfo(Transform playerTransform)
     {
-        //yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(5f);
         for (int i = 1; i < SceneManager.sceneCount; i++)
         {
 
@@ -146,6 +147,7 @@ public class SceneConnector : MonoBehaviour
         //    FileIO.ExportRespawnInfoToFile(playerTransform, SceneManager.GetSceneAt(1).name);
         //}
     }
+
 
     public void CreateUnloadTrigger()
     {
@@ -164,6 +166,7 @@ public class SceneConnector : MonoBehaviour
         if (bDebug) Debug.Log("Unloaded : " + _data.sceneName);
         try
         {
+
             SceneManager.UnloadSceneAsync(_data.sceneName);
         }
         catch (Exception e)

@@ -45,7 +45,7 @@ public class MineSpawner : Weapon
     void Awake()
     {
         base.Awake();
-
+        LoadDataOnSceneEnter();
         if (m_playerController == null)
         {
             m_playerController = FindObjectOfType<ALTPlayerController>();

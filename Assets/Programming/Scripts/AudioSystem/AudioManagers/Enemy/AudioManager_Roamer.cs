@@ -73,6 +73,16 @@ public class AudioManager_Roamer : AudioManager
 
     public void TriggerDeath()
     {
+        //Randomize volume and pitch slightly
+        float randVolumeScale = Random.Range(0.8f, 1.2f);
+        float randomPitchScale = Random.Range(-0.3f, 0.3f);
+        _audioSourceDie.pitch += randomPitchScale;
 
+        //Play Sound
+        int index = Random.Range(0, _dieSounds.Length);
+        _audioSourceDie.PlayOneShot(_dieSounds[index], randVolumeScale);
+
+        //Reset initial pitch
+        _audioSourceDie.pitch = 1f;
     }
 }
