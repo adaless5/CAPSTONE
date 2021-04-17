@@ -40,10 +40,13 @@ public class EndGameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (ALTPlayerController.instance.CheckForInteract())
+        if(ALTPlayerController.instance != null)
         {
-            //EventBroker.CallOnGameEnd();
-            //PlayEndGameCutscene();
+            if (ALTPlayerController.instance.CheckForInteract())
+            {
+                //EventBroker.CallOnGameEnd();
+                //PlayEndGameCutscene();
+            }
         }
     }
 }
