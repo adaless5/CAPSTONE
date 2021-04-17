@@ -65,7 +65,7 @@ public static class FileIO
 
     public static void SaveConnectorToFile(string scene, string connectorName, string data)
     {
-        string path = (buildMode) ? "Abyssian_Data/StreamingAssets/ConnectorData/" : "Assets/Design/Resources/Data/ConnectorData/";
+        string path = (buildMode) ? "ConnectorData/" : "Assets/Design/Resources/Data/ConnectorData/";
 
         //Create proper directory and file
         DirectoryInfo directoryInfo = Directory.CreateDirectory(path + scene);
@@ -124,7 +124,7 @@ public static class FileIO
 
     public static string LoadConnectorFromFile(string scene, string connectorName)
     {
-        string path = (buildMode) ? "Abyssian_Data/StreamingAssets/ConnectorData/" : "Assets/Design/Resources/Data/ConnectorData/";
+        string path = (buildMode) ? "ConnectorData/" : "Assets/Design/Resources/Data/ConnectorData/";
 
         try
         {
