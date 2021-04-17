@@ -38,7 +38,7 @@ public class CreditObject : MonoBehaviour
         { _currentAlpha = 1; _isVisible = true;
             gameObject.layer = 0;
         }
-        image.GetComponent<MeshRenderer>().material.color = new Color(1, 1, 1, _currentAlpha);
+        image.GetComponent<MeshRenderer>().material.color = new Color(image.GetComponent<MeshRenderer>().material.color.r, image.GetComponent<MeshRenderer>().material.color.g, image.GetComponent<MeshRenderer>().material.color.b, _currentAlpha);
     }
 
     void FadeOut(GameObject image)
@@ -48,7 +48,7 @@ public class CreditObject : MonoBehaviour
         if (_currentAlpha < 0)
         { _currentAlpha = 0; _isVisible = false; _isActive = false; }
         gameObject.layer = 2;
-        image.GetComponent<MeshRenderer>().material.color = new Color(1, 1, 1, _currentAlpha);
+        image.GetComponent<MeshRenderer>().material.color = new Color(image.GetComponent<MeshRenderer>().material.color.r, image.GetComponent<MeshRenderer>().material.color.g, image.GetComponent<MeshRenderer>().material.color.b, _currentAlpha);
     }
     private void Awake()
     {
