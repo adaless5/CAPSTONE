@@ -15215,10 +15215,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01dfb7d86835dc749b42ade1c715bbec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_HP: 50
+  m_HP: 5
   m_IsLoadingShield: 0
   bCanBeDamaged: 1
   isDead: 0
+  HasOwnDeathLogic: 0
   healthBar: {fileID: 0}
   m_compass: {fileID: 0}
   m_marker: {fileID: 0}
@@ -15587,6 +15588,7 @@ MonoBehaviour:
   _PlayerInteractType: 1
   _ActivationPolicy: 0
   _ResponseType: 0
+  bIsActive: 0
 --- !u!1 &9175967991831983869
 GameObject:
   m_ObjectHideFlags: 0
