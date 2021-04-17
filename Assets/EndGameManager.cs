@@ -13,7 +13,7 @@ public class EndGameManager : MonoBehaviour
         EventBroker.OnGameEnd += PlayEndGameCutscene;
         endGameDirector = GetComponent<PlayableDirector>();
         EventBroker.OnPlayerSpawned += PlayerSpawn;
-
+        _player = ALTPlayerController.instance.gameObject;
 
     }
 
@@ -28,8 +28,8 @@ public class EndGameManager : MonoBehaviour
 
     void PlayerSpawn(GameObject player)
     {
-        _player = player;
-        cinematicPlayer.transform.position = player.transform.position;
+        //_player = player;
+        //cinematicPlayer.transform.position = player.transform.position;
     }
 
     // Start is called before the first frame update
@@ -40,13 +40,12 @@ public class EndGameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(ALTPlayerController.instance != null)
-        {
-            if (ALTPlayerController.instance.CheckForInteract())
-            {
-                //EventBroker.CallOnGameEnd();
-                //PlayEndGameCutscene();
-            }
-        }
+
+        //if (ALTPlayerController.instance.CheckForInteract())
+        //{
+        //    //EventBroker.CallOnGameEnd();
+        //    //PlayEndGameCutscene();
+        //}
+
     }
 }
