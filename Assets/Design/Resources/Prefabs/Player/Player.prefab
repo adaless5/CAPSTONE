@@ -440,13 +440,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1182869356}
-  m_LocalRotation: {x: -0.47351804, y: -0, z: -0, w: 0.88078415}
+  m_LocalRotation: {x: -0.03906394, y: -0, z: -0, w: 0.99923676}
   m_LocalPosition: {x: 0, y: 0.294, z: -0.053}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1154036758698940953}
   m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: -56.526, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -4.478, y: 0, z: 0}
 --- !u!1 &50937383999330497
 GameObject:
   m_ObjectHideFlags: 0
@@ -653,7 +653,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AspectMode: 0
-  m_AspectRatio: 13.856988
+  m_AspectRatio: 11.701494
 --- !u!114 &408777896
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -667,7 +667,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AspectMode: 0
-  m_AspectRatio: 24.196901
+  m_AspectRatio: 20.826735
 --- !u!114 &1812851586
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -681,7 +681,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AspectMode: 0
-  m_AspectRatio: 13.856986
+  m_AspectRatio: 11.701493
 --- !u!114 &6153891893479197954
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1453,7 +1453,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AspectMode: 0
-  m_AspectRatio: 2.109595
+  m_AspectRatio: 1.7790717
 --- !u!1 &2274327040977851073
 GameObject:
   m_ObjectHideFlags: 0
@@ -1564,7 +1564,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AspectMode: 0
-  m_AspectRatio: 1.2168489
+  m_AspectRatio: 1.0247422
 --- !u!1 &2620541182768406717
 GameObject:
   m_ObjectHideFlags: 0
@@ -1624,22 +1624,6 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
---- !u!114 &338146222223344484
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2802856246025625874}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67359f0718479ff429d1778118d5f08c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _AudioSource: {fileID: 5201185488864183015}
-  _gogglesOn: {fileID: 8300000, guid: 9e59075b3f6431d41905d2f90db16326, type: 3}
-  _gogglesOff: {fileID: 8300000, guid: 22979e7598da0074bb607f80e44acf87, type: 3}
-  _thermalState: 1
 --- !u!82 &5201185488864183015
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1737,6 +1721,22 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &338146222223344484
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2802856246025625874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67359f0718479ff429d1778118d5f08c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _AudioSource: {fileID: 5201185488864183015}
+  _gogglesOn: {fileID: 8300000, guid: 9e59075b3f6431d41905d2f90db16326, type: 3}
+  _gogglesOff: {fileID: 8300000, guid: 22979e7598da0074bb607f80e44acf87, type: 3}
+  _thermalState: 1
 --- !u!114 &8968185654841767273
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2748,6 +2748,7 @@ MonoBehaviour:
   _bIsRunning: 0
   _bIsJumping: 0
   _bIsCredits: 0
+  DeathRotation: {x: 0, y: 0, z: 100}
 --- !u!114 &-550643398168935818
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5091,7 +5092,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AspectMode: 0
-  m_AspectRatio: 6.6873918
+  m_AspectRatio: 5.642367
 --- !u!1 &7922734317199265129
 GameObject:
   m_ObjectHideFlags: 0
@@ -5767,7 +5768,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AspectMode: 0
-  m_AspectRatio: 2.063195
+  m_AspectRatio: 1.7356486
 --- !u!1 &8586854027277901604
 GameObject:
   m_ObjectHideFlags: 0
@@ -5873,7 +5874,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AspectMode: 0
-  m_AspectRatio: 2.0983942
+  m_AspectRatio: 1.7679403
 --- !u!1 &9012466203571668948
 GameObject:
   m_ObjectHideFlags: 0
