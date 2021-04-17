@@ -33,16 +33,16 @@ public class RoamerIdleState : RoamerState
         }
         else if (_IdleTimer <= 0.0f)
         {    
-         // if(_currentEnemy.GetComponent<RoamerAI>().bShouldWanderRandomly)
-         // {
-         //     _nextState = new RoamerWanderState(_currentEnemy, _patrolPoints, _playerPos, _navMeshAgent, _currentEnemy.GetComponent<RoamerAI>()._wanderRadius);
-         //
-         // }
-         //   else
-            {
-                _nextState = new RoamerPatrolState(_currentEnemy, _patrolPoints, _playerPos, _navMeshAgent);
+            //if(_currentEnemy.GetComponent<RoamerAI>().bShouldWanderRandomly)
+            //{
+            //    _nextState = new RoamerWanderState(_currentEnemy, _patrolPoints, _playerPos, _navMeshAgent, _currentEnemy.GetComponent<RoamerAI>()._wanderRadius);
 
-            }
+            //}
+            //else
+            //{
+            _nextState = new RoamerPatrolState(_currentEnemy, _patrolPoints, _playerPos, _navMeshAgent);
+
+            //}
             _stage = EVENT.EXIT;
         }
 

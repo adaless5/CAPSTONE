@@ -110,6 +110,9 @@ public class TeleportingEnemyAI : MonoBehaviour
             if (!_attack._isAttacking)
             {
                 _attack.Attack();
+                
+                try { GetComponent<AudioManager_Telenemy>().TriggerAttack(); }
+                catch { }
             }
         
     }
