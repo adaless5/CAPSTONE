@@ -10,6 +10,8 @@ public class DroneAI : MonoBehaviour
     private NavMeshAgent _navMeshAgent;
     GameObject _playerReference;
 
+    bool hasAttacked = false;
+
     private void Awake()
     {
         EventBroker.OnPlayerSpawned += EventStart;
@@ -44,6 +46,20 @@ public class DroneAI : MonoBehaviour
 
         if (_currentState != null)
             _currentState = _currentState.Process();
+
+        if (_currentState._stateName == DroneState.STATENAME.ATTACK)
+        {
+            try
+            {
+                AudioManager_Drone audioManager = GetComponent<AudioManager_Drone>();
+                if (!audioManager.isPlaying() && !hasAttacked)
+                {
+                    audioManager.TriggerShot();
+                }
+            }
+            catch { }
+        }
+        
     }
 
     public void SetCurrentDroneState(DroneState state)
