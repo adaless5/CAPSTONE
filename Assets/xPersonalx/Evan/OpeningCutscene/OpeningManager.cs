@@ -56,6 +56,7 @@ public class OpeningManager : MonoBehaviour
 
     void LoadGameScene()
     {
+        Destroy(gameObject);
         SceneManager.LoadScene("TitleScreen", LoadSceneMode.Single);
     }
     public void LookTowards(Transform thisTransform, Vector3 targetLocation, float turnspeed)
@@ -76,6 +77,8 @@ public class OpeningManager : MonoBehaviour
             {
                 if (Gamepad.current.IsPressed())
                 {
+                    _audioManager._AudioSource.Stop();
+                    Destroy(gameObject);
                     SceneManager.LoadScene("TitleScreen", LoadSceneMode.Single);
                 }
             }
@@ -83,6 +86,8 @@ public class OpeningManager : MonoBehaviour
             {
                 if (Keyboard.current.anyKey.isPressed)
                 {
+                    _audioManager._AudioSource.Stop();
+                    Destroy(gameObject);
                     SceneManager.LoadScene("TitleScreen", LoadSceneMode.Single);
                 }
             }
@@ -90,6 +95,8 @@ public class OpeningManager : MonoBehaviour
             {
                 if (Mouse.current.rightButton.isPressed || Mouse.current.leftButton.isPressed)
                 {
+                    _audioManager._AudioSource.Stop();
+                    Destroy(gameObject);
                     SceneManager.LoadScene("TitleScreen", LoadSceneMode.Single);
                 }
             }
