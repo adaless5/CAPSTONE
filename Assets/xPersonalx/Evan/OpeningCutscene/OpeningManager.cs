@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class OpeningManager : MonoBehaviour
 {
@@ -16,6 +18,13 @@ public class OpeningManager : MonoBehaviour
     // Start is called before the first frame update
     /// 1:22
     /// 
+    bool canStart = false;
+    IEnumerator Start()
+    {
+        yield return new WaitForSeconds(3.0f);
+        canStart = true;
+    }
+
     void FadeIn(GameObject image, float speed,float _currentAlpha)
     {
         _currentAlpha = image.GetComponent<MeshRenderer>().material.color.a;
@@ -44,13 +53,10 @@ public class OpeningManager : MonoBehaviour
     {
         FadeIn(_black, 0.2f, _blacknessCurrentAlpha);
     }
-    void Start()
-    {
-        
-    }
+
     void LoadGameScene()
     {
-
+        SceneManager.LoadScene("TitleScreen", LoadSceneMode.Single);
     }
     public void LookTowards(Transform thisTransform, Vector3 targetLocation, float turnspeed)
     {
@@ -64,6 +70,30 @@ public class OpeningManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (canStart)
+        {
+            if (Gamepad.current != null)
+            {
+                if (Gamepad.current.IsPressed())
+                {
+                    SceneManager.LoadScene("TitleScreen", LoadSceneMode.Single);
+                }
+            }
+            if (Keyboard.current != null)
+            {
+                if (Keyboard.current.anyKey.isPressed)
+                {
+                    SceneManager.LoadScene("TitleScreen", LoadSceneMode.Single);
+                }
+            }
+            if (Mouse.current != null)
+            {
+                if (Mouse.current.rightButton.isPressed || Mouse.current.leftButton.isPressed)
+                {
+                    SceneManager.LoadScene("TitleScreen", LoadSceneMode.Single);
+                }
+            }
+        }
         _camera.transform.position = Vector3.MoveTowards(_camera.transform.position,_eschaton.transform.position,_CameraPanSpeed * Time.deltaTime);
         LookTowards(_camera.transform,_eschaton.transform.position,0.02f);
         if (_openingLength > 0.0f)
