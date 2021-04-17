@@ -299,8 +299,4 @@ public class CreatureWeapon : Weapon
         }
     }
 
-    public void LoadDataOnSceneEnter()
-    {
-
-    }
 }

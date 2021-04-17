@@ -82,17 +82,17 @@ public class CreatureProjectile : MonoBehaviour
 
     private void OnDisable()
     {
-        //_lifeTime = _maxLifeTime;
-        ////transform.parent = _transformOrigin;
-        //if (m_bHasAction)
-        //{
-        //    if (_target.GetComponent<TEMP_Roamer>())
-        //    {
-        //        _target.GetComponent<TEMP_Roamer>()._FollowSpeed = _targetDefaultSpeed;
-        //    }
-        //}
+        _lifeTime = _maxLifeTime;
+        transform.parent = _transformOrigin;
+        if (m_bHasAction)
+        {
+            if (_target.GetComponent<TEMP_Roamer>())
+            {
+                _target.GetComponent<TEMP_Roamer>()._FollowSpeed = _targetDefaultSpeed;
+            }
+        }
 
-        //DeStick();
+        DeStick();
     }
 
     private void OnCollisionEnter(Collision collision)
