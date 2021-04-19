@@ -54,7 +54,6 @@ public class MainMenuUI : MonoBehaviour
 
 
         if (data.sceneName == "" || data.sceneName == null)
-
         {
             bNewGame = true;
         }
@@ -64,14 +63,18 @@ public class MainMenuUI : MonoBehaviour
         }
         SceneManager.LoadScene("Loading_Scene");
         //get info from save system and load accordnaly
+    }
+
+    public void ClearSave()
+    {
 
     }
+
     public void NewGame()
     {
         Time.timeScale = 1f;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-
 
         FileIO.ClearAllSavedData();
 

@@ -16,15 +16,17 @@ public class PlaySubtitles : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
         scriptManager = FindObjectOfType<ScriptManager>();  //expensive call
         guiManager = FindObjectOfType<SubtitleGuiManager>();
-        controller = FindObjectOfType<ALTPlayerController>();
     }
 
     void Update()
     {
-        if (controller == null)
-        {
-            controller = FindObjectOfType<ALTPlayerController>();
-        }
+    
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+            ALTPlayerController.instance._InInteractionVolume = true;
     }
 
     private void OnTriggerStay(Collider other)
@@ -32,7 +34,7 @@ public class PlaySubtitles : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             GameObject.FindObjectOfType<InteractableText>().b_inInteractCollider = true;
-            if (controller.CheckForInteract())
+            if (ALTPlayerController.instance.CheckForInteract())
             {
                 StartCoroutine(DisplaySubtitles());
                 GetComponent<AudioManager_VoiceOver>().PlayVoiceOver();
@@ -41,18 +43,40 @@ public class PlaySubtitles : MonoBehaviour
         }
     }
 
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+            ALTPlayerController.instance._InInteractionVolume = false;
+    }
+
     private IEnumerator DisplaySubtitles()
     {
-        var script = scriptManager.GetText(audioSource.clip.name);  //get text
-        var lineDuration = audioSource.clip.length / script.Length; //script size cannot equal 0, need to have a script in the lines array in the text file
-
-        foreach (var line in script)
+        if (scriptManager == null)
         {
-            guiManager.SetText(line); //set text
-            yield return new WaitForSeconds(lineDuration);
+            scriptManager = FindObjectOfType<ScriptManager>();
+        }
+        if (guiManager == null)
+        {
+            guiManager = FindObjectOfType<SubtitleGuiManager>();
         }
 
-        guiManager.SetText(string.Empty);   //clear text to empty
-        isPlaying = false;
+        if (scriptManager != null)
+        {
+            var script = scriptManager.GetText(audioSource.clip.name);  //get text
+
+            var lineDuration = audioSource.clip.length / script.Length; //script size cannot equal 0, need to have a script in the lines array in the text file
+
+            if (guiManager != null)
+            {
+                foreach (var line in script)
+                {
+                    guiManager.SetText(line); //set text
+                    yield return new WaitForSeconds(lineDuration);
+                }
+
+                guiManager.SetText(string.Empty);   //clear text to empty
+                isPlaying = false;
+            }
+        }
     }
 }
